@@ -5,7 +5,7 @@ namespace DalTest;
 
 internal class Program
 {
-   public static void Main(string[] args)
+   public static void Main(string[] args) 
     {
     //    private static IAssignment? s_dalAssignment = new AssignmentImplementation(); //stage 1
     //private static IVolunteer? s_dalVolunteer = new VolunteerImplementation(); //stage 1
