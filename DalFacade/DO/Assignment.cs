@@ -13,5 +13,5 @@ public record Assignment
   )
 {
     /// Default constructor for stage 3
-    public Assignment() : this(0, 0, 0, DateTime.no) { }
+    public Assignment() : this(0, 0, 0, DateTime.Now) { }
 }
