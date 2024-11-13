@@ -11,7 +11,7 @@ public class VolunteerImplementation : IVolunteer
     {
         if (Read(item.Id) != null)
         {
-            throw new("An object of type Volunteer with such an ID already exists");
+            throw new Exception($"An object of type Volunteer with such an ID={item.Id} already exists");
         }
         DataSource.Volunteers.Add(item);
 
@@ -25,7 +25,7 @@ public class VolunteerImplementation : IVolunteer
             if (DataSource.Volunteers[i].Id == id)
                 DataSource.Volunteers.Remove(DataSource.Volunteers[i]);
         }
-        throw new("An object of type Volunteer with such an ID does not exist");
+        throw new Exception($"An object of type Volunteer with such an ID={id} does not exist");
     }
 
 
@@ -62,7 +62,7 @@ public class VolunteerImplementation : IVolunteer
             }
 
         }
-        throw new ("An object of type Volunteer with such an ID does not exist");
+        throw new Exception($"An object of type Volunteer with such an ID={item.Id} does not exist");
     }
     
 }
