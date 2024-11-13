@@ -9,7 +9,11 @@ public class AssignmentImplementation : IAssignment
 {
     public void Create(Assignment item)
     {
-        throw new NotImplementedException();
+        if (Read(item.Id) != null)
+        {
+            throw new("An object of type Assignment with such an ID already exists");
+        }
+        DataSource.Assignments.Add(item);
     }
 
     public void Delete(int id)
