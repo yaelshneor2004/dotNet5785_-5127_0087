@@ -21,8 +21,8 @@ public record Call
  double Latitude,
 double Longitude ,
 DateTime OpenTime,
-string? Description=null,
-DateTime? MaxFinishCall=null
+string? Description= null,
+DateTime? MaxFinishCall= null
 )
 {
     /// Default constructor for stage 3

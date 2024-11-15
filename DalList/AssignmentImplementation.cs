@@ -9,14 +9,12 @@ public class AssignmentImplementation : IAssignment
 {
     public void Create(Assignment item)
     {
-    //    int newId = Config.NextCallId;
-    //    Assignment newAssignment = item;
-    //    newAssignment.Id = newId;
-    //    DataSource.Assignment.Add(newAssignment);
-    //
-    //
-      }
-
+        //for entities with auto id
+        int newId = Config.NextAssignmentId;
+        Assignment newAssignment = item with { Id = newId };
+        DataSource.Assignments.Add(newAssignment);
+        
+    }
 
     public void Delete(int id)
     {

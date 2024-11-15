@@ -10,11 +10,10 @@ public class CallImplementation : ICall
 {
     public void Create(Call item)
     {
-        //int newId = Config.NextCallId;
-        //Call newCall = item;
-        //newCall.Id = newId;
-        //DataSource.Calls.Add(newCall);
-
+        //for entities with auto id
+        int newId = Config.NextCallId;
+        Call newCall = item with { Id = newId };
+        DataSource.Calls.Add(newCall);
     }
 
 
