@@ -291,7 +291,9 @@ internal class Program
         ((dynamic)dal).Update(entity);
         Console.WriteLine($"{type} updated.");
 
-    }  
+    }
+
+    //The function uses input from the user to create a new object of type Volunteer
     public static Volunteer inputV()
     {
         Console.WriteLine($"Creating new volunteer:");
@@ -335,7 +337,69 @@ internal class Program
         return newVolunteer;
     }
 
+    //The function uses input from the user to create a new object of type Assignment
+    public static Assignment inputA()
+    {
+        Console.WriteLine("Creating new assignment:");
 
+        Console.WriteLine("Enter ID: ");
+        int id = int.Parse(Console.ReadLine()!);
+
+        Console.WriteLine("Enter Call ID: ");
+        int callId = int.Parse(Console.ReadLine()!);
+
+        Console.WriteLine("Enter Volunteer ID: ");
+        int volunteerId = int.Parse(Console.ReadLine()!);
+
+        Console.WriteLine("Enter Start Call (YYYY-MM-DD HH:MM:SS): ");
+        DateTime startCall = DateTime.Parse(Console.ReadLine()!);
+
+        Console.WriteLine("Enter Finish Type (optional, press Enter to skip): ");
+        string? finishTypeInput = Console.ReadLine();
+        MyFinishType? finishType = string.IsNullOrEmpty(finishTypeInput) ? (MyFinishType?)null : Enum.Parse<MyFinishType>(finishTypeInput); //check if the input us empty/null and putting 0/1 respectively
+
+        Console.WriteLine("Enter Finish Call (optional, press Enter to skip, YYYY-MM-DD HH:MM:SS): ");
+        string? finishCallInput = Console.ReadLine();
+        DateTime? finishCall = string.IsNullOrEmpty(finishCallInput) ? (DateTime?)null : DateTime.Parse(finishCallInput);
+
+        Assignment newAssignment = new Assignment(id, callId, volunteerId, startCall, finishType, finishCall);
+        return newAssignment;
+    }
+
+    //The function uses input from the user to create a new object of type Call
+    public static Call inputC()
+    {
+        Console.WriteLine("Creating new call:");
+
+        Console.WriteLine("Enter ID: ");
+        int id = int.Parse(Console.ReadLine()!);
+
+        Console.WriteLine("Enter Call Type: ");
+        MyCallType callType = (MyCallType)Enum.Parse(typeof(MyCallType), Console.ReadLine()!);
+
+        Console.WriteLine("Enter Address: ");
+        string address = Console.ReadLine()!;
+
+        Console.WriteLine("Enter Latitude: ");
+        double latitude = double.Parse(Console.ReadLine()!);
+
+        Console.WriteLine("Enter Longitude: ");
+        double longitude = double.Parse(Console.ReadLine()!);
+
+        Console.WriteLine("Enter Open Time (YYYY-MM-DD HH:MM:SS): ");
+        DateTime openTime = DateTime.Parse(Console.ReadLine()!);
+
+        Console.WriteLine("Enter Description (optional, press Enter to skip): ");
+        string? description = Console.ReadLine();
+        if (string.IsNullOrEmpty(description)) description = null;
+
+        Console.WriteLine("Enter Max Finish Call (optional, press Enter to skip, YYYY-MM-DD HH:MM:SS): ");
+        string? maxFinishCallInput = Console.ReadLine();
+        DateTime? maxFinishCall = string.IsNullOrEmpty(maxFinishCallInput) ? (DateTime?)null : DateTime.Parse(maxFinishCallInput);
+
+        Call newCall = new Call(id, callType, address, latitude, longitude, openTime, description, maxFinishCall);
+        return newCall;
+    }
 
     public static void SubMenuConfig()
     {

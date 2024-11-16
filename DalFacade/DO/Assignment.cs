@@ -1,4 +1,8 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
+using Dal;
+using DalApi;
+using DO;
 
 namespace DO;
 /// <summary>
@@ -23,3 +27,4 @@ public record Assignment
     /// Default constructor for stage 3
     public Assignment() : this(0, 0, 0, DateTime.Now) { }
 }
+
