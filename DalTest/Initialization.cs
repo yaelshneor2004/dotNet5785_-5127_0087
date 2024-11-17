@@ -46,41 +46,32 @@ private static void createVolunteer()
     "Derech Hevron 78, Jerusalem, Israel", "Herzl Blvd 103, Jerusalem, Israel", "Jaffa St 45, Jerusalem, Israel",
     "Herzl 9, Haifa, Israel", "Moriah Blvd 70, Haifa, Israel", "The Prophets 11, Haifa, Israel",
     "Rav Shauli 5, Be'er Sheva, Israel", "Reger Blvd 55, Be'er Sheva, Israel", "Johanna Jabotinsky 15, Be'er Sheva, Israel",
-    "Begin Way 234, Petah Tikva, Israel", "Weizmann 22, Petah Tikva, Israel", "Eli Cohen 1, Ramat Gan, Israel",
-    "Shazar Blvd 20, Holon, Israel", "Ben Yehuda 35, Netanya, Israel", "Jabotinsky 16, Herzliya, Israel",
-    "Rabin Square 4, Kfar Saba, Israel", "Palmach 12, Ashdod, Israel", "HaShalom 8, Ashkelon, Israel",
-    "Bialik 23, Rehovot, Israel", "HaTmarim 2, Eilat, Israel", "Derech Efrat 7, Giv'atayim, Israel",
-    "Herzl 15, Rishon LeZion, Israel", "Balfour 6, Bat Yam, Israel", "HaNassi 3, Ramat HaSharon, Israel",
-    "Derech HaShalom 5, Modiin, Israel", "Einstein 11, Tel Aviv, Israel", "Katzanelson 17, Ramat Gan, Israel",
-    "King George 29, Tel Aviv, Israel", "Allenby 43, Tel Aviv, Israel", "Nachalat Binyamin 12, Tel Aviv, Israel",
-    "HaShalom 15, Tel Aviv, Israel", "Ben Gurion 18, Herzliya, Israel", "Rabin Blvd 50, Ramat Hasharon, Israel",
-    "Shenkar 4, Ra'anana, Israel", "Rav Ashi 13, Jerusalem, Israel", "Shlomzion 21, Jerusalem, Israel",
-    "Hillel St 9, Jerusalem, Israel", "Shai Agnon 6, Jerusalem, Israel", "Hadarim 2, Haifa, Israel",
-    "HaTamarim 3, Be'er Sheva, Israel", "Keren Hayesod 7, Ashdod, Israel", "HaRakevet 10, Rishon LeZion, Israel",
-    "Tchernichovsky 14, Tel Aviv, Israel", "Yehuda HaLevi 33, Tel Aviv, Israel", "Nahmani 10, Tel Aviv, Israel",
-    "Brenner 12, Tel Aviv, Israel", "HaShalom 22, Tel Aviv, Israel"
-};
+    "Begin Way 234, Petah Tikva, Israel", "Weizmann 22, Petah Tikva, Israel", "Eli Cohen 1, Ramat Gan, Israel" };
 
-        double[] Latitude = { 3.2,5.4 /*to do*/};
-        double[] Longitude = { 7.2,1.5 /* to do*/};
+
         Random rand = new Random();
        for (int i=0;i<15;i++)
         {
+            double? latitude = null;
+            double? longitude = null;
+            string password = $"{new Random().Next(100000, 999999)}{(char)new Random().Next('A', 'Z' + 1)}{(char)new Random().Next('a', 'z' + 1)}";
             string name=volunteerNames[i];
             string address=addresses[i];
-            double latitude = Latitude[i];
-            double longitude = Longitude[i];
             string phone = "05" + rand.Next(0, 10) + rand.Next(10000000, 99999999).ToString();
-            string email = $"{name.Replace(" ", "").ToLower()}@gmail.com";
+            string email = $"{name.Replace(" ", "").ToLower()}@gmail.com"; 
             double? maxDistance = (rand.Next(2) == 0) ? (rand.NextDouble() * 95 + 5) : (double?)null;
             int id;
             do
                 id = s_rand.Next(200000000, 400000000);
-            while (s_dalVolunteer!.Read(id) != null&& CheckID(id));
+            while (s_dalVolunteer!.Read(id) != null); // id
 
- 
-            s_dalVolunteer!.Create(new(id, name, phone, email,0,0, ,address, latitude, longitude, maxDistance,true));
+            //create 15 Volunteer
+            s_dalVolunteer!.Create(new(id, name, phone, email, MyRole.Volunteer, MyTypeDistance.Aerial, password ,address, latitude, longitude, maxDistance,true));
         }
+
+       //create 2 managers
+        s_dalVolunteer!.Create(new(327770087, "Ayala Ozeri", "0533328200", "ayala.ozeri@gmail.com", MyRole.Manager, MyTypeDistance.Aerial, "ayala19", "Rothschild 10, Tel Aviv, Israel", 32.0625, 34.7721, 10.0, true));
+        s_dalVolunteer!.Create(new(326615127, "Yael Shneor", "0533859299", "y7697086@gmail.com", MyRole.Manager, MyTypeDistance.Aerial, "yaelS2208", "Derech Hevron 78, Jerusalem, Israel", 31.7525, 35.2121, 20.0, true));
 
 
 
@@ -88,31 +79,36 @@ private static void createVolunteer()
     private static void createsAssignment()
     {
         Random rand = new Random();
+        int index = 1;
+        var volunteers = s_dalVolunteer?.ReadAll();
+        var calls = s_dalCall?.ReadAll();
 
-        var allCalls = s_dalCall!.ReadAll(); // שליפת כל הקריאות
-        var allVolunteers = s_dalVolunteer!.ReadAll(); // שליפת כל המתנדבים
-        int idIndex = 0;
+        int unassignedCalls = 0;
 
-        foreach (var call in allCalls)
+        for (int i = 0; i < calls?.Count; i++)
         {
-            var volunteer = allVolunteers[rand.Next(allVolunteers.Count)]; // random Volunteers
-            DateTime startCall = call.OpenTime.AddHours(rand.Next(1, 12)); // Start between 1 hour and 12 hours after opening//לבדוק מה הדרישות בפרוייקט
+              if (unassignedCalls < 15) 
+                { 
+                    unassignedCalls++;
+                    continue;
+                }
 
-            // סוג סיום ותאריך סיום אופציונליים
-            //לבדוק את זה-מה הדרישות בפרוייקט
-            MyFinishType? finishType = rand.Next(2) == 0 ? (MyFinishType?)MyFinishType.Treated : null; //finishType can be null if the convert not success
-            DateTime? finishCall = finishType != null ? startCall.AddHours(rand.Next(1, 24)) : null;
+                int callId = calls[i].Id;
+            int volunteerId = volunteers[s_rand.Next(volunteers.Count)].Id; //Draw a volunteer from everyone
+                DateTime startCall = calls[i].MaxFinishCall - calls[i].OpenTime;
+            MyFinishType finishType = (MyFinishType)rand.Next(0, 4);
 
-            s_dalAssignment!.Create(new Assignment(idIndex++, call.Id,volunteer.Id,startCall,finishType,finishCall));
-
-
+            s_dalAssignment!.Create(new Assignment(index, callId, volunteerId, startCall, finishType, finishCall));
+             
         }
+
+
     }
     private static void createsCall()
     {
         Random rand = new Random();
 
-        string[] callAddresses = {"10 Jaffa Street, Jerusalem",
+        string[] callAddresses =  {"10 Jaffa Street, Jerusalem",
     "20 Emek Refaim Street, Jerusalem",
     "30 Agripas Street, Jerusalem",
     "40 Shmuel HaNavi Street, Jerusalem",
@@ -166,28 +162,35 @@ private static void createVolunteer()
     "10 Rivlin Street, Jerusalem"
 };
 
-        //לבדוק שוני בין ההגדרות ביצירת המערך
-    double[] callLatitudes = { /* 50 קווי רוחב */ };
-        double[] longi = new double[]  { 31.78130811991647, 31.76543961779154, 31.783470280009738,31.791048846509597,31.78391107912798, 31.771053788166768, 31.785777797665002, 31.817876781912197, 31.78186936361579, 31.74578724034863, 31.78068910546481, 31.78255160178496, 31.779769, 31.7798566, 31.789588, 31.755770, 31.755974, 31.781584, 31.772610, 31.781239, 31.782361, 31.780486, 31.7820255, 31.775421, 31.816719, 31.787706, 31.776943, 31.7765005, 31.785952, 31.786426, 31.780594, 31.779808, 31.816370, 31.779226, 31.817092, 31.757365, 31.780274, 31.771251, 31.771493, 31.763331, 31.780627, 31.780728, 31.786061, 31.756843, 31.769767, 31.753902, 31.748810, 31.776448, 31.794707, 31.777475, 31.790191, 31.779852, 31.780946 };
+        double[] callLongitudes = new double[]  { 31.78130811991647, 31.76543961779154, 31.783470280009738,31.791048846509597,31.78391107912798, 31.771053788166768, 31.785777797665002, 31.817876781912197, 31.78186936361579, 31.74578724034863, 31.78068910546481, 31.78255160178496, 31.779769, 31.7798566, 31.789588, 31.755770, 31.755974, 31.781584, 31.772610, 31.781239, 31.782361, 31.780486, 31.7820255, 31.775421, 31.816719, 31.787706, 31.776943, 31.7765005, 31.785952, 31.786426, 31.780594, 31.779808, 31.816370, 31.779226, 31.817092, 31.757365, 31.780274, 31.771251, 31.771493, 31.763331, 31.780627, 31.780728, 31.786061, 31.756843, 31.769767, 31.753902, 31.748810, 31.776448, 31.794707, 31.777475, 31.790191, 31.779852, 31.780946 };
 
-        double[] callLongitudes = { /* 50 קווי אורך */ };
-        double[] lati = new double[] { 35.22119546257982, 35.22123577032626,  35.215657362641764,  35.224665335668945, 35.221665622205705, 35.21205714918638, 35.19764122028971, 35.18968763754008, 35.21774235102746, 35.21658163568471, 35.21638617800225, 35.209312878017535, 35.2159379, 35.2092867, 35.224894, 35.202146, 35.201317, 35.215236, 35.216455, 35.218053, 35.213336, 35.212081, 35.221056, 35.219964, 35.190149, 35.222337, 35.222155, 35.217356, 35.189180, 35.216914, 35.214816, 35.226296, 35.192176, 35.218002, 35.191500, 35.160694, 35.214955, 35.183917, 35.200909, 35.218213, 35.217068, 35.214544, 35.195686, 35.215021, 35.208627, 35.221349, 35.211373, 35.211675, 35.218078, 35.224944, 35.198722, 35.214792, 35.220409};
+        double[] callLatitudes = new double[] { 35.22119546257982, 35.22123577032626,  35.215657362641764,  35.224665335668945, 35.221665622205705, 35.21205714918638, 35.19764122028971, 35.18968763754008, 35.21774235102746, 35.21658163568471, 35.21638617800225, 35.209312878017535, 35.2159379, 35.2092867, 35.224894, 35.202146, 35.201317, 35.215236, 35.216455, 35.218053, 35.213336, 35.212081, 35.221056, 35.219964, 35.190149, 35.222337, 35.222155, 35.217356, 35.189180, 35.216914, 35.214816, 35.226296, 35.192176, 35.218002, 35.191500, 35.160694, 35.214955, 35.183917, 35.200909, 35.218213, 35.217068, 35.214544, 35.195686, 35.215021, 35.208627, 35.221349, 35.211373, 35.211675, 35.218078, 35.224944, 35.198722, 35.214792, 35.220409};
 
-        int idIndex = 0;
-        foreach (var address in callAddresses)
+        int idIndex = 1;//Not really consumed, getting booted from CallImplementation
+        for (int i = 0; i < callAddresses.Length; i++)
         {
+            string address = callAddresses[i];
+            MyCallType callType = 0;
             double latitude = callLatitudes[idIndex];
             double longitude = callLongitudes[idIndex];
-            DateTime openTime = DateTime.Now.AddDays(-rand.Next(0, 30)); // up to 30 days back
+            DateTime openTime = new DateTime(s_dalConfig.Clock.Year - 2, 1, 1); //stage 1
+            int range = (s_dalConfig.Clock - openTime).Days; //stage 1
+            openTime.AddDays(s_rand.Next(range));
+
+            DateTime maxFinishCall = new DateTime(s_dalConfig.Clock.Year +1, 6, 1); //stage 1
+            int range2 = (s_dalConfig.Clock - maxFinishCall).Days; //stage 1
+            maxFinishCall.AddDays(s_rand.Next(range));
+
+
             string? description = $" call number: {idIndex} of type: {callType} at: {address}";
-            DateTime? maxFinishCall = rand.Next(2) == 0 ? openTime.AddHours(rand.Next(1, 72)) : null; //Will randomly accept any date and time between 1 hour and 72 hours after openTime or be null. 🌟
 
-            DateTime start = new DateTime(s_dalConfig.Clock.Year - 2, 1, 1); //stage 1
-            int range = (s_dalConfig.Clock - start).Days; //stage 1
-            start.AddDays(s_rand.Next(range));
-
-
-            s_dalCall!.Create(new Call(idIndex++, callType, address, latitude, longitude, openTime, description, maxFinishCall);
+            if (i < 5)
+            {
+                maxFinishCall = s_dalConfig.Clock.AddDays(-rand.Next(1, 30)); //30 days before
+                description = $"Call number: {i + 1} of type: {callType} at: {callAddresses[i]}";
+            }
+            
+            s_dalCall!.Create(new Call(idIndex, callType, address, latitude, longitude, openTime, description, maxFinishCall));
         }
     }
 
