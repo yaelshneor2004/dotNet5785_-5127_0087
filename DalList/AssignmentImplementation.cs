@@ -10,7 +10,8 @@ public class AssignmentImplementation : IAssignment
     {
         //for entities with auto id
         int newId = Config.NextAssignmentId;
-        Assignment newAssignment = item with { Id = newId };
+        int new2Id = Config.NextAssignmentId;
+        Assignment newAssignment = item with { Id = newId,CallId=new2Id };
         DataSource.Assignments.Add(newAssignment);
         
     }
