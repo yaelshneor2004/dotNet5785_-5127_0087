@@ -63,7 +63,7 @@ private static void createVolunteer()
             int id;
             do
                 id = s_rand.Next(200000000, 400000000);
-            while (s_dalVolunteer!.Read(id) != null); // id
+            while (s_dalVolunteer!.Read(id) != null); //idd
 
             //create 15 Volunteer
             s_dalVolunteer!.Create(new(id, name, phone, email, MyRole.Volunteer, MyTypeDistance.Aerial, password ,address, latitude, longitude, maxDistance,true));
