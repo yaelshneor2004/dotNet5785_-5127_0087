@@ -101,12 +101,12 @@ internal class Program
                     switch (selectedOption)
                     {
                         case Crud.Create:
-                            // Advance System Clock by a Minute
-                            s_dalConfig!.Clock = s_dalConfig.Clock.AddMinutes(1);
+                        // Advance System Clock by a Minute
+                        s_dalConfig!.Clock = s_dalConfig.Clock.AddMinutes(1);
                             Console.WriteLine($"New System Clock: {s_dalConfig.Clock}");
                             break;
                         case Crud.Read:
-                            // Advance System Clock by an Hour
+                        // Advance System Clock by an Hour
                             s_dalConfig.Clock = s_dalConfig.Clock.AddHours(1);
                             Console.WriteLine($"New System Clock: {s_dalConfig.Clock}");
                             break;

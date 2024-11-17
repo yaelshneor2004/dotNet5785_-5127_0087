@@ -25,7 +25,10 @@ public enum MyTypeDistance
 /// </summary>
 public enum MyCallType
 {
-    //todo
+    English,
+    Math,
+    ComputerScience,
+    Accounting
 }
 
 /// <summary>
