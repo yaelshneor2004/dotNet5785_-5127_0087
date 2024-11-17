@@ -68,7 +68,7 @@ private static void createVolunteer()
     
         DateTime start = new DateTime(s_dalConfig.Clock.Year - 2, 1, 1); //stage 1
         int range = (s_dalConfig.Clock - start).Days; //stage 1
-        return start.AddDays(s_rand.Next(range));
+         start.AddDays(s_rand.Next(range));
     }
 
     public static void Do(IVolunteer? dalVolunteer, IAssignment? dalAssignment, ICall? dalCall, IConfig? dalConfig) //stage 1

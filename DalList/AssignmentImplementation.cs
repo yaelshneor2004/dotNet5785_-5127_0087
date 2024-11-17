@@ -62,5 +62,5 @@ public class AssignmentImplementation : IAssignment
         throw new Exception($"An object of type Assignment with such an ID={item.Id} does not exist");
     }
 
-    public override string ToString() { return $"Assignment: ID: {Id}, Call ID: {CallId}, Volunteer ID: {VolunteerId}, Start Call: {StartCall}, Finish Type: {FinishType}, Finish Call: {FinishCall}"; }
+    
 }

@@ -14,4 +14,3 @@ public interface IAssignment
     void DeleteAll(); //Delete all entity objects
 }
 
-public override string ToString();

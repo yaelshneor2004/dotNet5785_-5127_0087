@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Dal;
+
 using DalApi;
 using DO;
 
@@ -20,11 +20,15 @@ public record Assignment
      int CallId,
      int VolunteerId,
      DateTime StartCall,
-     Enum? FinishType=null,
+     Enum? FinishType = null,
      DateTime? FinishCall = null
   )
 {
     /// Default constructor for stage 3
     public Assignment() : this(0, 0, 0, DateTime.Now) { }
+    public override string ToString()
+    {
+        return $"ID: {Id}, Call ID: {CallId}, Volunteer ID: {VolunteerId}, Start Call: {StartCall}, " + $"Finish Type: {FinishType}, Finish Call: {FinishCall}";
+    }
 }
 
