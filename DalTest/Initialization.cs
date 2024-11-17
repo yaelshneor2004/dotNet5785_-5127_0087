@@ -79,30 +79,25 @@ private static void createVolunteer()
     private static void createsAssignment()
     {
         Random rand = new Random();
-        int index = 1;
-        var volunteers = s_dalVolunteer?.ReadAll();
-        var calls = s_dalCall?.ReadAll();
 
-        int unassignedCalls = 0;
+        var allCalls = s_dalCall!.ReadAll(); // שליפת כל הקריאות
+        var allVolunteers = s_dalVolunteer!.ReadAll(); // שליפת כל המתנדבים
+        int idIndex = 1;
 
-        for (int i = 0; i < calls?.Count; i++)
+        foreach (var call in allCalls)
         {
-              if (unassignedCalls < 15) 
-                { 
-                    unassignedCalls++;
-                    continue;
-                }
+            var volunteer = allVolunteers[rand.Next(allVolunteers.Count)]; // random Volunteers
+            DateTime startCall = call.OpenTime.AddHours(rand.Next(1, 12)); // Start between 1 hour and 12 hours after opening//לבדוק מה הדרישות בפרוייקט
 
-                int callId = calls[i].Id;
-            int volunteerId = volunteers[s_rand.Next(volunteers.Count)].Id; //Draw a volunteer from everyone
-                DateTime startCall = calls[i].MaxFinishCall - calls[i].OpenTime;
-            MyFinishType finishType = (MyFinishType)rand.Next(0, 4);
+            // סוג סיום ותאריך סיום אופציונליים
+            //לבדוק את זה-מה הדרישות בפרוייקט
+            MyFinishType? finishType = rand.Next(2) == 0 ? (MyFinishType?)MyFinishType.Treated : null; //finishType can be null if the convert not success
+            DateTime? finishCall = finishType != null ? startCall.AddHours(rand.Next(1, 24)) : null;
 
-            s_dalAssignment!.Create(new Assignment(index, callId, volunteerId, startCall, finishType, finishCall));
-             
+            s_dalAssignment!.Create(new Assignment(idIndex, , volunteer.Id,startCall,finishType,finishCall));
+
+
         }
-
-
     }
     private static void createsCall()
     {
