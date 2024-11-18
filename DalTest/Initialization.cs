@@ -26,8 +26,6 @@ private static void createVolunteer()
 
         double[] callLongitudes = new double[] { 34.77697, 34.79152, 34.78139, 35.21289, 35.18331, 35.22323, 34.99115, 34.98264, 34.98865, 34.79223, 34.77952, 34.78251, 34.88718, 34.88532, 34.82732 };
              double[] callLatitudes = new double[] { 32.06366, 32.06180, 32.08404, 31.74851, 31.76832, 31.78571, 32.79916, 32.79406, 32.81912, 31.25297, 31.24642, 31.25360, 32.09077, 32.08862, 32.08333 };
-
-        Random rand = new Random();
        for (int i=0;i<15;i++)
         {
             double? latitude = callLatitudes[i];
@@ -35,9 +33,9 @@ private static void createVolunteer()
             string password = $"{new Random().Next(100000, 999999)}{(char)new Random().Next('A', 'Z' + 1)}{(char)new Random().Next('a', 'z' + 1)}";
             string name=volunteerNames[i];
             string address=addresses[i];
-            string phone = "05" + rand.Next(0, 10) + rand.Next(10000000, 99999999).ToString();
+            string phone = "05" + s_rand.Next(0, 10) + s_rand.Next(10000000, 99999999).ToString();
             string email = $"{name.Replace(" ", "").ToLower()}@gmail.com"; 
-            double? maxDistance = (rand.Next(2) == 0) ? (rand.NextDouble() * 95 + 5) : (double?)null;
+            double? maxDistance = (s_rand.Next(2) == 0) ? (s_rand.NextDouble() * 95 + 5) : (double?)null;
             int id;
             do
                 id = s_rand.Next(200000000, 400000000);
@@ -77,8 +75,6 @@ private static void createVolunteer()
     }
         private static void createsCall()
     {
-        Random rand = new Random();
-
         string[] callAddresses =  {"10 Jaffa Street, Jerusalem",
     "20 Emek Refaim Street, Jerusalem",
     "30 Agripas Street, Jerusalem",
@@ -158,19 +154,14 @@ private static void createVolunteer()
             MyCallType callType = 0;
             double latitude = callLatitudes[i];
             double longitude = callLongitudes[i];
-
-            DateTime openTime = new DateTime((s_dalConfig ?? throw new InvalidOperationException("s_dalConfig is null")).Clock.Year - 2, 1, 1);
+            DateTime openTime = new DateTime((s_dalConfig ?? throw new InvalidOperationException("s_dalConfig is null")).Clock.Year - 1, 1, 1);
             int range = Math.Max(1, (s_dalConfig.Clock - openTime).Days); 
-            openTime = openTime.AddDays(rand.Next(range)).AddHours(s_rand.Next(24)).AddMinutes(s_rand.Next(60));
-
+            openTime = openTime.AddDays(s_rand.Next(range)).AddHours(s_rand.Next(24)).AddMinutes(s_rand.Next(60));
             DateTime maxFinishCall = openTime.AddDays(s_rand.Next(1, 15)); 
-
-
             string? description = $" call number: {idIndex} of type: {callType} at: {address}";
-
             if (i < 5)
             {
-                maxFinishCall = s_dalConfig.Clock.AddDays(-rand.Next(1, 30)); //30 days before
+                maxFinishCall = s_dalConfig.Clock.AddDays(-s_rand.Next(1, 30)); //30 days before
                 description = $"Call number: {i + 1} of type: {callType} at: {callAddresses[i]}";
             }
             
