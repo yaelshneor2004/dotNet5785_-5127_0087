@@ -4,11 +4,7 @@ using DalApi;
 using DO;
 
 namespace DalTest;
-public enum MainMenuOptions { Exit, ShowVolunteer, ShowCall, ShowAssignment, InitializeData, ShowAllData, ShowConfigSubMenu, ResetDatabaseAndConfig }
-public enum Crud
-{
-    Exit, Create, Read, ReadAll, Update, Delete, DeleteAll
-}
+
 internal class Program
 {
     private static IAssignment? s_dalAssignment = new AssignmentImplementation(); //stage 1
@@ -23,18 +19,18 @@ internal class Program
             do
             {
                 ShowMainMenu();
-                string st = Console.ReadLine()!;
+                string st = Console.ReadLine()?? "0";
                 selectedOption = (MainMenuOptions)int.Parse(st);
                 switch (selectedOption)
                 {
                     case MainMenuOptions.ShowVolunteer:
-                        ShowSubMenu("Volunteer",s_dalVolunteer);
+                        ShowSubMenu("Volunteer", s_dalVolunteer ?? throw new InvalidOperationException("s_dalVolunteer is null"));
                         break;
                     case MainMenuOptions.ShowCall:
-                        ShowSubMenu("Call", s_dalCall);
+                        ShowSubMenu("Call", s_dalCall ?? throw new InvalidOperationException("s_dalCall is null"));
                         break;
                     case MainMenuOptions.ShowAssignment:
-                        ShowSubMenu("Assignment", s_dalAssignment);
+                        ShowSubMenu("Assignment", s_dalAssignment ?? throw new InvalidOperationException("s_dalAssignment is null"));
                         break;
                     case MainMenuOptions.InitializeData:
                         InitializeData();
@@ -70,8 +66,8 @@ internal class Program
         Console.WriteLine("Main Menu:");
         Console.WriteLine("0. Exit");
         Console.WriteLine("1. Displaying a submenu for the volunteers");
-        Console.WriteLine("2. Show Entity 2 Sub-Menu");
-        Console.WriteLine("3. Show Entity 3 Sub-Menu");
+        Console.WriteLine("2. Displaying a submenu for the Call");
+        Console.WriteLine("3. Displaying a submenu for the Assignment");
         Console.WriteLine("4. Initialize Data");
         Console.WriteLine("5. Show All Data");
         Console.WriteLine("6. Show Config Sub-Menu");
@@ -79,73 +75,108 @@ internal class Program
         Console.Write("Select an option: ");
     }
 
-    private static void ShowVolunteers()
-    {
-        ShowSubMenu("Volunteer", s_dalVolunteer);
-    }
-    private static void ShowCall()
-    { ShowSubMenu("Call", s_dalCall); }
-    private static void ShowAssignment()
-    {
-        ShowSubMenu("Assignment", s_dalAssignment);
-    }
-
     private static void ShowConfigSubMenu()
     {
-          Crud selectedOption;
-            do
-            {
+        ConfigOptions selectedOption;
+        do
+        {
             SubMenuConfig();
-                if (Enum.TryParse(Console.ReadLine(), out selectedOption))
+            if (Enum.TryParse(Console.ReadLine(), out selectedOption))
+            {
+                s_dalConfig = s_dalConfig ?? throw new InvalidOperationException("s_dalConfig is null");
+                switch (selectedOption)
                 {
-                    switch (selectedOption)
-                    {
-                        case Crud.Create:
-                        // Advance System Clock by a Minute
-                        s_dalConfig!.Clock = s_dalConfig.Clock.AddMinutes(1);
-                            Console.WriteLine($"New System Clock: {s_dalConfig.Clock}");
-                            break;
-                        case Crud.Read:
-                        // Advance System Clock by an Hour
-                            s_dalConfig.Clock = s_dalConfig.Clock.AddHours(1);
-                            Console.WriteLine($"New System Clock: {s_dalConfig.Clock}");
-                            break;
-                        case Crud.ReadAll:
-                            // Show Current System Clock
-                            Console.WriteLine($"Current System Clock: {s_dalConfig.Clock}");
-                            break;
-                        case Crud.Update:
-                            // Set New Configuration Value
-                            Console.WriteLine("Enter New Risk Range (in minutes): ");
-                            int minutes = int.Parse(Console.ReadLine()!);
-                            s_dalConfig.RiskRange = TimeSpan.FromMinutes(minutes);
-                            Console.WriteLine($"New Risk Range: {s_dalConfig.RiskRange}");
-                            break;
-                        case Crud.Delete:
-                            // Show Current Configuration Values
-                            Console.WriteLine($"Current System Clock: {s_dalConfig.Clock}");
-                            Console.WriteLine($"Current Risk Range: {s_dalConfig.RiskRange}");
-                            break;
-                        case Crud.DeleteAll:
-                            // Reset Configuration Values
-                            s_dalConfig.Reset();
-                            Console.WriteLine("Configuration values reset.");
-                            break;
-                        case Crud.Exit:
-                            return;
-                        default:
-                            Console.WriteLine("Invalid option. Please try again.");
-                            break;
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Invalid input. Please enter a valid option number.");
-                }
-            } while (selectedOption != Crud.Exit);
-        
 
+                    case ConfigOptions.AdvanceClockByMinute:
+                        // Advance System Clock by a Minute
+                        s_dalConfig.Clock = s_dalConfig.Clock.AddMinutes(1);
+                        Console.WriteLine($"New System Clock: {s_dalConfig.Clock}");
+                        break;
+                    case ConfigOptions.AdvanceClockByHour:
+                        // Advance System Clock by an Hour
+                        s_dalConfig.Clock = s_dalConfig.Clock.AddHours(1);
+                        Console.WriteLine($"New System Clock: {s_dalConfig.Clock}");
+                        break;
+                    case ConfigOptions.ShowCurrentClock:
+                        // Show Current System Clock
+                        Console.WriteLine($"Current System Clock: {s_dalConfig.Clock}");
+                        break;
+                    case ConfigOptions.SetRiskRange:
+                        SetRiskRange();
+                        break;
+                    case ConfigOptions.ShowConfigValues:
+                        ShowConfigValues();
+                        break;
+                    case ConfigOptions.ResetConfig:
+                        // Reset Configuration Values
+                        s_dalConfig?.Reset();
+                        Console.WriteLine("Configuration values reset.");
+                        break;
+                    case ConfigOptions.Exit:
+                        return;
+                    default:
+                        Console.WriteLine("Invalid option. Please try again.");
+                        break;
+                }
+            }
+            else
+            {
+                Console.WriteLine("Invalid input. Please enter a valid option number.");
+            }
+        } while (selectedOption != ConfigOptions.Exit);
     }
+
+    private static void SetRiskRange()
+    {
+            Console.WriteLine("Which value do you want to change?");
+            Console.WriteLine("1. System Clock");
+            Console.WriteLine("2. Risk Range");
+            int choice = int.Parse(Console.ReadLine()?? "0");
+        s_dalConfig = s_dalConfig ?? throw new InvalidOperationException("s_dalConfig is null");
+        switch (choice)
+            {
+                case 1:
+                    Console.WriteLine("Enter new System Clock (yyyy-MM-dd HH:mm:ss): ");
+                    DateTime newClock = DateTime.Parse(Console.ReadLine()?? "0");
+                    s_dalConfig.Clock = newClock;
+                    Console.WriteLine($"New System Clock: {s_dalConfig.Clock}");
+                    break;
+                case 2:
+                    Console.WriteLine("Enter new Risk Range (in minutes): ");
+                    int minutes = int.Parse(Console.ReadLine()?? "0");
+                    s_dalConfig.RiskRange = TimeSpan.FromMinutes(minutes);
+                    Console.WriteLine($"New Risk Range: {s_dalConfig.RiskRange}");
+                    break;
+                default:
+                    Console.WriteLine("Invalid choice.");
+                    break;
+            }
+        
+    }
+
+    private static void ShowConfigValues()
+    {
+            Console.WriteLine("Which value do you want to change?");
+            Console.WriteLine("1. System Clock");
+            Console.WriteLine("2. Risk Range");
+            int choice = int.Parse(Console.ReadLine()?? "0");
+        s_dalConfig = s_dalConfig ?? throw new InvalidOperationException("s_dalConfig is null");
+        switch (choice)
+            {
+                case 1:
+                    Console.WriteLine($"New System Clock: {s_dalConfig.Clock}");
+                    break;
+                case 2:
+                    Console.WriteLine($"New Risk Range: {s_dalConfig.RiskRange}");
+                    break;
+                default:
+                    Console.WriteLine("Invalid choice.");
+                    break;
+            }
+       
+    }
+
+
     private static void InitializeData()
     {
         Initialization.Do(s_dalVolunteer,s_dalAssignment, s_dalCall, s_dalConfig);
@@ -155,65 +186,68 @@ internal class Program
 
     private static void ShowAllData()
     {
-        ReadAllEntities("Volunteer", s_dalVolunteer);
-        ReadAllEntities("Call", s_dalCall);
-        ReadAllEntities("Assignment", s_dalAssignment);
+        ReadAllEntities("Volunteer", s_dalVolunteer ?? throw new InvalidOperationException("s_dalVolunteer is null"));
+        ReadAllEntities("Call", s_dalCall ?? throw new InvalidOperationException("s_dalCall is null"));
+        ReadAllEntities("Assignment", s_dalAssignment ?? throw new InvalidOperationException("s_dalAssignment is null"));
     }
-
 
     private static void ResetDatabaseAndConfig()
     {
-            s_dalVolunteer!.DeleteAll();
-            s_dalCall!.DeleteAll();
-            s_dalAssignment!.DeleteAll();
-        s_dalConfig!.Reset();
+        (s_dalVolunteer ?? throw new InvalidOperationException("s_dalVolunteer is null")).DeleteAll();
+        (s_dalCall ?? throw new InvalidOperationException("s_dalCall is null")).DeleteAll();
+        (s_dalAssignment ?? throw new InvalidOperationException("s_dalAssignment is null")).DeleteAll();
+        (s_dalConfig ?? throw new InvalidOperationException("s_dalConfig is null")).Reset();
         Console.WriteLine("Database and configuration reset.");
-
     }
+
     private static void ShowSubMenu(string type, Object dal)
     {
         ShowSubMenuOutput(type);
-        string input = Console.ReadLine()!;
-        Crud cr = (Crud)int.Parse(input);
-        switch (cr)
+        string? input = Console.ReadLine();
+        if (int.TryParse(input, out int parsedInput))
         {
-            case Crud.Create:
-                CreateEntity(type, dal);
-                break;
-            case Crud.Read:
-                ReadEntity(type, dal);
-                break;
-            case Crud.ReadAll:
-                ReadAllEntities(type, dal);
-                break;
-            case Crud.Update:
-                UpdateEntity(type, dal);
-                break;
-            case Crud.Delete:
-                DeleteEntity(type, dal);
-                break;
-            case Crud.DeleteAll:
-                ((dynamic)dal).DeleteAll();
-                Console.WriteLine($"All {type}s deleted.");
-                break;
-            case Crud.Exit:
-                return;
-            default:
-                Console.WriteLine("Invalid option. Please try again.");
-                break;
+            Crud cr = (Crud)parsedInput;
+            switch (cr)
+            {
+                case Crud.Create:
+                    CreateEntity(type, dal);
+                    break;
+                case Crud.Read:
+                    ReadEntity(type, dal);
+                    break;
+                case Crud.ReadAll:
+                    ReadAllEntities(type, dal);
+                    break;
+                case Crud.Update:
+                    UpdateEntity(type, dal);
+                    break;
+                case Crud.Delete:
+                    DeleteEntity(type, dal);
+                    break;
+                case Crud.DeleteAll:
+                    ((dynamic)dal).DeleteAll();
+                    Console.WriteLine($"All {type}s deleted.");
+                    break;
+                case Crud.Exit:
+                    return;
+                default:
+                    Console.WriteLine("Invalid option. Please try again.");
+                    break;
+            }
         }
+        else { Console.WriteLine("Invalid input. Please enter a valid number."); }
     }
-    private static void ShowSubMenuOutput(string help)
+    private static void ShowSubMenuOutput(string type)
     {
 
-        Console.WriteLine($"{help} Sub-Menu:");
+        Console.WriteLine($"{type} Sub-Menu:");
         Console.WriteLine("0. Exit Sub-Menu");
-        Console.WriteLine($"1. Add New {help}");
-        Console.WriteLine($"2. Read {help} ");
-        Console.WriteLine($"3. Read All {help}s");
-        Console.WriteLine($"4. Update {help} ");
-        Console.WriteLine($"5. Delete {help} ");
-        Console.WriteLine($"6. Delete All {help}s");
+        Console.WriteLine($"1. Add New {type}");
+        Console.WriteLine($"2. Read {type} ");
+        Console.WriteLine($"3. Read All {type}s");
+        Console.WriteLine($"4. Update {type} ");
+        Console.WriteLine($"5. Delete {type} ");
+        Console.WriteLine($"6. Delete All {type}s");
         Console.Write("Select an option: ");
 
     }
@@ -244,7 +278,7 @@ internal class Program
         var entity = ((dynamic)dal).Read(id);
         if (entity != null)
         {
-            Console.WriteLine(entity.ToString());
+            Console.WriteLine(entity);
         }
         else
             Console.WriteLine($"{type} not found.");
@@ -278,6 +312,7 @@ internal class Program
         dynamic entity;
         if (type == "Volunteer")
         {
+
             entity = inputV();
         }
         else if (type == "Call")
@@ -299,37 +334,36 @@ internal class Program
         Console.WriteLine($"Creating new volunteer:");
 
         Console.WriteLine("Enter ID: ");
-        int id = int.Parse(Console.ReadLine()!);
-
+        int id = int.Parse(Console.ReadLine() ?? "0");
         Console.WriteLine("Enter Full Name: ");
-        string fullName = Console.ReadLine()!;
+        string fullName = Console.ReadLine() ?? "0";
 
         Console.WriteLine("Enter Phone (10 digits, starts with 0): ");
-        string phone = Console.ReadLine()!;
+        string phone = Console.ReadLine() ?? "0";
 
         Console.WriteLine("Enter Email: ");
-        string email = Console.ReadLine()!;
+        string  email = Console.ReadLine() ?? "0";
 
         Console.WriteLine("Enter Role (0 for Manager, 1 for Volunteer): ");
-        MyRole role = (MyRole)int.Parse(Console.ReadLine()!);
+        MyRole role = (MyRole)int.Parse(Console.ReadLine() ?? "0");
 
         Console.WriteLine("Enter Type Distance (0 for Aerial, 1 for Walking, 2 for Driving): ");
-        MyTypeDistance typeDistance = (MyTypeDistance)int.Parse(Console.ReadLine()!);
+       MyTypeDistance typeDistance = (MyTypeDistance)int.Parse(Console.ReadLine() ?? "0");
 
         Console.WriteLine("Enter Password: ");
-        string password = Console.ReadLine()!;
+        string password = Console.ReadLine() ?? "0";
 
         Console.WriteLine("Enter Address: ");
-        string address = Console.ReadLine()!;
+        string  address = Console.ReadLine() ?? "0";
 
         Console.WriteLine("Enter Latitude: ");
-        double latitude = double.Parse(Console.ReadLine()!);
+        double latitude = double.Parse(Console.ReadLine() ?? "0" );
 
         Console.WriteLine("Enter Longitude: ");
-        double longitude = double.Parse(Console.ReadLine()!);
+        double longitude = double.Parse(Console.ReadLine() ?? "0");
 
         Console.WriteLine("Enter Max Distance: ");
-        double maxDistance = double.Parse(Console.ReadLine()!);
+        double maxDistance = double.Parse(Console.ReadLine() ?? "0");
 
         bool isActive = true;
 
@@ -341,28 +375,24 @@ internal class Program
     public static Assignment inputA()
     {
         Console.WriteLine("Creating new assignment:");
-
-        Console.WriteLine("Enter ID: ");
-        int id = int.Parse(Console.ReadLine()!);
-
         Console.WriteLine("Enter Call ID: ");
-        int callId = int.Parse(Console.ReadLine()!);
+        int callId = int.Parse(Console.ReadLine() ?? "0");
 
         Console.WriteLine("Enter Volunteer ID: ");
-        int volunteerId = int.Parse(Console.ReadLine()!);
+        int volunteerId = int.Parse(Console.ReadLine() ?? "0");
 
         Console.WriteLine("Enter Start Call (YYYY-MM-DD HH:MM:SS): ");
-        DateTime startCall = DateTime.Parse(Console.ReadLine()!);
+        DateTime startCall = DateTime.Parse(Console.ReadLine() ?? "0");
 
         Console.WriteLine("Enter Finish Type (optional, press Enter to skip): ");
-        string? finishTypeInput = Console.ReadLine();
+        string finishTypeInput = Console.ReadLine() ?? "0";
         MyFinishType? finishType = string.IsNullOrEmpty(finishTypeInput) ? (MyFinishType?)null : Enum.Parse<MyFinishType>(finishTypeInput); //check if the input us empty/null and putting 0/1 respectively
 
         Console.WriteLine("Enter Finish Call (optional, press Enter to skip, YYYY-MM-DD HH:MM:SS): ");
-        string? finishCallInput = Console.ReadLine();
+        string finishCallInput = Console.ReadLine() ?? "0";
         DateTime? finishCall = string.IsNullOrEmpty(finishCallInput) ? (DateTime?)null : DateTime.Parse(finishCallInput);
 
-        Assignment newAssignment = new Assignment(id, callId, volunteerId, startCall, finishType, finishCall);
+        Assignment newAssignment = new Assignment(1, callId, volunteerId, startCall, finishType, finishCall);
         return newAssignment;
     }
 
@@ -371,33 +401,28 @@ internal class Program
     {
         Console.WriteLine("Creating new call:");
 
-        Console.WriteLine("Enter ID: ");
-        int id = int.Parse(Console.ReadLine()!);
-
         Console.WriteLine("Enter Call Type: ");
-        MyCallType callType = (MyCallType)Enum.Parse(typeof(MyCallType), Console.ReadLine()!);
+        MyCallType callType = (MyCallType)Enum.Parse(typeof(MyCallType), Console.ReadLine() ?? "0");
 
         Console.WriteLine("Enter Address: ");
-        string address = Console.ReadLine()!;
+        string address = Console.ReadLine() ?? "0";
 
         Console.WriteLine("Enter Latitude: ");
-        double latitude = double.Parse(Console.ReadLine()!);
+        double latitude = double.Parse(Console.ReadLine() ?? "0");
 
         Console.WriteLine("Enter Longitude: ");
-        double longitude = double.Parse(Console.ReadLine()!);
+        double longitude = double.Parse(Console.ReadLine() ?? "0");
 
         Console.WriteLine("Enter Open Time (YYYY-MM-DD HH:MM:SS): ");
-        DateTime openTime = DateTime.Parse(Console.ReadLine()!);
+        DateTime openTime = DateTime.Parse(Console.ReadLine() ?? "0");
 
         Console.WriteLine("Enter Description (optional, press Enter to skip): ");
-        string? description = Console.ReadLine();
-        if (string.IsNullOrEmpty(description)) description = null;
-
+        string  description = Console.ReadLine() ?? "0";
         Console.WriteLine("Enter Max Finish Call (optional, press Enter to skip, YYYY-MM-DD HH:MM:SS): ");
-        string? maxFinishCallInput = Console.ReadLine();
+        string maxFinishCallInput = Console.ReadLine() ?? "0";
         DateTime? maxFinishCall = string.IsNullOrEmpty(maxFinishCallInput) ? (DateTime?)null : DateTime.Parse(maxFinishCallInput);
 
-        Call newCall = new Call(id, callType, address, latitude, longitude, openTime, description, maxFinishCall);
+        Call newCall = new Call(1, callType, address, latitude, longitude, openTime, description, maxFinishCall);
         return newCall;
     }
 

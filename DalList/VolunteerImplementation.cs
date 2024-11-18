@@ -24,8 +24,10 @@ public class VolunteerImplementation : IVolunteer
         {
             if (DataSource.Volunteers[i].Id == id)
                 DataSource.Volunteers.Remove(DataSource.Volunteers[i]);
+            else
+                throw new Exception($"An object of type Volunteer with such an ID={id} does not exist");
         }
-        throw new Exception($"An object of type Volunteer with such an ID={id} does not exist");
+       
     }
 
 
@@ -60,9 +62,10 @@ public class VolunteerImplementation : IVolunteer
                 DataSource.Volunteers.Remove(DataSource.Volunteers[i]);
                 DataSource.Volunteers.Add(item);
             }
-
+            else
+                throw new Exception($"An object of type Volunteer with such an ID={item.Id} does not exist");
         }
-        throw new Exception($"An object of type Volunteer with such an ID={item.Id} does not exist");
+       
     }
     
 }

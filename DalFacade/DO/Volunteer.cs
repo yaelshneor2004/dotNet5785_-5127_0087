@@ -32,7 +32,5 @@ bool IsActive = false
 {
    /// Default constructor for stage 3
 public Volunteer():this(0,"","","",0,0) { }
-
-    public override string ToString() { return $"ID: {Id}, Name: {FullName}, Phone: {Phone}, Email: {Email}, Role: {Role}, " + $"Type Distance: {TypeDistance}, Address: {Address}, Latitude: {Latitude}, " + $"Longitude: {Longitude}, Max Distance: {MaxDistance}, Active: {IsActive}"; }
 }
 

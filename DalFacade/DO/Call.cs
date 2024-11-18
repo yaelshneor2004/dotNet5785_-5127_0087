@@ -29,5 +29,5 @@ DateTime? MaxFinishCall = null
     /// Default constructor for stage 3
     public Call() : this(0, 0, "", 0, 0, DateTime.Now) { }
 
-    public override string ToString() { return $"ID: {Id}, Call Type: {CallType}, Address: {Address}, Latitude: {Latitude}, " + $"Longitude: {Longitude}, Open Time: {OpenTime}, Description: {Description}, " + $"Max Finish Call: {MaxFinishCall}"; }
+  
 }

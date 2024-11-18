@@ -44,3 +44,33 @@ public enum MyFinishType
     ExpiredCancel
 
 }
+/// <summary>
+/// Enum containing options for the system configuration menu.
+/// </summary>
+
+public enum ConfigOptions
+{
+    Exit,
+    AdvanceClockByMinute ,
+    AdvanceClockByHour,
+    ShowCurrentClock,
+    SetRiskRange,
+    ShowConfigValues,
+    ResetConfig,
+   
+}
+/// <summary>
+/// Enum containing options for the main menu
+/// </summary>
+public enum MainMenuOptions
+{
+    Exit, ShowVolunteer, ShowCall, ShowAssignment, InitializeData, ShowAllData, ShowConfigSubMenu, ResetDatabaseAndConfig
+}
+
+/// <summary>
+/// Enum representing CRUD (Create, Read, Update, Delete) operations and options
+/// </summary>
+public enum Crud
+{
+    Exit, Create, Read, ReadAll, Update, Delete, DeleteAll
+}

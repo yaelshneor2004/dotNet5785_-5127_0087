@@ -23,8 +23,10 @@ public class CallImplementation : ICall
         {
             if (DataSource.Calls[i].Id == id)
                 DataSource.Calls.Remove(DataSource.Calls[i]);
+            else
+                throw new Exception($"An object of type Call with such an ID={id} does not exist");
         }
-        throw new Exception($"An object of type Call with such an ID={id} does not exist");
+
     }
 
 
@@ -59,8 +61,9 @@ public class CallImplementation : ICall
                 DataSource.Calls.Remove(DataSource.Calls[i]);
                 DataSource.Calls.Add(item);
             }
-
+            else
+                throw new Exception($"An object of type Call with such an ID={item.Id} does not exist");
         }
-        throw new Exception($"An object of type Call with such an ID={item.Id} does not exist");
+       
     }
 }

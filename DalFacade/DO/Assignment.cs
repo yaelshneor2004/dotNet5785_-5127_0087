@@ -26,9 +26,6 @@ public record Assignment
 {
     /// Default constructor for stage 3
     public Assignment() : this(0, 0, 0, DateTime.Now) { }
-    public override string ToString()
-    {
-        return $"ID: {Id}, Call ID: {CallId}, Volunteer ID: {VolunteerId}, Start Call: {StartCall}, " + $"Finish Type: {FinishType}, Finish Call: {FinishCall}";
-    }
+
 }
 

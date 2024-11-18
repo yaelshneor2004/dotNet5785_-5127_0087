@@ -22,8 +22,10 @@ public class AssignmentImplementation : IAssignment
         {
             if (DataSource.Assignments[i].Id == id)
                 DataSource.Assignments.Remove(DataSource.Assignments[i]);
+            else
+                throw new Exception($"An object of type Assignment with such an ID={id} does not exist");
         }
-        throw new Exception($"An object of type Assignment with such an ID={id} does not exist");
+     
     }
 
 
@@ -58,9 +60,10 @@ public class AssignmentImplementation : IAssignment
                 DataSource.Assignments.Remove(DataSource.Assignments[i]);
                 DataSource.Assignments.Add(item);
             }
-
+            else
+                throw new Exception($"An object of type Assignment with such an ID={item.Id} does not exist");
         }
-        throw new Exception($"An object of type Assignment with such an ID={item.Id} does not exist");
+       
     }
 
     
