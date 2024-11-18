@@ -1,9 +1,9 @@
 ﻿
 
 using DalApi;
-
 namespace Dal;
 
+//The ConfigImplementation class manages configuration settings, including getting and setting the clock and risk range, and resetting the configuration. 🌟
 public class ConfigImplementation : IConfig
 {
     

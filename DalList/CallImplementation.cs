@@ -5,6 +5,7 @@ using DalApi;
 using DO;
 using System.Collections.Generic;
 
+//The CallImplementation class manages operations for Call entities, including creating, reading, updating, and deleting calls in the data source
 public class CallImplementation : ICall
 
 {

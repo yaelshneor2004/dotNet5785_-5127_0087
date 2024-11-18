@@ -7,10 +7,11 @@ namespace DalTest;
 
 internal class Program
 {
-    private static IAssignment? s_dalAssignment = new AssignmentImplementation(); //stage 1
-    private static IVolunteer? s_dalVolunteer = new VolunteerImplementation(); //stage 1
-    private static ICall? s_dalCall = new CallImplementation(); //stage 1
-    private static IConfig? s_dalConfig = new ConfigImplementation(); //stage 1
+    private static IAssignment? s_dalAssignment = new AssignmentImplementation(); // Initialize assignment DAL
+    private static IVolunteer? s_dalVolunteer = new VolunteerImplementation(); // Initialize volunteer DAL
+    private static ICall? s_dalCall = new CallImplementation(); // Initialize call DAL
+    private static IConfig? s_dalConfig = new ConfigImplementation(); // Initialize config DAL
+
     public static void Main(string[] args)
     {
         try
@@ -18,49 +19,48 @@ internal class Program
             MainMenuOptions selectedOption;
             do
             {
-                ShowMainMenu();
-                if (!int.TryParse(Console.ReadLine(), out int selectedOptionInt)) throw new FormatException("Invalid input for menu option!"); 
+                ShowMainMenu(); // Show the main menu
+                if (!int.TryParse(Console.ReadLine(), out int selectedOptionInt)) throw new FormatException("Invalid input for menu option!");
                 selectedOption = (MainMenuOptions)selectedOptionInt;
                 switch (selectedOption)
                 {
                     case MainMenuOptions.ShowVolunteer:
-                        ShowSubMenu("Volunteer", s_dalVolunteer ?? throw new InvalidOperationException("s_dalVolunteer is null"));
+                        ShowSubMenu("Volunteer", s_dalVolunteer ?? throw new InvalidOperationException("s_dalVolunteer is null")); // Show volunteer submenu
                         break;
                     case MainMenuOptions.ShowCall:
-                        ShowSubMenu("Call", s_dalCall ?? throw new InvalidOperationException("s_dalCall is null"));
+                        ShowSubMenu("Call", s_dalCall ?? throw new InvalidOperationException("s_dalCall is null")); // Show call submenu
                         break;
                     case MainMenuOptions.ShowAssignment:
-                        ShowSubMenu("Assignment", s_dalAssignment ?? throw new InvalidOperationException("s_dalAssignment is null"));
+                        ShowSubMenu("Assignment", s_dalAssignment ?? throw new InvalidOperationException("s_dalAssignment is null")); // Show assignment submenu
                         break;
                     case MainMenuOptions.InitializeData:
-                        InitializeData();
+                        InitializeData(); // Initialize data
                         break;
                     case MainMenuOptions.ShowAllData:
-                        ShowAllData();
+                        ShowAllData(); // Show all data
                         break;
-                        //
                     case MainMenuOptions.ShowConfigSubMenu:
-                        ShowConfigSubMenu();
+                        ShowConfigSubMenu(); // Show config submenu
                         break;
                     case MainMenuOptions.ResetDatabaseAndConfig:
-                        ResetDatabaseAndConfig();
+                        ResetDatabaseAndConfig(); // Reset database and config
                         break;
                     default:
                         Console.WriteLine("Invalid option. Please try again.");
                         break;
                 }
 
-
             }
             while (selectedOption != 0);
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.Message);
+            Console.WriteLine(ex.Message); // Print exception message
         }
 
     }
 
+    //The SubMenuConfig function displays a configuration submenu with options for advancing the system clock, showing or setting configuration values, and resetting configuration values
     private static void ShowMainMenu()
     {
         Console.WriteLine("Main Menu:");
@@ -80,103 +80,104 @@ internal class Program
         ConfigOptions selectedOption;
         do
         {
-            SubMenuConfig();
+            SubMenuConfig(); // Show configuration submenu
             if (!Enum.TryParse(Console.ReadLine(), out int selectedOptionInt)) throw new FormatException("Invalid input for menu option!");
             selectedOption = (ConfigOptions)selectedOptionInt;
             s_dalConfig = s_dalConfig ?? throw new InvalidOperationException("s_dalConfig is null");
-                switch (selectedOption)
-                {
+            switch (selectedOption)
+            {
 
-                    case ConfigOptions.AdvanceClockByMinute:
-                        // Advance System Clock by a Minute
-                        s_dalConfig.Clock = s_dalConfig.Clock.AddMinutes(1);
-                        Console.WriteLine($"New System Clock: {s_dalConfig.Clock}");
-                        break;
-                    case ConfigOptions.AdvanceClockByHour:
-                        // Advance System Clock by an Hour
-                        s_dalConfig.Clock = s_dalConfig.Clock.AddHours(1);
-                        Console.WriteLine($"New System Clock: {s_dalConfig.Clock}");
-                        break;
-                    case ConfigOptions.ShowCurrentClock:
-                        // Show Current System Clock
-                        Console.WriteLine($"Current System Clock: {s_dalConfig.Clock}");
-                        break;
-                    case ConfigOptions.SetRiskRange:
-                        SetRiskRange();
-                        break;
-                    case ConfigOptions.ShowConfigValues:
-                        ShowConfigValues();
-                        break;
-                    case ConfigOptions.ResetConfig:
-                        // Reset Configuration Values
-                        s_dalConfig?.Reset();
-                        Console.WriteLine("Configuration values reset.");
-                        break;
-                    case ConfigOptions.Exit:
-                        return;
-                    default:
-                        Console.WriteLine("Invalid option. Please try again.");
-                        break;
-                }
-       
-        } 
+                case ConfigOptions.AdvanceClockByMinute:
+                    // Advance System Clock by a Minute
+                    s_dalConfig.Clock = s_dalConfig.Clock.AddMinutes(1);
+                    Console.WriteLine($"New System Clock: {s_dalConfig.Clock}");
+                    break;
+                case ConfigOptions.AdvanceClockByHour:
+                    // Advance System Clock by an Hour
+                    s_dalConfig.Clock = s_dalConfig.Clock.AddHours(1);
+                    Console.WriteLine($"New System Clock: {s_dalConfig.Clock}");
+                    break;
+                case ConfigOptions.ShowCurrentClock:
+                    // Show Current System Clock
+                    Console.WriteLine($"Current System Clock: {s_dalConfig.Clock}");
+                    break;
+                case ConfigOptions.SetRiskRange:
+                    SetRiskRange(); // Set the risk range
+                    break;
+                case ConfigOptions.ShowConfigValues:
+                    ShowConfigValues(); // Show configuration values
+                    break;
+                case ConfigOptions.ResetConfig:
+                    // Reset Configuration Values
+                    s_dalConfig?.Reset();
+                    Console.WriteLine("Configuration values reset.");
+                    break;
+                case ConfigOptions.Exit:
+                    return;
+                default:
+                    Console.WriteLine("Invalid option. Please try again.");
+                    break;
+            }
+
+        }
         while (selectedOption != ConfigOptions.Exit);
     }
 
+
     private static void SetRiskRange()
     {
-            Console.WriteLine("Which value do you want to change?");
-            Console.WriteLine("1. System Clock");
-            Console.WriteLine("2. Risk Range");
+        Console.WriteLine("Which value do you want to change?");
+        Console.WriteLine("1. System Clock");
+        Console.WriteLine("2. Risk Range");
         if (!int.TryParse(Console.ReadLine(), out int choice)) throw new FormatException("Invalid input for choice!");
         s_dalConfig = s_dalConfig ?? throw new InvalidOperationException("s_dalConfig is null");
         switch (choice)
-            {
-                case 1:
-                    Console.WriteLine("Enter new System Clock (yyyy-MM-dd HH:mm:ss): ");
+        {
+            case 1:
+                Console.WriteLine("Enter new System Clock (yyyy-MM-dd HH:mm:ss): ");
                 if (!DateTime.TryParse(Console.ReadLine(), out DateTime newClock)) throw new FormatException("Invalid date and time format!");
                 s_dalConfig.Clock = newClock;
-                    Console.WriteLine($"New System Clock: {s_dalConfig.Clock}");
-                    break;
-                case 2:
-                    Console.WriteLine("Enter new Risk Range (in minutes): ");
+                Console.WriteLine($"New System Clock: {s_dalConfig.Clock}");
+                break;
+            case 2:
+                Console.WriteLine("Enter new Risk Range (in minutes): ");
                 if (!int.TryParse(Console.ReadLine(), out int minutes)) throw new FormatException("Invalid input for minutes!");
                 s_dalConfig.RiskRange = TimeSpan.FromMinutes(minutes);
-                    Console.WriteLine($"New Risk Range: {s_dalConfig.RiskRange}");
-                    break;
-                default:
-                    Console.WriteLine("Invalid choice.");
-                    break;
-            }
-        
+                Console.WriteLine($"New Risk Range: {s_dalConfig.RiskRange}");
+                break;
+            default:
+                Console.WriteLine("Invalid choice.");
+                break;
+        }
+
     }
 
     private static void ShowConfigValues()
     {
-            Console.WriteLine("Which value do you want to change?");
-            Console.WriteLine("1. System Clock");
-            Console.WriteLine("2. Risk Range");
+        Console.WriteLine("Which value do you want to change?");
+        Console.WriteLine("1. System Clock");
+        Console.WriteLine("2. Risk Range");
         if (!int.TryParse(Console.ReadLine(), out int choice)) throw new FormatException("Invalid input for choice!");
         s_dalConfig = s_dalConfig ?? throw new InvalidOperationException("s_dalConfig is null");
         switch (choice)
-            {
-                case 1:
-                    Console.WriteLine($"New System Clock: {s_dalConfig.Clock}");
-                    break;
-                case 2:
-                    Console.WriteLine($"New Risk Range: {s_dalConfig.RiskRange}");
-                    break;
-                default:
-                    Console.WriteLine("Invalid choice.");
-                    break;
-            }
-       
+        {
+            case 1:
+                Console.WriteLine($"New System Clock: {s_dalConfig.Clock}");
+                break;
+            case 2:
+                Console.WriteLine($"New Risk Range: {s_dalConfig.RiskRange}");
+                break;
+            default:
+                Console.WriteLine("Invalid choice.");
+                break;
+        }
+
     }
 
 
     private static void InitializeData()
     {
-        Initialization.Do(s_dalVolunteer,s_dalAssignment, s_dalCall, s_dalConfig);
+        Initialization.Do(s_dalVolunteer, s_dalAssignment, s_dalCall, s_dalConfig);
         Console.WriteLine("Data initialized.");
     }
 
@@ -232,6 +233,7 @@ internal class Program
             }
         }
     }
+    //displays a submenu with options for adding, reading, updating, and deleting entities of the specified type
     private static void ShowSubMenuOutput(string type)
     {
 
@@ -246,6 +248,8 @@ internal class Program
         Console.Write("Select an option: ");
 
     }
+
+    //The CreateEntity function creates a new entity and uses the DAL object to add it to the database
     private static void CreateEntity(string type, object dal)
     {
         dynamic entity;
@@ -281,6 +285,8 @@ internal class Program
         }
 
     }
+
+    //The ReadEntity function reads an entity by its ID and uses the DAL object to retrieve it from the database
     private static void ReadAllEntities(string type, object dal)
     {
         var entities = ((dynamic)dal).ReadAll();
@@ -307,6 +313,8 @@ internal class Program
         }
 
     }
+
+    //The DeleteEntity function deletes an entity by its ID and uses the DAL object to remove it from the database
     private static void UpdateEntity(string type, object dal)
     {
         dynamic entity;
@@ -421,16 +429,17 @@ internal class Program
         if (!DateTime.TryParse(Console.ReadLine(), out DateTime openTime)) throw new FormatException("Invalid Open Time!");
 
         Console.WriteLine("Enter Description (optional, press Enter to skip): ");
-        string description = Console.ReadLine()?? "0";
+        string description = Console.ReadLine() ?? "0";
 
         Console.WriteLine("Enter Max Finish Call (optional, press Enter to skip, YYYY-MM-DD HH:MM:SS): ");
-        string maxFinishCallInput = Console.ReadLine()?? "0";
+        string maxFinishCallInput = Console.ReadLine() ?? "0";
         DateTime? maxFinishCall = string.IsNullOrEmpty(maxFinishCallInput) ? (DateTime?)null : DateTime.Parse(maxFinishCallInput);
 
         Call newCall = new Call(1, callType, address, latitude, longitude, openTime, description, maxFinishCall);
         return newCall;
     }
 
+    //The SubMenuConfig function displays a configuration submenu with options for advancing the system clock, showing or setting configuration values, and resetting configuration values
     public static void SubMenuConfig()
     {
         Console.WriteLine("Config Sub-Menu:");
