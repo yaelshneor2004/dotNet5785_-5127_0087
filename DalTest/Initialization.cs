@@ -33,7 +33,7 @@ private static void createVolunteer()
             string password = $"{new Random().Next(100000, 999999)}{(char)new Random().Next('A', 'Z' + 1)}{(char)new Random().Next('a', 'z' + 1)}";
             string name=volunteerNames[i];
             string address=addresses[i];
-            string phone = "05" + s_rand.Next(0, 10) + s_rand.Next(10000000, 99999999).ToString();
+            string phone = "05" + s_rand.Next(10) + s_rand.Next(10000000, 100000000);
             string email = $"{name.Replace(" ", "").ToLower()}@gmail.com"; 
             double? maxDistance = (s_rand.Next(2) == 0) ? (s_rand.NextDouble() * 95 + 5) : (double?)null;
             int id;
@@ -56,20 +56,27 @@ private static void createVolunteer()
     {
         int index = 1;
         var volunteers = s_dalVolunteer?.ReadAll();
-        var calls = s_dalCall?.ReadAll();
-        for (int i = 0; i < calls?.Count; i++)
+
+
+        var calls = s_dalCall?.ReadAll()?.Where(call => call != null).Take(50);
+        if (calls != null)
         {
-            if (i < 15) continue;
-            int callId = calls[i].Id;
-            int volunteerId = volunteers?[s_rand.Next(volunteers?.Count ?? 0)].Id ?? 0; // Draw a volunteer
-            DateTime startCall = calls[i].OpenTime with { }; //stage 1
-            int range = (int)((calls[i].MaxFinishCall?.AddHours(2) ?? startCall).Subtract(startCall)).TotalHours;
-             startCall = startCall.AddHours(1);//stage 1
-            DateTime finishCall =startCall with { }; //stage 1
-            int range2 = (int)((calls[i].MaxFinishCall?.AddHours(2) ?? finishCall).Subtract(finishCall)).TotalMinutes;
-            finishCall = finishCall.AddMinutes(s_rand.Next(range2));//stage 
-            MyFinishType finishType = (MyFinishType)s_rand.Next(0, 4);
-            s_dalAssignment?.Create(new Assignment(index, callId, volunteerId, startCall, finishType, finishCall));
+            foreach (var call in calls) // Only 50 were allocated out of the 65
+
+
+
+            {
+                int callId = call.Id;
+                int volunteerId = volunteers?[s_rand.Next(volunteers?.Count ?? 0)].Id ?? 0; // Draw a volunteer
+                DateTime startCall = call.OpenTime with { };
+                int range = (int)((call.MaxFinishCall?.AddHours(2) ?? startCall).Subtract(startCall)).TotalHours;
+                startCall = startCall.AddHours(1);//add one hours
+                DateTime finishCall = startCall with { }; //creates a copy of startCall and stores it in finishCall:
+                int range2 = (int)((call.MaxFinishCall?.AddHours(2) ?? finishCall).Subtract(finishCall)).TotalMinutes;
+                finishCall = finishCall.AddMinutes(s_rand.Next(range2));//Adds random minutes to finishCall
+                MyFinishType finishType = (MyFinishType)s_rand.Next(0, 4);
+                s_dalAssignment?.Create(new Assignment(index, callId, volunteerId, startCall, finishType, finishCall));
+            }
         }
     
     }
@@ -154,10 +161,10 @@ private static void createVolunteer()
             MyCallType callType = 0;
             double latitude = callLatitudes[i];
             double longitude = callLongitudes[i];
-            DateTime openTime = new DateTime((s_dalConfig ?? throw new InvalidOperationException("s_dalConfig is null")).Clock.Year - 1, 1, 1);
+            DateTime openTime = new DateTime((s_dalConfig ?? throw new InvalidOperationException("s_dalConfig is null")).Clock.Year - 1, 1, 1); //One year back from today
             int range = Math.Max(1, (s_dalConfig.Clock - openTime).Days); 
             openTime = openTime.AddDays(s_rand.Next(range)).AddHours(s_rand.Next(24)).AddMinutes(s_rand.Next(60));
-            DateTime maxFinishCall = openTime.AddDays(s_rand.Next(1, 15)); 
+            DateTime maxFinishCall = openTime.AddDays(s_rand.Next(1, 15)); //Valid for two weeks
             string? description = $" call number: {idIndex} of type: {callType} at: {address}";
             if (i < 5)
             {
