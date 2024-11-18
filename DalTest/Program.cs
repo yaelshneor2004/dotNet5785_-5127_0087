@@ -19,8 +19,8 @@ internal class Program
             do
             {
                 ShowMainMenu();
-                string st = Console.ReadLine()?? "0";
-                selectedOption = (MainMenuOptions)int.Parse(st);
+                if (!int.TryParse(Console.ReadLine(), out int selectedOptionInt)) throw new FormatException("Invalid input for menu option!"); 
+                selectedOption = (MainMenuOptions)selectedOptionInt;
                 switch (selectedOption)
                 {
                     case MainMenuOptions.ShowVolunteer:
@@ -81,9 +81,9 @@ internal class Program
         do
         {
             SubMenuConfig();
-            if (Enum.TryParse(Console.ReadLine(), out selectedOption))
-            {
-                s_dalConfig = s_dalConfig ?? throw new InvalidOperationException("s_dalConfig is null");
+            if (!Enum.TryParse(Console.ReadLine(), out int selectedOptionInt)) throw new FormatException("Invalid input for menu option!");
+            selectedOption = (ConfigOptions)selectedOptionInt;
+            s_dalConfig = s_dalConfig ?? throw new InvalidOperationException("s_dalConfig is null");
                 switch (selectedOption)
                 {
 
@@ -118,12 +118,9 @@ internal class Program
                         Console.WriteLine("Invalid option. Please try again.");
                         break;
                 }
-            }
-            else
-            {
-                Console.WriteLine("Invalid input. Please enter a valid option number.");
-            }
-        } while (selectedOption != ConfigOptions.Exit);
+       
+        } 
+        while (selectedOption != ConfigOptions.Exit);
     }
 
     private static void SetRiskRange()
@@ -131,20 +128,20 @@ internal class Program
             Console.WriteLine("Which value do you want to change?");
             Console.WriteLine("1. System Clock");
             Console.WriteLine("2. Risk Range");
-            int choice = int.Parse(Console.ReadLine()?? "0");
+        if (!int.TryParse(Console.ReadLine(), out int choice)) throw new FormatException("Invalid input for choice!");
         s_dalConfig = s_dalConfig ?? throw new InvalidOperationException("s_dalConfig is null");
         switch (choice)
             {
                 case 1:
                     Console.WriteLine("Enter new System Clock (yyyy-MM-dd HH:mm:ss): ");
-                    DateTime newClock = DateTime.Parse(Console.ReadLine()?? "0");
-                    s_dalConfig.Clock = newClock;
+                if (!DateTime.TryParse(Console.ReadLine(), out DateTime newClock)) throw new FormatException("Invalid date and time format!");
+                s_dalConfig.Clock = newClock;
                     Console.WriteLine($"New System Clock: {s_dalConfig.Clock}");
                     break;
                 case 2:
                     Console.WriteLine("Enter new Risk Range (in minutes): ");
-                    int minutes = int.Parse(Console.ReadLine()?? "0");
-                    s_dalConfig.RiskRange = TimeSpan.FromMinutes(minutes);
+                if (!int.TryParse(Console.ReadLine(), out int minutes)) throw new FormatException("Invalid input for minutes!");
+                s_dalConfig.RiskRange = TimeSpan.FromMinutes(minutes);
                     Console.WriteLine($"New Risk Range: {s_dalConfig.RiskRange}");
                     break;
                 default:
@@ -159,7 +156,7 @@ internal class Program
             Console.WriteLine("Which value do you want to change?");
             Console.WriteLine("1. System Clock");
             Console.WriteLine("2. Risk Range");
-            int choice = int.Parse(Console.ReadLine()?? "0");
+        if (!int.TryParse(Console.ReadLine(), out int choice)) throw new FormatException("Invalid input for choice!");
         s_dalConfig = s_dalConfig ?? throw new InvalidOperationException("s_dalConfig is null");
         switch (choice)
             {
@@ -203,10 +200,9 @@ internal class Program
     private static void ShowSubMenu(string type, Object dal)
     {
         ShowSubMenuOutput(type);
-        string? input = Console.ReadLine();
-        if (int.TryParse(input, out int parsedInput))
+        if (!int.TryParse(Console.ReadLine(), out int parsedInput)) throw new FormatException("Invalid input!");
+        Crud cr = (Crud)parsedInput;
         {
-            Crud cr = (Crud)parsedInput;
             switch (cr)
             {
                 case Crud.Create:
@@ -235,7 +231,6 @@ internal class Program
                     break;
             }
         }
-        else { Console.WriteLine("Invalid input. Please enter a valid number."); }
     }
     private static void ShowSubMenuOutput(string type)
     {
@@ -274,14 +269,17 @@ internal class Program
     private static void ReadEntity(string type, object dal)
     {
         Console.WriteLine($"Enter ID of the {type} to read:");
-        int id = int.Parse(Console.ReadLine()!);
+        if (!int.TryParse(Console.ReadLine(), out int id)) throw new FormatException("Invalid input for ID!");
         var entity = ((dynamic)dal).Read(id);
         if (entity != null)
         {
             Console.WriteLine(entity);
         }
         else
+        {
             Console.WriteLine($"{type} not found.");
+        }
+
     }
     private static void ReadAllEntities(string type, object dal)
     {
@@ -295,17 +293,19 @@ internal class Program
     private static void DeleteEntity(string type, object dal)
     {
         Console.WriteLine($"Enter ID of the {type} to delete:");
-        int.TryParse(Console.ReadLine(), out int id);
-            var entity = ((dynamic)dal).Read(id);
-            if (entity != null)
-            {
-                ((dynamic)dal).Delete(id);
-                Console.WriteLine($"{type} deleted.");
-            }
-            else
-            {
-                Console.WriteLine($"{type} not found.");
-            }
+        if (!int.TryParse(Console.ReadLine(), out int id)) throw new FormatException("Invalid input for ID!");
+
+        var entity = ((dynamic)dal).Read(id);
+        if (entity != null)
+        {
+            ((dynamic)dal).Delete(id);
+            Console.WriteLine($"{type} deleted.");
+        }
+        else
+        {
+            Console.WriteLine($"{type} not found.");
+        }
+
     }
     private static void UpdateEntity(string type, object dal)
     {
@@ -334,36 +334,39 @@ internal class Program
         Console.WriteLine($"Creating new volunteer:");
 
         Console.WriteLine("Enter ID: ");
-        int id = int.Parse(Console.ReadLine() ?? "0");
+        if (!int.TryParse(Console.ReadLine(), out int id)) throw new FormatException("Invalid ID!");
+
         Console.WriteLine("Enter Full Name: ");
-        string fullName = Console.ReadLine() ?? "0";
+        string fullName = Console.ReadLine() ?? string.Empty;
 
         Console.WriteLine("Enter Phone (10 digits, starts with 0): ");
-        string phone = Console.ReadLine() ?? "0";
+        string phone = Console.ReadLine() ?? string.Empty;
 
         Console.WriteLine("Enter Email: ");
-        string  email = Console.ReadLine() ?? "0";
+        string email = Console.ReadLine() ?? string.Empty;
 
         Console.WriteLine("Enter Role (0 for Manager, 1 for Volunteer): ");
-        MyRole role = (MyRole)int.Parse(Console.ReadLine() ?? "0");
+        if (!int.TryParse(Console.ReadLine(), out int roleInput)) throw new FormatException("Invalid Role!");
+        MyRole role = (MyRole)roleInput;
 
         Console.WriteLine("Enter Type Distance (0 for Aerial, 1 for Walking, 2 for Driving): ");
-       MyTypeDistance typeDistance = (MyTypeDistance)int.Parse(Console.ReadLine() ?? "0");
+        if (!int.TryParse(Console.ReadLine(), out int typeDistanceInput)) throw new FormatException("Invalid Type Distance!");
+        MyTypeDistance typeDistance = (MyTypeDistance)typeDistanceInput;
 
         Console.WriteLine("Enter Password: ");
-        string password = Console.ReadLine() ?? "0";
+        string password = Console.ReadLine() ?? string.Empty;
 
         Console.WriteLine("Enter Address: ");
-        string  address = Console.ReadLine() ?? "0";
+        string address = Console.ReadLine() ?? string.Empty;
 
         Console.WriteLine("Enter Latitude: ");
-        double latitude = double.Parse(Console.ReadLine() ?? "0" );
+        if (!double.TryParse(Console.ReadLine(), out double latitude)) throw new FormatException("Invalid Latitude!");
 
         Console.WriteLine("Enter Longitude: ");
-        double longitude = double.Parse(Console.ReadLine() ?? "0");
+        if (!double.TryParse(Console.ReadLine(), out double longitude)) throw new FormatException("Invalid Longitude!");
 
         Console.WriteLine("Enter Max Distance: ");
-        double maxDistance = double.Parse(Console.ReadLine() ?? "0");
+        if (!double.TryParse(Console.ReadLine(), out double maxDistance)) throw new FormatException("Invalid Max Distance!");
 
         bool isActive = true;
 
@@ -371,22 +374,23 @@ internal class Program
         return newVolunteer;
     }
 
-    //The function uses input from the user to create a new object of type Assignment
+    // The function uses input from the user to create a new object of type Assignment
     public static Assignment inputA()
     {
         Console.WriteLine("Creating new assignment:");
+
         Console.WriteLine("Enter Call ID: ");
-        int callId = int.Parse(Console.ReadLine() ?? "0");
+        if (!int.TryParse(Console.ReadLine(), out int callId)) throw new FormatException("Invalid Call ID!");
 
         Console.WriteLine("Enter Volunteer ID: ");
-        int volunteerId = int.Parse(Console.ReadLine() ?? "0");
+        if (!int.TryParse(Console.ReadLine(), out int volunteerId)) throw new FormatException("Invalid Volunteer ID!");
 
         Console.WriteLine("Enter Start Call (YYYY-MM-DD HH:MM:SS): ");
-        DateTime startCall = DateTime.Parse(Console.ReadLine() ?? "0");
+        if (!DateTime.TryParse(Console.ReadLine(), out DateTime startCall)) throw new FormatException("Invalid Start Call!");
 
         Console.WriteLine("Enter Finish Type (optional, press Enter to skip): ");
         string finishTypeInput = Console.ReadLine() ?? "0";
-        MyFinishType? finishType = string.IsNullOrEmpty(finishTypeInput) ? (MyFinishType?)null : Enum.Parse<MyFinishType>(finishTypeInput); //check if the input us empty/null and putting 0/1 respectively
+        MyFinishType? finishType = string.IsNullOrEmpty(finishTypeInput) ? (MyFinishType?)null : Enum.Parse<MyFinishType>(finishTypeInput);
 
         Console.WriteLine("Enter Finish Call (optional, press Enter to skip, YYYY-MM-DD HH:MM:SS): ");
         string finishCallInput = Console.ReadLine() ?? "0";
@@ -396,30 +400,31 @@ internal class Program
         return newAssignment;
     }
 
-    //The function uses input from the user to create a new object of type Call
+    // The function uses input from the user to create a new object of type Call
     public static Call inputC()
     {
         Console.WriteLine("Creating new call:");
 
         Console.WriteLine("Enter Call Type: ");
-        MyCallType callType = (MyCallType)Enum.Parse(typeof(MyCallType), Console.ReadLine() ?? "0");
+        if (!Enum.TryParse(Console.ReadLine(), out MyCallType callType)) throw new FormatException("Invalid Call Type!");
 
         Console.WriteLine("Enter Address: ");
-        string address = Console.ReadLine() ?? "0";
+        string address = Console.ReadLine() ?? string.Empty;
 
         Console.WriteLine("Enter Latitude: ");
-        double latitude = double.Parse(Console.ReadLine() ?? "0");
+        if (!double.TryParse(Console.ReadLine(), out double latitude)) throw new FormatException("Invalid Latitude!");
 
         Console.WriteLine("Enter Longitude: ");
-        double longitude = double.Parse(Console.ReadLine() ?? "0");
+        if (!double.TryParse(Console.ReadLine(), out double longitude)) throw new FormatException("Invalid Longitude!");
 
         Console.WriteLine("Enter Open Time (YYYY-MM-DD HH:MM:SS): ");
-        DateTime openTime = DateTime.Parse(Console.ReadLine() ?? "0");
+        if (!DateTime.TryParse(Console.ReadLine(), out DateTime openTime)) throw new FormatException("Invalid Open Time!");
 
         Console.WriteLine("Enter Description (optional, press Enter to skip): ");
-        string  description = Console.ReadLine() ?? "0";
+        string description = Console.ReadLine()?? "0";
+
         Console.WriteLine("Enter Max Finish Call (optional, press Enter to skip, YYYY-MM-DD HH:MM:SS): ");
-        string maxFinishCallInput = Console.ReadLine() ?? "0";
+        string maxFinishCallInput = Console.ReadLine()?? "0";
         DateTime? maxFinishCall = string.IsNullOrEmpty(maxFinishCallInput) ? (DateTime?)null : DateTime.Parse(maxFinishCallInput);
 
         Call newCall = new Call(1, callType, address, latitude, longitude, openTime, description, maxFinishCall);
