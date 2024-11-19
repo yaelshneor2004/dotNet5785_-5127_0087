@@ -6,7 +6,7 @@ using DO;
 using System.Collections.Generic;
 
 //The CallImplementation class manages operations for Call entities, including creating, reading, updating, and deleting calls in the data source
-public class CallImplementation : ICall
+internal class CallImplementation : ICall
 
 {
     public void Create(Call item)

@@ -5,7 +5,7 @@ using DO;
 using System.Collections.Generic;
 
 //The VolunteerImplementation class manages operations for Volunteer entities, including creating, reading, updating, and deleting calls in the data source
-public class VolunteerImplementation : IVolunteer
+internal class VolunteerImplementation : IVolunteer
 {
     public void Create(Volunteer item)
     {

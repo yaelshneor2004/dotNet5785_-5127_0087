@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 //The AssignmentImplementation class manages operations for Assignment entities, including creating, reading, updating, and deleting calls in the data source
 
-public class AssignmentImplementation : IAssignment
+internal class AssignmentImplementation : IAssignment
 {
     public void Create(Assignment item)
     {
