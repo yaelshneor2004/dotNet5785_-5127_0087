@@ -56,8 +56,8 @@ internal class Program
         catch (Exception ex)
         {
             Console.WriteLine(ex.Message); // Print exception message
+            ShowMainMenu();
         }
-
     }
 
     //The SubMenuConfig function displays a configuration submenu with options for advancing the system clock, showing or setting configuration values, and resetting configuration values
@@ -77,50 +77,50 @@ internal class Program
 
     private static void ShowConfigSubMenu()
     {
-        ConfigOptions selectedOption;
-        do
-        {
-            SubMenuConfig(); // Show configuration submenu
-            if (!Enum.TryParse(Console.ReadLine(), out int selectedOptionInt)) throw new FormatException("Invalid input for menu option!");
-            selectedOption = (ConfigOptions)selectedOptionInt;
-            s_dalConfig = s_dalConfig ?? throw new InvalidOperationException("s_dalConfig is null");
-            switch (selectedOption)
+         ConfigOptions selectedOption;
+            do
             {
+            SubMenuConfig(); // Show configuration submenu
+                if (!int.TryParse(Console.ReadLine(), out int selectedOptionInt)) throw new FormatException("Invalid input for menu option!");
+                selectedOption = (ConfigOptions)selectedOptionInt;
+                s_dalConfig = s_dalConfig ?? throw new InvalidOperationException("s_dalConfig is null");
+                switch (selectedOption)
+                {
 
-                case ConfigOptions.AdvanceClockByMinute:
-                    // Advance System Clock by a Minute
-                    s_dalConfig.Clock = s_dalConfig.Clock.AddMinutes(1);
-                    Console.WriteLine($"New System Clock: {s_dalConfig.Clock}");
-                    break;
-                case ConfigOptions.AdvanceClockByHour:
-                    // Advance System Clock by an Hour
-                    s_dalConfig.Clock = s_dalConfig.Clock.AddHours(1);
-                    Console.WriteLine($"New System Clock: {s_dalConfig.Clock}");
-                    break;
-                case ConfigOptions.ShowCurrentClock:
-                    // Show Current System Clock
-                    Console.WriteLine($"Current System Clock: {s_dalConfig.Clock}");
-                    break;
-                case ConfigOptions.SetRiskRange:
-                    SetRiskRange(); // Set the risk range
-                    break;
-                case ConfigOptions.ShowConfigValues:
-                    ShowConfigValues(); // Show configuration values
-                    break;
-                case ConfigOptions.ResetConfig:
-                    // Reset Configuration Values
-                    s_dalConfig?.Reset();
-                    Console.WriteLine("Configuration values reset.");
-                    break;
-                case ConfigOptions.Exit:
-                    return;
-                default:
-                    Console.WriteLine("Invalid option. Please try again.");
-                    break;
+                    case ConfigOptions.AdvanceClockByMinute:
+                        // Advance System Clock by a Minute
+                        s_dalConfig.Clock = s_dalConfig.Clock.AddMinutes(1);
+                        Console.WriteLine($"New System Clock: {s_dalConfig.Clock}");
+                        break;
+                    case ConfigOptions.AdvanceClockByHour:
+                        // Advance System Clock by an Hour
+                        s_dalConfig.Clock = s_dalConfig.Clock.AddHours(1);
+                        Console.WriteLine($"New System Clock: {s_dalConfig.Clock}");
+                        break;
+                    case ConfigOptions.ShowCurrentClock:
+                        // Show Current System Clock
+                        Console.WriteLine($"Current System Clock: {s_dalConfig.Clock}");
+                        break;
+                    case ConfigOptions.SetRiskRange:
+                        SetRiskRange(); // Set the risk range
+                        break;
+                    case ConfigOptions.ShowConfigValues:
+                        ShowConfigValues(); // Show configuration values
+                        break;
+                    case ConfigOptions.ResetConfig:
+                        // Reset Configuration Values
+                        s_dalConfig?.Reset();
+                        Console.WriteLine("Configuration values reset.");
+                        break;
+                    case ConfigOptions.Exit:
+                        return;
+                    default:
+                        Console.WriteLine("Invalid option. Please try again.");
+                        break;
+                }
+
             }
-
-        }
-        while (selectedOption != ConfigOptions.Exit);
+            while (selectedOption != ConfigOptions.Exit);
     }
 
 
@@ -200,10 +200,13 @@ internal class Program
 
     private static void ShowSubMenu(string type, Object dal)
     {
-        ShowSubMenuOutput(type);
-        if (!int.TryParse(Console.ReadLine(), out int parsedInput)) throw new FormatException("Invalid input!");
-        Crud cr = (Crud)parsedInput;
+        Crud cr;
+        do
         {
+            ShowSubMenuOutput(type);
+
+            if (!int.TryParse(Console.ReadLine(), out int parsedInput)) throw new FormatException("Invalid input!");
+             cr = (Crud)parsedInput;
             switch (cr)
             {
                 case Crud.Create:
@@ -232,6 +235,7 @@ internal class Program
                     break;
             }
         }
+        while (cr!=0);
     }
     //displays a submenu with options for adding, reading, updating, and deleting entities of the specified type
     private static void ShowSubMenuOutput(string type)
@@ -351,6 +355,7 @@ internal class Program
         string phone = Console.ReadLine() ?? string.Empty;
 
         Console.WriteLine("Enter Email: ");
+
         string email = Console.ReadLine() ?? string.Empty;
 
         Console.WriteLine("Enter Role (0 for Manager, 1 for Volunteer): ");
@@ -383,6 +388,7 @@ internal class Program
     }
 
     // The function uses input from the user to create a new object of type Assignment
+
     public static Assignment inputA()
     {
         Console.WriteLine("Creating new assignment:");
