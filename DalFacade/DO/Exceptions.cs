@@ -17,5 +17,22 @@ public class DalDeletionImpossible : Exception
 {
     public DalDeletionImpossible(string? message) : base(message) { }
 }
+[Serializable]
+public class DalFormatException : Exception
+{
+    public DalFormatException(string? message) : base(message) { }
+}
 
-
+[Serializable]
+public class DalInvalidOperationException : Exception
+{
+    public DalInvalidOperationException(string? message) : base(message)
+    {
+    }
+}
+[Serializable]
+public class ConfigNotFoundException : Exception 
+{ 
+    public ConfigNotFoundException(string? message) : base(message) {
+    }
+}

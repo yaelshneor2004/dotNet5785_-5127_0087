@@ -17,7 +17,7 @@ internal class Program
             do
             {
                 ShowMainMenu(); // Show the main menu
-                if (!int.TryParse(Console.ReadLine(), out int selectedOptionInt)) throw new FormatException("Invalid input for menu option!");
+                if (!int.TryParse(Console.ReadLine(), out int selectedOptionInt)) throw new DalFormatException("Invalid input for menu option!");
                 selectedOption = (MainMenuOptions)selectedOptionInt;
                 switch (selectedOption)
                 {
@@ -43,19 +43,19 @@ internal class Program
                         ResetDatabaseAndConfig(); // Reset database and config
                         break;
                     default:
-                        Console.WriteLine("Invalid option. Please try again.");
-                        break;
+                        throw new DalInvalidOperationException("Invalid option. Please try again.");
+                      
                 }
 
 
             }
             while (selectedOption != 0);
         }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message); // Print exception message
-            ShowMainMenu();
-        }
+        catch (DalDoesNotExistException ex) { Console.WriteLine($"Data access error: {ex.Message}"); ShowMainMenu(); }
+        catch (DalAlreadyExistsException ex) { Console.WriteLine($"Data access error: {ex.Message}"); ShowMainMenu(); }
+        catch (DalDeletionImpossible ex) { Console.WriteLine($"Data access error: {ex.Message}"); ShowMainMenu(); }
+        catch (DalFormatException ex) { Console.WriteLine($"Input error: {ex.Message}"); ShowMainMenu(); }
+        catch (InvalidOperationException ex) { Console.WriteLine($"Operation error: {ex.Message}"); ShowMainMenu(); }
     }
 
     //The SubMenuConfig function displays a configuration submenu with options for advancing the system clock, showing or setting configuration values, and resetting configuration values
@@ -79,25 +79,25 @@ internal class Program
         do
         {
             SubMenuConfig(); // Show configuration submenu
-            if (!int.TryParse(Console.ReadLine(), out int selectedOptionInt)) throw new FormatException("Invalid input for menu option!");
+            if (!int.TryParse(Console.ReadLine(), out int selectedOptionInt)) throw new DalFormatException("Invalid input for menu option!");
             selectedOption = (ConfigOptions)selectedOptionInt;
             switch (selectedOption)
             {
                 case ConfigOptions.AdvanceClockByMinute:
                     // Advance System Clock by a Minute
-                    var clock = s_dal?.Config.Clock ?? throw new InvalidOperationException("s_dal.Config is null");
+                    var clock = s_dal?.Config.Clock ?? throw new ConfigNotFoundException("s_dal.Config is null");
                     s_dal.Config.Clock = clock.AddMinutes(1);
                     Console.WriteLine($"New System Clock: {s_dal.Config.Clock}");
                     break;
                 case ConfigOptions.AdvanceClockByHour:
                     // Advance System Clock by an Hour
-                    clock = s_dal?.Config.Clock ?? throw new InvalidOperationException("s_dal.Config is null");
+                    clock = s_dal?.Config.Clock ?? throw new ConfigNotFoundException("s_dal.Config is null");
                     s_dal.Config.Clock = clock.AddHours(1);
                     Console.WriteLine($"New System Clock: {s_dal.Config.Clock}");
                     break;
                 case ConfigOptions.ShowCurrentClock:
                     // Show Current System Clock
-                    clock = s_dal?.Config.Clock ?? throw new InvalidOperationException("s_dal.Config is null");
+                    clock = s_dal?.Config.Clock ?? throw new ConfigNotFoundException("s_dal.Config is null");
                     Console.WriteLine($"Current System Clock: {clock}");
                     break;
                 case ConfigOptions.SetRiskRange:
@@ -108,15 +108,15 @@ internal class Program
                     break;
                 case ConfigOptions.ResetConfig:
                     // Reset Configuration Values
-                    var config = s_dal?.Config ?? throw new InvalidOperationException("s_dal.Config is null");
+                    var config = s_dal?.Config ?? throw new ConfigNotFoundException("s_dal.Config is null");
                     config.Reset();
                     Console.WriteLine("Configuration values reset.");
                     break;
                 case ConfigOptions.Exit:
                     return;
                 default:
-                    Console.WriteLine("Invalid option. Please try again.");
-                    break;
+                    throw new DalInvalidOperationException("Invalid option. Please try again.");
+                    
             }
         }
         while (selectedOption != ConfigOptions.Exit);
@@ -127,24 +127,23 @@ internal class Program
         Console.WriteLine("Which value do you want to change?");
         Console.WriteLine("1. System Clock");
         Console.WriteLine("2. Risk Range");
-        if (!int.TryParse(Console.ReadLine(), out int choice)) throw new FormatException("Invalid input for choice!");
+        if (!int.TryParse(Console.ReadLine(), out int choice)) throw new DalFormatException("Invalid input for choice!");
         switch (choice)
         {
             case 1:
                 Console.WriteLine("Enter new System Clock (yyyy-MM-dd HH:mm:ss): ");
-                if (!DateTime.TryParse(Console.ReadLine(), out DateTime newClock)) throw new FormatException("Invalid date and time format!");
+                if (!DateTime.TryParse(Console.ReadLine(), out DateTime newClock)) throw new DalFormatException("Invalid date and time format!");
                 s_dal.Config.Clock = newClock;
                 Console.WriteLine($"New System Clock: {s_dal.Config.Clock}");
                 break;
             case 2:
                 Console.WriteLine("Enter new Risk Range (in minutes): ");
-                if (!int.TryParse(Console.ReadLine(), out int minutes)) throw new FormatException("Invalid input for minutes!");
+                if (!int.TryParse(Console.ReadLine(), out int minutes)) throw new DalFormatException("Invalid input for minutes!");
                 s_dal.Config.RiskRange = TimeSpan.FromMinutes(minutes);
                 Console.WriteLine($"New Risk Range: {s_dal.Config.RiskRange}");
                 break;
             default:
-                Console.WriteLine("Invalid choice.");
-                break;
+                throw new DalInvalidOperationException("Invalid option. Please try again.");
         }
     }
 
@@ -154,7 +153,7 @@ internal class Program
         Console.WriteLine("Which value do you want to change?");
         Console.WriteLine("1. System Clock");
         Console.WriteLine("2. Risk Range");
-        if (!int.TryParse(Console.ReadLine(), out int choice)) throw new FormatException("Invalid input for choice!");
+        if (!int.TryParse(Console.ReadLine(), out int choice)) throw new DalFormatException("Invalid input for choice!");
         switch (choice)
         {
             case 1:
@@ -164,8 +163,8 @@ internal class Program
                 Console.WriteLine($"New Risk Range: {s_dal.Config.RiskRange}");
                 break;
             default:
-                Console.WriteLine("Invalid choice.");
-                break;
+                throw new DalInvalidOperationException("Invalid option. Please try again.");
+               
         }
 
     }
@@ -202,7 +201,7 @@ internal class Program
         {
             ShowSubMenuOutput(type);
 
-            if (!int.TryParse(Console.ReadLine(), out int parsedInput)) throw new FormatException("Invalid input!");
+            if (!int.TryParse(Console.ReadLine(), out int parsedInput)) throw new DalFormatException("Invalid input!");
              cr = (Crud)parsedInput;
             switch (cr)
             {
@@ -228,8 +227,7 @@ internal class Program
                 case Crud.Exit:
                     return;
                 default:
-                    Console.WriteLine("Invalid option. Please try again.");
-                    break;
+                    throw new DalInvalidOperationException("Invalid option. Please try again.");
             }
         }
         while (cr!=0);
@@ -274,7 +272,7 @@ internal class Program
     private static void ReadEntity(string type, object dal)
     {
         Console.WriteLine($"Enter ID of the {type} to read:");
-        if (!int.TryParse(Console.ReadLine(), out int id)) throw new FormatException("Invalid input for ID!");
+        if (!int.TryParse(Console.ReadLine(), out int id)) throw new DalFormatException("Invalid input for ID!");
         var entity = ((dynamic)dal).Read(id);
         if (entity != null)
         {
@@ -300,7 +298,7 @@ internal class Program
     private static void DeleteEntity(string type, object dal)
     {
         Console.WriteLine($"Enter ID of the {type} to delete:");
-        if (!int.TryParse(Console.ReadLine(), out int id)) throw new FormatException("Invalid input for ID!");
+        if (!int.TryParse(Console.ReadLine(), out int id)) throw new DalFormatException("Invalid input for ID!");
 
         var entity = ((dynamic)dal).Read(id);
         if (entity != null)
@@ -343,7 +341,7 @@ internal class Program
         Console.WriteLine($"Creating new volunteer:");
 
         Console.WriteLine("Enter ID: ");
-        if (!int.TryParse(Console.ReadLine(), out int id)) throw new FormatException("Invalid ID!");
+        if (!int.TryParse(Console.ReadLine(), out int id)) throw new DalFormatException("Invalid ID!");
 
         Console.WriteLine("Enter Full Name: ");
         string fullName = Console.ReadLine() ?? string.Empty;
@@ -356,11 +354,11 @@ internal class Program
         string email = Console.ReadLine() ?? string.Empty;
 
         Console.WriteLine("Enter Role (0 for Manager, 1 for Volunteer): ");
-        if (!int.TryParse(Console.ReadLine(), out int roleInput)) throw new FormatException("Invalid Role!");
+        if (!int.TryParse(Console.ReadLine(), out int roleInput)) throw new DalFormatException("Invalid Role!");
         MyRole role = (MyRole)roleInput;
 
         Console.WriteLine("Enter Type Distance (0 for Aerial, 1 for Walking, 2 for Driving): ");
-        if (!int.TryParse(Console.ReadLine(), out int typeDistanceInput)) throw new FormatException("Invalid Type Distance!");
+        if (!int.TryParse(Console.ReadLine(), out int typeDistanceInput)) throw new DalFormatException("Invalid Type Distance!");
         MyTypeDistance typeDistance = (MyTypeDistance)typeDistanceInput;
 
         Console.WriteLine("Enter Password: ");
@@ -370,13 +368,13 @@ internal class Program
         string address = Console.ReadLine() ?? string.Empty;
 
         Console.WriteLine("Enter Latitude: ");
-        if (!double.TryParse(Console.ReadLine(), out double latitude)) throw new FormatException("Invalid Latitude!");
+        if (!double.TryParse(Console.ReadLine(), out double latitude)) throw new DalFormatException("Invalid Latitude!");
 
         Console.WriteLine("Enter Longitude: ");
-        if (!double.TryParse(Console.ReadLine(), out double longitude)) throw new FormatException("Invalid Longitude!");
+        if (!double.TryParse(Console.ReadLine(), out double longitude)) throw new DalFormatException("Invalid Longitude!");
 
         Console.WriteLine("Enter Max Distance: ");
-        if (!double.TryParse(Console.ReadLine(), out double maxDistance)) throw new FormatException("Invalid Max Distance!");
+        if (!double.TryParse(Console.ReadLine(), out double maxDistance)) throw new DalFormatException("Invalid Max Distance!");
 
         bool isActive = true;
 
@@ -391,21 +389,21 @@ internal class Program
         Console.WriteLine("Creating new assignment:");
 
         Console.WriteLine("Enter Call ID: ");
-        if (!int.TryParse(Console.ReadLine(), out int callId)) throw new FormatException("Invalid Call ID!");
+        if (!int.TryParse(Console.ReadLine(), out int callId)) throw new DalFormatException("Invalid Call ID!");
 
         Console.WriteLine("Enter Volunteer ID: ");
-        if (!int.TryParse(Console.ReadLine(), out int volunteerId)) throw new FormatException("Invalid Volunteer ID!");
+        if (!int.TryParse(Console.ReadLine(), out int volunteerId)) throw new DalFormatException("Invalid Volunteer ID!");
 
         Console.WriteLine("Enter Start Call (YYYY-MM-DD HH:MM:SS): ");
-        if (!DateTime.TryParse(Console.ReadLine(), out DateTime startCall)) throw new FormatException("Invalid Start Call!");
+        if (!DateTime.TryParse(Console.ReadLine(), out DateTime startCall)) throw new DalFormatException("Invalid Start Call!");
 
         Console.WriteLine("Enter Finish Type (optional, press Enter to skip): ");
         string finishTypeInput = Console.ReadLine() ?? "0";
         MyFinishType? finishType = string.IsNullOrEmpty(finishTypeInput) ? (MyFinishType?)null : Enum.Parse<MyFinishType>(finishTypeInput);
 
         Console.WriteLine("Enter Finish Call (optional, press Enter to skip, YYYY-MM-DD HH:MM:SS): ");
-        string finishCallInput = Console.ReadLine() ?? "0";
-        DateTime? finishCall = string.IsNullOrEmpty(finishCallInput) ? (DateTime?)null : DateTime.Parse(finishCallInput);
+        if (!DateTime.TryParse(Console.ReadLine(), out DateTime finishCall)) throw new DalFormatException("Invalid Date");
+  
 
         Assignment newAssignment = new Assignment(1, callId, volunteerId, startCall, finishType, finishCall);
         return newAssignment;
@@ -417,28 +415,29 @@ internal class Program
         Console.WriteLine("Creating new call:");
 
         Console.WriteLine("Enter Call Type: ");
-        if (!Enum.TryParse(Console.ReadLine(), out MyCallType callType)) throw new FormatException("Invalid Call Type!");
+        if (!Enum.TryParse(Console.ReadLine(), out MyCallType callType)) throw new DalFormatException("Invalid Call Type!");
 
         Console.WriteLine("Enter Address: ");
         string address = Console.ReadLine() ?? string.Empty;
 
         Console.WriteLine("Enter Latitude: ");
-        if (!double.TryParse(Console.ReadLine(), out double latitude)) throw new FormatException("Invalid Latitude!");
+        if (!double.TryParse(Console.ReadLine(), out double latitude)) throw new DalFormatException("Invalid Latitude!");
 
         Console.WriteLine("Enter Longitude: ");
-        if (!double.TryParse(Console.ReadLine(), out double longitude)) throw new FormatException("Invalid Longitude!");
+        if (!double.TryParse(Console.ReadLine(), out double longitude)) throw new DalFormatException("Invalid Longitude!");
 
         Console.WriteLine("Enter Open Time (YYYY-MM-DD HH:MM:SS): ");
-        if (!DateTime.TryParse(Console.ReadLine(), out DateTime openTime)) throw new FormatException("Invalid Open Time!");
+        if (!DateTime.TryParse(Console.ReadLine(), out DateTime openTime)) throw new DalFormatException("Invalid Open Time!");
 
         Console.WriteLine("Enter Description (optional, press Enter to skip): ");
         string description = Console.ReadLine() ?? "0";
 
         Console.WriteLine("Enter Max Finish Call (optional, press Enter to skip, YYYY-MM-DD HH:MM:SS): ");
-        string maxFinishCallInput = Console.ReadLine() ?? "0";
-        DateTime? maxFinishCall = string.IsNullOrEmpty(maxFinishCallInput) ? (DateTime?)null : DateTime.Parse(maxFinishCallInput);
+        if (!DateTime.TryParse(Console.ReadLine(), out DateTime maxFinishCallInput)) throw new DalFormatException("Invalid Date");
 
-        Call newCall = new Call(1, callType, address, latitude, longitude, openTime, description, maxFinishCall);
+       
+
+        Call newCall = new Call(1, callType, address, latitude, longitude, openTime, description, maxFinishCallInput);
         return newCall;
     }
 
