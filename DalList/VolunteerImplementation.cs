@@ -11,23 +11,21 @@ internal class VolunteerImplementation : IVolunteer
     {
         if (Read(item.Id) != null)
         {
-            throw new Exception($"An object of type Volunteer with such an ID={item.Id} already exists");
+            throw new DalAlreadyExistsException($"An object of type Volunteer with such an ID={item.Id} already exists");
         }
         DataSource.Volunteers.Add(item);
 
     }
 
 
-    public void Delete(int id)
-    {
-        for (int i = 0; i < DataSource.Volunteers.Count; i++)
-        {
-            if (DataSource.Volunteers[i].Id == id)
-                DataSource.Volunteers.Remove(DataSource.Volunteers[i]);
-            else
-                throw new Exception($"An object of type Volunteer with such an ID={id} does not exist");
-        }
-       
+    public void Delete(int id) 
+    { 
+        var volunteer = Read(id);
+        if (volunteer != null)
+            DataSource.Volunteers.Remove(volunteer); 
+         else  
+            throw new DalDeletionImpossible($"An object of type Volunteer with such an ID={id} does not exist");
+        
     }
 
 
@@ -39,33 +37,27 @@ internal class VolunteerImplementation : IVolunteer
 
     public Volunteer? Read(int id)
     {
-        for (int i = 0; i < DataSource.Volunteers.Count; i++)
-        {
-            if (DataSource.Volunteers[i].Id == id)
-                return DataSource.Volunteers[i];
-        }
-        return null;
+        return DataSource.Volunteers.FirstOrDefault(item => item.Id == id); 
     }
-
-
-    public List<Volunteer> ReadAll()
+    public Volunteer? Read(Func<Volunteer, bool> filter)
     {
-        return new List<Volunteer>(DataSource.Volunteers);
+        return DataSource.Volunteers.FirstOrDefault(filter);
     }
 
-    public void Update(Volunteer item)
-    {
-        for (int i = 0; i < DataSource.Volunteers.Count; i++)
+    public IEnumerable<Volunteer> ReadAll(Func<Volunteer, bool>? filter = null) 
+               => filter == null
+                   ? DataSource.Volunteers.Select(item => item)
+                   : DataSource.Volunteers.Where(filter);
+
+    public void Update(Volunteer item) { 
+        var existingVolunteer = Read(item.Id);
+        if (existingVolunteer != null)
         {
-            if (DataSource.Volunteers[i].Id == item.Id)
-            {
-                DataSource.Volunteers.Remove(DataSource.Volunteers[i]);
-                DataSource.Volunteers.Add(item);
-            }
-            else
-                throw new Exception($"An object of type Volunteer with such an ID={item.Id} does not exist");
+            DataSource.Volunteers.Remove(existingVolunteer);
+            DataSource.Volunteers.Add(item);
         }
-       
+        else
+            throw new DalDoesNotExistException($"An object of type Volunteer with such an ID={item.Id} does not exist"); 
     }
-    
+
 }

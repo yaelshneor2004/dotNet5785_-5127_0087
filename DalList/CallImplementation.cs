@@ -1,70 +1,67 @@
-﻿
+﻿namespace Dal;
 
-namespace Dal;
 using DalApi;
 using DO;
 using System.Collections.Generic;
+using System.Linq;
 
-//The CallImplementation class manages operations for Call entities, including creating, reading, updating, and deleting calls in the data source
+// The CallImplementation class manages operations for Call entities, including creating, reading, updating, and deleting calls in the data source.
 internal class CallImplementation : ICall
-
 {
     public void Create(Call item)
     {
-        //for entities with auto id
+        // For entities with auto-generated ID
         int newId = Config.NextCallId;
         Call newCall = item with { Id = newId };
         DataSource.Calls.Add(newCall);
     }
 
-
     public void Delete(int id)
     {
-        for (int i = 0; i < DataSource.Calls.Count; i++)
+        var call = Read(id);
+        if (call != null)
         {
-            if (DataSource.Calls[i].Id == id)
-                DataSource.Calls.Remove(DataSource.Calls[i]);
-            else
-                throw new Exception($"An object of type Call with such an ID={id} does not exist");
+            DataSource.Calls.Remove(call);
         }
-
+        else
+        {
+            throw new DalDeletionImpossible($"An object of type Call with such an ID={id} does not exist");
+        }
     }
-
 
     public void DeleteAll()
     {
         DataSource.Calls.Clear();
     }
 
-
     public Call? Read(int id)
     {
-        for (int i = 0; i < DataSource.Calls.Count; i++)
-        {
-            if (DataSource.Calls[i].Id == id)
-                return DataSource.Calls[i];
-        }
-        return null;
+        return DataSource.Calls.FirstOrDefault(item => item.Id == id);
     }
 
-
-    public List<Call> ReadAll()
+    public Call? Read(Func<Call, bool> filter)
     {
-        return new List<Call>(DataSource.Calls);
+        return DataSource.Calls.FirstOrDefault(filter);
+    }
+
+    public IEnumerable<Call> ReadAll(Func<Call, bool>? filter = null)
+    {
+        return filter == null
+            ? DataSource.Calls
+            : DataSource.Calls.Where(filter);
     }
 
     public void Update(Call item)
     {
-        for (int i = 0; i < DataSource.Calls.Count; i++)
+        var existingCall = Read(item.Id);
+        if (existingCall != null)
         {
-            if (DataSource.Calls[i].Id == item.Id)
-            {
-                DataSource.Calls.Remove(DataSource.Calls[i]);
-                DataSource.Calls.Add(item);
-            }
-            else
-                throw new Exception($"An object of type Call with such an ID={item.Id} does not exist");
+            DataSource.Calls.Remove(existingCall);
+            DataSource.Calls.Add(item);
         }
-       
+        else
+        {
+            throw new DalDoesNotExistException($"An object of type Call with such an ID={item.Id} does not exist");
+        }
     }
 }

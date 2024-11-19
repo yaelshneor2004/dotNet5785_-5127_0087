@@ -74,7 +74,7 @@ internal class Program
     }
 
     private static void ShowConfigSubMenu()
-    { 
+    {
         ConfigOptions selectedOption;
         do
         {
@@ -85,17 +85,20 @@ internal class Program
             {
                 case ConfigOptions.AdvanceClockByMinute:
                     // Advance System Clock by a Minute
-                    s_dal.Config.Clock = s_dal.Config.Clock.AddMinutes(1);
+                    var clock = s_dal?.Config.Clock ?? throw new InvalidOperationException("s_dal.Config is null");
+                    s_dal.Config.Clock = clock.AddMinutes(1);
                     Console.WriteLine($"New System Clock: {s_dal.Config.Clock}");
                     break;
                 case ConfigOptions.AdvanceClockByHour:
                     // Advance System Clock by an Hour
-                    s_dal.Config.Clock = s_dal.Config.Clock.AddHours(1);
+                    clock = s_dal?.Config.Clock ?? throw new InvalidOperationException("s_dal.Config is null");
+                    s_dal.Config.Clock = clock.AddHours(1);
                     Console.WriteLine($"New System Clock: {s_dal.Config.Clock}");
                     break;
                 case ConfigOptions.ShowCurrentClock:
                     // Show Current System Clock
-                    Console.WriteLine($"Current System Clock: {s_dal.Config.Clock}");
+                    clock = s_dal?.Config.Clock ?? throw new InvalidOperationException("s_dal.Config is null");
+                    Console.WriteLine($"Current System Clock: {clock}");
                     break;
                 case ConfigOptions.SetRiskRange:
                     SetRiskRange(); // Set the risk range
@@ -105,7 +108,8 @@ internal class Program
                     break;
                 case ConfigOptions.ResetConfig:
                     // Reset Configuration Values
-                    s_dal.Config?.Reset();
+                    var config = s_dal?.Config ?? throw new InvalidOperationException("s_dal.Config is null");
+                    config.Reset();
                     Console.WriteLine("Configuration values reset.");
                     break;
                 case ConfigOptions.Exit:

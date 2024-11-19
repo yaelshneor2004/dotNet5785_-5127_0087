@@ -78,25 +78,27 @@ public static class Initialization
     {
         int index = 1;
         var volunteers = s_dal?.Volunteer.ReadAll();
-        var calls = s_dal?.Call.ReadAll()?.Where(call => call != null).Take(50);
+        var calls = s_dal?.Call.ReadAll()?.Where(call => call != null).Take(50)?.ToList();
 
-        if (calls != null)
+        var volunteerList = volunteers?.ToList();
+
+        foreach (var call in calls ?? Enumerable.Empty<Call>())
         {
-            foreach (var call in calls)
-            {
-                int callId = call.Id;
-                int volunteerId = volunteers?[s_rand.Next(volunteers?.Count ?? 0)].Id ?? 0; // Draw a volunteer
-                DateTime startCall = call.OpenTime with { };
-                int range = (int)((call.MaxFinishCall?.AddHours(2) ?? startCall).Subtract(startCall)).TotalHours;
-                startCall = startCall.AddHours(1); // Add one hour
-                DateTime finishCall = startCall with { }; // Creates a copy of startCall and stores it in finishCall
-                int range2 = (int)((call.MaxFinishCall?.AddHours(2) ?? finishCall).Subtract(finishCall)).TotalMinutes;
-                finishCall = finishCall.AddMinutes(s_rand.Next(range2)); // Adds random minutes to finishCall
-                MyFinishType finishType = (MyFinishType)s_rand.Next(0, 4);
-                s_dal?.Assignment.Create(new Assignment(index, callId, volunteerId, startCall, finishType, finishCall));
-            }
+            int callId = call.Id;
+            int volunteerId = volunteerList != null && volunteerList.Count > 0
+                ? volunteerList[s_rand.Next(volunteerList.Count)].Id: 0; // Draw a volunteer
+
+            DateTime startCall = call.OpenTime with { };
+            int range = (int)((call.MaxFinishCall?.AddHours(2) ?? startCall).Subtract(startCall)).TotalHours;
+            startCall = startCall.AddHours(1); // Add one hour
+            DateTime finishCall = startCall with { }; // Creates a copy of startCall and stores it in finishCall
+            int range2 = (int)((call.MaxFinishCall?.AddHours(2) ?? finishCall).Subtract(finishCall)).TotalMinutes;
+            finishCall = finishCall.AddMinutes(s_rand.Next(range2)); // Adds random minutes to finishCall
+            MyFinishType finishType = (MyFinishType)s_rand.Next(0, 4);
+            s_dal?.Assignment.Create(new Assignment(index, callId, volunteerId, startCall, finishType, finishCall));
         }
     }
+
 
     /// <summary>
     /// The createsCall method generates call data, including addresses, coordinates, open and max finish times, and creates new call entries
