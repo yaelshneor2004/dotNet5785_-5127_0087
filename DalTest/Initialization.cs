@@ -9,11 +9,10 @@ using System.Text;
 
 public static class Initialization
 {
-    private static IAssignment? s_dalAssignment; // Data access layer for assignments
-    private static IVolunteer? s_dalVolunteer; // Data access layer for volunteers
-    private static ICall? s_dalCall; // Data access layer for calls
-    private static IConfig? s_dalConfig; // Data access layer for configurations
+    private static IDal? s_dal; 
     private static readonly Random s_rand = new(); // Random number generator
+    private const int MIN_ID = 200000000;
+    private const int MAX_ID = 400000000;
 
 
     /// <summary>
@@ -22,15 +21,30 @@ public static class Initialization
     private static void createVolunteer()
     {
         string[] volunteerNames =
-       { "Dani Levy", "Eli Amar", "Yair Cohen", "Ariela Levin", "Dina Klein", "Shira Israelof", "David Ben-Gurion", "Golda Meir", "Yitzhak Rabin", "Chaim Weizmann", "Menachem Begin", "Ariel Sharon", "Moshe Dayan", "Shimon Peres", "Yigal Alon" };
-        string[] addresses =  { "Rothschild 10, Tel Aviv, Israel", "Yigal Alon 120, Tel Aviv, Israel", "Ibn Gvirol 30, Tel Aviv, Israel",
-    "Derech Hevron 78, Jerusalem, Israel", "Herzl Blvd 103, Jerusalem, Israel", "Jaffa St 45, Jerusalem, Israel",
-    "Herzl 9, Haifa, Israel", "Moriah Blvd 70, Haifa, Israel", "The Prophets 11, Haifa, Israel",
-    "Rav Shauli 5, Be'er Sheva, Israel", "Reger Blvd 55, Be'er Sheva, Israel", "Johanna Jabotinsky 15, Be'er Sheva, Israel",
-    "Begin Way 234, Petah Tikva, Israel", "Weizmann 22, Petah Tikva, Israel", "Eli Cohen 1, Ramat Gan, Israel" };
+        {
+        "Dani Levy", "Eli Amar", "Yair Cohen", "Ariela Levin", "Dina Klein", "Shira Israelof", "David Ben-Gurion",
+        "Golda Meir", "Yitzhak Rabin", "Chaim Weizmann", "Menachem Begin", "Ariel Sharon", "Moshe Dayan", "Shimon Peres", "Yigal Alon"
+    };
+        string[] addresses =
+        {
+        "Rothschild 10, Tel Aviv, Israel", "Yigal Alon 120, Tel Aviv, Israel", "Ibn Gvirol 30, Tel Aviv, Israel",
+        "Derech Hevron 78, Jerusalem, Israel", "Herzl Blvd 103, Jerusalem, Israel", "Jaffa St 45, Jerusalem, Israel",
+        "Herzl 9, Haifa, Israel", "Moriah Blvd 70, Haifa, Israel", "The Prophets 11, Haifa, Israel",
+        "Rav Shauli 5, Be'er Sheva, Israel", "Reger Blvd 55, Be'er Sheva, Israel", "Johanna Jabotinsky 15, Be'er Sheva, Israel",
+        "Begin Way 234, Petah Tikva, Israel", "Weizmann 22, Petah Tikva, Israel", "Eli Cohen 1, Ramat Gan, Israel"
+    };
 
-        double[] callLongitudes = new double[] { 34.77697, 34.79152, 34.78139, 35.21289, 35.18331, 35.22323, 34.99115, 34.98264, 34.98865, 34.79223, 34.77952, 34.78251, 34.88718, 34.88532, 34.82732 };
-        double[] callLatitudes = new double[] { 32.06366, 32.06180, 32.08404, 31.74851, 31.76832, 31.78571, 32.79916, 32.79406, 32.81912, 31.25297, 31.24642, 31.25360, 32.09077, 32.08862, 32.08333 };
+        double[] callLongitudes = new double[]
+        {
+        34.77697, 34.79152, 34.78139, 35.21289, 35.18331, 35.22323, 34.99115, 34.98264, 34.98865, 34.79223, 34.77952,
+        34.78251, 34.88718, 34.88532, 34.82732
+        };
+        double[] callLatitudes = new double[]
+        {
+        32.06366, 32.06180, 32.08404, 31.74851, 31.76832, 31.78571, 32.79916, 32.79406, 32.81912, 31.25297, 31.24642,
+        31.25360, 32.09077, 32.08862, 32.08333
+        };
+
         for (int i = 0; i < 15; i++)
         {
             double? latitude = callLatitudes[i]; // Latitude of the call at index i
@@ -44,20 +58,18 @@ public static class Initialization
             int id; // ID variable (uninitialized)
 
             do
-                id = s_rand.Next(200000000, 400000000);
-            while (s_dalVolunteer!.Read(id) != null); // id
+                id = s_rand.Next(MIN_ID, MAX_ID);
+            while (s_dal!.Volunteer.Read(id) != null); // id
 
-            //create 15 Volunteer
-            s_dalVolunteer!.Create(new(id, name, phone, email, MyRole.Volunteer, MyTypeDistance.Aerial, password, address, latitude, longitude, maxDistance, true));
+            // Create 15 Volunteer
+            s_dal!.Volunteer.Create(new(id, name, phone, email, MyRole.Volunteer, MyTypeDistance.Aerial, password, address, latitude, longitude, maxDistance, true));
         }
 
-        //create 2 managers
-        s_dalVolunteer!.Create(new(327770087, "Ayala Ozeri", "0533328200", "ayala.ozeri@gmail.com", MyRole.Manager, MyTypeDistance.Aerial, "ayala19", "Rothschild 10, Tel Aviv, Israel", 32.0625, 34.7721, 10.0, true));
-        s_dalVolunteer!.Create(new(326615127, "Yael Shneor", "0533859299", "y7697086@gmail.com", MyRole.Manager, MyTypeDistance.Aerial, "yaelS2208", "Derech Hevron 78, Jerusalem, Israel", 31.7525, 35.2121, 20.0, true));
-
-
-
+        // Create 2 managers
+        s_dal!.Volunteer.Create(new(327770087, "Ayala Ozeri", "0533328200", "ayala.ozeri@gmail.com", MyRole.Manager, MyTypeDistance.Aerial, "ayala19", "Rothschild 10, Tel Aviv, Israel", 32.0625, 34.7721, 10.0, true));
+        s_dal!.Volunteer.Create(new(326615127, "Yael Shneor", "0533859299", "y7697086@gmail.com", MyRole.Manager, MyTypeDistance.Aerial, "yaelS2208", "Derech Hevron 78, Jerusalem, Israel", 31.7525, 35.2121, 20.0, true));
     }
+
 
     /// <summary>
     /// The createsAssignment method reads volunteers and calls, then allocates volunteers to 50 calls, calculates start and finish times, assigns random finish types, and creates new assignments. 🌟
@@ -65,31 +77,27 @@ public static class Initialization
     private static void createsAssignment()
     {
         int index = 1;
-        var volunteers = s_dalVolunteer?.ReadAll();
+        var volunteers = s_dal?.Volunteer.ReadAll();
+        var calls = s_dal?.Call.ReadAll()?.Where(call => call != null).Take(50);
 
-
-        var calls = s_dalCall?.ReadAll()?.Where(call => call != null).Take(50);
         if (calls != null)
         {
-            foreach (var call in calls) // Only 50 were allocated out of the 65
-
-
-
+            foreach (var call in calls)
             {
                 int callId = call.Id;
-                int volunteerId = volunteers?[s_rand.Next(volunteers?.Count ?? 0)].Id ?? 0; // Draw a volunteer
+                int volunteerId = volunteers?[s_rand.Next(volunteers?.Count ?? 0)].Id ?? 0; // Draw a volunteer
                 DateTime startCall = call.OpenTime with { };
                 int range = (int)((call.MaxFinishCall?.AddHours(2) ?? startCall).Subtract(startCall)).TotalHours;
-                startCall = startCall.AddHours(1);//add one hours
-                DateTime finishCall = startCall with { }; //creates a copy of startCall and stores it in finishCall:
+                startCall = startCall.AddHours(1); // Add one hour
+                DateTime finishCall = startCall with { }; // Creates a copy of startCall and stores it in finishCall
                 int range2 = (int)((call.MaxFinishCall?.AddHours(2) ?? finishCall).Subtract(finishCall)).TotalMinutes;
-                finishCall = finishCall.AddMinutes(s_rand.Next(range2));//Adds random minutes to finishCall
+                finishCall = finishCall.AddMinutes(s_rand.Next(range2)); // Adds random minutes to finishCall
                 MyFinishType finishType = (MyFinishType)s_rand.Next(0, 4);
-                s_dalAssignment?.Create(new Assignment(index, callId, volunteerId, startCall, finishType, finishCall));
+                s_dal?.Assignment.Create(new Assignment(index, callId, volunteerId, startCall, finishType, finishCall));
             }
         }
-
     }
+
     /// <summary>
     /// The createsCall method generates call data, including addresses, coordinates, open and max finish times, and creates new call entries
     /// </summary>
@@ -175,34 +183,27 @@ public static class Initialization
             MyCallType callType = 0;
             double latitude = callLatitudes[i];
             double longitude = callLongitudes[i];
-            DateTime openTime = new DateTime((s_dalConfig ?? throw new InvalidOperationException("s_dalConfig is null")).Clock.Year - 1, 1, 1); //One year back from today
-            int range = Math.Max(1, (s_dalConfig.Clock - openTime).Days); 
+            DateTime openTime = new DateTime((s_dal!.Config.Clock.Year - 1), 1, 1); // One year back from today
+            int range = Math.Max(1, (s_dal.Config.Clock - openTime).Days);
             openTime = openTime.AddDays(s_rand.Next(range)).AddHours(s_rand.Next(24)).AddMinutes(s_rand.Next(60));
-            DateTime maxFinishCall = openTime.AddDays(s_rand.Next(1, 15)); //Valid for two weeks
-            string? description = $" call number: {idIndex} of type: {callType} at: {address}";
+            DateTime maxFinishCall = openTime.AddDays(s_rand.Next(1, 15)); // Valid for two weeks
+            string? description = $"call number: {idIndex} of type: {callType} at: {address}";
             if (i < 5)
             {
-                maxFinishCall = s_dalConfig.Clock.AddDays(-s_rand.Next(1, 30)); //30 days before
+                maxFinishCall = s_dal.Config.Clock.AddDays(-s_rand.Next(1, 30)); // 30 days before
                 description = $"Call number: {i + 1} of type: {callType} at: {callAddresses[i]}";
             }
-            
-            s_dalCall!.Create(new Call(idIndex, callType, address, latitude, longitude, openTime, description, maxFinishCall));
+
+            s_dal!.Call.Create(new Call(idIndex, callType, address, latitude, longitude, openTime, description, maxFinishCall));
         }
     }
 
-
     //initializes and validates DAL objects, resets configurations, deletes existing data, and then initializes volunteers, calls, and assignments
-    public static void Do(IVolunteer? dalVolunteer, IAssignment? dalAssignment, ICall? dalCall, IConfig? dalConfig) //stage 1
+    public static void Do(IDal dal) 
     {
-        s_dalVolunteer = dalVolunteer ?? throw new NullReferenceException("DAL object can not be null!"); // Ensure dalVolunteer is not null
-        s_dalAssignment = dalAssignment ?? throw new NullReferenceException("DAL object can not be null!"); // Ensure dalAssignment is not null
-        s_dalCall = dalCall ?? throw new NullReferenceException("DAL object can not be null!"); // Ensure dalCall is not null
-        s_dalConfig = dalConfig ?? throw new NullReferenceException("DAL object can not be null!"); // Ensure dalConfig is not null
+        s_dal = dal ?? throw new NullReferenceException("DAL object can not be null!"); 
         Console.WriteLine("Reset Configuration values and List values...");
-        s_dalConfig.Reset(); // Reset configuration values
-        s_dalCall.DeleteAll(); // Delete all calls
-        s_dalAssignment.DeleteAll(); // Delete all assignments
-        s_dalVolunteer.DeleteAll(); // Delete all volunteers
+        s_dal.ResetDB();
         Console.WriteLine("Initializing Volunteer list ...");
         createVolunteer();
         createsCall();
