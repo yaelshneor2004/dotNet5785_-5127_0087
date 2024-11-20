@@ -43,7 +43,7 @@ internal class VolunteerImplementation : IVolunteer
     {
         return DataSource.Volunteers.FirstOrDefault(filter);
     }
-
+    //retrieves all Volunteer entities, optionally filtering them based on a provided condition
     public IEnumerable<Volunteer> ReadAll(Func<Volunteer, bool>? filter = null) 
                => filter == null
                    ? DataSource.Volunteers.Select(item => item)
