@@ -17,17 +17,10 @@ internal class CallImplementation : ICall
     }
 
     public void Delete(int id)
-    {
-        var call = Read(id);
-        if (call != null)
         {
-            DataSource.Calls.Remove(call);
-        }
-        else
-        {
+            if (DataSource.Calls.RemoveAll(it => it.Id == id) == 0)
             throw new DalDeletionImpossible($"An object of type Call with such an ID={id} does not exist");
-        }
-    }
+       }
 
     public void DeleteAll()
     {
@@ -53,15 +46,9 @@ internal class CallImplementation : ICall
 
     public void Update(Call item)
     {
-        var existingCall = Read(item.Id);
-        if (existingCall != null)
-        {
-            DataSource.Calls.Remove(existingCall);
-            DataSource.Calls.Add(item);
-        }
-        else
-        {
+            if (DataSource.Calls.RemoveAll(it => it.Id == item.Id) == 0)
             throw new DalDoesNotExistException($"An object of type Call with such an ID={item.Id} does not exist");
-        }
-    }
+        DataSource.Calls.Add(item);
+      }
+    
 }

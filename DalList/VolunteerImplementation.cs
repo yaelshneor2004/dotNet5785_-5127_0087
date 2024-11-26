@@ -19,13 +19,9 @@ internal class VolunteerImplementation : IVolunteer
 
 
     public void Delete(int id) 
-    { 
-        var volunteer = Read(id);
-        if (volunteer != null)
-            DataSource.Volunteers.Remove(volunteer); 
-         else  
+    {
+            if (DataSource.Volunteers.RemoveAll(it => it.Id == id) == 0)
             throw new DalDeletionImpossible($"An object of type Volunteer with such an ID={id} does not exist");
-        
     }
 
 
@@ -49,15 +45,11 @@ internal class VolunteerImplementation : IVolunteer
                    ? DataSource.Volunteers.Select(item => item)
                    : DataSource.Volunteers.Where(filter);
 
-    public void Update(Volunteer item) { 
-        var existingVolunteer = Read(item.Id);
-        if (existingVolunteer != null)
-        {
-            DataSource.Volunteers.Remove(existingVolunteer);
-            DataSource.Volunteers.Add(item);
-        }
-        else
-            throw new DalDoesNotExistException($"An object of type Volunteer with such an ID={item.Id} does not exist"); 
+    public void Update(Volunteer item) 
+    {
+            if (DataSource.Volunteers.RemoveAll(it => it.Id == item.Id) == 0)
+            throw new DalDoesNotExistException($"An object of type Volunteer with such an ID={item.Id} does not exist");
+        DataSource.Volunteers.Add(item);
+     
     }
-
 }
