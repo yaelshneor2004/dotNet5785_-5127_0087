@@ -22,6 +22,7 @@ internal class AssignmentImplementation : IAssignment
         if (DataSource.Assignments.RemoveAll(it => it.Id == id) == 0)
             throw new DalDeletionImpossible($"An object of type Assignment with such an ID={id} does not exist");
     }
+    
 
     public void DeleteAll()
     {
