@@ -56,16 +56,21 @@ internal class AssignmentImplementation : IAssignment
         (assignmentsRootElem.Elements().FirstOrDefault(st => (int?)st.Element("Id") == item.Id)
         ?? throw new DO.DalDoesNotExistException($"Assignment with ID={item.Id} does Not exist"))
                 .Remove();
-
-        assignmentsRootElem.Add(new XElement("Assignment", createAssignmentElement(item)));
-
+        int nextId = Config.NextAssignmentId;
+        Assignment copy = item with { Id = nextId };
+        assignmentsRootElem.Add(new XElement("Assignment", createAssignmentElement(copy)));
         XMLTools.SaveListToXMLElement(assignmentsRootElem, Config.s_assignments_xml);
     }
 
 
     public void Create(Assignment item)
     {
-        throw new NotImplementedException();
+        XElement assignmentsRootElem = XMLTools.LoadListFromXMLElement(Config.s_assignments_xml);
+        int nextId = Config.NextAssignmentId;
+        Assignment copy = item with { Id = nextId };
+        assignmentsRootElem.Add(new XElement("Assignment", createAssignmentElement(copy)));
+        XMLTools.SaveListToXMLElement(assignmentsRootElem, Config.s_assignments_xml);
+
     }
 
     public void Delete(int id)
@@ -81,11 +86,17 @@ internal class AssignmentImplementation : IAssignment
     public void DeleteAll()
     {
         XElement assignmentsRootElem = XMLTools.LoadListFromXMLElement(Config.s_assignments_xml);
-        (assignmentsRootElem.Elements().Remove
+        assignmentsRootElem.RemoveAll();
+        XMLTools.SaveListToXMLElement(assignmentsRootElem, Config.s_assignments_xml);
+
     }
 
     public IEnumerable<Assignment> ReadAll(Func<Assignment, bool>? filter = null)
     {
-        throw new NotImplementedException();
+        XElement assignmentsRootElem = XMLTools.LoadListFromXMLElement(Config.s_assignments_xml);
+        return (filter == null
+                   ? assignmentsRootElem.Elements().Select(s => getAssignment(s))
+                   : assignmentsRootElem.Elements().Select(s => getAssignment(s)).Where(filter));
     }
+
 }

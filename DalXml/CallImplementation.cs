@@ -7,38 +7,57 @@ using System.Collections.Generic;
 
 internal class CallImplementation : ICall
 {
-    public void Create(Call item)
+
+
+    public void Update(Call item)
     {
-        throw new NotImplementedException();
+        List<Call> Calls = XMLTools.LoadListFromXMLSerializer<Call>(Config.s_calls_xml);
+        if (Calls.RemoveAll(it => it.Id == item.Id) == 0)
+            throw new DalDoesNotExistException($"Course with ID={item.Id} does Not exist");
+        int nextId = Config.NextCallId;
+        Call copy = item with { Id = nextId };
+        Calls.Add(copy);
+        XMLTools.SaveListToXMLSerializer(Calls, Config.s_calls_xml);
     }
 
     public void Delete(int id)
     {
-        throw new NotImplementedException();
+        List<Call> Calls = XMLTools.LoadListFromXMLSerializer<Call>(Config.s_calls_xml);
+        if (Calls.RemoveAll(it => it.Id == id) == 0)
+            throw new DalDoesNotExistException($"Course with ID={id} does Not exist");
+        XMLTools.SaveListToXMLSerializer(Calls, Config.s_calls_xml);
     }
-
     public void DeleteAll()
     {
-        throw new NotImplementedException();
+        XMLTools.SaveListToXMLSerializer(new List<Call>(), Config.s_calls_xml);
+    }
+
+    public void Create(Call item)
+    {
+        List<Call> Calls = XMLTools.LoadListFromXMLSerializer<Call>(Config.s_calls_xml);
+       int nextId=Config.NextCallId;
+        Call copy=item with { Id = nextId };
+        Calls.Add(copy);
+        XMLTools.SaveListToXMLSerializer(Calls, Config.s_calls_xml);
+
     }
 
     public Call? Read(Func<Call, bool> filter)
     {
-        throw new NotImplementedException();
+        return XMLTools.LoadListFromXMLSerializer<Call>(Config.s_calls_xml).FirstOrDefault(filter);
     }
 
     public Call? Read(int id)
     {
-        throw new NotImplementedException();
+        return XMLTools.LoadListFromXMLSerializer<Call>(Config.s_calls_xml).FirstOrDefault(it => it.Id == id);
     }
 
     public IEnumerable<Call> ReadAll(Func<Call, bool>? filter = null)
     {
-        throw new NotImplementedException();
+        List<Call> Calls = XMLTools.LoadListFromXMLSerializer<Call>(Config.s_calls_xml);
+        return (filter == null
+                  ? Calls
+                  : Calls.Where(filter));
     }
 
-    public void Update(Call item)
-    {
-        throw new NotImplementedException();
-    }
 }
