@@ -4,6 +4,7 @@ using DalApi;
 using DO;
 using System.Collections.Generic;
 using System.Linq;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 // The CallImplementation class manages operations for Call entities, including creating, reading, updating, and deleting calls in the data source.
 internal class CallImplementation : ICall
@@ -37,6 +38,7 @@ internal class CallImplementation : ICall
         return DataSource.Calls.FirstOrDefault(filter);
     }
 
+    //retrieves all Call entities, optionally filtering them based on a provided condition
     public IEnumerable<Call> ReadAll(Func<Call, bool>? filter = null)
     {
         return filter == null

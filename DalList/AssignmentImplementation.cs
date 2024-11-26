@@ -38,6 +38,7 @@ internal class AssignmentImplementation : IAssignment
         return DataSource.Assignments.FirstOrDefault(filter);
     }
 
+    //retrieves all Assignment entities, optionally filtering them based on a provided condition
     public IEnumerable<Assignment> ReadAll(Func<Assignment, bool>? filter = null)
     {
         return filter == null
