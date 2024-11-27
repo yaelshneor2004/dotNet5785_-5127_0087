@@ -10,30 +10,53 @@ using System.Xml.Linq;
 
 internal class AssignmentImplementation : IAssignment
 {
-    static Assignment getAssignment(XElement a)
+  static Assignment getAssignment(XElement a)
+    { 
+        return new DO. Assignment()
+        { 
+            Id = a.ToIntNullable("Id") ?? throw new FormatException("can't convert id")
+        , CallId = a?.ToIntNullable("CallId") ?? throw new FormatException("can't convert callId"), 
+            VolunteerId = a?.ToIntNullable("VolunteerId") ?? throw new FormatException("can't convert volunteerId"),
+            StartCall = a?.ToDateTimeNullable("StartCall") ?? throw new FormatException("can't convert startCall"), 
+            FinishCall = a?.ToDateTimeNullable("FinishCall")?? throw new FormatException(" can't convert startCall"), 
+            FinishType = a?.ToEnumNullable<MyFinishType>("FinishType") ?? throw new FormatException(" can't convert startCall")
+        }; 
+    }
+    //static Assignment getAssignment(XElement a)
+    //{
+    //    return new DO.Assignment()
+    //    {
+    //        Id = a.ToIntNullable("Id") ?? throw new FormatException("can't convert id"),
+    //        CallId = a.ToIntNullable("Id") ?? throw new FormatException("can't convert id"),
+    //        VolunteerId = a.ToIntNullable("Id") ?? throw new FormatException("can't convert id"),
+    //        StartCall = a.ToDateTimeNullable("StartCall")?? throw new FormatException("can't convert start Call"),
+    //        FinishCall = a.ToDateTimeNullable("FinishCall"),
+    //        FinishType = a.ToEnumNullable<MyFinishType>("FinishType"),
+    //    };
+    //}
+
+  private IEnumerable<XElement>GetAssignmentElement(Assignment assignment)
     {
-        return new DO.Assignment()
-        {
-            Id = a.ToIntNullable("Id") ?? throw new FormatException("can't convert id"),
-            CallId = a.ToIntNullable("Id") ?? throw new FormatException("can't convert id"),
-            VolunteerId = a.ToIntNullable("Id") ?? throw new FormatException("can't convert id"),
-            StartCall = a.ToDateTimeNullable("StartCall")?? throw new FormatException("can't convert start Call"),
-            FinishCall = a.ToDateTimeNullable("FinishCall"),
-            FinishType = a.ToEnumNullable<MyFinishType>("FinishType"),
-        };
+        yield return new XElement("Id", assignment.Id);
+        yield return new XElement("CallId", assignment.CallId);
+        yield return new XElement("VolunteerId", assignment.VolunteerId);
+        yield return new XElement("StartCall", assignment.StartCall);
+        yield return new XElement("FinishType", assignment.FinishType?.ToString()); // Convert Enum to string
+        yield return new XElement("FinishCall", assignment.FinishCall);
     }
     //Converts an Assignment object into an XElement
-    static XElement createAssignmentElement(Assignment assignment)
+    private XElement createAssignmentElement(Assignment assignment)
     {
-        return new XElement("Assignment",
-            new XElement("Id", assignment.Id),
-            new XElement("CallId", assignment.CallId),
-            new XElement("VolunteerId", assignment.VolunteerId),
-            new XElement("StartCall", assignment.StartCall),
-            new XElement("FinishType", assignment.FinishType?.ToString()), // Convert Enum to string
-            new XElement("FinishCall", assignment.FinishCall)
-        );
+        return new XElement("Assignment", GetAssignmentElement(assignment));
+        //    new XElement("Id", assignment.Id),
+        //    new XElement("CallId", assignment.CallId),
+        //    new XElement("VolunteerId", assignment.VolunteerId),
+        //    new XElement("StartCall", assignment.StartCall),
+        //    new XElement("FinishType", assignment.FinishType?.ToString()), // Convert Enum to string
+        //    new XElement("FinishCall", assignment.FinishCall)
+        //);
     }
+
 
 
     public Assignment? Read(int id)
@@ -68,7 +91,7 @@ internal class AssignmentImplementation : IAssignment
         XElement assignmentsRootElem = XMLTools.LoadListFromXMLElement(Config.s_assignments_xml);
         int nextId = Config.NextAssignmentId;
         Assignment copy = item with { Id = nextId };
-        assignmentsRootElem.Add(new XElement("Assignment", createAssignmentElement(copy)));
+        assignmentsRootElem.Add(new XElement(createAssignmentElement(copy)));
         XMLTools.SaveListToXMLElement(assignmentsRootElem, Config.s_assignments_xml);
 
     }
@@ -91,12 +114,30 @@ internal class AssignmentImplementation : IAssignment
 
     }
 
+    //public IEnumerable<Assignment> ReadAll(Func<Assignment, bool>? filter = null)
+    //{
+    //    XElement assignmentsRootElem = XMLTools.LoadListFromXMLElement(Config.s_assignments_xml);
+    //    return (filter == null
+    //               ? assignmentsRootElem.Elements().Select(s => getAssignment(s))
+    //               : assignmentsRootElem.Elements().Select(s => getAssignment(s)).Where(filter));
+    //}
     public IEnumerable<Assignment> ReadAll(Func<Assignment, bool>? filter = null)
     {
         XElement assignmentsRootElem = XMLTools.LoadListFromXMLElement(Config.s_assignments_xml);
-        return (filter == null
-                   ? assignmentsRootElem.Elements().Select(s => getAssignment(s))
-                   : assignmentsRootElem.Elements().Select(s => getAssignment(s)).Where(filter));
+        IEnumerable<Assignment> assignments = assignmentsRootElem.Elements().Select(s =>
+        {
+            try
+            {
+                return getAssignment(s);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error getting assignment from XML: {ex.Message}");
+                throw;
+            }
+        });
+
+        return filter == null ? assignments : assignments.Where(filter);
     }
 
 }

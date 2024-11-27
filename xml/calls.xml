@@ -1,3 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ArrayOfCall>
+<ArrayOfCall xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Call>
+    <Id>1</Id>
+    <CallType>English</CallType>
+    <Address>10 Jaffa Street, Jerusalem</Address>
+    <Latitude>35.22119546257982</Latitude>
+    <Longitude>31.78130811991647</Longitude>
+    <OpenTime>2024-04-23T19:22:00</OpenTime>
+    <Description>Call number: 1 of type: English at: 10 Jaffa Street, Jerusalem</Description>
+    <MaxFinishCall>2024-10-31T17:50:12</MaxFinishCall>
+  </Call>
+  <Call>
+    <Id>2</Id>
+    <CallType>English</CallType>
+    <Address>20 Emek Refaim Street, Jerusalem</Address>
+    <Latitude>35.22123577032626</Latitude>
+    <Longitude>31.76543961779154</Longitude>
+    <OpenTime>2023-12-13T03:35:00</OpenTime>
+    <Description>Call number: 2 of type: English at: 20 Emek Refaim Street, Jerusalem</Description>
+    <MaxFinishCall>2024-11-19T17:50:12</MaxFinishCall>
+  </Call>
+  <Call>
+    <Id>3</Id>
+    <CallType>English</CallType>
+    <Address>30 Agripas Street, Jerusalem</Address>
+    <Latitude>35.215657362641764</Latitude>
+    <Longitude>31.783470280009738</Longitude>
+    <OpenTime>2023-04-01T21:04:00</OpenTime>
+    <Description>Call number: 3 of type: English at: 30 Agripas Street, Jerusalem</Description>
+    <MaxFinishCall>2024-11-23T17:50:12</MaxFinishCall>
+  </Call>
 </ArrayOfCall>

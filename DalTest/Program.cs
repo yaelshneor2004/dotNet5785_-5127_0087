@@ -7,7 +7,7 @@ namespace DalTest;
 internal class Program
 {
     //static readonly IDal s_dal = new DalList();
-    static readonly IDal s_dal = new DalXml();
+    static readonly DalApi. IDal s_dal = new Dal. DalXml();
 
     public static void Main(string[] args)
     {
@@ -179,9 +179,45 @@ internal class Program
 
     private static void ShowAllData()
     {
-        ReadAllEntities("Volunteer", s_dal!.Volunteer);
-        ReadAllEntities("Call", s_dal!.Call);
-        ReadAllEntities("Assignment", s_dal!.Assignment);
+        PrintVolunteer();
+        PrintCall();
+        PrintAssienment();
+
+
+    }
+    private static void PrintVolunteer()
+    {
+        List<Volunteer>newlist=s_dal.Volunteer.ReadAll().ToList();
+        if (newlist != null && newlist.Count > 0) 
+        {
+            foreach (var volunteer in newlist)
+            {
+                Console.WriteLine(volunteer);
+            }
+} 
+        }
+
+    private static void PrintCall()
+    {
+        List<Call> newlist = s_dal.Call.ReadAll().ToList();
+        if (newlist != null && newlist.Count > 0)
+        {
+            foreach (var volunteer in newlist)
+            {
+                Console.WriteLine(volunteer);
+            }
+        }
+    }
+    private static void PrintAssienment()
+    {
+        List<Assignment> newlist = s_dal.Assignment.ReadAll().ToList();
+        if (newlist != null && newlist.Count > 0)
+        {
+            foreach (var volunteer in newlist)
+            {
+                Console.WriteLine(volunteer);
+            }
+        }
     }
 
     private static void ResetDatabaseAndConfig()
