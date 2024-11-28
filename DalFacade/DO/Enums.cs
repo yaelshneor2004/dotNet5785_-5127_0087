@@ -70,7 +70,7 @@ public enum MainMenuOptions
 /// <summary>
 /// Enum representing CRUD (Create, Read, Update, Delete) operations and options
 /// </summary>
-public enum Crud
+public enum EntityMenuOption
 {
     Exit, Create, Read, ReadAll, Update, Delete, DeleteAll
 }

@@ -22,18 +22,6 @@ internal class AssignmentImplementation : IAssignment
             FinishType = a?.ToEnumNullable<MyFinishType>("FinishType") ?? throw new FormatException(" can't convert startCall")
         }; 
     }
-    //static Assignment getAssignment(XElement a)
-    //{
-    //    return new DO.Assignment()
-    //    {
-    //        Id = a.ToIntNullable("Id") ?? throw new FormatException("can't convert id"),
-    //        CallId = a.ToIntNullable("Id") ?? throw new FormatException("can't convert id"),
-    //        VolunteerId = a.ToIntNullable("Id") ?? throw new FormatException("can't convert id"),
-    //        StartCall = a.ToDateTimeNullable("StartCall")?? throw new FormatException("can't convert start Call"),
-    //        FinishCall = a.ToDateTimeNullable("FinishCall"),
-    //        FinishType = a.ToEnumNullable<MyFinishType>("FinishType"),
-    //    };
-    //}
 
   private IEnumerable<XElement>GetAssignmentElement(Assignment assignment)
     {
@@ -48,13 +36,6 @@ internal class AssignmentImplementation : IAssignment
     private XElement createAssignmentElement(Assignment assignment)
     {
         return new XElement("Assignment", GetAssignmentElement(assignment));
-        //    new XElement("Id", assignment.Id),
-        //    new XElement("CallId", assignment.CallId),
-        //    new XElement("VolunteerId", assignment.VolunteerId),
-        //    new XElement("StartCall", assignment.StartCall),
-        //    new XElement("FinishType", assignment.FinishType?.ToString()), // Convert Enum to string
-        //    new XElement("FinishCall", assignment.FinishCall)
-        //);
     }
 
 
@@ -114,30 +95,11 @@ internal class AssignmentImplementation : IAssignment
 
     }
 
-    //public IEnumerable<Assignment> ReadAll(Func<Assignment, bool>? filter = null)
-    //{
-    //    XElement assignmentsRootElem = XMLTools.LoadListFromXMLElement(Config.s_assignments_xml);
-    //    return (filter == null
-    //               ? assignmentsRootElem.Elements().Select(s => getAssignment(s))
-    //               : assignmentsRootElem.Elements().Select(s => getAssignment(s)).Where(filter));
-    //}
     public IEnumerable<Assignment> ReadAll(Func<Assignment, bool>? filter = null)
     {
         XElement assignmentsRootElem = XMLTools.LoadListFromXMLElement(Config.s_assignments_xml);
-        IEnumerable<Assignment> assignments = assignmentsRootElem.Elements().Select(s =>
-        {
-            try
-            {
-                return getAssignment(s);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error getting assignment from XML: {ex.Message}");
-                throw;
-            }
-        });
-
-        return filter == null ? assignments : assignments.Where(filter);
+        return (filter == null
+                   ? assignmentsRootElem.Elements().Select(s => getAssignment(s))
+                   : assignmentsRootElem.Elements().Select(s => getAssignment(s)).Where(filter));
     }
-
 }

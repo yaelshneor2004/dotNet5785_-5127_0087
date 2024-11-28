@@ -6,9 +6,9 @@
     <Address>10 Jaffa Street, Jerusalem</Address>
     <Latitude>35.22119546257982</Latitude>
     <Longitude>31.78130811991647</Longitude>
-    <OpenTime>2023-04-07T21:10:00</OpenTime>
+    <OpenTime>2023-11-11T14:50:00</OpenTime>
     <Description>Call number: 1 of type: English at: 10 Jaffa Street, Jerusalem</Description>
-    <MaxFinishCall>2024-11-15T19:49:16</MaxFinishCall>
+    <MaxFinishCall>2024-11-01T10:49:27</MaxFinishCall>
   </Call>
   <Call>
     <Id>2</Id>
@@ -16,9 +16,9 @@
     <Address>20 Emek Refaim Street, Jerusalem</Address>
     <Latitude>35.22123577032626</Latitude>
     <Longitude>31.76543961779154</Longitude>
-    <OpenTime>2024-06-26T02:53:00</OpenTime>
+    <OpenTime>2024-11-22T14:48:00</OpenTime>
     <Description>Call number: 2 of type: English at: 20 Emek Refaim Street, Jerusalem</Description>
-    <MaxFinishCall>2024-11-11T19:49:16</MaxFinishCall>
+    <MaxFinishCall>2024-11-07T10:49:27</MaxFinishCall>
   </Call>
   <Call>
     <Id>3</Id>
@@ -26,9 +26,9 @@
     <Address>30 Agripas Street, Jerusalem</Address>
     <Latitude>35.215657362641764</Latitude>
     <Longitude>31.783470280009738</Longitude>
-    <OpenTime>2023-01-11T17:54:00</OpenTime>
+    <OpenTime>2024-09-12T12:06:00</OpenTime>
     <Description>Call number: 3 of type: English at: 30 Agripas Street, Jerusalem</Description>
-    <MaxFinishCall>2024-11-09T19:49:16</MaxFinishCall>
+    <MaxFinishCall>2024-10-30T10:49:27</MaxFinishCall>
   </Call>
   <Call>
     <Id>4</Id>
@@ -36,9 +36,9 @@
     <Address>40 Shmuel HaNavi Street, Jerusalem</Address>
     <Latitude>35.224665335668945</Latitude>
     <Longitude>31.791048846509597</Longitude>
-    <OpenTime>2023-04-25T16:41:00</OpenTime>
+    <OpenTime>2023-05-03T16:36:00</OpenTime>
     <Description>Call number: 4 of type: English at: 40 Shmuel HaNavi Street, Jerusalem</Description>
-    <MaxFinishCall>2024-11-25T19:49:16</MaxFinishCall>
+    <MaxFinishCall>2024-11-09T10:49:27</MaxFinishCall>
   </Call>
   <Call>
     <Id>5</Id>
@@ -46,9 +46,9 @@
     <Address>50 HaNevi'im Street, Jerusalem</Address>
     <Latitude>35.221665622205705</Latitude>
     <Longitude>31.78391107912798</Longitude>
-    <OpenTime>2023-02-28T22:09:00</OpenTime>
+    <OpenTime>2024-01-22T23:18:00</OpenTime>
     <Description>Call number: 5 of type: English at: 50 HaNevi'im Street, Jerusalem</Description>
-    <MaxFinishCall>2024-11-12T19:49:16</MaxFinishCall>
+    <MaxFinishCall>2024-11-01T10:49:27</MaxFinishCall>
   </Call>
   <Call>
     <Id>6</Id>
@@ -56,9 +56,9 @@
     <Address>60 Gaza Street, Jerusalem</Address>
     <Latitude>35.21205714918638</Latitude>
     <Longitude>31.771053788166768</Longitude>
-    <OpenTime>2023-06-01T13:37:00</OpenTime>
+    <OpenTime>2023-05-11T17:10:00</OpenTime>
     <Description>call number: 1 of type: English at: 60 Gaza Street, Jerusalem</Description>
-    <MaxFinishCall>2023-06-09T13:37:00</MaxFinishCall>
+    <MaxFinishCall>2023-05-13T17:10:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>7</Id>
@@ -66,9 +66,9 @@
     <Address>4 Herzl Boulevard, Jerusalem</Address>
     <Latitude>35.19764122028971</Latitude>
     <Longitude>31.785777797665002</Longitude>
-    <OpenTime>2023-02-20T15:27:00</OpenTime>
+    <OpenTime>2023-11-12T05:21:00</OpenTime>
     <Description>call number: 1 of type: English at: 4 Herzl Boulevard, Jerusalem</Description>
-    <MaxFinishCall>2023-03-06T15:27:00</MaxFinishCall>
+    <MaxFinishCall>2023-11-17T05:21:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>8</Id>
@@ -76,9 +76,9 @@
     <Address>40 Masliansky Street, Jerusalem</Address>
     <Latitude>35.18968763754008</Latitude>
     <Longitude>31.817876781912197</Longitude>
-    <OpenTime>2024-05-05T04:26:00</OpenTime>
+    <OpenTime>2023-09-26T15:43:00</OpenTime>
     <Description>call number: 1 of type: English at: 40 Masliansky Street, Jerusalem</Description>
-    <MaxFinishCall>2024-05-15T04:26:00</MaxFinishCall>
+    <MaxFinishCall>2023-10-03T15:43:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>9</Id>
@@ -86,9 +86,9 @@
     <Address>10 Ben Yehuda Street, Jerusalem</Address>
     <Latitude>35.21774235102746</Latitude>
     <Longitude>31.78186936361579</Longitude>
-    <OpenTime>2024-09-18T22:28:00</OpenTime>
+    <OpenTime>2023-12-26T12:05:00</OpenTime>
     <Description>call number: 1 of type: English at: 10 Ben Yehuda Street, Jerusalem</Description>
-    <MaxFinishCall>2024-09-22T22:28:00</MaxFinishCall>
+    <MaxFinishCall>2023-12-27T12:05:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>10</Id>
@@ -96,9 +96,9 @@
     <Address>150 Hebron Road, Jerusalem</Address>
     <Latitude>35.21658163568471</Latitude>
     <Longitude>31.74578724034863</Longitude>
-    <OpenTime>2023-02-20T16:11:00</OpenTime>
+    <OpenTime>2024-05-03T17:20:00</OpenTime>
     <Description>call number: 1 of type: English at: 150 Hebron Road, Jerusalem</Description>
-    <MaxFinishCall>2023-03-01T16:11:00</MaxFinishCall>
+    <MaxFinishCall>2024-05-17T17:20:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>11</Id>
@@ -106,9 +106,9 @@
     <Address>5 Hillel Street, Jerusalem</Address>
     <Latitude>35.21638617800225</Latitude>
     <Longitude>31.78068910546481</Longitude>
-    <OpenTime>2024-06-23T09:08:00</OpenTime>
+    <OpenTime>2023-02-15T21:45:00</OpenTime>
     <Description>call number: 1 of type: English at: 5 Hillel Street, Jerusalem</Description>
-    <MaxFinishCall>2024-06-28T09:08:00</MaxFinishCall>
+    <MaxFinishCall>2023-02-17T21:45:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>12</Id>
@@ -116,9 +116,9 @@
     <Address>6 Korazin Street, Jerusalem</Address>
     <Latitude>35.209312878017535</Latitude>
     <Longitude>31.78255160178496</Longitude>
-    <OpenTime>2024-06-05T18:53:00</OpenTime>
+    <OpenTime>2024-09-14T06:59:00</OpenTime>
     <Description>call number: 1 of type: English at: 6 Korazin Street, Jerusalem</Description>
-    <MaxFinishCall>2024-06-16T18:53:00</MaxFinishCall>
+    <MaxFinishCall>2024-09-22T06:59:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>13</Id>
@@ -126,9 +126,9 @@
     <Address>35 King George Street, Jerusalem</Address>
     <Latitude>35.2159379</Latitude>
     <Longitude>31.779769</Longitude>
-    <OpenTime>2023-03-31T08:00:00</OpenTime>
+    <OpenTime>2023-09-23T08:25:00</OpenTime>
     <Description>call number: 1 of type: English at: 35 King George Street, Jerusalem</Description>
-    <MaxFinishCall>2023-04-14T08:00:00</MaxFinishCall>
+    <MaxFinishCall>2023-10-01T08:25:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>14</Id>
@@ -136,9 +136,9 @@
     <Address>78 Ben Zvi Street, Jerusalem</Address>
     <Latitude>35.2092867</Latitude>
     <Longitude>31.7798566</Longitude>
-    <OpenTime>2024-04-21T18:56:00</OpenTime>
+    <OpenTime>2023-01-30T07:11:00</OpenTime>
     <Description>call number: 1 of type: English at: 78 Ben Zvi Street, Jerusalem</Description>
-    <MaxFinishCall>2024-04-28T18:56:00</MaxFinishCall>
+    <MaxFinishCall>2023-02-04T07:11:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>15</Id>
@@ -146,9 +146,9 @@
     <Address>4 Devorah HaNeviah Street, Jerusalem</Address>
     <Latitude>35.224894</Latitude>
     <Longitude>31.789588</Longitude>
-    <OpenTime>2023-11-21T01:10:00</OpenTime>
+    <OpenTime>2024-08-28T03:48:00</OpenTime>
     <Description>call number: 1 of type: English at: 4 Devorah HaNeviah Street, Jerusalem</Description>
-    <MaxFinishCall>2023-11-28T01:10:00</MaxFinishCall>
+    <MaxFinishCall>2024-09-02T03:48:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>16</Id>
@@ -156,9 +156,9 @@
     <Address>15 Yehuda HaNasi Street, Jerusalem</Address>
     <Latitude>35.202146</Latitude>
     <Longitude>31.75577</Longitude>
-    <OpenTime>2023-06-01T01:52:00</OpenTime>
+    <OpenTime>2023-03-03T02:47:00</OpenTime>
     <Description>call number: 1 of type: English at: 15 Yehuda HaNasi Street, Jerusalem</Description>
-    <MaxFinishCall>2023-06-14T01:52:00</MaxFinishCall>
+    <MaxFinishCall>2023-03-04T02:47:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>17</Id>
@@ -166,9 +166,9 @@
     <Address>5 Aliash Street, Jerusalem</Address>
     <Latitude>35.201317</Latitude>
     <Longitude>31.755974</Longitude>
-    <OpenTime>2024-02-18T19:17:00</OpenTime>
+    <OpenTime>2023-03-23T09:46:00</OpenTime>
     <Description>call number: 1 of type: English at: 5 Aliash Street, Jerusalem</Description>
-    <MaxFinishCall>2024-02-28T19:17:00</MaxFinishCall>
+    <MaxFinishCall>2023-04-03T09:46:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>18</Id>
@@ -176,9 +176,9 @@
     <Address>15 Arlozorov Street, Jerusalem</Address>
     <Latitude>35.215236</Latitude>
     <Longitude>31.781584</Longitude>
-    <OpenTime>2023-08-21T04:54:00</OpenTime>
+    <OpenTime>2023-12-31T07:24:00</OpenTime>
     <Description>call number: 1 of type: English at: 15 Arlozorov Street, Jerusalem</Description>
-    <MaxFinishCall>2023-08-31T04:54:00</MaxFinishCall>
+    <MaxFinishCall>2024-01-09T07:24:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>19</Id>
@@ -186,9 +186,9 @@
     <Address>13 Shamai Street, Jerusalem</Address>
     <Latitude>35.216455</Latitude>
     <Longitude>31.77261</Longitude>
-    <OpenTime>2024-03-11T18:00:00</OpenTime>
+    <OpenTime>2023-01-17T18:50:00</OpenTime>
     <Description>call number: 1 of type: English at: 13 Shamai Street, Jerusalem</Description>
-    <MaxFinishCall>2024-03-15T18:00:00</MaxFinishCall>
+    <MaxFinishCall>2023-01-31T18:50:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>20</Id>
@@ -196,9 +196,9 @@
     <Address>10 Tavor Street, Jerusalem</Address>
     <Latitude>35.218053</Latitude>
     <Longitude>31.781239</Longitude>
-    <OpenTime>2023-10-15T19:46:00</OpenTime>
+    <OpenTime>2023-06-13T03:18:00</OpenTime>
     <Description>call number: 1 of type: English at: 10 Tavor Street, Jerusalem</Description>
-    <MaxFinishCall>2023-10-17T19:46:00</MaxFinishCall>
+    <MaxFinishCall>2023-06-26T03:18:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>21</Id>
@@ -206,9 +206,9 @@
     <Address>55 Ussishkin Street, Jerusalem</Address>
     <Latitude>35.213336</Latitude>
     <Longitude>31.782361</Longitude>
-    <OpenTime>2023-04-10T21:48:00</OpenTime>
+    <OpenTime>2024-06-10T17:21:00</OpenTime>
     <Description>call number: 1 of type: English at: 55 Ussishkin Street, Jerusalem</Description>
-    <MaxFinishCall>2023-04-12T21:48:00</MaxFinishCall>
+    <MaxFinishCall>2024-06-11T17:21:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>22</Id>
@@ -216,9 +216,9 @@
     <Address>7 Helene HaMalka Street, Jerusalem</Address>
     <Latitude>35.212081</Latitude>
     <Longitude>31.780486</Longitude>
-    <OpenTime>2024-11-01T09:51:00</OpenTime>
+    <OpenTime>2024-01-10T01:23:00</OpenTime>
     <Description>call number: 1 of type: English at: 7 Helene HaMalka Street, Jerusalem</Description>
-    <MaxFinishCall>2024-11-05T09:51:00</MaxFinishCall>
+    <MaxFinishCall>2024-01-22T01:23:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>23</Id>
@@ -226,9 +226,9 @@
     <Address>14 Lincoln Street, Jerusalem</Address>
     <Latitude>35.221056</Latitude>
     <Longitude>31.7820255</Longitude>
-    <OpenTime>2023-08-24T17:49:00</OpenTime>
+    <OpenTime>2024-09-15T19:52:00</OpenTime>
     <Description>call number: 1 of type: English at: 14 Lincoln Street, Jerusalem</Description>
-    <MaxFinishCall>2023-08-31T17:49:00</MaxFinishCall>
+    <MaxFinishCall>2024-09-21T19:52:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>24</Id>
@@ -236,9 +236,9 @@
     <Address>40 Zerach Street, Jerusalem</Address>
     <Latitude>35.219964</Latitude>
     <Longitude>31.775421</Longitude>
-    <OpenTime>2024-07-28T21:57:00</OpenTime>
+    <OpenTime>2023-02-13T14:16:00</OpenTime>
     <Description>call number: 1 of type: English at: 40 Zerach Street, Jerusalem</Description>
-    <MaxFinishCall>2024-08-01T21:57:00</MaxFinishCall>
+    <MaxFinishCall>2023-02-26T14:16:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>25</Id>
@@ -246,9 +246,9 @@
     <Address>22 Mea Shearim Street, Jerusalem</Address>
     <Latitude>35.190149</Latitude>
     <Longitude>31.816719</Longitude>
-    <OpenTime>2024-05-17T11:20:00</OpenTime>
+    <OpenTime>2023-03-04T01:27:00</OpenTime>
     <Description>call number: 1 of type: English at: 22 Mea Shearim Street, Jerusalem</Description>
-    <MaxFinishCall>2024-05-28T11:20:00</MaxFinishCall>
+    <MaxFinishCall>2023-03-09T01:27:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>26</Id>
@@ -256,9 +256,9 @@
     <Address>10 King David Street, Jerusalem</Address>
     <Latitude>35.222337</Latitude>
     <Longitude>31.787706</Longitude>
-    <OpenTime>2024-02-04T04:51:00</OpenTime>
+    <OpenTime>2023-01-09T09:37:00</OpenTime>
     <Description>call number: 1 of type: English at: 10 King David Street, Jerusalem</Description>
-    <MaxFinishCall>2024-02-08T04:51:00</MaxFinishCall>
+    <MaxFinishCall>2023-01-20T09:37:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>27</Id>
@@ -266,9 +266,9 @@
     <Address>30 Ruth Street, Jerusalem</Address>
     <Latitude>35.222155</Latitude>
     <Longitude>31.776943</Longitude>
-    <OpenTime>2023-01-15T21:34:00</OpenTime>
+    <OpenTime>2024-02-24T11:38:00</OpenTime>
     <Description>call number: 1 of type: English at: 30 Ruth Street, Jerusalem</Description>
-    <MaxFinishCall>2023-01-18T21:34:00</MaxFinishCall>
+    <MaxFinishCall>2024-03-05T11:38:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>28</Id>
@@ -276,9 +276,9 @@
     <Address>9 Beit HaDfus Street, Jerusalem</Address>
     <Latitude>35.217356</Latitude>
     <Longitude>31.7765005</Longitude>
-    <OpenTime>2023-03-15T01:54:00</OpenTime>
+    <OpenTime>2023-11-18T09:19:00</OpenTime>
     <Description>call number: 1 of type: English at: 9 Beit HaDfus Street, Jerusalem</Description>
-    <MaxFinishCall>2023-03-18T01:54:00</MaxFinishCall>
+    <MaxFinishCall>2023-11-26T09:19:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>29</Id>
@@ -286,9 +286,9 @@
     <Address>5 David Yellin Street, Jerusalem</Address>
     <Latitude>35.18918</Latitude>
     <Longitude>31.785952</Longitude>
-    <OpenTime>2024-11-05T05:00:00</OpenTime>
+    <OpenTime>2023-11-26T04:25:00</OpenTime>
     <Description>call number: 1 of type: English at: 5 David Yellin Street, Jerusalem</Description>
-    <MaxFinishCall>2024-11-17T05:00:00</MaxFinishCall>
+    <MaxFinishCall>2023-12-02T04:25:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>30</Id>
@@ -296,9 +296,9 @@
     <Address>8 Shmuel HaNagid Street, Jerusalem</Address>
     <Latitude>35.216914</Latitude>
     <Longitude>31.786426</Longitude>
-    <OpenTime>2024-03-03T09:18:00</OpenTime>
+    <OpenTime>2024-02-05T09:04:00</OpenTime>
     <Description>call number: 1 of type: English at: 8 Shmuel HaNagid Street, Jerusalem</Description>
-    <MaxFinishCall>2024-03-11T09:18:00</MaxFinishCall>
+    <MaxFinishCall>2024-02-16T09:04:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>31</Id>
@@ -306,9 +306,9 @@
     <Address>15 HaTzanhanim Street, Jerusalem</Address>
     <Latitude>35.214816</Latitude>
     <Longitude>31.780594</Longitude>
-    <OpenTime>2024-06-29T17:37:00</OpenTime>
+    <OpenTime>2024-05-03T06:49:00</OpenTime>
     <Description>call number: 1 of type: English at: 15 HaTzanhanim Street, Jerusalem</Description>
-    <MaxFinishCall>2024-07-12T17:37:00</MaxFinishCall>
+    <MaxFinishCall>2024-05-08T06:49:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>32</Id>
@@ -316,9 +316,9 @@
     <Address>9 Rabbi Akiva Street, Jerusalem</Address>
     <Latitude>35.226296</Latitude>
     <Longitude>31.779808</Longitude>
-    <OpenTime>2023-02-20T00:45:00</OpenTime>
+    <OpenTime>2023-04-15T01:02:00</OpenTime>
     <Description>call number: 1 of type: English at: 9 Rabbi Akiva Street, Jerusalem</Description>
-    <MaxFinishCall>2023-02-28T00:45:00</MaxFinishCall>
+    <MaxFinishCall>2023-04-28T01:02:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>33</Id>
@@ -326,9 +326,9 @@
     <Address>7 Greenberg Street, Jerusalem</Address>
     <Latitude>35.192176</Latitude>
     <Longitude>31.81637</Longitude>
-    <OpenTime>2024-11-04T09:13:00</OpenTime>
+    <OpenTime>2023-07-11T09:55:00</OpenTime>
     <Description>call number: 1 of type: English at: 7 Greenberg Street, Jerusalem</Description>
-    <MaxFinishCall>2024-11-06T09:13:00</MaxFinishCall>
+    <MaxFinishCall>2023-07-23T09:55:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>34</Id>
@@ -336,9 +336,9 @@
     <Address>6 Henrietta Szold Street, Jerusalem</Address>
     <Latitude>35.218002</Latitude>
     <Longitude>31.779226</Longitude>
-    <OpenTime>2024-04-13T16:52:00</OpenTime>
+    <OpenTime>2023-06-04T22:04:00</OpenTime>
     <Description>call number: 1 of type: English at: 6 Henrietta Szold Street, Jerusalem</Description>
-    <MaxFinishCall>2024-04-24T16:52:00</MaxFinishCall>
+    <MaxFinishCall>2023-06-15T22:04:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>35</Id>
@@ -346,9 +346,9 @@
     <Address>5 Shmuel HaNagid Street, Jerusalem</Address>
     <Latitude>35.1915</Latitude>
     <Longitude>31.817092</Longitude>
-    <OpenTime>2024-05-16T13:31:00</OpenTime>
+    <OpenTime>2024-02-25T04:12:00</OpenTime>
     <Description>call number: 1 of type: English at: 5 Shmuel HaNagid Street, Jerusalem</Description>
-    <MaxFinishCall>2024-05-24T13:31:00</MaxFinishCall>
+    <MaxFinishCall>2024-03-07T04:12:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>36</Id>
@@ -356,9 +356,9 @@
     <Address>18 Beit Vagan Street, Jerusalem</Address>
     <Latitude>35.160694</Latitude>
     <Longitude>31.757365</Longitude>
-    <OpenTime>2023-06-27T18:34:00</OpenTime>
+    <OpenTime>2023-06-30T08:42:00</OpenTime>
     <Description>call number: 1 of type: English at: 18 Beit Vagan Street, Jerusalem</Description>
-    <MaxFinishCall>2023-07-07T18:34:00</MaxFinishCall>
+    <MaxFinishCall>2023-07-05T08:42:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>37</Id>
@@ -366,9 +366,9 @@
     <Address>12 Neve Sha'anan Street, Jerusalem</Address>
     <Latitude>35.214955</Latitude>
     <Longitude>31.780274</Longitude>
-    <OpenTime>2024-03-01T19:37:00</OpenTime>
+    <OpenTime>2024-09-25T22:01:00</OpenTime>
     <Description>call number: 1 of type: English at: 12 Neve Sha'anan Street, Jerusalem</Description>
-    <MaxFinishCall>2024-03-02T19:37:00</MaxFinishCall>
+    <MaxFinishCall>2024-09-29T22:01:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>38</Id>
@@ -376,9 +376,9 @@
     <Address>3 Rachel Imenu Street, Jerusalem</Address>
     <Latitude>35.183917</Latitude>
     <Longitude>31.771251</Longitude>
-    <OpenTime>2023-04-05T07:41:00</OpenTime>
+    <OpenTime>2023-08-26T07:51:00</OpenTime>
     <Description>call number: 1 of type: English at: 3 Rachel Imenu Street, Jerusalem</Description>
-    <MaxFinishCall>2023-04-19T07:41:00</MaxFinishCall>
+    <MaxFinishCall>2023-08-31T07:51:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>39</Id>
@@ -386,9 +386,9 @@
     <Address>15 Hillel Street, Jerusalem</Address>
     <Latitude>35.200909</Latitude>
     <Longitude>31.771493</Longitude>
-    <OpenTime>2024-03-22T05:12:00</OpenTime>
+    <OpenTime>2023-11-18T19:25:00</OpenTime>
     <Description>call number: 1 of type: English at: 15 Hillel Street, Jerusalem</Description>
-    <MaxFinishCall>2024-03-28T05:12:00</MaxFinishCall>
+    <MaxFinishCall>2023-11-28T19:25:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>40</Id>
@@ -396,9 +396,9 @@
     <Address>8 Bezalel Street, Jerusalem</Address>
     <Latitude>35.218213</Latitude>
     <Longitude>31.763331</Longitude>
-    <OpenTime>2024-05-03T11:13:00</OpenTime>
+    <OpenTime>2023-06-15T20:59:00</OpenTime>
     <Description>call number: 1 of type: English at: 8 Bezalel Street, Jerusalem</Description>
-    <MaxFinishCall>2024-05-14T11:13:00</MaxFinishCall>
+    <MaxFinishCall>2023-06-22T20:59:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>41</Id>
@@ -406,9 +406,9 @@
     <Address>9 Kiryat Moshe Street, Jerusalem</Address>
     <Latitude>35.217068</Latitude>
     <Longitude>31.780627</Longitude>
-    <OpenTime>2024-09-15T11:54:00</OpenTime>
+    <OpenTime>2023-08-17T16:41:00</OpenTime>
     <Description>call number: 1 of type: English at: 9 Kiryat Moshe Street, Jerusalem</Description>
-    <MaxFinishCall>2024-09-29T11:54:00</MaxFinishCall>
+    <MaxFinishCall>2023-08-24T16:41:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>42</Id>
@@ -416,9 +416,9 @@
     <Address>13 Pierre Koenig Street, Jerusalem</Address>
     <Latitude>35.214544</Latitude>
     <Longitude>31.780728</Longitude>
-    <OpenTime>2023-03-28T03:55:00</OpenTime>
+    <OpenTime>2024-05-26T04:06:00</OpenTime>
     <Description>call number: 1 of type: English at: 13 Pierre Koenig Street, Jerusalem</Description>
-    <MaxFinishCall>2023-04-06T03:55:00</MaxFinishCall>
+    <MaxFinishCall>2024-06-07T04:06:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>43</Id>
@@ -426,9 +426,9 @@
     <Address>24 Rabbi Herzog Street, Jerusalem</Address>
     <Latitude>35.195686</Latitude>
     <Longitude>31.786061</Longitude>
-    <OpenTime>2023-05-17T16:58:00</OpenTime>
+    <OpenTime>2023-08-25T11:02:00</OpenTime>
     <Description>call number: 1 of type: English at: 24 Rabbi Herzog Street, Jerusalem</Description>
-    <MaxFinishCall>2023-05-27T16:58:00</MaxFinishCall>
+    <MaxFinishCall>2023-09-05T11:02:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>44</Id>
@@ -436,9 +436,9 @@
     <Address>5 Ein Gedi Street, Jerusalem</Address>
     <Latitude>35.215021</Latitude>
     <Longitude>31.756843</Longitude>
-    <OpenTime>2023-01-06T02:28:00</OpenTime>
+    <OpenTime>2023-10-31T17:51:00</OpenTime>
     <Description>call number: 1 of type: English at: 5 Ein Gedi Street, Jerusalem</Description>
-    <MaxFinishCall>2023-01-10T02:28:00</MaxFinishCall>
+    <MaxFinishCall>2023-11-01T17:51:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>45</Id>
@@ -446,9 +446,9 @@
     <Address>8 HaOman Street, Jerusalem</Address>
     <Latitude>35.208627</Latitude>
     <Longitude>31.769767</Longitude>
-    <OpenTime>2023-03-29T09:56:00</OpenTime>
+    <OpenTime>2024-09-23T03:25:00</OpenTime>
     <Description>call number: 1 of type: English at: 8 HaOman Street, Jerusalem</Description>
-    <MaxFinishCall>2023-03-30T09:56:00</MaxFinishCall>
+    <MaxFinishCall>2024-09-28T03:25:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>46</Id>
@@ -456,9 +456,9 @@
     <Address>5 Ibn Shaprut Street, Jerusalem</Address>
     <Latitude>35.221349</Latitude>
     <Longitude>31.753902</Longitude>
-    <OpenTime>2024-01-20T04:09:00</OpenTime>
+    <OpenTime>2023-07-13T17:55:00</OpenTime>
     <Description>call number: 1 of type: English at: 5 Ibn Shaprut Street, Jerusalem</Description>
-    <MaxFinishCall>2024-02-03T04:09:00</MaxFinishCall>
+    <MaxFinishCall>2023-07-22T17:55:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>47</Id>
@@ -466,9 +466,9 @@
     <Address>25 Bar Ilan Street, Jerusalem</Address>
     <Latitude>35.211373</Latitude>
     <Longitude>31.74881</Longitude>
-    <OpenTime>2024-01-17T15:18:00</OpenTime>
+    <OpenTime>2024-06-21T03:11:00</OpenTime>
     <Description>call number: 1 of type: English at: 25 Bar Ilan Street, Jerusalem</Description>
-    <MaxFinishCall>2024-01-22T15:18:00</MaxFinishCall>
+    <MaxFinishCall>2024-06-30T03:11:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>48</Id>
@@ -476,9 +476,9 @@
     <Address>6 Yitzhak Kariv Street, Jerusalem</Address>
     <Latitude>35.211675</Latitude>
     <Longitude>31.776448</Longitude>
-    <OpenTime>2023-12-08T13:30:00</OpenTime>
+    <OpenTime>2024-08-11T22:47:00</OpenTime>
     <Description>call number: 1 of type: English at: 6 Yitzhak Kariv Street, Jerusalem</Description>
-    <MaxFinishCall>2023-12-16T13:30:00</MaxFinishCall>
+    <MaxFinishCall>2024-08-25T22:47:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>49</Id>
@@ -486,9 +486,9 @@
     <Address>17 Weizmann Street, Jerusalem</Address>
     <Latitude>35.218078</Latitude>
     <Longitude>31.794707</Longitude>
-    <OpenTime>2023-05-13T13:05:00</OpenTime>
+    <OpenTime>2023-03-20T16:54:00</OpenTime>
     <Description>call number: 1 of type: English at: 17 Weizmann Street, Jerusalem</Description>
-    <MaxFinishCall>2023-05-17T13:05:00</MaxFinishCall>
+    <MaxFinishCall>2023-03-27T16:54:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>50</Id>
@@ -496,9 +496,9 @@
     <Address>9 Shmuel HaNagid Street, Jerusalem</Address>
     <Latitude>35.224944</Latitude>
     <Longitude>31.777475</Longitude>
-    <OpenTime>2023-06-01T17:20:00</OpenTime>
+    <OpenTime>2023-10-25T17:37:00</OpenTime>
     <Description>call number: 1 of type: English at: 9 Shmuel HaNagid Street, Jerusalem</Description>
-    <MaxFinishCall>2023-06-08T17:20:00</MaxFinishCall>
+    <MaxFinishCall>2023-11-02T17:37:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>51</Id>
@@ -506,9 +506,9 @@
     <Address>7 Ben Ze'ev Street, Jerusalem</Address>
     <Latitude>35.198722</Latitude>
     <Longitude>31.790191</Longitude>
-    <OpenTime>2024-05-27T03:50:00</OpenTime>
+    <OpenTime>2023-02-27T09:17:00</OpenTime>
     <Description>call number: 1 of type: English at: 7 Ben Ze'ev Street, Jerusalem</Description>
-    <MaxFinishCall>2024-06-08T03:50:00</MaxFinishCall>
+    <MaxFinishCall>2023-03-01T09:17:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>52</Id>
@@ -516,9 +516,9 @@
     <Address>10 Rivlin Street, Jerusalem</Address>
     <Latitude>35.214792</Latitude>
     <Longitude>31.779852</Longitude>
-    <OpenTime>2024-03-01T19:28:00</OpenTime>
+    <OpenTime>2023-08-29T17:56:00</OpenTime>
     <Description>call number: 1 of type: English at: 10 Rivlin Street, Jerusalem</Description>
-    <MaxFinishCall>2024-03-03T19:28:00</MaxFinishCall>
+    <MaxFinishCall>2023-09-03T17:56:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>53</Id>
@@ -526,9 +526,9 @@
     <Address>120 Ibn Gabirol St, Tel Aviv</Address>
     <Latitude>35.220409</Latitude>
     <Longitude>31.780946</Longitude>
-    <OpenTime>2023-08-17T10:16:00</OpenTime>
+    <OpenTime>2024-01-23T16:24:00</OpenTime>
     <Description>call number: 1 of type: English at: 120 Ibn Gabirol St, Tel Aviv</Description>
-    <MaxFinishCall>2023-08-31T10:16:00</MaxFinishCall>
+    <MaxFinishCall>2024-01-27T16:24:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>54</Id>
@@ -536,9 +536,9 @@
     <Address>13 Ben Gurion Blvd, Holon</Address>
     <Latitude>34.7818</Latitude>
     <Longitude>32.0853</Longitude>
-    <OpenTime>2023-10-27T21:14:00</OpenTime>
+    <OpenTime>2024-02-04T15:47:00</OpenTime>
     <Description>call number: 1 of type: English at: 13 Ben Gurion Blvd, Holon</Description>
-    <MaxFinishCall>2023-11-08T21:14:00</MaxFinishCall>
+    <MaxFinishCall>2024-02-11T15:47:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>55</Id>
@@ -546,9 +546,9 @@
     <Address>45 Jerusalem St, Ramat Gan</Address>
     <Latitude>34.7748</Latitude>
     <Longitude>32.0142</Longitude>
-    <OpenTime>2024-06-25T09:52:00</OpenTime>
+    <OpenTime>2023-05-08T22:19:00</OpenTime>
     <Description>call number: 1 of type: English at: 45 Jerusalem St, Ramat Gan</Description>
-    <MaxFinishCall>2024-07-01T09:52:00</MaxFinishCall>
+    <MaxFinishCall>2023-05-12T22:19:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>56</Id>
@@ -556,9 +556,9 @@
     <Address>200 Jabotinsky St, Petah Tikva</Address>
     <Latitude>34.8101</Latitude>
     <Longitude>32.0833</Longitude>
-    <OpenTime>2023-05-02T02:32:00</OpenTime>
+    <OpenTime>2024-03-18T21:30:00</OpenTime>
     <Description>call number: 1 of type: English at: 200 Jabotinsky St, Petah Tikva</Description>
-    <MaxFinishCall>2023-05-03T02:32:00</MaxFinishCall>
+    <MaxFinishCall>2024-03-22T21:30:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>57</Id>
@@ -566,9 +566,9 @@
     <Address>30 Herzl Blvd, Rishon LeZion</Address>
     <Latitude>34.867</Latitude>
     <Longitude>32.0922</Longitude>
-    <OpenTime>2023-10-03T18:45:00</OpenTime>
+    <OpenTime>2023-01-04T05:00:00</OpenTime>
     <Description>call number: 1 of type: English at: 30 Herzl Blvd, Rishon LeZion</Description>
-    <MaxFinishCall>2023-10-14T18:45:00</MaxFinishCall>
+    <MaxFinishCall>2023-01-10T05:00:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>58</Id>
@@ -576,9 +576,9 @@
     <Address>15 Rothschild St, Netanya</Address>
     <Latitude>34.7996</Latitude>
     <Longitude>31.9674</Longitude>
-    <OpenTime>2024-11-18T22:39:00</OpenTime>
+    <OpenTime>2023-05-31T23:31:00</OpenTime>
     <Description>call number: 1 of type: English at: 15 Rothschild St, Netanya</Description>
-    <MaxFinishCall>2024-11-25T22:39:00</MaxFinishCall>
+    <MaxFinishCall>2023-06-10T23:31:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>59</Id>
@@ -586,9 +586,9 @@
     <Address>88 HaNesi'im St, Be'er Sheva</Address>
     <Latitude>34.8532</Latitude>
     <Longitude>32.3295</Longitude>
-    <OpenTime>2024-11-12T22:17:00</OpenTime>
+    <OpenTime>2023-02-23T19:56:00</OpenTime>
     <Description>call number: 1 of type: English at: 88 HaNesi'im St, Be'er Sheva</Description>
-    <MaxFinishCall>2024-11-17T22:17:00</MaxFinishCall>
+    <MaxFinishCall>2023-03-09T19:56:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>60</Id>
@@ -596,9 +596,9 @@
     <Address>100 Yitzhak Rabin Blvd, Haifa</Address>
     <Latitude>34.7915</Latitude>
     <Longitude>31.2518</Longitude>
-    <OpenTime>2023-02-13T14:39:00</OpenTime>
+    <OpenTime>2024-06-06T23:31:00</OpenTime>
     <Description>call number: 1 of type: English at: 100 Yitzhak Rabin Blvd, Haifa</Description>
-    <MaxFinishCall>2023-02-22T14:39:00</MaxFinishCall>
+    <MaxFinishCall>2024-06-16T23:31:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>61</Id>
@@ -606,9 +606,9 @@
     <Address>9 HaGefen St, Kfar Saba</Address>
     <Latitude>34.9896</Latitude>
     <Longitude>32.794</Longitude>
-    <OpenTime>2023-10-27T20:42:00</OpenTime>
+    <OpenTime>2024-06-05T09:37:00</OpenTime>
     <Description>call number: 1 of type: English at: 9 HaGefen St, Kfar Saba</Description>
-    <MaxFinishCall>2023-11-10T20:42:00</MaxFinishCall>
+    <MaxFinishCall>2024-06-08T09:37:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>62</Id>
@@ -616,9 +616,9 @@
     <Address>70 Weizmann St, Herzliya</Address>
     <Latitude>34.9076</Latitude>
     <Longitude>32.1782</Longitude>
-    <OpenTime>2023-08-19T19:30:00</OpenTime>
+    <OpenTime>2023-11-15T15:53:00</OpenTime>
     <Description>call number: 1 of type: English at: 70 Weizmann St, Herzliya</Description>
-    <MaxFinishCall>2023-08-25T19:30:00</MaxFinishCall>
+    <MaxFinishCall>2023-11-19T15:53:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>63</Id>
@@ -626,9 +626,9 @@
     <Address>22 HaBanim St, Givatayim</Address>
     <Latitude>34.8352</Latitude>
     <Longitude>32.1658</Longitude>
-    <OpenTime>2024-02-28T07:52:00</OpenTime>
+    <OpenTime>2023-03-31T19:28:00</OpenTime>
     <Description>call number: 1 of type: English at: 22 HaBanim St, Givatayim</Description>
-    <MaxFinishCall>2024-03-09T07:52:00</MaxFinishCall>
+    <MaxFinishCall>2023-04-05T19:28:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>64</Id>
@@ -636,9 +636,9 @@
     <Address>55 Allenby St, Tel Aviv</Address>
     <Latitude>34.8114</Latitude>
     <Longitude>32.0703</Longitude>
-    <OpenTime>2024-06-17T09:36:00</OpenTime>
+    <OpenTime>2023-08-11T00:50:00</OpenTime>
     <Description>call number: 1 of type: English at: 55 Allenby St, Tel Aviv</Description>
-    <MaxFinishCall>2024-06-30T09:36:00</MaxFinishCall>
+    <MaxFinishCall>2023-08-24T00:50:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>65</Id>
@@ -646,9 +646,9 @@
     <Address>7 HaPalmach St, Ashdod</Address>
     <Latitude>34.7722</Latitude>
     <Longitude>32.0644</Longitude>
-    <OpenTime>2023-01-04T18:14:00</OpenTime>
+    <OpenTime>2023-08-15T13:49:00</OpenTime>
     <Description>call number: 1 of type: English at: 7 HaPalmach St, Ashdod</Description>
-    <MaxFinishCall>2023-01-06T18:14:00</MaxFinishCall>
+    <MaxFinishCall>2023-08-28T13:49:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>66</Id>
@@ -656,9 +656,9 @@
     <Address>10 HaYarkon St, Eilat</Address>
     <Latitude>34.6553</Latitude>
     <Longitude>31.8014</Longitude>
-    <OpenTime>2024-09-03T13:56:00</OpenTime>
+    <OpenTime>2024-07-22T21:01:00</OpenTime>
     <Description>call number: 1 of type: English at: 10 HaYarkon St, Eilat</Description>
-    <MaxFinishCall>2024-09-07T13:56:00</MaxFinishCall>
+    <MaxFinishCall>2024-07-29T21:01:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>67</Id>
@@ -666,8 +666,8 @@
     <Address>18 Sokolov St, Ramat HaSharon</Address>
     <Latitude>34.9519</Latitude>
     <Longitude>29.5535</Longitude>
-    <OpenTime>2023-07-30T22:45:00</OpenTime>
+    <OpenTime>2023-12-09T00:28:00</OpenTime>
     <Description>call number: 1 of type: English at: 18 Sokolov St, Ramat HaSharon</Description>
-    <MaxFinishCall>2023-08-09T22:45:00</MaxFinishCall>
+    <MaxFinishCall>2023-12-10T00:28:00</MaxFinishCall>
   </Call>
 </ArrayOfCall>
