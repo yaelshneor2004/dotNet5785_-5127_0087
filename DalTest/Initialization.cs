@@ -20,7 +20,7 @@ public static class Initialization
     /// </summary>
     private static void createVolunteer()
     {
-        string[] volunteerNames =
+        string[] volunteerNames  =
         {
         "Dani Levy", "Eli Amar", "Yair Cohen", "Ariela Levin", "Dina Klein", "Shira Israelof", "David Ben-Gurion",
         "Golda Meir", "Yitzhak Rabin", "Chaim Weizmann", "Menachem Begin", "Ariel Sharon", "Moshe Dayan", "Shimon Peres", "Yigal Alon"
