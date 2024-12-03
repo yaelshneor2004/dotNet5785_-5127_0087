@@ -1,14 +1,13 @@
 ﻿using Dal;
 using DalApi;
-
 using DO;
 
 namespace DalTest;
 
 internal class Program
 {
-   static readonly IDal s_dal = new DalList();
-    //static readonly IDal s_dal = new DalXml();
+    //static readonly IDal s_dal = new DalList();
+    static readonly IDal s_dal = new Dal.DalXml();
 
     public static void Main(string[] args)
     {
@@ -23,13 +22,13 @@ internal class Program
                 switch (selectedOption)
                 {
                     case MainMenuOptions.ShowVolunteer:
-                        ShowSubMenu("Volunteer", s_dal!.Volunteer); // Show volunteer submenu
+                        VolunteerEntityMenu();// Show volunteer submenu
                         break;
                     case MainMenuOptions.ShowCall:
-                        ShowSubMenu("Call", s_dal!.Call); // Show call submenu
+                        CallEntityMenu(); // Show call submenu
                         break;
                     case MainMenuOptions.ShowAssignment:
-                        ShowSubMenu("Assignment", s_dal!.Assignment); // Show assignment submenu
+                        AssignmentEntityMenu(); // Show assignment submenu
                         break;
                     case MainMenuOptions.InitializeData:
                         InitializeData(); // Initialize data
@@ -45,7 +44,7 @@ internal class Program
                         break;
                     default:
                         throw new DalInvalidOperationException("Invalid option. Please try again.");
-                      
+
                 }
 
 
@@ -117,7 +116,7 @@ internal class Program
                     return;
                 default:
                     throw new DalInvalidOperationException("Invalid option. Please try again.");
-                    
+
             }
         }
         while (selectedOption != ConfigOptions.Exit);
@@ -165,7 +164,7 @@ internal class Program
                 break;
             default:
                 throw new DalInvalidOperationException("Invalid option. Please try again.");
-               
+
         }
 
     }
@@ -173,17 +172,60 @@ internal class Program
 
     private static void InitializeData()
     {
-        Initialization.Do(s_dal); 
+        Initialization.Do(s_dal);
         Console.WriteLine("Data initialized.");
     }
 
 
     private static void ShowAllData()
     {
-        ReadAllEntities("Volunteer", s_dal!.Volunteer);
-        ReadAllEntities("Call", s_dal!.Call);
-        ReadAllEntities("Assignment", s_dal!.Assignment);
+        PrintVolunteer();
+        PrintCall();
+        PrintAssignment();
+
+
     }
+    private static void PrintVolunteer()
+    {
+        List<Volunteer> newlist = s_dal.Volunteer.ReadAll().ToList();
+        if (newlist != null && newlist.Count > 0)
+        {
+            foreach (var volunteer in newlist)
+            {
+                Console.WriteLine(volunteer);
+            }
+        }
+        else
+            Console.WriteLine("No volunteers in the database.");
+    }
+
+    private static void PrintCall()
+    {
+        List<Call> newlist = s_dal.Call.ReadAll().ToList();
+        if (newlist != null && newlist.Count > 0)
+        {
+            foreach (var volunteer in newlist)
+            {
+                Console.WriteLine(volunteer);
+            }
+        }
+        else
+            Console.WriteLine("No calls in the database.");
+    }
+    private static void PrintAssignment()
+    {
+        List<Assignment> newlist = s_dal.Assignment.ReadAll().ToList();
+        if (newlist != null && newlist.Count > 0)
+        {
+            foreach (var volunteer in newlist)
+            {
+                Console.WriteLine(volunteer);
+            }
+        }
+        else
+            Console.WriteLine("No Assignments in the database.");
+    }
+    
 
     private static void ResetDatabaseAndConfig()
     {
@@ -194,47 +236,7 @@ internal class Program
         Console.WriteLine("Database and configuration reset.");
     }
 
-
-    private static void ShowSubMenu(string type, Object dal)
-    {
-        Crud cr;
-        do
-        {
-            ShowSubMenuOutput(type);
-
-            if (!int.TryParse(Console.ReadLine(), out int parsedInput)) throw new DalFormatException("Invalid input!");
-             cr = (Crud)parsedInput;
-            switch (cr)
-            {
-                case Crud.Create:
-                    CreateEntity(type, dal);
-                    break;
-                case Crud.Read:
-                    ReadEntity(type, dal);
-                    break;
-                case Crud.ReadAll:
-                    ReadAllEntities(type, dal);
-                    break;
-                case Crud.Update:
-                    UpdateEntity(type, dal);
-                    break;
-                case Crud.Delete:
-                    DeleteEntity(type, dal);
-                    break;
-                case Crud.DeleteAll:
-                    ((dynamic)dal).DeleteAll();
-                    Console.WriteLine($"All {type}s deleted.");
-                    break;
-                case Crud.Exit:
-                    return;
-                default:
-                    throw new DalInvalidOperationException("Invalid option. Please try again.");
-            }
-        }
-        while (cr!=0);
-    }
-    //displays a submenu with options for adding, reading, updating, and deleting entities of the specified type
-    private static void ShowSubMenuOutput(string type)
+    private static void PrintEntitysMenu(string type)
     {
 
         Console.WriteLine($"{type} Sub-Menu:");
@@ -249,95 +251,8 @@ internal class Program
 
     }
 
-    //The CreateEntity function creates a new entity and uses the DAL object to add it to the database
-    private static void CreateEntity(string type, object dal)
-    {
-        dynamic entity;
-        if (type == "Volunteer")
-        {
-            entity = inputV();
-        }
-        else if (type == "Call")
-        {
-            entity = inputC();
-        }
-        else
-        {
-            entity = inputA();
-        }
-
-        ((dynamic)dal).Create(entity);
-        Console.WriteLine($"{type} created.");
-    }
-
-    private static void ReadEntity(string type, object dal)
-    {
-        Console.WriteLine($"Enter ID of the {type} to read:");
-        if (!int.TryParse(Console.ReadLine(), out int id)) throw new DalFormatException("Invalid input for ID!");
-        var entity = ((dynamic)dal).Read(id);
-        if (entity != null)
-        {
-            Console.WriteLine(entity);
-        }
-        else
-        {
-            Console.WriteLine($"{type} not found.");
-        }
-
-    }
-
-    //The ReadEntity function reads an entity by its ID and uses the DAL object to retrieve it from the database
-    private static void ReadAllEntities(string type, object dal)
-    {
-        var entities = ((dynamic)dal).ReadAll();
-        Console.WriteLine($"{type} List:");
-        foreach (var entity in entities)
-        {
-            Console.WriteLine(entity);
-        }
-    }
-    private static void DeleteEntity(string type, object dal)
-    {
-        Console.WriteLine($"Enter ID of the {type} to delete:");
-        if (!int.TryParse(Console.ReadLine(), out int id)) throw new DalFormatException("Invalid input for ID!");
-
-        var entity = ((dynamic)dal).Read(id);
-        if (entity != null)
-        {
-            ((dynamic)dal).Delete(id);
-            Console.WriteLine($"{type} deleted.");
-        }
-        else
-        {
-            Console.WriteLine($"{type} not found.");
-        }
-
-    }
-
-    //The DeleteEntity function deletes an entity by its ID and uses the DAL object to remove it from the database
-    private static void UpdateEntity(string type, object dal)
-    {
-        dynamic entity;
-        if (type == "Volunteer")
-        {
-
-            entity = inputV();
-        }
-        else if (type == "Call")
-        {
-            entity = inputC();
-        }
-        else
-        {
-            entity = inputA();
-        }
-        ((dynamic)dal).Update(entity);
-        Console.WriteLine($"{type} updated.");
-
-    }
-
     //The function uses input from the user to create a new object of type Volunteer
-    public static Volunteer inputV()
+    public static Volunteer InputVolunteer()
     {
         Console.WriteLine($"Creating new volunteer:");
 
@@ -385,7 +300,7 @@ internal class Program
 
     // The function uses input from the user to create a new object of type Assignment
 
-    public static Assignment inputA()
+    public static Assignment InputAssignment()
     {
         Console.WriteLine("Creating new assignment:");
 
@@ -404,14 +319,14 @@ internal class Program
 
         Console.WriteLine("Enter Finish Call (optional, press Enter to skip, YYYY-MM-DD HH:MM:SS): ");
         if (!DateTime.TryParse(Console.ReadLine(), out DateTime finishCall)) throw new DalFormatException("Invalid Date");
-  
+
 
         Assignment newAssignment = new Assignment(1, callId, volunteerId, startCall, finishType, finishCall);
         return newAssignment;
     }
 
     // The function uses input from the user to create a new object of type Call
-    public static Call inputC()
+    public static Call InputCall()
     {
         Console.WriteLine("Creating new call:");
 
@@ -436,7 +351,7 @@ internal class Program
         Console.WriteLine("Enter Max Finish Call (optional, press Enter to skip, YYYY-MM-DD HH:MM:SS): ");
         if (!DateTime.TryParse(Console.ReadLine(), out DateTime maxFinishCallInput)) throw new DalFormatException("Invalid Date");
 
-       
+
 
         Call newCall = new Call(1, callType, address, latitude, longitude, openTime, description, maxFinishCallInput);
         return newCall;
@@ -455,5 +370,215 @@ internal class Program
         Console.WriteLine("6. Reset Configuration Values");
         Console.Write("Select an option: ");
     }
+    private static void VolunteerEntityMenu()
+    {
+        bool IsExit = false;
+        do
+        {
+            PrintEntitysMenu("Volunteer");
+            if (!int.TryParse(Console.ReadLine(), out int choiceInput)) throw new DalFormatException("Invalid input for menu option!");
+            EntityMenuOption choice = (EntityMenuOption)choiceInput;
+            try
+            {
+                switch (choice)
+                {
+                    case EntityMenuOption.Exit: ///0
+                        {
+                            IsExit = true;
+                            break;
+                        }
+                    case EntityMenuOption.Create: //1
+                        {
+                            s_dal.Volunteer.Create(InputVolunteer());
+                            Console.WriteLine("Volunteer created successfully!");
+                            break;
+                        }
+                    case EntityMenuOption.Read: //2
+                        {
+                            Console.WriteLine("enter id: ");
+                            if (!int.TryParse(Console.ReadLine(), out int id)) throw new DalFormatException("Invalid input for ID!");
+                            Volunteer? volunteer = s_dal.Volunteer.Read(id);
+                            if (volunteer == null)
+                                throw new Exception($"Volunteer with ID={id} does not exists");
+                            else
+                                Console.WriteLine(volunteer); //print
 
+                            break;
+                        }
+                    case EntityMenuOption.ReadAll: //3
+                        {
+                            PrintVolunteer();
+                            break;
+                        }
+                    case EntityMenuOption.Update: //4
+                        {
+                            s_dal.Volunteer.Update(InputVolunteer());
+                            Console.WriteLine("Volunteer updated successfully!");
+                            break;
+                        }
+                    case EntityMenuOption.Delete: //5
+                        {
+                            Console.WriteLine("enter id: ");
+                            if (!int.TryParse(Console.ReadLine(), out int id)) throw new DalFormatException("Invalid input for ID!");
+                            s_dal.Volunteer.Delete(id);
+                            Console.WriteLine($"Volunteer {id} deleted successfully!");
+                            break;
+                        }
+                    case EntityMenuOption.DeleteAll: //6
+                        {
+                            s_dal.Volunteer.DeleteAll();
+                            Console.WriteLine("Volunteers deleted successfully!");
+                            break;
+                        }
+                    default:
+                        {
+                            throw new DalInvalidOperationException("Invalid choice");
+                        }
+                }
+            }
+            catch (Exception ExMsg)
+            {
+                Console.WriteLine(ExMsg);
+                VolunteerEntityMenu();
+            }
+
+        } while (IsExit == false);//while not exit
+    }
+    private static void CallEntityMenu()
+    {
+        bool IsExit = false;
+        do
+        {
+            PrintEntitysMenu("Call");
+            if (!int.TryParse(Console.ReadLine(), out int choiceInput)) throw new DalFormatException("Invalid input for menu option!");
+            EntityMenuOption choice = (EntityMenuOption)choiceInput;
+
+            switch (choice)
+            {
+                case EntityMenuOption.Exit: //0
+                    {
+                        IsExit = true;
+                        break;
+                    }
+                case EntityMenuOption.Create: //1
+                    {
+                        s_dal.Call.Create(InputCall());
+                        Console.WriteLine("Call created successfully!");
+                        break;
+                    }
+                case EntityMenuOption.Read: //2
+                    {
+                        Console.WriteLine("enter id: ");
+                        if (!int.TryParse(Console.ReadLine(), out int id)) throw new DalFormatException("Invalid input for ID!");
+                        Call? call = s_dal.Call.Read(id);
+                        if (call == null)
+                            throw new Exception($"Call with ID={id} does not exists");
+                        else
+                            Console.WriteLine(call); //print
+
+                        break;
+                    }
+                case EntityMenuOption.ReadAll: //3
+                    {
+                        PrintCall();
+                        break;
+                    }
+                case EntityMenuOption.Update: //4
+                    {
+                        s_dal.Call.Update(InputCall());
+                        Console.WriteLine("Call updated successfully!");
+                        break;
+                    }
+                case EntityMenuOption.Delete: //5
+                    {
+                        Console.WriteLine("enter id: ");
+                        if (!int.TryParse(Console.ReadLine(), out int id)) throw new DalFormatException("Invalid input for ID!");
+                        s_dal.Call.Delete(id);
+                        Console.WriteLine($"Call {id} deleted successfully!");
+                        break;
+                    }
+                case EntityMenuOption.DeleteAll: //6
+                    {
+                        s_dal.Call.DeleteAll();
+                        Console.WriteLine("Calls deleted successfully!");
+                        break;
+                    }
+                default:
+                    {
+                        throw new DalInvalidOperationException("Invalid choice");
+                    }
+
+            }
+
+        } while (IsExit == false);//while not exit
+    }
+    private static void AssignmentEntityMenu()
+    {
+        bool IsExit = false;
+
+        do
+        {
+            PrintEntitysMenu("Assignment");
+            if (!int.TryParse(Console.ReadLine(), out int choiceInput)) throw new DalFormatException("Invalid input for menu option!");
+            EntityMenuOption choice = (EntityMenuOption)choiceInput;
+
+            switch (choice)
+            {
+                case EntityMenuOption.Exit: //0
+                    {
+                        IsExit = true;
+                        break;
+                    }
+                case EntityMenuOption.Create: //1
+                    {
+                        s_dal.Assignment.Create(InputAssignment());
+                        Console.WriteLine("Assignment created successfully!");
+                        break;
+                    }
+                case EntityMenuOption.Read: //2
+                    {
+                        Console.WriteLine("enter id: ");
+                        if (!int.TryParse(Console.ReadLine(), out int id)) throw new DalFormatException("Invalid input for ID!");
+                        Assignment? assignment = s_dal.Assignment.Read(id);
+                        if (assignment == null)
+                            throw new Exception($"Assignment with ID={id} does not exists");
+                        else
+                            Console.WriteLine(assignment); //print
+                        break;
+                    }
+                case EntityMenuOption.ReadAll: //3
+                    {
+                        PrintAssignment();
+                        break;
+                    }
+                case EntityMenuOption.Update: //4
+                    {
+                        s_dal.Assignment.Update(InputAssignment());
+                        Console.WriteLine("Assignment updated successfully!");
+                        break;
+                    }
+                case EntityMenuOption.Delete: //5
+                    {
+                        Console.WriteLine("enter id: ");
+                        if (!int.TryParse(Console.ReadLine(), out int id)) throw new DalFormatException("Invalid input for ID!");
+                        s_dal.Assignment.Delete(id);
+                        Console.WriteLine($"Assignment {id} deleted successfully!");
+                        break;
+                    }
+                case EntityMenuOption.DeleteAll: //6
+                    {
+                        s_dal.Assignment.DeleteAll();
+                        Console.WriteLine("Assignments deleted successfully!");
+                        break;
+                    }
+                default:
+                    {
+                        throw new DalInvalidOperationException("Invalid choice");
+                    }
+
+            }
+
+        } while (IsExit == false);//while not exit
+
+    }
 }

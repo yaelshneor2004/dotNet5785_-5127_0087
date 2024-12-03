@@ -98,7 +98,8 @@ static class XMLTools
     public static TimeSpan GetConfigTimeVal(string xmlFileName, string elemName)
     {
         XElement root = XMLTools.LoadListFromXMLElement(xmlFileName);
-        TimeSpan ts = root.Element(elemName) != null ? TimeSpan.Parse(root.Element(elemName).Value) : throw new FormatException($"can't convert: {xmlFileName}, {elemName}");
+        XElement? element = root.Element(elemName);
+        TimeSpan ts = element != null ? TimeSpan.Parse(element.Value) : throw new FormatException($"Can't convert: {xmlFileName}, {elemName}");
         return ts;
     }
     public static DateTime GetConfigDateVal(string xmlFileName, string elemName)
