@@ -20,7 +20,7 @@ public record Assignment
      int CallId,
      int VolunteerId,
      DateTime StartCall,
-     Enum? FinishType = null,
+     MyFinishType? FinishType = null,
      DateTime? FinishCall = null
   )
 {

@@ -1,4 +1,4 @@
-﻿namespace DO;
+﻿namespace BO;
 /// <summary>
 /// Enum representing roles within the organization.
 /// Possible values are 'Volunteer' and 'Manager'
@@ -36,40 +36,30 @@ public enum MyCallType
 /// Options include 'Treated' for completed cases, 'SelfCancel' for user-initiated cancellations, 
 /// 'ManagerCancel' for administrative cancellations, and 'ExpiredCancel' for time-out cases
 /// </summary>
+public enum MyCallStatusByVolunteer
+{ 
+    InProgress,
+    AtRisk
+}
+public enum MyCurrentCallType
+{
+    Emergency,
+    Regular,
+    None // Added to handle cases where no call is in progress
+}
+public enum MyCallStatus
+{
+    Open,
+    InProgress,
+    Closed,
+    Expired,
+    OpenAtRisk,
+    InProgressAtRisk
+}
 public enum MyFinishType
 {
     Treated,
     SelfCancel,
     ManagerCancel,
     ExpiredCancel
-}
-/// <summary>
-/// Enum containing options for the system configuration menu.
-/// </summary>
-
-public enum ConfigOptions
-{
-    Exit,
-    AdvanceClockByMinute ,
-    AdvanceClockByHour,
-    ShowCurrentClock,
-    SetRiskRange,
-    ShowConfigValues,
-    ResetConfig,
-   
-}
-/// <summary>
-/// Enum containing options for the main menu
-/// </summary>
-public enum MainMenuOptions
-{
-    Exit, ShowVolunteer, ShowCall, ShowAssignment, InitializeData, ShowAllData, ShowConfigSubMenu, ResetDatabaseAndConfig
-}
-
-/// <summary>
-/// Enum representing CRUD (Create, Read, Update, Delete) operations and options
-/// </summary>
-public enum EntityMenuOption
-{
-    Exit, Create, Read, ReadAll, Update, Delete, DeleteAll
 }

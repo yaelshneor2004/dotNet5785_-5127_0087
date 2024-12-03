@@ -1,11 +1,15 @@
-﻿
-
-namespace Dal;
+﻿namespace Dal;
     using DalApi;
 using DO;
 
-sealed public class DalList : IDal
+sealed internal class DalList : IDal
 {
+    private DalList() { }
+    public static IDal Instance => Nested.instance;
+    private static class Nested
+    {
+        internal static readonly DalList instance = new DalList();
+    }
     public IAssignment Assignment { get; } = new AssignmentImplementation();
 
 

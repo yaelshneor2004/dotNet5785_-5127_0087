@@ -3,10 +3,15 @@ using DalApi;
 
 namespace Dal;
 
-sealed public class DalXml : IDal
+sealed internal class DalXml : IDal
 {
-  
-    public IConfig Config { get; } = new ConfigImplementation();
+        private DalXml() { }
+        public static IDal Instance => Nested.instance;
+        private static class Nested
+        {
+            internal static readonly DalXml instance = new DalXml();
+        }
+        public IConfig Config { get; } = new ConfigImplementation();
 
     public IAssignment Assignment { get; } = new AssignmentImplementation();
 

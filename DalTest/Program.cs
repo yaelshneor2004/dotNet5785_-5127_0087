@@ -6,8 +6,8 @@ namespace DalTest;
 
 internal class Program
 {
-    //static readonly IDal s_dal = new DalList();
-    static readonly IDal s_dal = new Dal.DalXml();
+    static readonly IDal s_dal = Factory.Get;
+    // static readonly IDal s_dal = new Dal.DalXml();
 
     public static void Main(string[] args)
     {
@@ -172,7 +172,7 @@ internal class Program
 
     private static void InitializeData()
     {
-        Initialization.Do(s_dal);
+        Initialization.Do();
         Console.WriteLine("Data initialized.");
     }
 
