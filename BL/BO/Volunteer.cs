@@ -1,4 +1,5 @@
-﻿namespace BO
+﻿
+namespace BO
 {
         /// <summary>
         /// Details about the volunteer and his attributes.
@@ -36,6 +37,11 @@
         public int TotalCallsHandled { get; init; } 
         public int TotalCallsCancelled { get; init; } 
         public int TotalCallsExpired { get; init; } 
-        public BO.CallInProgress? CurrentCall { get; set; } 
+        public BO.CallInProgress? CurrentCall { get; set; }
+
+        internal static object FirstOrDefault(Func<object, bool> value)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
