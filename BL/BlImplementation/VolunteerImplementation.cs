@@ -1,4 +1,5 @@
 ﻿using BlApi;
+using BO;
 using System.Linq;
 namespace BlImplementation;
 
@@ -10,27 +11,47 @@ internal class VolunteerImplementation:IVolunteer
 
     public BO.MyRole Login(string username, string password)
     {
-        // Retrieve the list of volunteers from the DAL
-        var volunteers = _dal.Volunteer.ReadAll();
-
-        // Search for the user by username
-        var user = volunteers.FirstOrDefault(v => v.FullName == username);
-
-        // Check if the user exists
-        if (user == null)
+        try
         {
-            throw new UnauthorizedAccessException("Username or password is incorrect.");
-        }
+            // Retrieve the list of volunteers from the DAL
+            var volunteers = _dal.Volunteer.ReadAll();
 
-        // Check if the password is correct
-        if (user.Password != password)
+            // Search for the user by username
+            var user = volunteers.FirstOrDefault(v => v.FullName == username);
+
+            // Check if the user exists
+            if (user == null)
+            {
+                throw new BlUnauthorizedAccessException("Username does not exist");
+            }
+
+            // Check if the password is correct
+            if (user.Password != password)
+            {
+                throw new BlUnauthorizedAccessException("Password is incorrect");
+            }
+
+            // Return the user's role
+            return (BO.MyRole)user.Role;
+        }
+        catch (DO.DalDoesNotExistException ex)
         {
-            throw new UnauthorizedAccessException("Username or password is incorrect.");
+            throw new BO.BlDoesNotExistException($"User with the username '{username}' does not exist in the system");
         }
+        
 
-        // Return the user's role
-        return(BO.MyRole)user.Role;
     }
+
+    /* boStudent.Alias, boStudent.IsActive, boStudent.BirthDate);
+    	try
+    	{
+        		_dal.Student.Create(doStudent);
+    	}
+    	catch (DO.DalAlreadyExistsException ex)
+    	{
+throw new BO.BlAlreadyExistsException($"Student with ID={boStudent.Id} already exists", ex);
+    	}
+*/
 
     public void AddVolunteer(BO.Volunteer myVolunteer)
     {
