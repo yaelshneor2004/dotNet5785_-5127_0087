@@ -1,5 +1,4 @@
 ﻿using BlApi;
-using BO;
 using System.Linq;
 namespace BlImplementation;
 
@@ -9,15 +8,30 @@ internal class VolunteerImplementation:IVolunteer
 {
     private readonly DalApi.IDal _dal = DalApi.Factory.Get;
 
-    public BO.MyRole Login(string username, string password)//CHECK
+    public BO.MyRole Login(string username, string password)
     {
-        BO.Volunteer volunteer;//= BO.VolunteerInList.FirstOrDefault(v => v.fullName == username); throw new NotImplementedException();
-        if (volunteer.Password == password)
-        { return volunteer.Role; }
-        else
-            throw new UnauthorizedAccessException("Incorrect password.");
+        // Retrieve the list of volunteers from the DAL
+        var volunteers = _dal.Volunteer.ReadAll();
 
+        // Search for the user by username
+        var user = volunteers.FirstOrDefault(v => v.FullName == username);
+
+        // Check if the user exists
+        if (user == null)
+        {
+            throw new UnauthorizedAccessException("Username or password is incorrect.");
+        }
+
+        // Check if the password is correct
+        if (user.Password != password)
+        {
+            throw new UnauthorizedAccessException("Username or password is incorrect.");
+        }
+
+        // Return the user's role
+        return(BO.MyRole)user.Role;
     }
+
     public void AddVolunteer(BO.Volunteer myVolunteer)
     {
         throw new NotImplementedException();
@@ -62,9 +76,6 @@ internal class VolunteerImplementation:IVolunteer
 
         return filteredVolunteers;
     }
-
-
-    
     public void UpdateVolunteer(int id, BO.Volunteer myVolunteer)
     {
         throw new NotImplementedException();
