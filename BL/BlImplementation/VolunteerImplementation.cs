@@ -1,7 +1,8 @@
 ﻿using BlApi;
-using BO;
-
 namespace BlImplementation;
+
+using BO;
+using System.Linq;
 
 internal class VolunteerImplementation : IVolunteer
 {
@@ -31,14 +32,61 @@ internal class VolunteerImplementation : IVolunteer
         throw new NotImplementedException();
     }
 
-    public BO.VolunteerInList GetVolunteerList(bool? IsActive, BO.VolunteerInList? volunteerInList)//CHECK
+    /*public BO.VolunteerInList GetVolunteerList(bool? IsActive, BO.MyCurrentCallType? myCurrentCallType)//CHECK
     {
-        var filteredVolunteers = BO.VolunteerInList();
+        var filteredVolunteers = _dal.Volunteer;*/
 
-        if (IsActive.HasValue)
+        public IEnumerable<BO.VolunteerInList> GetVolunteersList(bool? isActive, VolunteerSortField? sortBy)
+{
+    // קבלת כל המתנדבים
+    var allVolunteers = _dal.Volunteer;
+
+    // סינון הרשימה לפי מתנדבים פעילים ולא פעילים
+    IEnumerable<VolunteerInList> filteredVolunteers;
+    if (isActive.HasValue)
+    {
+        filteredVolunteers = allVolunteers.Where(v => v.IsActive == isActive.Value);
+    }
+    else
+    {
+        filteredVolunteers = allVolunteers;
+    }
+
+    // מיון הרשימה לפי שדה המיון שנבחר
+    IEnumerable<Volunteer> sortedVolunteers;
+    if (sortBy.HasValue)
+    {
+        sortedVolunteers = sortBy switch
         {
-           filteredVolunteers = filteredVolunteers.Where(v => v.IsActive == IsActive.Value);
+            VolunteerSortField.Name => filteredVolunteers.OrderBy(v => v.Name),
+            VolunteerSortField.Age => filteredVolunteers.OrderBy(v => v.Age),
+            VolunteerSortField.RegistrationDate => filteredVolunteers.OrderBy(v => v.RegistrationDate),
+            _ => filteredVolunteers.OrderBy(v => v.Id)
+        };
+    }
+    else
+    {
+        sortedVolunteers = filteredVolunteers.OrderBy(v => v.Id);
+    }
+
+    // המרת הרשימה לישות הלוגית המוצגת
+    return sortedVolunteers.Select(v => new BO.VolunteerInList
+    {
+        Id = v.Id,
+        Name = v.Name,
+        Age = v.Age,
+        IsActive = v.IsActive,
+        RegistrationDate = v.RegistrationDate
+    }).ToList();
+}
+
+       /* if (IsActive == null)
+            return (BO.VolunteerInList)_dal.Volunteer;
+        else
+        {
+            var a = _dal.Volunteer.Where(v => v.IsActive == true).ToList();
         }
+        
         if (volunteerInList != null)
         {
             filteredVolunteers = SortVolunteers(filteredVolunteers, volunteerInList.Id); 
@@ -81,7 +129,7 @@ internal class VolunteerImplementation : IVolunteer
             FullName = v.FullName,
             Role = v.Role.ToString()
         }).ToList();
-    }
+    }*/
 
     private IEnumerable<Volunteer> SortVolunteers(IEnumerable<Volunteer> volunteers, int sortBy)
     {
