@@ -15,7 +15,7 @@ public interface IVolunteer
 
    void UpdateVolunteer(int id, BO.Volunteer myVolunteer); //update
 
-    void DeleteVolunteer( int id );
+    void DeleteVolunteer( int volunteerId);
 
     void AddVolunteer(BO.Volunteer myVolunteer);
 

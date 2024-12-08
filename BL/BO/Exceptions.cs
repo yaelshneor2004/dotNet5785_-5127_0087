@@ -29,5 +29,16 @@ public class BlException : Exception
     public BlException(string message, Exception innerException)
                 : base(message, innerException) { }
 }
-
+[Serializable]
+public class BlInvalidOperationException : Exception
+{
+    public BlInvalidOperationException(string? message) : base(message) { }
+}
+[Serializable]
+public class BlAlreadyExistsException : Exception
+{
+    public BlAlreadyExistsException(string? message) : base(message) { }
+    public BlAlreadyExistsException(string message, Exception innerException)
+                : base(message, innerException) { }
+}
 

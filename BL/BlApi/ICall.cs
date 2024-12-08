@@ -8,11 +8,10 @@ public interface  ICall
     BO.CallInList GetCallList(BO.CallInList? CallFilterBy, Object? obj, BO.CallInList? CallSortBy);
 
     //Returns the object it constructed
-    BO.Volunteer GetCallDetails(int id);
+    BO.Volunteer GetCallDetails(int callId);
+    void UpdateCallDetails(BO.Call call);
 
-    void UpdateCall(BO.Volunteer myVolunteer); 
-
-    void DeleteCall(int id);
+    void DeleteCall(int callId);
 
     void AddCall(BO.Call myCall);
 

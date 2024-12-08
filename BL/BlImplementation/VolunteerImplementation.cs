@@ -47,13 +47,75 @@ internal class VolunteerImplementation:IVolunteer
 
     public void AddVolunteer(BO.Volunteer myVolunteer)
     {
-        throw new NotImplementedException();
+        try
+        {
+            // Validate input values
+            ValidateVolunteerDetails(myVolunteer);
+            // Update coordinates if address is valid
+            var coordinates = GeocodeAddress(myVolunteer.Address);
+            myVolunteer.Latitude = coordinates.Latitude;
+            myVolunteer.Longitude = coordinates.Longitude;
+
+            // Create a new DO.Volunteer object
+            var newVolunteer = new DO.Volunteer
+            {
+                Id = myVolunteer.Id,
+                FullName = myVolunteer.FullName,
+                Phone = myVolunteer.Phone,
+                Email = myVolunteer.Email,
+                Password = myVolunteer.Password,
+                Address = myVolunteer.Address,
+                Latitude = myVolunteer.Latitude,
+                Longitude = myVolunteer.Longitude,
+                IsActive = myVolunteer.IsActive,
+                MaxDistance = myVolunteer.MaxDistance,
+                TypeDistance = (DO.MyTypeDistance)myVolunteer.TypeDistance,
+                Role = (DO.MyRole)myVolunteer.Role
+            };
+
+            // Attempt to add the new volunteer to DAL
+            _dal.Volunteer.Create(newVolunteer);
+        }
+        catch (DO.DalAlreadyExistsException ex)
+        {
+            throw new BO.BlAlreadyExistsException($"Volunteer with ID {myVolunteer.Id} already exists.", ex);
+        }
+        catch (Exception ex)
+        {
+            throw new BO.BlException("An error occurred while adding volunteer details.", ex);
+        }
     }
 
-    public void DeleteVolunteer(int id)
-    {
-        throw new NotImplementedException();
-    }
+    public void DeleteVolunteer(int volunteerId)
+        {
+            try
+            {
+                // Retrieve the volunteer details from DAL
+                var volunteer = _dal.Volunteer.Read(volunteerId);
+
+                // Check if the volunteer is currently handling any calls or has handled any calls in the past
+                var currentAssignments = _dal.Assignment.ReadAll(a => a.VolunteerId == volunteerId && a.FinishCall == null).Any();
+                var pastAssignments = _dal.Assignment.ReadAll(a => a.VolunteerId == volunteerId).Any();
+
+                if (currentAssignments || pastAssignments)
+                {
+                    throw new BO.BlInvalidOperationException("Cannot delete volunteer who is currently handling or has handled calls.");
+                }
+
+                // Attempt to delete the volunteer from DAL
+                _dal.Volunteer.Delete(volunteerId);
+            }
+            catch (DO.DalDoesNotExistException ex)
+            {
+                throw new BO.BlDoesNotExistException($"Volunteer with ID {volunteerId} does not exist.", ex);
+            }
+            catch (Exception ex)
+            {
+                throw new BO.BlException("An error occurred while deleting volunteer details.", ex);
+            }
+       }
+
+
 
     public BO.Volunteer GetVolunteerDetails(int id)
     {
