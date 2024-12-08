@@ -1,7 +1,9 @@
-﻿
+﻿using System;
+using System.Net.Http;
+using Newtonsoft.Json;
+
 
 using DalApi;
-using System.Diagnostics;
 
 namespace Helpers;
 
@@ -42,6 +44,73 @@ internal static class VolunteerManager
 
         return BO.MyCallStatusByVolunteer.InProgress; 
     }
+
+
+
+        public static void ValidateVolunteerDetails(BO.Volunteer volunteer)
+        {
+        // Email format check
+        if (!IsValidEmail(volunteer.Email))
+            {
+                throw new BO.BlException("Invalid email format.");
+            }
+
+        // Check if the numeric fields are indeed numeric
+        if (!IsNumeric(volunteer.Id.ToString()))
+        {
+            throw new BO.BlException("Invalid ID format.");
+            }
+
+            // בדיקה אם כתובת תקינה (אפשר להשתמש בשירותי API למשל)
+            if (!IsValidAddress(volunteer.Address, out double latitude, out double longitude))
+            {
+                throw new BO.BlException("Invalid address.");
+            }
+
+        // Update the longitude and latitude by address
+        volunteer.Latitude = latitude;
+        volunteer.Longitude = longitude;
+
+            // בדיקות נוספות לפי הצורך...
+        }
+
+        private static bool IsValidEmail(string email)
+        {
+        // Email format check
+        return email.Contains("@") && email.Contains(".");
+    }
+
+    private static bool IsNumeric(string value)
+        {
+            return int.TryParse(value, out _);
+        }
+
+   
+
+    private static bool IsValidAddress(string address, out double latitude, out double longitude)
+        {
+            latitude = 0;
+            longitude = 0;
+
+            var client = new HttpClient();
+            var response = client.GetAsync($"https://nominatim.openstreetmap.org/search?q={address}&format=json&addressdetails=1").Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                var content = response.Content.ReadAsStringAsync().Result;
+                dynamic result = JsonConvert.DeserializeObject(content);
+
+                if (result != null && result.Count > 0)
+                {
+                    latitude = result[0].lat;
+                    longitude = result[0].lon;
+                    return true;
+                }
+            }
+
+            return false;
+        
+        }
 
 
 }

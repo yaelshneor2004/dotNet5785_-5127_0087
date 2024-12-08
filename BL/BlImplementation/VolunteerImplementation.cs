@@ -229,7 +229,8 @@ internal class VolunteerImplementation:IVolunteer
             }
 
             // Validate input values
-            ValidateVolunteerDetails(myVolunteer);
+            VolunteerManager.ValidateVolunteerDetails(myVolunteer);
+
             var updatedVolunteer = new DO.Volunteer
             {
                 // Update the fields that are allowed to be updated
@@ -244,8 +245,9 @@ internal class VolunteerImplementation:IVolunteer
                 IsActive = myVolunteer.IsActive,
                 MaxDistance = myVolunteer.MaxDistance,
                 TypeDistance = (DO.MyTypeDistance)myVolunteer.TypeDistance,
-                Role = volunteer.Role.Equals(BO.MyRole.Manager) ? (DO.MyRole)myVolunteer.Role :_dal.Volunteer.Read(myVolunteer.Id).Role // Only managers can update the role
+                Role = volunteer.Role.Equals(BO.MyRole.Manager) ? (DO.MyRole)myVolunteer.Role : _dal.Volunteer.Read(myVolunteer.Id).Role // Only managers can update the role
             };
+
             // Attempt to update the volunteer in DAL
             _dal.Volunteer.Update(updatedVolunteer);
         }
@@ -257,56 +259,6 @@ internal class VolunteerImplementation:IVolunteer
         {
             throw new BO.BlException("An error occurred while updating volunteer details.", ex);
         }
-    }
-
-    // Helper method to validate volunteer details
-    private void ValidateVolunteerDetails(BO.Volunteer volunteer)
-    {
-        // Validate email format
-        if (!IsValidEmail(volunteer.Email))
-        {
-            throw new BO.BlValidationException("Invalid email format.");
-        }
-
-        // Validate numeric fields
-        if (!IsValidPhone(volunteer.Phone))
-        {
-            throw new BO.BlValidationException("Invalid phone number.");
-        }
-
-        // Additional validation for other fields can be added here
-
-        // Validate address and calculate latitude and longitude
-        var coordinates = GeocodeAddress(volunteer.Address);
-        volunteer.Latitude = coordinates.Latitude;
-        volunteer.Longitude = coordinates.Longitude;
-    }
-
-    // Helper method to validate email format
-    private bool IsValidEmail(string email)
-    {
-        try
-        {
-            var addr = new System.Net.Mail.MailAddress(email);
-            return addr.Address == email;
-        }
-        catch
-        {
-            return false;
-        }
-    }
-
-    // Helper method to validate phone number format (basic example)
-    private bool IsValidPhone(string phone)
-    {
-        return phone.All(char.IsDigit) && phone.Length == 10;
-    }
-
-    // Helper method to geocode address (dummy implementation)
-    private (double Latitude, double Longitude) GeocodeAddress(string address)
-    {
-        // Implement actual geocoding logic here
-        return (0.0, 0.0);
     }
 
 }

@@ -1,6 +1,7 @@
 ﻿using BlApi;
 
 using Helpers;
+using static Helpers.CallManager;
 
 namespace BlImplementation;
 
@@ -52,14 +53,15 @@ internal class CallImplementation:ICall
             var callDetails = new BO.Call
             {
                 Id = callData.Id,
-                Type =(BO.MyCallType) callData.CallType,
+                Type = (BO.MyCallType)callData.CallType,
                 Description = callData.Description,
                 Address = callData.Address,
                 Latitude = callData.Latitude,
                 Longitude = callData.Longitude,
                 StartTime = callData.OpenTime,
                 MaxEndTime = callData.MaxFinishCall,
-                Status =CallManager.CalculateCallStatus(assignmentsData, callData.MaxFinishCall),
+                Status = CallManager.CalculateCallStatus(assignmentsData, callData.MaxFinishCall),
+                // Status = CallManager.GetCallStatus(callData, assignmentsData),
                 Assignments = assignmentsData.Select(a => new BO.CallAssignInList
                 {
                     VolunteerId = a.VolunteerId != 0 ? a.VolunteerId : (int?)null,
@@ -67,7 +69,6 @@ internal class CallImplementation:ICall
                     EndTreatmentTime = a.FinishCall,
                     EndType = a.FinishType != null ? (BO.MyFinishType)a.FinishType : (BO.MyFinishType?)null
                 }).ToList()
-
             };
             return callDetails;
         }
@@ -80,6 +81,7 @@ internal class CallImplementation:ICall
             throw new BO.BlException("An error occurred while retrieving call details.", ex);
         }
     }
+
 
     public BO.CallInList GetCallList(BO.CallInList? CallFilterBy, object? obj, CallInList? CallSortBy)
     {
@@ -101,44 +103,47 @@ internal class CallImplementation:ICall
         throw new NotImplementedException();
     }
 
-    public void UpdateCallDetails(BO.Call call)
-    {
-        try
-        {
-            // Validate the format of the values
-            ValidateCallFormat(call);
-
-            // Validate the logical correctness of the values
-            ValidateCallLogic(call);
-
-            // Create a data object of type DO.Call
-            var doCall = new DO.Call
+public void UpdateCall(BO.Call myCall)
+{
+            try
             {
-                Id = call.Id,
-                CallType =(DO.MyCallType) call.Type,
-                Address = call.Address?? "",
-                Latitude = call.Latitude ?? 0,
-                Longitude = call.Longitude ?? 0,
-                OpenTime = call.StartTime,
-                Description = call.Description,
-                MaxFinishCall = call.MaxEndTime
-            };
+                // Validate the format of the values
+                ValidateCallFormat(call);
 
-            // Attempt to update the call in the data layer
-            _dal.Call.Update(doCall);
-        }
-        catch (DO.DalDoesNotExistException ex)
-        {
-            throw new BO.BlDoesNotExistException($"Call with ID {call.Id} does not exist.", ex);
-        }
-        catch (Exception ex)
-        {
-            throw new BO.BlException("An error occurred while updating call details.", ex);
-        }
-    }
+                // Validate the logical correctness of the values
+                ValidateCallLogic(call);
 
-    // Method to validate the format of the values
-    private void ValidateCallFormat(BO.Call call)
+                // Create a data object of type DO.Call
+                var doCall = new DO.Call
+                {
+                    Id = call.Id,
+                    CallType = (DO.MyCallType)call.Type,
+                    Address = call.Address ?? "",
+                    Latitude = call.Latitude ?? 0,
+                    Longitude = call.Longitude ?? 0,
+                    OpenTime = call.StartTime,
+                    Description = call.Description,
+                    MaxFinishCall = call.MaxEndTime
+                };
+
+                // Attempt to update the call in the data layer
+                _dal.Call.Update(doCall);
+            }
+            catch (DO.DalDoesNotExistException ex)
+            {
+                throw new BO.BlDoesNotExistException($"Call with ID {call.Id} does not exist.", ex);
+            }
+            catch (Exception ex)
+            {
+                throw new BO.BlException("An error occurred while updating call details.", ex);
+            }
+}
+
+
+
+
+        // Method to validate the format of the values
+        private void ValidateCallFormat(BO.Call call)
     {
         if (string.IsNullOrWhiteSpace(call.Address))
         {
