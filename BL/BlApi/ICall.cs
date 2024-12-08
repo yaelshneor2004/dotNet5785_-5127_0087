@@ -13,14 +13,14 @@ public interface  ICall
 
     void DeleteCall(int callId);
 
-    void AddCall(BO.Call myCall);
+    void AddCall(BO.Call call);
 
 
     IEnumerable<BO.ClosedCallInList> SortClosedCalls(int idV, BO.MyCallType? callType);  
 
     IEnumerable<BO.OpenCallInList> SortOpenedCalls(int idV, BO.MyCallType? callType,BO.OpenCallInList openCallInList);
 
-    void UpdateEndTreatment(int idV, int idC);
+    void CompleteAssignment(int volunteerId, int assignmentId);
     void UpdateCancelTreatment(int idV, int idC);
     void SelectCallToTreat(int idV, int idC);
 

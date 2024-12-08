@@ -1,6 +1,7 @@
 ﻿using BlApi;
 
 using Helpers;
+using Newtonsoft.Json;
 using static Helpers.CallManager;
 
 namespace BlImplementation;
@@ -8,9 +9,40 @@ namespace BlImplementation;
 internal class CallImplementation:ICall
 {
     private readonly DalApi.IDal _dal = DalApi.Factory.Get;
-    public void AddCall(BO.Call myCall)
+    public void AddCall(BO.Call call)
     {
-        throw new NotImplementedException();
+        try
+        {
+            // Validate the format of the values
+            CallManager. ValidateCallFormat(call);
+
+            // Validate the logical correctness of the values
+           CallManager. ValidateCallLogic(call);
+
+            // Create a new data object of type DO.Call
+            var newCall = new DO.Call
+            {
+                Id =call.Id,
+                CallType = (DO.MyCallType)call.Type,
+                Address = call.Address??"",
+                Latitude = call.Latitude ?? 0,
+                Longitude = call.Longitude ?? 0,
+                OpenTime = DateTime.Now,
+                Description = call.Description,
+                MaxFinishCall = call.MaxEndTime
+            };
+
+            // Attempt to add the new call in the data layer
+            _dal.Call.Create(newCall);
+        }
+        catch (DO.DalAlreadyExistsException ex)
+        {
+            throw new BO.BlAlreadyExistsException($"Call with ID {call.Id} already exists.", ex);
+        }
+        catch (Exception ex)
+        {
+            throw new BO.BlException("An error occurred while adding the call.", ex);
+        }
     }
     public int[] CallAmount()
     {
@@ -47,8 +79,10 @@ internal class CallImplementation:ICall
         {
             // Retrieve call details from the data layer
             var callData = _dal.Call.Read(callId);
+
             // Retrieve the list of assignments for the call from the data layer
             var assignmentsData = _dal.Assignment.ReadAll(a => a.CallId == callId).ToList();
+
             // Map call details to BO.Call object
             var callDetails = new BO.Call
             {
@@ -60,8 +94,7 @@ internal class CallImplementation:ICall
                 Longitude = callData.Longitude,
                 StartTime = callData.OpenTime,
                 MaxEndTime = callData.MaxFinishCall,
-                Status = CallManager.CalculateCallStatus(assignmentsData, callData.MaxFinishCall),
-                // Status = CallManager.GetCallStatus(callData, assignmentsData),
+                Status = CallManager.GetCallStatus(callData, assignmentsData),
                 Assignments = assignmentsData.Select(a => new BO.CallAssignInList
                 {
                     VolunteerId = a.VolunteerId != 0 ? a.VolunteerId : (int?)null,
@@ -81,8 +114,6 @@ internal class CallImplementation:ICall
             throw new BO.BlException("An error occurred while retrieving call details.", ex);
         }
     }
-
-
     public BO.CallInList GetCallList(BO.CallInList? CallFilterBy, object? obj, CallInList? CallSortBy)
     {
         throw new NotImplementedException();
@@ -103,100 +134,86 @@ internal class CallImplementation:ICall
         throw new NotImplementedException();
     }
 
-public void UpdateCall(BO.Call myCall)
-{
-            try
-            {
-                // Validate the format of the values
-                ValidateCallFormat(call);
-
-                // Validate the logical correctness of the values
-                ValidateCallLogic(call);
-
-                // Create a data object of type DO.Call
-                var doCall = new DO.Call
-                {
-                    Id = call.Id,
-                    CallType = (DO.MyCallType)call.Type,
-                    Address = call.Address ?? "",
-                    Latitude = call.Latitude ?? 0,
-                    Longitude = call.Longitude ?? 0,
-                    OpenTime = call.StartTime,
-                    Description = call.Description,
-                    MaxFinishCall = call.MaxEndTime
-                };
-
-                // Attempt to update the call in the data layer
-                _dal.Call.Update(doCall);
-            }
-            catch (DO.DalDoesNotExistException ex)
-            {
-                throw new BO.BlDoesNotExistException($"Call with ID {call.Id} does not exist.", ex);
-            }
-            catch (Exception ex)
-            {
-                throw new BO.BlException("An error occurred while updating call details.", ex);
-            }
-}
-
-
-
-
-        // Method to validate the format of the values
-        private void ValidateCallFormat(BO.Call call)
+    public void UpdateCall(BO.Call myCall)
     {
-        if (string.IsNullOrWhiteSpace(call.Address))
+        try
         {
-            throw new BO.BlException("Address cannot be empty.");
-        }
+            // Validate the format of the values
+            CallManager.ValidateCallFormat(myCall);
 
-        if (call.Latitude.HasValue && (call.Latitude < -90 || call.Latitude > 90))
-        {
-            throw new BO.BlException("Latitude must be between -90 and 90.");
-        }
+            // Validate the logical correctness of the values
+            CallManager.ValidateCallLogic(myCall);
 
-        if (call.Longitude.HasValue && (call.Longitude < -180 || call.Longitude > 180))
+            // Create a data object of type DO.Call
+            var doCall = new DO.Call
+            {
+                Id = myCall.Id,
+                CallType = (DO.MyCallType)myCall.Type,
+                Address = myCall.Address ?? "",
+                Latitude = myCall.Latitude ?? 0,
+                Longitude = myCall.Longitude ?? 0,
+                OpenTime = myCall.StartTime,
+                Description = myCall.Description,
+                MaxFinishCall = myCall.MaxEndTime
+            };
+
+            // Attempt to update the call in the data layer
+            _dal.Call.Update(doCall);
+        }
+        catch (DO.DalDoesNotExistException ex)
         {
-            throw new BO.BlException("Longitude must be between -180 and 180.");
+            throw new BO.BlDoesNotExistException($"Call with ID {myCall.Id} does not exist.", ex);
+        }
+        catch (Exception ex)
+        {
+            throw new BO.BlException("An error occurred while updating call details.", ex);
         }
     }
-
-    // Method to validate the logical correctness of the values
-    private void ValidateCallLogic(BO.Call call)
-    {
-        if (call.MaxEndTime.HasValue && call.MaxEndTime <= call.StartTime)
-        {
-            throw new BO.BlException("Max end time must be later than start time.");
-        }
-
-        // Validate the address as a real-world address
-        var geoCoordinates = GetCoordinatesFromAddress(call.Address);
-        if (geoCoordinates == null)
-        {
-            throw new BO.BlException("Address is not valid.");
-        }
-
-        // Update the latitude and longitude based on the address
-        call.Latitude = geoCoordinates.Latitude;
-        call.Longitude = geoCoordinates.Longitude;
-    }
-
-    // Helper method to calculate latitude and longitude based on address
-    private (double Latitude, double Longitude)? GetCoordinatesFromAddress(string address)
-    {
-        // Here you would use an external service to calculate the coordinates based on the address
-        // For example purposes, returning a fixed value
-        return (32.0853, 34.7818); // Tel Aviv
-    }
-
-
     public void UpdateCancelTreatment(int idV, int idC)
     {
         throw new NotImplementedException();
     }
-
-    public void UpdateEndTreatment(int idV, int idC)
+    public void CompleteAssignment(int volunteerId, int assignmentId)
     {
-        throw new NotImplementedException();
+        try
+        {
+            // Retrieve assignment details from the data layer
+            var assignment = _dal.Assignment.Read(assignmentId);
+
+            // Check if the volunteer is authorized to complete the assignment
+            if (assignment.VolunteerId != volunteerId)
+            {
+                throw new BO.BlException("Unauthorized: The volunteer does not match the assignment.");
+            }
+
+            // Check if the assignment is still open
+            if (assignment.FinishCall.HasValue)
+            {
+                throw new BO.BlException("The assignment is already completed or canceled.");
+            }
+
+            // Check if the call is not expired
+            var call = _dal.Call.Read(assignment.CallId);
+            if (call.MaxFinishCall.HasValue && ClockManager.Now > call.MaxFinishCall.Value)
+            {
+                throw new BO.BlException("The call has expired.");
+            }
+
+            // Update assignment details
+            assignment.FinishType =DO.MyFinishType.Treated;
+            assignment.FinishCall = ClockManager.Now;
+
+            // Update the assignment in the data layer
+            _dal.Assignment.Update(assignment);
+        }
+        catch (DO.DalDoesNotExistException ex)
+        {
+            throw new BO.BlDoesNotExistException($"Assignment with ID {assignmentId} does not exist.", ex);
+        }
+        catch (Exception ex)
+        {
+            throw new BO.BlException("An error occurred while completing the assignment.", ex);
+        }
     }
+
 }
