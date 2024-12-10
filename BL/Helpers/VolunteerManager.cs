@@ -110,10 +110,10 @@ internal static class VolunteerManager
     }
 
     // Validate the address and get latitude and longitude
-    private static bool IsValidAddress(string address, out double latitude, out double longitude)
+    private static (double Latitude, double Longitude) GetCoordinates(string address)
     {
-        latitude = 0;
-        longitude = 0;
+        double latitude = 0;
+        double longitude = 0;
 
         var client = new HttpClient();
         var response = client.GetAsync($"https://nominatim.openstreetmap.org/search?q={address}&format=json&addressdetails=1").Result;
@@ -127,12 +127,66 @@ internal static class VolunteerManager
             {
                 latitude = result[0].lat;
                 longitude = result[0].lon;
-                return true;
             }
         }
 
-        return false;
+        return (latitude, longitude);
     }
+    public static double CalculateAerialDistance(double lat1, double lon1, double lat2, double lon2)
+    {
+        const double R = 6371; // רדיוס כדור הארץ בקילומטרים
+        var lat = ToRadians(lat2 - lat1);
+        var lon = ToRadians(lon2 - lon1);
+        var a = Math.Sin(lat / 2) * Math.Sin(lat / 2) +
+                Math.Cos(ToRadians(lat1)) * Math.Cos(ToRadians(lat2)) *
+                Math.Sin(lon / 2) * Math.Sin(lon / 2);
+        var c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+        return R * c; // מרחק בקילומטרים
+    }
+
+    public static double ToRadians(double angle)
+    {
+        return angle * (Math.PI / 180);
+    }
+    private static double CalculateDrivingDistance(double lat1, double lon1, double lat2, double lon2)
+    {
+        var client = new HttpClient();
+        var response = client.GetAsync($"https://routing.openstreetmap.de/routed-car/route/v1/driving/{lon1},{lat1};{lon2},{lat2}?overview=false").Result;
+
+        if (response.IsSuccessStatusCode)
+        {
+            var content = response.Content.ReadAsStringAsync().Result;
+            dynamic result = JsonConvert.DeserializeObject(content);
+
+            if (result != null && result.routes != null && result.routes.Count > 0)
+            {
+                var distanceInMeters = result.routes[0].distance;
+                return distanceInMeters / 1000.0; // המרחק בקילומטרים
+            }
+        }
+
+        throw new Exception("Failed to calculate driving distance.");
+    }
+    public static double CalculateWalkingDistance(double lat1, double lon1, double lat2, double lon2)
+    {
+        var client = new HttpClient();
+        var response = client.GetAsync($"https://routing.openstreetmap.de/routed-foot/route/v1/driving/{lon1},{lat1};{lon2},{lat2}?overview=false").Result;
+
+        if (response.IsSuccessStatusCode)
+        {
+            var content = response.Content.ReadAsStringAsync().Result;
+            dynamic result = JsonConvert.DeserializeObject(content);
+
+            if (result != null && result.routes != null && result.routes.Count > 0)
+            {
+                var distanceInMeters = result.routes[0].distance;
+                return distanceInMeters / 1000.0; // המרחק בקילומטרים
+            }
+        }
+
+        throw new Exception("Failed to calculate walking distance.");
+    }
+
 }
 
 
