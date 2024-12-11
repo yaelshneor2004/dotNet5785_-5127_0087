@@ -80,7 +80,7 @@ Status ,
  TotalAssignments 
 }
 
-public enum CloseCallInList
+public enum CloseCall
 {
  
 Address,
@@ -89,3 +89,12 @@ StartTreatmentTime,
 EndTime,
  EndType
 }
+
+public enum OpenedCall
+{
+    Type ,
+     Address ,
+    StartTime, 
+    MaxEndTime ,
+   DistanceFromVolunteer 
+    }

@@ -68,7 +68,7 @@ internal static class CallManager
     {
         // Check if the address is valid
         if (string.IsNullOrWhiteSpace(call.Address))
-            throw new BO.nu("Address cannot be empty.");    }
+            throw new BO.BlNullPropertyException("Address cannot be empty.");    }
 
     // Method to validate the logical correctness of the values
     public static void ValidateCallLogic(BO.Call call)
@@ -200,15 +200,29 @@ internal static class CallManager
             MaxFinishCall = myCall.MaxEndTime
         };   
     }
-    public static IEnumerable<BO.ClosedCallInList> SortClosedCallsByField(IEnumerable<BO.ClosedCallInList> calls, MyFinishType sortBy)
+    public static IEnumerable<BO.ClosedCallInList> SortClosedCallsByField(IEnumerable<BO.ClosedCallInList> calls, BO.CloseCall? sortBy)
     {
         return sortBy switch
         {
-            MyFinishType.Treated => calls.OrderBy(call => call.EndType == MyFinishType.Treated),
-            MyFinishType.SelfCancel => calls.OrderBy(call => call.EndType == MyFinishType.SelfCancel),
-            MyFinishType.ManagerCancel => calls.OrderBy(call => call.EndType == MyFinishType.ManagerCancel),
-            MyFinishType.ExpiredCancel => calls.OrderBy(call => call.EndType == MyFinishType.ExpiredCancel),
+            CloseCall.Address => calls.OrderBy(call => call.Address),
+            CloseCall.StartTime => calls.OrderBy(call => call.StartTime ),
+            CloseCall.StartTreatmentTime => calls.OrderBy(call => call.StartTreatmentTime),
+            CloseCall.EndTime => calls.OrderBy(call => call.EndTime ),
+            CloseCall.EndType => calls.OrderBy(call => call.EndType ),
             _ => calls.OrderBy(call => call.Id)
+        };
+    }
+
+    public static IEnumerable<BO.OpenCallInList> SortOpenCallsByField(IEnumerable<BO.OpenCallInList> openCallInList, BO.OpenedCall? sortBy)
+    {
+        return sortBy switch
+        {
+            BO.OpenedCall.Type => openCallInList.OrderBy(call => call.Type),
+            BO.OpenedCall.Address => openCallInList.OrderBy(call => call.Address),
+            BO.OpenedCall.StartTime => openCallInList.OrderBy(call => call.StartTime),
+            BO.OpenedCall.MaxEndTime => openCallInList.OrderBy(call => call.MaxEndTime),
+            BO.OpenedCall.DistanceFromVolunteer => openCallInList.OrderBy(call => call.DistanceFromVolunteer),
+            _ => openCallInList.OrderBy(call => call.Id)
         };
     }
     public static IEnumerable<BO.ClosedCallInList> FilterClosedCallsByCallType(IEnumerable<BO.ClosedCallInList> calls, MyCallType sortBy)
@@ -222,6 +236,50 @@ internal static class CallManager
             _ => calls.OrderBy(call => call.Id)
         };
     }
+    public static BO.ClosedCallInList convertAssignmentToClosed(DO.Assignment assignment)
+    {
+        var callDetails = s_dal.Call.Read(assignment.CallId);
+
+        return new BO.ClosedCallInList
+        {
+            Id = assignment.CallId,
+            Type = (BO.MyCallType)callDetails.CallType,
+            Address = callDetails.Address,
+            StartTime = callDetails.OpenTime,
+            StartTreatmentTime = assignment.StartCall,
+            EndTime = assignment.FinishCall,
+            EndType = (BO.MyFinishType)assignment.FinishType
+        };
+    }
+   public static bool OpenCondition(DO.Assignment assignment)
+    {
+        var callDetails = s_dal.Call.Read(assignment.CallId);
+        var call = ConvertFromDoToBo(callDetails);
+        return call.Status == MyCallStatus.Open || call.Status == MyCallStatus.OpenAtRisk;
+    }
+
+    public static bool CloseCondition(DO.Assignment assignment)
+    {
+        var callDetails = s_dal.Call.Read(assignment.CallId);
+        var call = ConvertFromDoToBo(callDetails);
+        return call.Status == MyCallStatus.Expired || call.Status == MyCallStatus.Closed;
+    }
+    public static BO.OpenCallInList convertAssignmentToOpened(DO.Assignment assignment)
+    {
+        var callDetails = s_dal.Call.Read(assignment.CallId);
+        var volunteer = s_dal.Volunteer.Read(assignment.VolunteerId);
+        return new BO.OpenCallInList
+        {
+            Id = assignment.CallId,
+            Type = (BO.MyCallType)callDetails.CallType,
+            Description = callDetails.Description,
+            Address = callDetails.Address,
+            StartTime = callDetails.OpenTime,
+            MaxEndTime = callDetails.MaxFinishCall,
+            DistanceFromVolunteer = Tools.GlobalDistance(volunteer.Longitude, volunteer.Latitude, callDetails.Longitude, callDetails.Latitude, volunteer.TypeDistance)
+        };
+    }
+
 
 
 }

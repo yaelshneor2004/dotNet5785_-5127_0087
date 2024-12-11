@@ -90,16 +90,18 @@ internal class CallImplementation:ICall
         throw new NotImplementedException();
     }
 
-    public IEnumerable<BO.ClosedCallInList> SortClosedCalls(int idV, MyCallType? callType, CloseCallInList? closeCallInList)
+    public IEnumerable<BO.ClosedCallInList> SortClosedCalls(int idV, MyCallType? callType, CloseCall? closeCall)
     {
-        var assignmennts = _dal.Assignment.ReadAll();
-        assignmennts=assignmennts.Where(a=>a.VolunteerId == idV&&a.FinishType==null);
-
+        var closeList = _dal.Assignment.ReadAll().Where(a => a.VolunteerId == idV && CallManager.CloseCondition(a)).Select(a => convertAssignmentToClosed(a)).ToList();
+        closeList = callType.HasValue ? closeList.Where(call => call.Type == callType.Value).ToList() : closeList;
+        return CallManager.SortClosedCallsByField(closeList, closeCall);
     }
 
-    public IEnumerable<BO.OpenCallInList> SortOpenedCalls(int idV, MyCallType? callType, OpenCallInList openCallInList)
+    public IEnumerable<BO.OpenCallInList> SortOpenedCalls(int idV, MyCallType? callType,BO.OpenedCall openedCall)
     {
-        throw new NotImplementedException();
+        var openCalls = _dal.Assignment.ReadAll().Where(a=>a.VolunteerId==idV&&CallManager.OpenCondition(a)).Select(a => convertAssignmentToOpened(a)).ToList();
+        openCalls = callType.HasValue ? openCalls.Where(call => call.Type == callType.Value).ToList() : openCalls;
+        return CallManager.SortOpenCallsByField(openCalls, openedCall);
     }
 
     public void UpdateCall(BO.Call myCall)
@@ -125,48 +127,6 @@ internal class CallImplementation:ICall
     public void UpdateCancelTreatment(int idV, int idC)
     {
         throw new NotImplementedException();
-    }
-    public void CompleteAssignment(int volunteerId, int assignmentId)
-    {
-        try
-        {
-            // Retrieve assignment details from the data layer
-            var assignment = _dal.Assignment.Read(assignmentId);
-
-            // Check if the volunteer is authorized to complete the assignment
-            if (assignment.VolunteerId != volunteerId)
-            {
-                throw new BO.BlException("Unauthorized: The volunteer does not match the assignment.");
-            }
-
-            // Check if the assignment is still open
-            if (assignment.FinishCall.HasValue)
-            {
-                throw new BO.BlException("The assignment is already completed or canceled.");
-            }
-
-            // Check if the call is not expired
-            var call = _dal.Call.Read(assignment.CallId);
-            if (call.MaxFinishCall.HasValue && ClockManager.Now > call.MaxFinishCall.Value)
-            {
-                throw new BO.BlException("The call has expired.");
-            }
-
-            // Update assignment details
-            assignment.FinishType =DO.MyFinishType.Treated;
-            assignment.FinishCall = ClockManager.Now;
-
-            // Update the assignment in the data layer
-            _dal.Assignment.Update(assignment);
-        }
-        catch (DO.DalDoesNotExistException ex)
-        {
-            throw new BO.BlDoesNotExistException($"Assignment with ID {assignmentId} does not exist.", ex);
-        }
-        catch (Exception ex)
-        {
-            throw new BO.BlException("An error occurred while completing the assignment.", ex);
-        }
     }
 
 }
