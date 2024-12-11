@@ -79,3 +79,13 @@ StartTime ,
 Status ,
  TotalAssignments 
 }
+
+public enum CloseCallInList
+{
+ 
+Address,
+StartTime,
+StartTreatmentTime,
+EndTime,
+ EndType
+}

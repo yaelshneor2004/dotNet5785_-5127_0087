@@ -1,4 +1,5 @@
 ﻿
+using BO;
 using DalApi;
 using Newtonsoft.Json;
 
@@ -199,4 +200,28 @@ internal static class CallManager
             MaxFinishCall = myCall.MaxEndTime
         };   
     }
+    public static IEnumerable<BO.ClosedCallInList> SortClosedCallsByField(IEnumerable<BO.ClosedCallInList> calls, MyFinishType sortBy)
+    {
+        return sortBy switch
+        {
+            MyFinishType.Treated => calls.OrderBy(call => call.EndType == MyFinishType.Treated),
+            MyFinishType.SelfCancel => calls.OrderBy(call => call.EndType == MyFinishType.SelfCancel),
+            MyFinishType.ManagerCancel => calls.OrderBy(call => call.EndType == MyFinishType.ManagerCancel),
+            MyFinishType.ExpiredCancel => calls.OrderBy(call => call.EndType == MyFinishType.ExpiredCancel),
+            _ => calls.OrderBy(call => call.Id)
+        };
+    }
+    public static IEnumerable<BO.ClosedCallInList> FilterClosedCallsByCallType(IEnumerable<BO.ClosedCallInList> calls, MyCallType sortBy)
+    {
+        return sortBy switch
+        {
+            MyCallType.English => calls.OrderBy(call => call.Type == MyCallType.English),
+            MyCallType.Math => calls.OrderBy(call => call.Type == MyCallType.Math),
+            MyCallType.ComputerScience => calls.OrderBy(call => call.Type == MyCallType.ComputerScience),
+            MyCallType.Accounting => calls.OrderBy(call => call.Type == MyCallType.Accounting),
+            _ => calls.OrderBy(call => call.Id)
+        };
+    }
+
+
 }

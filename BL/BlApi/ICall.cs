@@ -1,4 +1,6 @@
-﻿namespace BlApi;
+﻿using BO;
+
+namespace BlApi;
 
 public interface  ICall
 {
@@ -16,7 +18,7 @@ public interface  ICall
     void AddCall(BO.Call call);
 
 
-    IEnumerable<BO.ClosedCallInList> SortClosedCalls(int idV, BO.MyCallType? callType);  
+    IEnumerable<BO.ClosedCallInList> SortClosedCalls(int idV, BO.MyCallType? callType, CloseCallInList? closeCallInList);  
 
     IEnumerable<BO.OpenCallInList> SortOpenedCalls(int idV, BO.MyCallType? callType,BO.OpenCallInList openCallInList);
 
