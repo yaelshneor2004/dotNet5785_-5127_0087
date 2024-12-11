@@ -7,12 +7,35 @@ namespace Helpers;
 internal static class CallManager
 {
     private static IDal s_dal = Factory.Get;
+    public static BO.Call ConvertFromDoToBo(DO.Call callData)
+    {
+        var assignmentsData = s_dal.Assignment.ReadAll(a => a.CallId == callData.Id).ToList();
+        return new BO.Call
+        {
+            Id = callData.Id,
+            Type = (BO.MyCallType)callData.CallType,
+            Description = callData.Description,
+            Address = callData.Address,
+            Latitude = callData.Latitude,
+            Longitude = callData.Longitude,
+            StartTime = callData.OpenTime,
+            MaxEndTime = callData.MaxFinishCall,
+            Status = GetCallStatus(callData),
+            Assignments = assignmentsData.Select(a => new BO.CallAssignInList
+            {
+                VolunteerId = a.VolunteerId != 0 ? a.VolunteerId : (int?)null,
+                VolunteerName = a.VolunteerId != 0 ? s_dal.Volunteer.Read(a.VolunteerId)?.FullName : null,
+                EndTreatmentTime = a.FinishCall,
+                EndType = a.FinishType != null ? (BO.MyFinishType)a.FinishType : (BO.MyFinishType?)null
+            }).ToList()
+        };
+    }
     public static BO.MyCallStatus CalculateCallStatus(DO.Assignment lastAssignment, DateTime? maxEndTime)
     {
         var currentTime = ClockManager.Now;
         var isInRiskTimeRange = maxEndTime != null && (maxEndTime.Value - currentTime) <= s_dal.Config.RiskRange;
 
-      
+
         if (lastAssignment == null)
         {
             return maxEndTime == null || maxEndTime > currentTime
@@ -44,48 +67,24 @@ internal static class CallManager
     {
         // Check if the address is valid
         if (string.IsNullOrWhiteSpace(call.Address))
-        {
-            throw new BO.BlException("Address cannot be empty.");
-        }
-
-        // Check if the latitude and longitude are within valid ranges
-        if (call.Latitude.HasValue && (call.Latitude < -90 || call.Latitude > 90))
-        {
-            throw new BO.BlException("Latitude must be between -90 and 90.");
-        }
-
-        if (call.Longitude.HasValue && (call.Longitude < -180 || call.Longitude > 180))
-        {
-            throw new BO.BlException("Longitude must be between -180 and 180.");
-        }
-    }
+            throw new BO.nu("Address cannot be empty.");    }
 
     // Method to validate the logical correctness of the values
     public static void ValidateCallLogic(BO.Call call)
     {
         // Check if the maximum end time is greater than the start time
         if (call.MaxEndTime.HasValue && call.MaxEndTime <= call.StartTime)
-        {
-            throw new BO.BlException("Max end time must be later than start time.");
-        }
+            throw new BO.BlInvalidOperationException("Max end time must be later than start time.");
         if (!IsValidAddress(call.Address, out double latitude, out double longitude))
         {
             throw new BO.BlException("Invalid address.");
         }
-
         // Update the latitude and longitude based on the address
         call.Latitude = latitude;
         call.Longitude = longitude;
+        if(call.Id<0)
+            throw new BO.BlInvalidOperationException("invalide callId.");
 
-        // אם יש מתנדב שמוקצה לקריאה, עדכן את פרטי המתנדב
-        var assignment = s_dal.Assignment.ReadAll(a => a.CallId == call.Id).FirstOrDefault();
-        if (assignment != null)
-        {
-            //var volunteer = s_dal.Volunteer.Read(assignment.VolunteerId);
-            //volunteer.Latitude= latitude;
-            //volunteer.Longitude = longitude;
-            //s_dal.Volunteer.Update(volunteer);
-        }
     }
 
     // Helper method to get latitude and longitude based on address
@@ -112,33 +111,92 @@ internal static class CallManager
 
         return false;
     }
-      public static BO.MyCallStatus GetCallStatus(DO.Call call, IEnumerable<DO.Assignment> assignments)
-    {
-        var now = DateTime.Now;
 
-        var activeAssignment = assignments.FirstOrDefault(a => a.CallId == call.Id && a.FinishCall == null);
-        if (activeAssignment != null)
+    public static BO.MyCallStatus GetCallStatus(DO.Call call)
+    {
+        var assignment = s_dal.Assignment.Read(call.Id);
+        var now = ClockManager.Now;
+        // Check if the call is in progress (if the assignment is active and has no finish time)
+        if (assignment != null && assignment.FinishCall == null)
         {
+            // Check if the call is in progress at risk
+            if (call.MaxFinishCall.HasValue && now > call.MaxFinishCall.Value - s_dal.Config.RiskRange)
+                return BO.MyCallStatus.InProgressAtRisk;
             return BO.MyCallStatus.InProgress;
         }
-
-        if (call.MaxFinishCall.HasValue && now > call.MaxFinishCall.Value)
-        {
+        // Check if the call is expired
+        // Condition 1: The call has a max finish time and the current time is past that time
+        // Condition 2: The call has no active assignment and the current time is past the max finish time
+        if (call.MaxFinishCall.HasValue && now > call.MaxFinishCall.Value && (assignment == null || assignment.FinishCall == null))
             return BO.MyCallStatus.Expired;
-        }
-
-        var finishedAssignment = assignments.FirstOrDefault(a => a.CallId == call.Id && a.FinishCall.HasValue);
-        if (finishedAssignment != null)
-        {
+        // Check if the call is closed (if the assignment has a finish time)
+        if (assignment != null && assignment.FinishCall.HasValue)
             return BO.MyCallStatus.Closed;
-        }
-
-        if (call.MaxFinishCall.HasValue && now > call.OpenTime.AddHours(1))
-        {
+        // Check if the call is open at risk
+        if (call.MaxFinishCall.HasValue && now > call.OpenTime + (s_dal.Config.RiskRange))
             return BO.MyCallStatus.OpenAtRisk;
-        }
-
+        // Default: Open call
         return BO.MyCallStatus.Open;
     }
 
+    public static IEnumerable<BO.CallInList> SortCalls(IEnumerable<BO.CallInList> calls, BO.MySortInCallInList sortBy)
+    {
+        return sortBy switch
+        {
+            BO.MySortInCallInList.Type => calls.OrderBy(call => call.Type),
+            BO.MySortInCallInList.StartTime => calls.OrderBy(call => call.StartTime),
+            BO.MySortInCallInList.TimeRemaining => calls.OrderBy(call => call.TimeRemaining),
+            BO.MySortInCallInList.CompletionTime => calls.OrderBy(call => call.CompletionTime),
+            BO.MySortInCallInList.Status => calls.OrderBy(call => call.Status),
+            BO.MySortInCallInList.TotalAssignments => calls.OrderBy(call => call.TotalAssignments),
+            _ => calls.OrderBy(call => call.CallId)
+        };
+    }
+
+    public static object? GetFieldValue(BO.CallInList call, BO.MySortInCallInList field)
+    {
+        return field switch
+        {
+            BO.MySortInCallInList.Type => call.Type,
+            BO.MySortInCallInList.StartTime => call.StartTime,
+            BO.MySortInCallInList.TimeRemaining => call.TimeRemaining,
+            BO.MySortInCallInList.CompletionTime => call.CompletionTime,
+            BO.MySortInCallInList.Status => call.Status,
+            BO.MySortInCallInList.TotalAssignments => call.TotalAssignments,
+            _ => null
+        };
+    }
+    public static BO.CallInList ConvertToCallInList(DO.Call callData)
+    {
+            var assignmentsData = s_dal.Assignment.ReadAll(a => a.CallId == callData.Id).ToList();
+        var lastAssignment = assignmentsData.OrderByDescending(a => a.StartCall).FirstOrDefault();
+        return new BO.CallInList
+            {
+                Id = lastAssignment?.Id ?? 0,
+                CallId = callData.Id,
+                Type = (BO.MyCallType)callData.CallType,
+                StartTime = callData.OpenTime,
+                TimeRemaining = callData.MaxFinishCall.HasValue? callData.MaxFinishCall.Value - ClockManager.Now  : (TimeSpan?)null,
+                LastVolunteerName = lastAssignment != null && lastAssignment.VolunteerId != 0 ? s_dal.Volunteer.Read(lastAssignment.VolunteerId)?.FullName : null,
+                CompletionTime = lastAssignment?.FinishCall.HasValue == true ? lastAssignment.FinishCall.Value - callData.OpenTime : (TimeSpan?)null,
+                Status = GetCallStatus(callData),
+                TotalAssignments = assignmentsData.Count()
+            };
+
+    }
+
+    public static DO.Call ConvertBOToDO(BO.Call myCall)
+    {
+       return new DO.Call
+        {
+            Id = myCall.Id,
+            CallType = (DO.MyCallType)myCall.Type,
+            Address = myCall.Address ?? "",
+            Latitude = myCall.Latitude ?? 0,
+            Longitude = myCall.Longitude ?? 0,
+            OpenTime = myCall.StartTime,
+            Description = myCall.Description,
+            MaxFinishCall = myCall.MaxEndTime
+        };   
+    }
 }

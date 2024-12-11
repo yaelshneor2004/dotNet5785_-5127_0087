@@ -41,13 +41,10 @@ public class BlAlreadyExistsException : Exception
     public BlAlreadyExistsException(string message, Exception innerException)
                 : base(message, innerException) { }
 }
-
-//// Lack of permission to access a resource, such as a file or directory
-//[Serializable]
-//public class BlUnauthorizedAccessException : Exception
-//{
-//    public BlUnauthorizedAccessException(string? message) : base(message) { }
-//    public BlUnauthorizedAccessException(string message, Exception innerException)
-//                : base(message, innerException) { }
-//}
-
+[Serializable]
+public class BlErrorException : Exception
+{
+    public BlErrorException(string? message) : base(message) { }
+    public BlErrorException(string message, Exception innerException)
+                : base(message, innerException) { }
+}

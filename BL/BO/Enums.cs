@@ -63,3 +63,19 @@ public enum MyFinishType
     ManagerCancel,
     ExpiredCancel
 }
+public enum MySortInVolunteerInList
+{
+FullName,
+ TotalCallsHandled ,
+ TotalCallsCancelled ,
+ CurrentCallType 
+}
+public enum MySortInCallInList
+{
+ Type ,
+StartTime ,
+ TimeRemaining ,
+ CompletionTime ,
+Status ,
+ TotalAssignments 
+}

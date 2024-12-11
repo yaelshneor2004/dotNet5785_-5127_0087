@@ -1,11 +1,10 @@
 ﻿using BlApi;
-
+using BO;
 using Helpers;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using static Helpers.CallManager;
-
 namespace BlImplementation;
-
 internal class CallImplementation:ICall
 {
     private readonly DalApi.IDal _dal = DalApi.Factory.Get;
@@ -15,10 +14,8 @@ internal class CallImplementation:ICall
         {
             // Validate the format of the values
             CallManager. ValidateCallFormat(call);
-
             // Validate the logical correctness of the values
            CallManager. ValidateCallLogic(call);
-
             // Create a new data object of type DO.Call
             var newCall = new DO.Call
             {
@@ -46,9 +43,19 @@ internal class CallImplementation:ICall
     }
     public int[] CallAmount()
     {
-        throw new NotImplementedException();
+        var calls = _dal.Call.ReadAll();
+        var callsBo = calls.Select(callData => ConvertFromDoToBo(callData)).ToList(); // המרת הקריאות ל-BO
+        var callAmounts = new int[Enum.GetValues(typeof(MyCallStatus)).Length];
+        var groupedCalls = callsBo.GroupBy(c => c.Status)
+                                .Select(group => new
+                                {
+                                    Status = group.Key,
+                                    Count = group.Count()
+                                });
+        foreach (var group in groupedCalls)
+            callAmounts[(int)group.Status] = group.Count;
+        return callAmounts;
     }
-
     public void DeleteCall(int callId)
     {
         try
@@ -78,32 +85,9 @@ internal class CallImplementation:ICall
         try
         {
             // Retrieve call details from the data layer
-            var callData = _dal.Call.Read(callId);
-
-            // Retrieve the list of assignments for the call from the data layer
-            var assignmentsData = _dal.Assignment.ReadAll(a => a.CallId == callId).ToList();
-
-            // Map call details to BO.Call object
-            var callDetails = new BO.Call
-            {
-                Id = callData.Id,
-                Type = (BO.MyCallType)callData.CallType,
-                Description = callData.Description,
-                Address = callData.Address,
-                Latitude = callData.Latitude,
-                Longitude = callData.Longitude,
-                StartTime = callData.OpenTime,
-                MaxEndTime = callData.MaxFinishCall,
-                Status = CallManager.GetCallStatus(callData, assignmentsData),
-                Assignments = assignmentsData.Select(a => new BO.CallAssignInList
-                {
-                    VolunteerId = a.VolunteerId != 0 ? a.VolunteerId : (int?)null,
-                    VolunteerName = a.VolunteerId != 0 ? _dal.Volunteer.Read(a.VolunteerId)?.FullName : null,
-                    EndTreatmentTime = a.FinishCall,
-                    EndType = a.FinishType != null ? (BO.MyFinishType)a.FinishType : (BO.MyFinishType?)null
-                }).ToList()
-            };
-            return callDetails;
+            var callData = _dal.Call.Read(callId) ?? throw new BO.BlDoesNotExistException($"Call with ID {callId} does not exist.");
+            // Convert DO.Call to BO.Call and return
+            return CallManager.ConvertFromDoToBo(callData);
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -111,14 +95,19 @@ internal class CallImplementation:ICall
         }
         catch (Exception ex)
         {
-            throw new BO.BlException("An error occurred while retrieving call details.", ex);
+            throw new BO.BlErrorException("An error occurred while retrieving call details.", ex);
         }
     }
-    public BO.CallInList GetCallList(BO.CallInList? CallFilterBy, object? obj, CallInList? CallSortBy)
-    {
-        throw new NotImplementedException();
-    }
 
+    public IEnumerable< BO.CallInList> GetCallList(BO.MySortInCallInList? callFilter, object? filterValue, BO.MySortInCallInList? callSort)
+    {
+        var calls = _dal.Call.ReadAll();
+        var callsBo = calls.Select(callData =>CallManager.ConvertToCallInList(callData)).Distinct().ToList();
+
+        if (callFilter.HasValue && filterValue != null)
+            callsBo = callsBo.Where(call =>CallManager.GetFieldValue(call, callFilter.Value)?.Equals(filterValue) == true).ToList();
+        return CallManager.SortCalls(callsBo, callSort.Value).ToList();
+    }
     public void SelectCallToTreat(int idV, int idC)
     {
         throw new NotImplementedException();
@@ -140,25 +129,10 @@ internal class CallImplementation:ICall
         {
             // Validate the format of the values
             CallManager.ValidateCallFormat(myCall);
-
             // Validate the logical correctness of the values
             CallManager.ValidateCallLogic(myCall);
-
-            // Create a data object of type DO.Call
-            var doCall = new DO.Call
-            {
-                Id = myCall.Id,
-                CallType = (DO.MyCallType)myCall.Type,
-                Address = myCall.Address ?? "",
-                Latitude = myCall.Latitude ?? 0,
-                Longitude = myCall.Longitude ?? 0,
-                OpenTime = myCall.StartTime,
-                Description = myCall.Description,
-                MaxFinishCall = myCall.MaxEndTime
-            };
-
             // Attempt to update the call in the data layer
-            _dal.Call.Update(doCall);
+            _dal.Call.Update(CallManager.ConvertBOToDO(myCall));
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -166,7 +140,7 @@ internal class CallImplementation:ICall
         }
         catch (Exception ex)
         {
-            throw new BO.BlException("An error occurred while updating call details.", ex);
+            throw new BO.BlErrorException("An error occurred while updating call details.", ex);
         }
     }
     public void UpdateCancelTreatment(int idV, int idC)
