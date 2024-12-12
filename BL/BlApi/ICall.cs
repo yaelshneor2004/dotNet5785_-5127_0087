@@ -4,30 +4,36 @@ namespace BlApi;
 
 public interface  ICall
 {
-    int[] CallAmount(); //Returns the amount of calls
+    // Adds a new call to the system
+    public void AddCall(BO.Call call);
 
-    //Returns a sorted and filtered collection of a logical data entity
-    BO.CallInList GetCallList(BO.CallInList? CallFilterBy, Object? obj, BO.CallInList? CallSortBy);
+// Returns an array with the count of calls per status
+public int[] CallAmount();
 
-    //Returns the object it constructed
-    BO.Volunteer GetCallDetails(int callId);
-    void UpdateCallDetails(BO.Call call);
+// Deletes a call based on its ID
+public void DeleteCall(int callId);
 
-    void DeleteCall(int callId);
+// Retrieves the details of a specific call by its ID
+public BO.Call GetCallDetails(int callId);
 
-    void AddCall(BO.Call call);
+// Retrieves a list of calls with optional filtering and sorting
+public IEnumerable<BO.CallInList> GetCallList(BO.MySortInCallInList? callFilter, object? filterValue, BO.MySortInCallInList? callSort);
 
+// Selects a call to treat by a volunteer
+public void SelectCallToTreat(int idV, int idC);
 
-    IEnumerable<BO.ClosedCallInList> SortClosedCalls(int idV, BO.MyCallType? callType, CloseCallInList? closeCallInList);  
+// Sorts the closed calls for a specific volunteer with optional filtering and sorting
+public IEnumerable<BO.ClosedCallInList> SortClosedCalls(int idV, MyCallType? callType, CloseCall? closeCall);
 
-    IEnumerable<BO.OpenCallInList> SortOpenedCalls(int idV, BO.MyCallType? callType,BO.OpenCallInList openCallInList);
+// Sorts the opened calls for a specific volunteer with optional filtering and sorting
+public IEnumerable<BO.OpenCallInList> SortOpenedCalls(int idV, MyCallType? callType, BO.OpenedCall openedCall);
 
-    void CompleteAssignment(int volunteerId, int assignmentId);
-    void UpdateCancelTreatment(int idV, int idC);
-    void SelectCallToTreat(int idV, int idC);
+// Updates the details of a specific call
+public void UpdateCall(BO.Call myCall);
 
+// Cancels the treatment of an assignment
+public void UpdateCancelTreatment(int idV, int idC);
 
-
-    /**/
-
+// Completes an assignment
+public void UpdateCompleteAssignment(int volunteerId, int assignmentId);
 }

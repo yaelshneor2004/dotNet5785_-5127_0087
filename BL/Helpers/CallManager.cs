@@ -202,16 +202,21 @@ internal static class CallManager
     }
     public static IEnumerable<BO.ClosedCallInList> SortClosedCallsByField(IEnumerable<BO.ClosedCallInList> calls, BO.CloseCall? sortBy)
     {
-        return sortBy switch
-        {
-            CloseCall.Address => calls.OrderBy(call => call.Address),
-            CloseCall.StartTime => calls.OrderBy(call => call.StartTime ),
-            CloseCall.StartTreatmentTime => calls.OrderBy(call => call.StartTreatmentTime),
-            CloseCall.EndTime => calls.OrderBy(call => call.EndTime ),
-            CloseCall.EndType => calls.OrderBy(call => call.EndType ),
-            _ => calls.OrderBy(call => call.Id)
-        };
+        return from call in calls
+               orderby sortBy switch
+               {
+                   BO.CloseCall.Address => call.Address as object,
+                   BO.CloseCall.StartTime => call.StartTime as object,
+                   BO.CloseCall.StartTreatmentTime => call.StartTreatmentTime as object,
+                   BO.CloseCall.EndTime => call.EndTime as object,
+                   BO.CloseCall.EndType => call.EndType as object,
+                   _ => call.Id as object
+               }
+               select call;
     }
+
+
+
 
     public static IEnumerable<BO.OpenCallInList> SortOpenCallsByField(IEnumerable<BO.OpenCallInList> openCallInList, BO.OpenedCall? sortBy)
     {
@@ -225,17 +230,7 @@ internal static class CallManager
             _ => openCallInList.OrderBy(call => call.Id)
         };
     }
-    public static IEnumerable<BO.ClosedCallInList> FilterClosedCallsByCallType(IEnumerable<BO.ClosedCallInList> calls, MyCallType sortBy)
-    {
-        return sortBy switch
-        {
-            MyCallType.English => calls.OrderBy(call => call.Type == MyCallType.English),
-            MyCallType.Math => calls.OrderBy(call => call.Type == MyCallType.Math),
-            MyCallType.ComputerScience => calls.OrderBy(call => call.Type == MyCallType.ComputerScience),
-            MyCallType.Accounting => calls.OrderBy(call => call.Type == MyCallType.Accounting),
-            _ => calls.OrderBy(call => call.Id)
-        };
-    }
+    
     public static BO.ClosedCallInList convertAssignmentToClosed(DO.Assignment assignment)
     {
         var callDetails = s_dal.Call.Read(assignment.CallId);
@@ -280,6 +275,12 @@ internal static class CallManager
         };
     }
 
-
-
+    public static bool IsManager(int idV)
+    {
+       return s_dal.Volunteer.Read(idV).Role == DO.MyRole.Manager;
+    }
+    public static bool IsOpenAssignment(IEnumerable<DO.Assignment> assignments)
+    {
+        return assignments.Any(a => !a.FinishCall.HasValue && !a.FinishType.HasValue);
+    }
 }

@@ -3,7 +3,7 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using DalApi;
 using System.Text.RegularExpressions;
-using BO;
+using BlApi;
 
 namespace Helpers;
 
@@ -178,7 +178,77 @@ private static bool IsValidEmail(string email)
             _ => volunteers.OrderBy(v => v.Id)
         };
     }
+    public static DO.Volunteer ConvertFromBoToDo(BO.Volunteer myVolunteer)
+    {
+         return new DO.Volunteer
+        {
+            Id = myVolunteer.Id,
+            FullName = myVolunteer.FullName,
+            Phone = myVolunteer.Phone,
+            Email = myVolunteer.Email,
+            Password = myVolunteer.Password,
+            Address = myVolunteer.Address,
+            Latitude = myVolunteer.Latitude,
+            Longitude = myVolunteer.Longitude,
+            IsActive = myVolunteer.IsActive,
+            MaxDistance = myVolunteer.MaxDistance,
+            TypeDistance = (DO.MyTypeDistance)myVolunteer.TypeDistance,
+            Role = (DO.MyRole)myVolunteer.Role
+        };
+    }
+    public static BO.Volunteer ConvertFromDoToBo(DO.Volunteer myVolunteer)
+    {
+        var assignments = s_dal.Assignment.ReadAll(a => a.VolunteerId == myVolunteer.Id).ToList();
 
+        return new BO.Volunteer
+        {
+            Id = myVolunteer.Id,
+            FullName = myVolunteer.FullName,
+            Phone = myVolunteer.Phone,
+            Email = myVolunteer.Email,
+            Password = myVolunteer.Password,
+            Address = myVolunteer.Address,
+            Latitude = myVolunteer.Latitude,
+            Longitude = myVolunteer.Longitude,
+            Role = (BO.MyRole)myVolunteer.Role,
+            IsActive = myVolunteer.IsActive,
+            MaxDistance = myVolunteer.MaxDistance,
+            TypeDistance = (BO.MyTypeDistance)myVolunteer.TypeDistance,
+            TotalCallsHandled = s_dal.Assignment.ReadAll(a => a.VolunteerId == myVolunteer.Id && a.FinishType == DO.MyFinishType.Treated).Count(),
+            TotalCallsCancelled = s_dal.Assignment.ReadAll(a => a.VolunteerId == myVolunteer.Id && (a.FinishType == DO.MyFinishType.SelfCancel || a.FinishType == DO.MyFinishType.ManagerCancel)).Count(),
+            TotalCallsExpired = s_dal.Assignment.ReadAll(a => a.VolunteerId == myVolunteer.Id && a.FinishType == DO.MyFinishType.ExpiredCancel).Count(),
+            CurrentCall = (from a in assignments
+                           let callData = s_dal.Call.Read(a.CallId)
+                           select new BO.CallInProgress
+                           {
+                               Id = a.Id,
+                               CallId = a.CallId,
+                               CallType = (BO.MyCallType)callData.CallType,
+                               Description = callData.Description,
+                               Address = callData.Address,
+                               StartTime = callData.OpenTime,
+                               MaxEndTime = callData.MaxFinishCall,
+                               StartTreatmentTime = a.StartCall,
+                               DistanceFromVolunteer = Tools.GlobalDistance(myVolunteer.Latitude, myVolunteer.Longitude, callData.Latitude, callData.Longitude, myVolunteer.TypeDistance),
+                               Status = VolunteerManager.DetermineCallStatus(callData.MaxFinishCall)
+                           }).FirstOrDefault() // Assuming CurrentCall should be the first open call or null
+        };
+    }
+    public static BO.VolunteerInList ConvertToVolunteerInList(DO.Volunteer VolunteerData)
+    {
+        return new BO.VolunteerInList
+        {
+            Id = VolunteerData.Id,
+            FullName = VolunteerData.FullName,
+            IsActive = VolunteerData.IsActive,
+            TotalCallsHandled = s_dal.Assignment.ReadAll(a => a.VolunteerId == VolunteerData.Id && a.FinishType == DO.MyFinishType.Treated).Count(),
+            TotalCallsCancelled = s_dal.Assignment.ReadAll(a => a.VolunteerId == VolunteerData.Id && (a.FinishType == DO.MyFinishType.SelfCancel || a.FinishType == DO.MyFinishType.ManagerCancel)).Count(),
+            TotalCallsExpired = s_dal.Assignment.ReadAll(a => a.VolunteerId == VolunteerData.Id && a.FinishType == DO.MyFinishType.ExpiredCancel).Count(),
+            CurrentCallId = s_dal.Assignment.ReadAll(a => a.VolunteerId == VolunteerData.Id && a.FinishCall == null).Select(a => (int?)a.CallId).FirstOrDefault(),
+            CurrentCallType = s_dal.Assignment.ReadAll(a => a.VolunteerId == VolunteerData.Id && a.FinishCall == null)
+           .Select(a => s_dal.Call.ReadAll(c => c.Id == a.CallId).Select(c => (BO.MyCurrentCallType?)c.CallType).FirstOrDefault()).FirstOrDefault() ?? BO.MyCurrentCallType.None
+        };
+    }
 }
 
 
