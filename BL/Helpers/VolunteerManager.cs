@@ -6,10 +6,10 @@ using System.Text.RegularExpressions;
 using BlApi;
 
 namespace Helpers;
-
 internal static class VolunteerManager
 {
-    private static IDal s_dal = Factory.Get;
+    private static IDal s_dal = DalApi. Factory.Get;
+
     public static BO.MyCallStatusByVolunteer DetermineCallStatus(DateTime? maxFinishTime)
     {
         // Use the updated system clock from ClockManager

@@ -1,11 +1,17 @@
-﻿namespace BlApi;
+﻿using BO;
+
+namespace BlApi;
 
 public interface  IAdmin
 {
-    void InitializeDB();
-    void ResetDB();
-    int GetMaxRange();
-    void SetMaxRange(int maxRange);
+    DateTime AdvanceClock(Clock advance);
     DateTime GetClock();
-    void ForwardClock(BO.TimeUnit unit);
+    TimeSpan GetRiskRange();
+    void SetRiskRange(TimeSpan time);
+     void initialization();
+
+    void Reset();
+
+
+
 }

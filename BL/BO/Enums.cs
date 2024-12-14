@@ -98,3 +98,11 @@ public enum OpenedCall
     MaxEndTime ,
    DistanceFromVolunteer 
     }
+public enum Clock
+{
+    Minute,
+    Hour,
+    Day,
+    Month,
+    Year,
+}

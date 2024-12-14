@@ -1,36 +1,65 @@
 ﻿using BlApi;
-
+using BO;
+using DalApi;
+using DalTest;
+using Helpers;
 namespace BlImplementation;
+internal class AdminImplementation : IAdmin
+{
+    private static IDal _dal = DalApi.Factory.Get;
+    public DateTime AdvanceClock(Clock advance)
+    {
+        switch (advance)
+        {
+            case Clock.Minute:
+                _dal.Config.Clock = ClockManager.Now.AddMinutes(1);
 
-//internal class AdminImplementation :/* IAdmin*/
-//{
-    //public void ForwardClock(BO.TimeUnit unit)
-    //{
-    //    throw new NotImplementedException();
-    //}
+                break;
+            case Clock.Hour:
+                _dal.Config.Clock = ClockManager.Now.AddHours(1);
 
-    //public DateTime GetClock()
-    //{
-    //    throw new NotImplementedException();
-    //}
+                break;
+            case Clock.Day:
+                _dal.Config.Clock = ClockManager.Now.AddDays(1);
+                break;
+            case Clock.Month:
+                _dal.Config.Clock = ClockManager.Now.AddMonths(1);
 
-    //public int GetMaxRange()
-    //{
-    //    throw new NotImplementedException();
-    //}
+                break;
+            case Clock.Year:
+                _dal.Config.Clock = ClockManager.Now.AddYears(1);
+                break;
+            default:
+                throw new Exception("invalid choice");
+        }
+        ClockManager.UpdateClock(_dal.Config.Clock);
+        return _dal.Config.Clock;
+    }
+    public DateTime GetClock()
+    {
+        return _dal.Config.Clock;
+    }
+    public TimeSpan GetRiskRange()
+    {
+        return _dal.Config.RiskRange;
 
-    //public void InitializeDB()
-    //{
-    //    throw new NotImplementedException();
-    //}
+    }
+    public DateTime SetClock(DateTime time)
+    {
+        return _dal.Config.Clock = time;
+    }
+    public void initialization()
+    {
+        DalTest.Initialization.Do();
+        ClockManager.UpdateClock(GetClock());
+    }
+    public void Reset()
+    {
+        _dal.ResetDB();
+    }
+    public void SetRiskRange(TimeSpan time)
+    {
+        _dal.Config.RiskRange = time;
+    }
+}
 
-    //public void ResetDB()
-    //{
-    //    throw new NotImplementedException();
-    //}
-
-    //public void SetMaxRange(int maxRange)
-    //{
-    //    throw new NotImplementedException();
-    //}
-//}
