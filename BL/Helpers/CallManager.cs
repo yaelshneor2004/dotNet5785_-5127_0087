@@ -216,8 +216,6 @@ internal static class CallManager
     }
 
 
-
-
     public static IEnumerable<BO.OpenCallInList> SortOpenCallsByField(IEnumerable<BO.OpenCallInList> openCallInList, BO.OpenedCall? sortBy)
     {
         return sortBy switch
@@ -283,4 +281,22 @@ internal static class CallManager
     {
         return assignments.Any(a => !a.FinishCall.HasValue && !a.FinishType.HasValue);
     }
+    public static void PeriodicCallsUpdates(DateTime oldClock, DateTime newClock)
+    {
+        var calls = s_dal.Call.ReadAll().ToList();
+
+        for (int i = 0; i < calls.Count; i++)
+        {
+            var call = calls[i];
+
+            // אם הזמן המרבי לסגירת הקריאה עבר, מסמנים אותה כ"פגת תוקף"
+            if (call.MaxFinishCall.HasValue && (newClock > call.MaxFinishCall))
+            {
+                call = call with { FinishType = DO.MyFinishType.ExpiredCancel };
+                s_dal.Call.Update(call); // עדכון הקריאה בבסיס הנתונים ישירות
+            }
+        }
+    }
+
+
 }

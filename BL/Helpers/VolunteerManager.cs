@@ -249,6 +249,38 @@ private static bool IsValidEmail(string email)
            .Select(a => s_dal.Call.ReadAll(c => c.Id == a.CallId).Select(c => (BO.MyCurrentCallType?)c.CallType).FirstOrDefault()).FirstOrDefault() ?? BO.MyCurrentCallType.None
         };
     }
+
+  public static void PeriodicVolunteersUpdates(DateTime oldClock, DateTime newClock)
+        {
+            var volunteers = s_dal.Volunteer.ReadAll().ToList();
+            var assignments = s_dal.Assignment.ReadAll().ToList();
+
+            var volunteerUpdates = volunteers.Select(volunteer =>
+            {
+                var volunteerAssignments = assignments.Where(a => a.VolunteerId == volunteer.Id).ToList();
+
+                // If the volunteer has not handled calls for 2 years, they are marked as inactive
+                if (!volunteerAssignments.Any() || (newClock - volunteerAssignments.Max(a => a.FinishCall ?? DateTime.MinValue)).TotalDays > 2 * 365)
+                {
+                    volunteer = volunteer with { IsActive = false };
+                }
+
+                // Upgrade the volunteer's role if he has handled more than 100 calls and is not a manager
+                if (volunteerAssignments.Count(a => a.FinishType == DO.MyFinishType.Treated) >= 100 && volunteer.Role != DO.MyRole.Manager)
+                {
+                    volunteer = volunteer with { Role = DO.MyRole.Manager };
+                }
+
+                return volunteer;
+            }).ToList();
+
+        // Update volunteers in the database
+        volunteerUpdates.ForEach(volunteer => s_dal.Volunteer.Update(volunteer));
+    }
+
+
+
 }
+
 
 
