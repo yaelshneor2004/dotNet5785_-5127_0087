@@ -39,9 +39,49 @@ namespace BO
         public int TotalCallsExpired { get; init; } 
         public BO.CallInProgress? CurrentCall { get; set; }
 
-        internal static object FirstOrDefault(Func<object, bool> value)
+
+
+
+
+
+
+
+        public Volunteer(
+    int id,
+    string fullName,
+    string phone,
+    string email,
+    string? password,
+    string? address,
+    double? latitude,
+    double? longitude,
+    MyRole role,
+    bool isActive,
+    double? maxDistance,
+    MyTypeDistance typeDistance,
+    int totalCallsHandled,
+    int totalCallsCancelled,
+    int totalCallsExpired,
+    BO.CallInProgress? currentCall = null)
         {
-            throw new NotImplementedException();
+            Id = id;
+            FullName = fullName;
+            Phone = phone;
+            Email = email;
+            Password = password;
+            Address = address;
+            Latitude = latitude;
+            Longitude = longitude;
+            Role = role;
+            IsActive = isActive;
+            MaxDistance = maxDistance;
+            TypeDistance = typeDistance;
+            TotalCallsHandled = totalCallsHandled;
+            TotalCallsCancelled = totalCallsCancelled;
+            TotalCallsExpired = totalCallsExpired;
+            CurrentCall = currentCall;
         }
+
     }
+
 }

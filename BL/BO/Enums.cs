@@ -106,3 +106,52 @@ public enum Clock
     Month,
     Year,
 }
+public enum BoFirstMenu
+{
+    Exit,
+    Volunteer,
+    Call,
+    Admin,
+    InitializeData,
+    ShowAllData,
+    ResetDatabaseAndConfig
+}
+
+public enum VolunteerMenuShow
+{
+    Exit,
+    Enter,
+    AddVolunteer,
+    DeleteVolunteer,
+    GetVolunteerInLists,
+    GetVolunteerDetails,
+    UpdateVolunteer
+}
+
+public enum CallMenuShow
+{
+    Exit,
+    AddCall,
+    DeleteCall,
+    CancelTreatment,
+    FilterClosedCallInLists,
+    EndTreatment,
+    GetCallDetails,
+    GetCallCounts,
+    ListOfCalls,
+    OpenCallInLists,
+    ChooseCall,
+    UpdateCall
+}
+
+public enum AdminMenuShow
+{
+    Exit,
+    SetClock,
+    SetRiskRange,
+    GetClock,
+    GetRiskRange,
+    AdvanceClock,
+    Initialization,
+    Reset
+}

@@ -201,39 +201,40 @@ private static bool IsValidEmail(string email)
         var assignments = s_dal.Assignment.ReadAll(a => a.VolunteerId == myVolunteer.Id).ToList();
 
         return new BO.Volunteer
-        {
-            Id = myVolunteer.Id,
-            FullName = myVolunteer.FullName,
-            Phone = myVolunteer.Phone,
-            Email = myVolunteer.Email,
-            Password = myVolunteer.Password,
-            Address = myVolunteer.Address,
-            Latitude = myVolunteer.Latitude,
-            Longitude = myVolunteer.Longitude,
-            Role = (BO.MyRole)myVolunteer.Role,
-            IsActive = myVolunteer.IsActive,
-            MaxDistance = myVolunteer.MaxDistance,
-            TypeDistance = (BO.MyTypeDistance)myVolunteer.TypeDistance,
-            TotalCallsHandled = s_dal.Assignment.ReadAll(a => a.VolunteerId == myVolunteer.Id && a.FinishType == DO.MyFinishType.Treated).Count(),
-            TotalCallsCancelled = s_dal.Assignment.ReadAll(a => a.VolunteerId == myVolunteer.Id && (a.FinishType == DO.MyFinishType.SelfCancel || a.FinishType == DO.MyFinishType.ManagerCancel)).Count(),
-            TotalCallsExpired = s_dal.Assignment.ReadAll(a => a.VolunteerId == myVolunteer.Id && a.FinishType == DO.MyFinishType.ExpiredCancel).Count(),
-            CurrentCall = (from a in assignments
-                           let callData = s_dal.Call.Read(a.CallId)
-                           select new BO.CallInProgress
-                           {
-                               Id = a.Id,
-                               CallId = a.CallId,
-                               CallType = (BO.MyCallType)callData.CallType,
-                               Description = callData.Description,
-                               Address = callData.Address,
-                               StartTime = callData.OpenTime,
-                               MaxEndTime = callData.MaxFinishCall,
-                               StartTreatmentTime = a.StartCall,
-                               DistanceFromVolunteer = Tools.GlobalDistance(myVolunteer.Latitude, myVolunteer.Longitude, callData.Latitude, callData.Longitude, myVolunteer.TypeDistance),
-                               Status = VolunteerManager.DetermineCallStatus(callData.MaxFinishCall)
-                           }).FirstOrDefault() // Assuming CurrentCall should be the first open call or null
-        };
+        (
+            id: myVolunteer.Id,
+            fullName: myVolunteer.FullName,
+            phone: myVolunteer.Phone,
+            email: myVolunteer.Email,
+            password: myVolunteer.Password ?? null,
+            address: myVolunteer.Address ?? null,
+            latitude: myVolunteer.Latitude ?? null,
+            longitude: myVolunteer.Longitude ?? null,
+            role: (BO.MyRole)myVolunteer.Role,
+            isActive: myVolunteer.IsActive,
+            maxDistance: myVolunteer.MaxDistance ?? null,
+            typeDistance: (BO.MyTypeDistance)myVolunteer.TypeDistance,
+            totalCallsHandled: s_dal.Assignment.ReadAll(a => a.VolunteerId == myVolunteer.Id && a.FinishType == DO.MyFinishType.Treated).Count(),
+            totalCallsCancelled: s_dal.Assignment.ReadAll(a => a.VolunteerId == myVolunteer.Id && (a.FinishType == DO.MyFinishType.SelfCancel || a.FinishType == DO.MyFinishType.ManagerCancel)).Count(),
+            totalCallsExpired: s_dal.Assignment.ReadAll(a => a.VolunteerId == myVolunteer.Id && a.FinishType == DO.MyFinishType.ExpiredCancel).Count(),
+            currentCall: (from a in assignments
+                          let callData = s_dal.Call.Read(a.CallId)
+                          select new BO.CallInProgress
+                          {
+                              Id = a.Id,
+                              CallId = a.CallId,
+                              CallType = (BO.MyCallType)callData.CallType,
+                              Description = callData.Description,
+                              Address = callData.Address,
+                              StartTime = callData.OpenTime,
+                              MaxEndTime = callData.MaxFinishCall,
+                              StartTreatmentTime = a.StartCall,
+                              DistanceFromVolunteer = Tools.GlobalDistance(myVolunteer.Latitude, myVolunteer.Longitude, callData.Latitude, callData.Longitude, myVolunteer.TypeDistance),
+                              Status = VolunteerManager.DetermineCallStatus(callData.MaxFinishCall)
+                          }).FirstOrDefault() // Assuming CurrentCall should be the first open call or null
+        );
     }
+
     public static BO.VolunteerInList ConvertToVolunteerInList(DO.Volunteer VolunteerData)
     {
         return new BO.VolunteerInList
