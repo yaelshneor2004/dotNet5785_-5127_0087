@@ -23,6 +23,12 @@
         public TimeSpan? CompletionTime { get; set; }
         public MyCallStatus Status { get; set; }
         public int TotalAssignments { get; set; }
+        public override string ToString()
+        {
+            return $"Id: {Id}, CallId: {CallId}, Type: {Type}, StartTime: {StartTime}, " +
+                   $"TimeRemaining: {TimeRemaining}, LastVolunteerName: {LastVolunteerName}, " +
+                   $"CompletionTime: {CompletionTime}, Status: {Status}, TotalAssignments: {TotalAssignments}";
+        }
     }
 
 }

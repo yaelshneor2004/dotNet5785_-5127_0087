@@ -25,6 +25,12 @@
         public DateTime StartTreatmentTime { get; set; }
         public double DistanceFromVolunteer { get; set; }
         public MyCallStatusByVolunteer Status { get; set; }
+        public override string ToString()
+        {
+            return $"Id: {Id}, CallId: {CallId}, CallType: {CallType}, Description: {Description}, " +
+                   $"Address: {Address}, StartTime: {StartTime}, MaxEndTime: {MaxEndTime}, " +
+                   $"StartTreatmentTime: {StartTreatmentTime}, DistanceFromVolunteer: {DistanceFromVolunteer}, Status: {Status}";
+        }
     }
 
 }

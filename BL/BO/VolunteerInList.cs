@@ -14,7 +14,7 @@ namespace BO
     /// <param name="TotalCallsExpired">Total number of calls that the volunteer chose to handle but expired</param>
     /// <param name="CurrentCallId">Identifier number of the call currently in progress (if any)</param>
     /// <param name="CurrentCallType">Type of the call currently in progress (ENUM)</param>
-   
+
     public class VolunteerInList
     {
         public int Id { get; init; }
@@ -25,7 +25,11 @@ namespace BO
         public int TotalCallsExpired { get; init; }
         public int? CurrentCallId { get; set; }
         public MyCurrentCallType CurrentCallType { get; set; }
+        public override string ToString()
+        {
+            return $"Volunteer ID: {Id}, FullName: {FullName}, Active: {IsActive}, " + $"Total Calls Handled: {TotalCallsHandled}, Total Calls Cancelled: {TotalCallsCancelled}, " + $"Total Calls Expired: {TotalCallsExpired}, Current Call ID: {CurrentCallId}, " + $"Current Call Type: {CurrentCallType}";
 
-        
+        }
     }
 }
+

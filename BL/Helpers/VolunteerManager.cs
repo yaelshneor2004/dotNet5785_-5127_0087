@@ -24,24 +24,24 @@ internal static class VolunteerManager
     }
     public static void ValidateVolunteerDetails(BO.Volunteer volunteer)
     {
+        // Check if the ID is numeric and valid
+        if (!IsNumeric(volunteer.Id.ToString()) /*||*/ /*!ValidateIdNumber(volunteer.Id.ToString())*/)
+            throw new BO.BlInvalidOperationException("Invalid ID format.");
+        if (!IsValidFirstName(volunteer.FullName))
+            throw new BO.BlInvalidOperationException($"Invalid name {volunteer.FullName}.");
+        if (!IsValidPhoneNumber(volunteer.Phone))
+            throw new BO.BlInvalidOperationException($"Invalid phone {volunteer.Phone}.");
         // Check if the email format and logical are valid
         if (!IsValidEmail(volunteer.Email))
             throw new BO.BlInvalidOperationException("Invalid email format.");
-        // Check if the ID is numeric and valid
-        if (!IsNumeric(volunteer.Id.ToString()) || !ValidateIdNumber(volunteer.Id.ToString()))
-            throw new BO.BlInvalidOperationException("Invalid ID format.");
-        // Check if the address is valid (can use API services)
-        if (!IsValidAddress(volunteer.Address, out double latitude, out double longitude)) 
-            throw new BO.BlInvalidOperationException("Invalid address.");
-        volunteer.Latitude = latitude;
-        volunteer.Longitude = longitude;  
-            if (!IsValidPhoneNumber(volunteer.Phone))
-            throw new BO.BlInvalidOperationException($"Invalid phone {volunteer.Phone}.");
-        if(!IsValidFirstName(volunteer.FullName))
-            throw new BO.BlInvalidOperationException($"Invalid name {volunteer.FullName}.");
         if (!IsStrongPassword(volunteer.Password))
             throw new BO.BlInvalidOperationException($"this Password is not strong enough.");
         // Update the longitude and latitude based on the address
+        // Check if the address is valid (can use API services)
+       // if (!IsValidAddress(volunteer.Address, out double latitude, out double longitude)) 
+            //throw new BO.BlInvalidOperationException("Invalid address.");
+      //  volunteer.Latitude = latitude;
+       // volunteer.Longitude = longitude;  
 
     }
     private static bool IsStrongPassword(string password)
@@ -100,27 +100,28 @@ private static bool IsValidEmail(string email)
     // Validate the logical correctness of the ID number
     private static bool ValidateIdNumber(string idNumber)
     {
-        // Check if the ID number contains exactly 9 digits
-        if (idNumber.Length != 9 || !idNumber.All(char.IsDigit))
+        // בדיקה שאורך המחרוזת הוא בדיוק 9 תווים וכוללת רק ספרות
+        if (idNumber.Length != 8 || !idNumber.All(char.IsDigit))
         {
             return false;
         }
 
-        // Calculate the checksum digit
+        // חישוב ספרת הביקורת
         int sum = 0;
-        for (int i = 0; i < 9; i++)
+        for (int i = 0; i < 8; i++)
         {
-            int digit = idNumber[i] - '0'; // Convert character to number
-            int weight = i % 2 == 0 ? 1 : 2; // Weight: 1 for even positions, 2 for odd positions
+            int digit = idNumber[i] - '0'; // המרת תו למספר
+            int weight = (i % 2) + 1; // משקל: 1 למיקומים אי-זוגיים, 2 למיקומים זוגיים
             int product = digit * weight;
-
-            // If the product is greater than 9, sum the digits of the product
-            sum += product > 9 ? product - 9 : product;
+            sum += product > 9 ? product - 9 : product; // אם המוצר גדול מ-9, סכום הספרות של המוצר
         }
 
-        // Check if the checksum is valid
-        return sum % 10 == 0;
+        // בדיקת תקינות ספרת הביקורת
+        int checkDigit = sum % 10 == 0 ? 0 : 10 - (sum % 10);
+        return checkDigit == (idNumber[8] - '0');
     }
+
+
     // Validate the address and get latitude and longitude
     private static bool IsValidAddress(string address, out double latitude, out double longitude)
     {
@@ -145,27 +146,18 @@ private static bool IsValidEmail(string email)
 
         return false;
     }
-    private static bool IsValidFirstName(string firstName)
+    public static bool IsValidFirstName(string name)
     {
-        // Regular expression pattern for validating a first name
-        string firstNamePattern = @"^[A-Za-zא-ת]{2,50}$";
-
-        // Use Regex to check if the first name matches the pattern
-        if (!Regex.IsMatch(firstName, firstNamePattern))
+        foreach (char c in name)
         {
-            return false;
+            if (!char.IsLetter(c) && c != ' ')
+            {
+                return false;
+            }
         }
-
-        // Additional logical checks (if needed)
-        // Check if the first name is not empty and has a valid length (typically between 2 to 50 characters)
-        if (string.IsNullOrWhiteSpace(firstName) || firstName.Length < 2 || firstName.Length > 50)
-        {
-            return false;
-        }
-
         return true;
     }
-  
+
     // Helper method to sort the volunteer list
     public static IEnumerable<BO.VolunteerInList> SortVolunteers(IEnumerable<BO.VolunteerInList> volunteers, BO.MySortInVolunteerInList sortBy)
     {

@@ -86,7 +86,7 @@ internal class CallImplementation:ICall
         var callsBo = calls.Select(callData =>CallManager.ConvertToCallInList(callData)).Distinct().ToList();
 
         if (callFilter.HasValue && filterValue != null)
-            callsBo = callsBo.Where(call =>CallManager.GetFieldValue(call, callFilter.Value)?.Equals(filterValue) == true).ToList();
+            callsBo = callsBo.Where(call =>CallManager.GetFieldValue(call, callFilter.Value)==(filterValue)).ToList();
         return CallManager.SortCalls(callsBo, callSort.Value).ToList();
     }
 
@@ -127,7 +127,7 @@ internal class CallImplementation:ICall
         return CallManager.SortClosedCallsByField(closeList, closeCall);
     }
 
-    public IEnumerable<BO.OpenCallInList> SortOpenedCalls(int idV, MyCallType? callType,BO.OpenedCall openedCall)
+    public IEnumerable<BO.OpenCallInList> SortOpenedCalls(int idV, MyCallType? callType,BO.OpenedCall? openedCall)
     {
         var openCalls = _dal.Assignment.ReadAll().Where(a=>a.VolunteerId==idV&&CallManager.OpenCondition(a)).Select(a => convertAssignmentToOpened(a)).ToList();
         openCalls = callType.HasValue ? openCalls.Where(call => call.Type == callType.Value).ToList() : openCalls;

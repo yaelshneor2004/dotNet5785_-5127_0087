@@ -12,22 +12,22 @@ internal class AdminImplementation : IAdmin
         switch (advance)
         {
             case Clock.Minute:
-                _dal.Config.Clock = ClockManager.Now.AddMinutes(1);
+                ClockManager.UpdateClock(ClockManager.Now.AddMinutes(1)); 
 
                 break;
             case Clock.Hour:
-                _dal.Config.Clock = ClockManager.Now.AddHours(1);
+                ClockManager.UpdateClock(ClockManager.Now.AddHours(1));
 
                 break;
             case Clock.Day:
-                _dal.Config.Clock = ClockManager.Now.AddDays(1);
+                ClockManager.UpdateClock(ClockManager.Now.AddDays(1));
                 break;
             case Clock.Month:
-                _dal.Config.Clock = ClockManager.Now.AddMonths(1);
+                ClockManager.UpdateClock(ClockManager.Now.AddMonths(1));
 
                 break;
             case Clock.Year:
-                _dal.Config.Clock = ClockManager.Now.AddYears(1);
+                ClockManager.UpdateClock(ClockManager.Now.AddYears(1));
                 break;
             default:
                 throw new Exception("invalid choice");
@@ -43,10 +43,6 @@ internal class AdminImplementation : IAdmin
     {
         return _dal.Config.RiskRange;
 
-    }
-    public DateTime SetClock(DateTime time)
-    {
-        return _dal.Config.Clock = time;
     }
     public void initialization()
     {
