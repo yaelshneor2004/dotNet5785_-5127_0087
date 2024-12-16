@@ -226,16 +226,16 @@
   </Volunteer>
   <Volunteer>
     <Id>326615127</Id>
-    <FullName>Yael Shneor</FullName>
-    <Phone>0533859299</Phone>
-    <Email>y7697086@gmail.com</Email>
+    <FullName>yafit</FullName>
+    <Phone>0527697086</Phone>
+    <Email>106mimi@gmail.com</Email>
     <Role>Manager</Role>
-    <TypeDistance>Aerial</TypeDistance>
-    <Password>yaelS2208</Password>
-    <Address>Derech Hevron 78, Jerusalem, Israel</Address>
-    <Latitude>31.7525</Latitude>
-    <Longitude>35.2121</Longitude>
-    <MaxDistance>20</MaxDistance>
+    <TypeDistance>Walking</TypeDistance>
+    <Password>yaelS2208!!</Password>
+    <Address>Rothschild 10, Tel Aviv, Israel</Address>
+    <Latitude>34.77190476535737</Latitude>
+    <Longitude>34.77190476535737</Longitude>
+    <MaxDistance>12</MaxDistance>
     <IsActive>true</IsActive>
   </Volunteer>
 </ArrayOfVolunteer>

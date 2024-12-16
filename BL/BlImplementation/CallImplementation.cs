@@ -61,8 +61,7 @@ internal class CallImplementation:ICall
         }
     }
     public BO.Call GetCallDetails(int callId)
-    {
-        
+    { 
         try
         {
             // Retrieve call details from the data layer
@@ -129,7 +128,7 @@ internal class CallImplementation:ICall
 
     public IEnumerable<BO.OpenCallInList> SortOpenedCalls(int idV, MyCallType? callType,BO.OpenedCall? openedCall)
     {
-        var openCalls = _dal.Assignment.ReadAll().Where(a=>a.VolunteerId==idV&&CallManager.OpenCondition(a)).Select(a => convertAssignmentToOpened(a)).ToList();
+        var openCalls = _dal.Assignment.ReadAll().Where(a=>a.VolunteerId==idV/*&&CallManager.OpenCondition(a)*/).Select(a => convertAssignmentToOpened(a)).ToList();
         openCalls = callType.HasValue ? openCalls.Where(call => call.Type == callType.Value).ToList() : openCalls;
         return CallManager.SortOpenCallsByField(openCalls, openedCall);
     }

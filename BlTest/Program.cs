@@ -70,6 +70,7 @@ internal class Program
             } while (choice != BoFirstMenu.Exit); // L
 
         }
+        
         catch (Exception ex)
         {
             Console.WriteLine(ex); // Handling exceptions

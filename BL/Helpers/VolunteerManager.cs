@@ -4,7 +4,16 @@ using Newtonsoft.Json;
 using DalApi;
 using System.Text.RegularExpressions;
 using BlApi;
-
+using System.Xml.Linq;
+using System;
+using System.Net.Http;
+using System.Threading.Tasks;
+using static Helpers.VolunteerManager;
+using System;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Xml.Linq;
+using System.Net;
 namespace Helpers;
 internal static class VolunteerManager
 {
@@ -36,14 +45,10 @@ internal static class VolunteerManager
             throw new BO.BlInvalidOperationException("Invalid email format.");
         if (!IsStrongPassword(volunteer.Password))
             throw new BO.BlInvalidOperationException($"this Password is not strong enough.");
-        // Update the longitude and latitude based on the address
-        // Check if the address is valid (can use API services)
-       // if (!IsValidAddress(volunteer.Address, out double latitude, out double longitude)) 
-            //throw new BO.BlInvalidOperationException("Invalid address.");
-      //  volunteer.Latitude = latitude;
-       // volunteer.Longitude = longitude;  
-
-    }
+         var coordinates = GetCoordinates(volunteer.Address);
+        volunteer.Latitude = coordinates.Longitude;
+            volunteer.Longitude = coordinates.Longitude;
+        }
     private static bool IsStrongPassword(string password)
     {
         if (password.Length < 8) // Check length
@@ -120,33 +125,40 @@ private static bool IsValidEmail(string email)
         int checkDigit = sum % 10 == 0 ? 0 : 10 - (sum % 10);
         return checkDigit == (idNumber[8] - '0');
     }
+public static (double Latitude, double Longitude) GetCoordinates(string address)
+{
+    const string apiKey = "6760049eeddd6444696021vhn016dbf";
+    const string urlTemplate = "https://geocode.maps.co/search?q={0}&api_key={1}&format=xml";
 
-
-    // Validate the address and get latitude and longitude
-    private static bool IsValidAddress(string address, out double latitude, out double longitude)
+    try
     {
-        latitude = 0;
-        longitude = 0;
+        string url = string.Format(urlTemplate, Uri.EscapeDataString(address), apiKey);
+        using HttpClient client = new HttpClient();
+        var response = client.GetAsync(url).Result;
+        response.EnsureSuccessStatusCode();
 
-        var client = new HttpClient();
-        var response = client.GetAsync($"https://nominatim.openstreetmap.org/search?q={address}&format=json&addressdetails=1").Result;
+        var content = response.Content.ReadAsStringAsync().Result;
+        var xdoc = XDocument.Parse(content);
+        var firstResult = xdoc.Root.Element("place");
 
-        if (response.IsSuccessStatusCode)
+        if (firstResult == null)
         {
-            var content = response.Content.ReadAsStringAsync().Result;
-            dynamic result = JsonConvert.DeserializeObject(content);
-
-            if (result != null && result.Count > 0)
-            {
-                latitude = result[0].lat;
-                longitude = result[0].lon;
-                return true;
-            }
+            throw new Exception("No results found for the given address.");
         }
 
-        return false;
+        double latitude = double.Parse(firstResult.Attribute("lat").Value);
+        double longitude = double.Parse(firstResult.Attribute("lon").Value);
+
+        return (latitude, longitude);
     }
-    public static bool IsValidFirstName(string name)
+    catch (Exception ex)
+    {
+        Console.WriteLine($"An error occurred: {ex.Message}");
+        throw;
+    }
+}
+
+public static bool IsValidFirstName(string name)
     {
         foreach (char c in name)
         {
