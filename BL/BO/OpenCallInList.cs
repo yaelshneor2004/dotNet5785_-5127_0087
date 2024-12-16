@@ -19,5 +19,10 @@
         public DateTime StartTime { get; set; }
         public DateTime? MaxEndTime { get; set; }
         public double DistanceFromVolunteer { get; set; }
+        public override string ToString()
+        {
+            return $"Id: {Id}, Type: {Type}, Description: {Description}, Address: {Address}, " +
+                   $"StartTime: {StartTime}, MaxEndTime: {MaxEndTime}, DistanceFromVolunteer: {DistanceFromVolunteer}";
+        }
     }
 }

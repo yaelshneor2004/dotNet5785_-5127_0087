@@ -40,6 +40,12 @@
                 Status = status;
                 Assignments = assignments ?? new List<BO.CallAssignInList>();
             }
-   
+        public override string ToString()
+        {
+            return $"Id: {Id}, Type: {Type}, Description: {Description}, Address: {Address}, " +
+                   $"Latitude: {Latitude}, Longitude: {Longitude}, StartTime: {StartTime}, " +
+                   $"MaxEndTime: {MaxEndTime}, Status: {Status}, " +
+                   $"Assignments: {string.Join(", ", Assignments?.Select(a => a.ToString()) ?? new List<string>())}";
+        }
     }
 }

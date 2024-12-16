@@ -26,7 +26,7 @@ public void SelectCallToTreat(int idV, int idC);
 public IEnumerable<BO.ClosedCallInList> SortClosedCalls(int idV, MyCallType? callType, CloseCall? closeCall);
 
 // Sorts the opened calls for a specific volunteer with optional filtering and sorting
-public IEnumerable<BO.OpenCallInList> SortOpenedCalls(int idV, MyCallType? callType, BO.OpenedCall openedCall);
+public IEnumerable<BO.OpenCallInList> SortOpenedCalls(int idV, MyCallType? callType, BO.OpenedCall? openedCall);
 
 // Updates the details of a specific call
 public void UpdateCall(BO.Call myCall);

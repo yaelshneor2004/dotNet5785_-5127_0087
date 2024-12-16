@@ -4,41 +4,44 @@ using DalApi;
 using Newtonsoft.Json;
 using System.Reflection;
 using System.Text;
-
+using Newtonsoft.Json;
+using System.Xml.Linq;
 namespace Helpers;
-
+using System;
+using System.Net.Http;
+using Newtonsoft.Json;
 internal static class Tools
 {
     private static IDal s_dal = Factory.Get;
     public static string ToStringProperty<T>(this T t)
     {
-            if (t == null)
-                return string.Empty;
+        if (t == null)
+            return string.Empty;
 
-            StringBuilder sb = new StringBuilder();
-            Type type = t.GetType();
-            PropertyInfo[] properties = type.GetProperties();
+        StringBuilder sb = new StringBuilder();
+        Type type = t.GetType();
+        PropertyInfo[] properties = type.GetProperties();
 
-            foreach (PropertyInfo property in properties)
+        foreach (PropertyInfo property in properties)
+        {
+            object value = property.GetValue(t, null);
+
+            if (value is System.Collections.IEnumerable && !(value is string))
             {
-                object value = property.GetValue(t, null);
-
-                if (value is System.Collections.IEnumerable && !(value is string))
+                sb.AppendLine($"{property.Name} = [");
+                foreach (var item in (System.Collections.IEnumerable)value)
                 {
-                    sb.AppendLine($"{property.Name} = [");
-                    foreach (var item in (System.Collections.IEnumerable)value)
-                    {
-                        sb.AppendLine($"  {item},");
-                    }
-                    sb.AppendLine("]");
+                    sb.AppendLine($"  {item},");
                 }
-                else
-                {
-                    sb.AppendLine($"{property.Name} = {value}");
-                }
+                sb.AppendLine("]");
             }
+            else
+            {
+                sb.AppendLine($"{property.Name} = {value}");
+            }
+        }
 
-            return sb.ToString();
+        return sb.ToString();
     }
     public static double GlobalDistance(double? lat1, double? lon1, double lat2, double lon2, DO.MyTypeDistance myTypeDistance)
     {
@@ -47,7 +50,7 @@ internal static class Tools
         return myTypeDistance switch
         {
             DO.MyTypeDistance.Aerial => CalculateAerialDistance(lat1.Value, lon1.Value, lat2, lon2),
-            DO. MyTypeDistance.Walking => CalculateWalkingDistance(lat1.Value, lon1.Value, lat2, lon2),
+            DO.MyTypeDistance.Walking => CalculateWalkingDistance(lat1.Value, lon1.Value, lat2, lon2),
             DO.MyTypeDistance.Traveling => CalculateDrivingDistance(lat1.Value, lon1.Value, lat2, lon2),
             _ => throw new BlInvalidOperationException("Invalid distance type")
         };
@@ -86,22 +89,34 @@ internal static class Tools
 
         throw new BlInvalidOperationException("Failed to calculate driving distance.");
     }
+
+    // חישוב מרחק בהליכה בין שתי נקודות קואורדינטות
     private static double CalculateWalkingDistance(double lat1, double lon1, double lat2, double lon2)
     {
-        var client = new HttpClient();
-        var response = client.GetAsync($"https://routing.openstreetmap.de/routed-foot/route/v1/driving/{lon1},{lat1};{lon2},{lat2}?overview=false").Result;
+        using HttpClient client = new HttpClient();
+        string url = $"https://routing.openstreetmap.de/routed-foot/route/v1/foot/{lon1},{lat1};{lon2},{lat2}?overview=false";
 
-        if (response.IsSuccessStatusCode)
+        try
         {
-            var content = response.Content.ReadAsStringAsync().Result;
-            dynamic result = JsonConvert.DeserializeObject(content);
+            var response = client.GetAsync(url).Result;
 
-            if (result != null && result.routes != null && result.routes.Count > 0)
+            if (response.IsSuccessStatusCode)
             {
-                var distanceInMeters = result.routes[0].distance;
-                return distanceInMeters / 1000.0;
+                var content = response.Content.ReadAsStringAsync().Result;
+                dynamic result = JsonConvert.DeserializeObject(content);
+
+                if (result != null && result.routes != null && result.routes.Count > 0)
+                {
+                    var distanceInMeters = result.routes[0].distance;
+                    return distanceInMeters / 1000.0; // המרחק בקילומטרים
+                }
             }
+            throw new Exception("Failed to calculate walking distance.");
         }
-        throw new BlInvalidOperationException("Failed to calculate walking distance.");
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An error occurred: {ex.Message}");
+            throw;
+        }
     }
 }

@@ -21,11 +21,11 @@ internal class VolunteerImplementation:IVolunteer
         }
         catch (DO.DalDoesNotExistException ex)
         {
-            throw new BO.BlDoesNotExistException($"User with the username '{username}' does not exist in the system",ex);
+            throw new BO.BlDoesNotExistException($"User with the username '{username}' does not exist in the system");
         }
         catch (Exception ex)
         {
-            throw new BO.BlException("An error occurred while retrieving volunteer details.", ex);
+            throw new BO.BlException("An error occurred while retrieving volunteer details.");
         }
     }
     public void AddVolunteer(BO.Volunteer myVolunteer)

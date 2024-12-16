@@ -131,23 +131,23 @@ public enum VolunteerMenuShow
 public enum CallMenuShow
 {
     Exit,
-    AddCall,
-    DeleteCall,
-    CancelTreatment,
-    FilterClosedCallInLists,
-    EndTreatment,
-    GetCallDetails,
     GetCallCounts,
     ListOfCalls,
+    GetCallDetails,
+    UpdateCall,
+    DeleteCall,
+    AddCall,
+    FilterClosedCallInLists,
     OpenCallInLists,
-    ChooseCall,
-    UpdateCall
+    EndTreatment,
+    CancelTreatment,
+    ChooseCall
 }
+
 
 public enum AdminMenuShow
 {
     Exit,
-    SetClock,
     SetRiskRange,
     GetClock,
     GetRiskRange,
