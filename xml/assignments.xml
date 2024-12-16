@@ -400,4 +400,12 @@
     <FinishType>ManagerCancel</FinishType>
     <FinishCall>2024-09-04T23:24:00</FinishCall>
   </Assignment>
+  <Assignment>
+    <Id>51</Id>
+    <CallId>69</CallId>
+    <VolunteerId>327770087</VolunteerId>
+    <StartCall>2024-12-16T22:13:40</StartCall>
+    <FinishType />
+    <FinishCall />
+  </Assignment>
 </ArrayOfAssignment>
