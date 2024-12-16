@@ -11,26 +11,28 @@ internal static class CallManager
     public static BO.Call ConvertFromDoToBo(DO.Call callData)
     {
         var assignmentsData = s_dal.Assignment.ReadAll(a => a.CallId == callData.Id).ToList();
+
         return new BO.Call
-        {
-            Id = callData.Id,
-            Type = (BO.MyCallType)callData.CallType,
-            Description = callData.Description,
-            Address = callData.Address,
-            Latitude = callData.Latitude,
-            Longitude = callData.Longitude,
-            StartTime = callData.OpenTime,
-            MaxEndTime = callData.MaxFinishCall,
-            Status = GetCallStatus(callData),
-            Assignments = assignmentsData.Select(a => new BO.CallAssignInList
+        (
+            id: callData.Id,
+            type: (BO.MyCallType)callData.CallType,
+            address: callData.Address,
+            latitude: callData.Latitude,
+            longitude: callData.Longitude,
+            startTime: callData.OpenTime,
+            maxEndTime: callData.MaxFinishCall,
+            description: callData.Description,
+            status: GetCallStatus(callData),
+            assignments: assignmentsData.Select(a => new BO.CallAssignInList
             {
                 VolunteerId = a.VolunteerId != 0 ? a.VolunteerId : (int?)null,
                 VolunteerName = a.VolunteerId != 0 ? s_dal.Volunteer.Read(a.VolunteerId)?.FullName : null,
                 EndTreatmentTime = a.FinishCall,
                 EndType = a.FinishType != null ? (BO.MyFinishType)a.FinishType : (BO.MyFinishType?)null
             }).ToList()
-        };
+        );
     }
+
     public static BO.MyCallStatus CalculateCallStatus(DO.Assignment lastAssignment, DateTime? maxEndTime)
     {
         var currentTime = ClockManager.Now;
@@ -281,22 +283,58 @@ internal static class CallManager
     {
         return assignments.Any(a => !a.FinishCall.HasValue && !a.FinishType.HasValue);
     }
-    public static void PeriodicCallsUpdates(DateTime oldClock, DateTime newClock)
+    //public static void PeriodicCallsUpdates(DateTime oldClock, DateTime newClock)
+    //{
+    //    var calls = s_dal.Call.ReadAll().ToList();
+
+    //    for (int i = 0; i < calls.Count; i++)
+    //    {
+    //        var call = calls[i];
+
+    //        אם הזמן המרבי לסגירת הקריאה עבר, מסמנים אותה כ"פגת תוקף"
+    //        if (call.MaxFinishCall.HasValue && (newClock > call.MaxFinishCall))
+    //        {
+    //            call = call with { my = DO.MyFinishType.ExpiredCancel };
+    //            s_dal.Call.Update(call); // עדכון הקריאה בבסיס הנתונים ישירות
+    //        }
+    //    }
+    //}
+
+    internal static void PeriodicCallsUpdates() //stage 4
     {
-        var calls = s_dal.Call.ReadAll().ToList();
+        var callsList = s_dal.Call.ReadAll(call => call.MaxFinishCall < ClockManager.Now);
 
-        for (int i = 0; i < calls.Count; i++)
+        foreach (var call in callsList)
         {
-            var call = calls[i];
+            var assignmentList = s_dal.Assignment.ReadAll(a => a.CallId == call.Id);
 
-            // אם הזמן המרבי לסגירת הקריאה עבר, מסמנים אותה כ"פגת תוקף"
-            if (call.MaxFinishCall.HasValue && (newClock > call.MaxFinishCall))
+            if (!assignmentList.Any())
             {
-                call = call with { FinishType = DO.MyFinishType.ExpiredCancel };
-                s_dal.Call.Update(call); // עדכון הקריאה בבסיס הנתונים ישירות
+                s_dal.Assignment.Create(new DO.Assignment
+                {
+                    CallId = call.Id,
+                    StartCall = ClockManager.Now,
+                    FinishCall = ClockManager.Now,
+                    FinishType = DO.MyFinishType.ExpiredCancel,
+                    VolunteerId = 0
+                });
+            }
+
+            DO.Assignment? assignmentInProgress = assignmentList.FirstOrDefault(a => a.FinishCall == null && a.FinishType == null);
+
+            if (assignmentInProgress != null)
+            {
+                s_dal.Assignment.Update(new DO.Assignment
+                {
+                    Id = assignmentInProgress.Id,
+                    CallId = assignmentInProgress.CallId,
+                    VolunteerId = assignmentInProgress.VolunteerId,
+                    StartCall = assignmentInProgress.StartCall,
+                    FinishCall = ClockManager.Now,
+                    FinishType = DO.MyFinishType.ExpiredCancel
+                });
             }
         }
     }
-
 
 }
