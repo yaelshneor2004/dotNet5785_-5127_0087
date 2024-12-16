@@ -79,14 +79,18 @@ public static class Initialization
         int index = 1;
         var volunteers = s_dal?.Volunteer.ReadAll();
         var calls = s_dal?.Call.ReadAll()?.Where(call => call != null).Take(50)?.ToList();
-
+        int volunteerId;
         var volunteerList = volunteers?.ToList();
         foreach (var call in calls ?? Enumerable.Empty<Call>())
         {
+          
             int callId = call.Id;
-            int volunteerId = volunteerList != null && volunteerList.Count > 0
-                ? volunteerList[s_rand.Next(volunteerList.Count)].Id : 0; // Draw a volunteer
-
+            do
+            {
+                volunteerId = volunteerList != null && volunteerList.Count > 0
+               ? volunteerList[s_rand.Next(volunteerList.Count)].Id : 0;
+            }
+            while (!volunteers.Any(v => v.Id == volunteerId));
             DateTime startCall = call.OpenTime with { };
             int range = (int)((call.MaxFinishCall?.AddHours(2) ?? startCall).Subtract(startCall)).TotalHours;
             if (range > 0)

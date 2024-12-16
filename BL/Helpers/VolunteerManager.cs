@@ -14,10 +14,15 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Net;
+using System.Text.Json;
+
 namespace Helpers;
 internal static class VolunteerManager
 {
     private static IDal s_dal = DalApi. Factory.Get;
+    private const string ApiKey = "675ef7e408d33282453687qrh963303";
+    private const string GoogleGeocodingApiUrl = "https://geocode.maps.co/search?q={0}&api_key=675ef7e408d33282453687qrh963303";
+    private const string GoogleMapsApiUrl = "https://geocode.maps.co/reverse?lat=&lon=&api_key=675ef7e408d33282453687qrh963303";
 
     public static BO.MyCallStatusByVolunteer DetermineCallStatus(DateTime? maxFinishTime)
     {
@@ -125,38 +130,6 @@ private static bool IsValidEmail(string email)
         int checkDigit = sum % 10 == 0 ? 0 : 10 - (sum % 10);
         return checkDigit == (idNumber[8] - '0');
     }
-public static (double Latitude, double Longitude) GetCoordinates(string address)
-{
-    const string apiKey = "6760049eeddd6444696021vhn016dbf";
-    const string urlTemplate = "https://geocode.maps.co/search?q={0}&api_key={1}&format=xml";
-
-    try
-    {
-        string url = string.Format(urlTemplate, Uri.EscapeDataString(address), apiKey);
-        using HttpClient client = new HttpClient();
-        var response = client.GetAsync(url).Result;
-        response.EnsureSuccessStatusCode();
-
-        var content = response.Content.ReadAsStringAsync().Result;
-        var xdoc = XDocument.Parse(content);
-        var firstResult = xdoc.Root.Element("place");
-
-        if (firstResult == null)
-        {
-            throw new Exception("No results found for the given address.");
-        }
-
-        double latitude = double.Parse(firstResult.Attribute("lat").Value);
-        double longitude = double.Parse(firstResult.Attribute("lon").Value);
-
-        return (latitude, longitude);
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"An error occurred: {ex.Message}");
-        throw;
-    }
-}
 
 public static bool IsValidFirstName(string name)
     {
@@ -168,6 +141,49 @@ public static bool IsValidFirstName(string name)
             }
         }
         return true;
+    }
+    public static (double Latitude, double Longitude) GetCoordinates(string address)
+    {
+        if (string.IsNullOrWhiteSpace(address))
+        {
+            throw new ArgumentException("Address cannot be null or empty.");
+        }
+
+        // URL מותאם עבור ה-API של Maps.co (הוספתי את המפתח בהתאם)
+        var url = $"https://geocode.maps.co/search?q={Uri.EscapeDataString(address)}&api_key={ApiKey}";
+
+        using (var client = new HttpClient())
+        {
+            var response = client.GetStringAsync(url).Result;
+
+            // ניתוח התשובה ב-JSON
+            var jsonResponse = JsonDocument.Parse(response);
+
+            // אם יש תוצאות בתשובה
+            if (jsonResponse.RootElement.GetArrayLength() > 0)
+            {
+                // הפנייה לתוצאה הראשונה
+                var firstResult = jsonResponse.RootElement[0];
+
+                // חילוץ הקואורדינטות
+                var latitude = firstResult.GetProperty("lat").GetString();
+                var longitude = firstResult.GetProperty("lon").GetString();
+
+                // המרה ל-double
+                if (double.TryParse(latitude, out double lat) && double.TryParse(longitude, out double lon))
+                {
+                    return (lat, lon);
+                }
+                else
+                {
+                    throw new Exception("Failed to parse latitude or longitude.");
+                }
+            }
+            else
+            {
+                throw new Exception("No results found for the given address.");
+            }
+        }
     }
 
     // Helper method to sort the volunteer list
