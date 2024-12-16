@@ -2,11 +2,15 @@
 using BO;
 using DalApi;
 using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace Helpers;
 
 internal static class CallManager
 {
+    private const string ApiKey = "675ef7e408d33282453687qrh963303";
+    private const string GoogleGeocodingApiUrl = "https://geocode.maps.co/search?q={0}&api_key=675ef7e408d33282453687qrh963303";
+    private const string GoogleMapsApiUrl = "https://geocode.maps.co/reverse?lat=&lon=&api_key=675ef7e408d33282453687qrh963303";
     private static IDal s_dal = Factory.Get;
     public static BO.Call ConvertFromDoToBo(DO.Call callData)
     {
@@ -26,13 +30,13 @@ internal static class CallManager
             assignments: assignmentsData.Select(a => new BO.CallAssignInList
             {
                 VolunteerId = a.VolunteerId != 0 ? a.VolunteerId : (int?)null,
-                VolunteerName = a.VolunteerId != 0 ? s_dal.Volunteer.Read(a.VolunteerId)?.FullName : null,
+                 VolunteerName = a.VolunteerId != 0 ? s_dal.Volunteer.Read(a.VolunteerId)?.FullName : null,
+                StartTreatmentTime = a.StartCall,
                 EndTreatmentTime = a.FinishCall,
                 EndType = a.FinishType != null ? (BO.MyFinishType)a.FinishType : (BO.MyFinishType?)null
             }).ToList()
         );
     }
-
     public static BO.MyCallStatus CalculateCallStatus(DO.Assignment lastAssignment, DateTime? maxEndTime)
     {
         var currentTime = ClockManager.Now;
@@ -78,41 +82,57 @@ internal static class CallManager
         // Check if the maximum end time is greater than the start time
         if (call.MaxEndTime.HasValue && call.MaxEndTime <= call.StartTime)
             throw new BO.BlInvalidOperationException("Max end time must be later than start time.");
-        if (!IsValidAddress(call.Address, out double latitude, out double longitude))
-        {
-            throw new BO.BlException("Invalid address.");
-        }
+        var coordinates = GetCoordinates(call.Address);
         // Update the latitude and longitude based on the address
-        call.Latitude = latitude;
-        call.Longitude = longitude;
+        call.Latitude = coordinates. Latitude;
+        call.Longitude = coordinates.Longitude ;
         if(call.Id<0)
             throw new BO.BlInvalidOperationException("invalide callId.");
 
     }
 
-    // Helper method to get latitude and longitude based on address
-    private static bool IsValidAddress(string address, out double latitude, out double longitude)
+    public static (double Latitude, double Longitude) GetCoordinates(string address)
     {
-        latitude = 0;
-        longitude = 0;
-
-        var client = new HttpClient();
-        var response = client.GetAsync($"https://nominatim.openstreetmap.org/search?q={address}&format=json&addressdetails=1").Result;
-
-        if (response.IsSuccessStatusCode)
+        if (string.IsNullOrWhiteSpace(address))
         {
-            var content = response.Content.ReadAsStringAsync().Result;
-            dynamic result = JsonConvert.DeserializeObject(content);
-
-            if (result != null && result.Count > 0)
-            {
-                latitude = result[0].lat;
-                longitude = result[0].lon;
-                return true;
-            }
+            throw new ArgumentException("Address cannot be null or empty.");
         }
 
-        return false;
+        // URL מותאם עבור ה-API של Maps.co (הוספתי את המפתח בהתאם)
+        var url = $"https://geocode.maps.co/search?q={Uri.EscapeDataString(address)}&api_key={ApiKey}";
+
+        using (var client = new HttpClient())
+        {
+            var response = client.GetStringAsync(url).Result;
+
+            // ניתוח התשובה ב-JSON
+            var jsonResponse = JsonDocument.Parse(response);
+
+            // אם יש תוצאות בתשובה
+            if (jsonResponse.RootElement.GetArrayLength() > 0)
+            {
+                // הפנייה לתוצאה הראשונה
+                var firstResult = jsonResponse.RootElement[0];
+
+                // חילוץ הקואורדינטות
+                var latitude = firstResult.GetProperty("lat").GetString();
+                var longitude = firstResult.GetProperty("lon").GetString();
+
+                // המרה ל-double
+                if (double.TryParse(latitude, out double lat) && double.TryParse(longitude, out double lon))
+                {
+                    return (lat, lon);
+                }
+                else
+                {
+                    throw new Exception("Failed to parse latitude or longitude.");
+                }
+            }
+            else
+            {
+                throw new Exception("No results found for the given address.");
+            }
+        }
     }
 
     public static BO.MyCallStatus GetCallStatus(DO.Call call)
@@ -179,8 +199,9 @@ internal static class CallManager
                 CallId = callData.Id,
                 Type = (BO.MyCallType)callData.CallType,
                 StartTime = callData.OpenTime,
-                TimeRemaining = callData.MaxFinishCall.HasValue? callData.MaxFinishCall.Value - ClockManager.Now  : (TimeSpan?)null,
-                LastVolunteerName = lastAssignment != null && lastAssignment.VolunteerId != 0 ? s_dal.Volunteer.Read(lastAssignment.VolunteerId)?.FullName : null,
+            TimeRemaining = callData.MaxFinishCall.HasValue
+    ? (callData.MaxFinishCall.Value - ClockManager.Now < TimeSpan.Zero ? TimeSpan.Zero : callData.MaxFinishCall.Value - ClockManager.Now)  : (TimeSpan?)null,
+            LastVolunteerName = lastAssignment != null && lastAssignment.VolunteerId != 0 ? s_dal.Volunteer.Read(lastAssignment.VolunteerId)?.FullName : null,
                 CompletionTime = lastAssignment?.FinishCall.HasValue == true ? lastAssignment.FinishCall.Value - callData.OpenTime : (TimeSpan?)null,
                 Status = GetCallStatus(callData),
                 TotalAssignments = assignmentsData.Count()

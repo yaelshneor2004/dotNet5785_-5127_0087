@@ -55,10 +55,6 @@ internal class CallImplementation:ICall
         {
             throw new BO.BlDoesNotExistException($"Call with ID {callId} does not exist.", ex);
         }
-        catch (Exception ex)
-        {
-            throw new BO.BlErrorException("An error occurred while deleting the call.", ex);
-        }
     }
     public BO.Call GetCallDetails(int callId)
     { 
@@ -72,10 +68,6 @@ internal class CallImplementation:ICall
         catch (DO.DalDoesNotExistException ex)
         {
             throw new BO.BlDoesNotExistException($"Call with ID {callId} does not exist.", ex);
-        }
-        catch (Exception ex)
-        {
-            throw new BO.BlErrorException("An error occurred while retrieving call details.", ex);
         }
     }
 
@@ -148,10 +140,6 @@ internal class CallImplementation:ICall
         {
             throw new BO.BlDoesNotExistException($"Call with ID {myCall.Id} does not exist.", ex);
         }
-        catch (Exception ex)
-        {
-            throw new BO.BlErrorException("An error occurred while updating call details.", ex);
-        }
     }
     public void UpdateCancelTreatment(int idV, int idC)
     {
@@ -180,11 +168,6 @@ internal class CallImplementation:ICall
         {
             // If the assignment does not exist, throw an appropriate exception to the presentation layer
             throw new BO.BlDoesNotExistException($"Assignment with ID {idC} does not exist.", ex);
-        }
-        catch (Exception ex)
-        {
-            // If another error occurred while updating the assignment, throw a generic exception
-            throw new BO.BlErrorException("An error occurred while canceling the assignment.", ex);
         }
     }
     public void UpdateCompleteAssignment(int volunteerId, int assignmentId)
@@ -216,11 +199,6 @@ internal class CallImplementation:ICall
         {
             // If the assignment does not exist, throw an appropriate exception to the presentation layer
             throw new BO.BlDoesNotExistException($"Assignment with ID {assignmentId} does not exist.", ex);
-        }
-        catch (Exception ex)
-        {
-            // If another error occurred while updating the assignment, throw a generic exception
-            throw new BO.BlErrorException("An error occurred while completing the assignment.", ex);
         }
     }
 }

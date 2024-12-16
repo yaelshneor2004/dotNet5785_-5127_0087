@@ -17,16 +17,17 @@ namespace BlTest;
 internal class Program
 {
     static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
-    private static IDal _dal =DalApi.Factory.Get; //stage 4
+    private static IDal _dal = DalApi.Factory.Get; //stage 4
     private const string ApiKey = "6755cb286fc03337717882gdo28c286";
     private const string GoogleMapsApiUrl = "https://maps.googleapis.com/maps/api/distancematrix/json";
     private const string GoogleGeocodingApiUrl = "https://maps.googleapis.com/maps/api/geocode/json";
     static void Main(string[] args)
     {
-        try
+        BoFirstMenu choice=BO.BoFirstMenu.Call;
+
+        do
         {
-            BoFirstMenu choice;
-            do
+            try
             {
                 ShowFirstMenu();
                 Console.WriteLine("enter your choice");
@@ -67,27 +68,25 @@ internal class Program
                         Console.WriteLine("invalid option.");
                         break;
                 }
-            } while (choice != BoFirstMenu.Exit); // L
-
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex); // Handling exceptions
+            }
         }
-        
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex); // Handling exceptions
-            ShowFirstMenu();
-        }
+        while (choice != BoFirstMenu.Exit); // L
     }
     private static void ShowFirstMenu()
     {
-            // Displaying main menu options
-            Console.WriteLine("Please select an option:");
-            Console.WriteLine("0 - Exit");
-            Console.WriteLine("1 - Show volunteer menu");
-            Console.WriteLine("2 - Show call menu");
-            Console.WriteLine("3 - Show admin menu");
-            Console.WriteLine("4 - initialize data");
-            Console.WriteLine("5 - Show all data");
-            Console.WriteLine("6 - reset database and config");
+        // Displaying main menu options
+        Console.WriteLine("Please select an option:");
+        Console.WriteLine("0 - Exit");
+        Console.WriteLine("1 - Show volunteer menu");
+        Console.WriteLine("2 - Show call menu");
+        Console.WriteLine("3 - Show admin menu");
+        Console.WriteLine("4 - initialize data");
+        Console.WriteLine("5 - Show all data");
+        Console.WriteLine("6 - reset database and config");
     }
     public static void ReadAll(string Type)
     {
@@ -172,9 +171,6 @@ internal class Program
 
     public static void VolunteerdMenu()
     {
-
-        try
-        {
             VolunteerMenuShow choice;
             do
             {
@@ -228,19 +224,19 @@ internal class Program
                         switch (sort)
                         {
                             case MySortInVolunteerInList.FullName:
-                                printVolunteers( s_bl.Volunteer.GetVolunteerList(filter, MySortInVolunteerInList.FullName));
-                                
+                                printVolunteers(s_bl.Volunteer.GetVolunteerList(filter, MySortInVolunteerInList.FullName));
+
                                 break;
 
                             case MySortInVolunteerInList.TotalCallsHandled:
-                                printVolunteers( s_bl.Volunteer.GetVolunteerList(filter, MySortInVolunteerInList.TotalCallsHandled));
+                                printVolunteers(s_bl.Volunteer.GetVolunteerList(filter, MySortInVolunteerInList.TotalCallsHandled));
                                 break;
 
                             case MySortInVolunteerInList.TotalCallsCancelled:
-                                printVolunteers( s_bl.Volunteer.GetVolunteerList(filter, MySortInVolunteerInList.TotalCallsCancelled));
+                                printVolunteers(s_bl.Volunteer.GetVolunteerList(filter, MySortInVolunteerInList.TotalCallsCancelled));
                                 break;
                             case MySortInVolunteerInList.CurrentCallType:
-                                printVolunteers( s_bl.Volunteer.GetVolunteerList(filter, MySortInVolunteerInList.CurrentCallType));
+                                printVolunteers(s_bl.Volunteer.GetVolunteerList(filter, MySortInVolunteerInList.CurrentCallType));
                                 break;
 
                             default:
@@ -251,7 +247,7 @@ internal class Program
                         Console.WriteLine("Enter your id:");
                         id = Console.ReadLine() ?? throw new FormatException("Invalid input. The ID must be a valid number.");
                         if (!int.TryParse(id, out userId)) throw new FormatException("Invalid input. The ID must be a valid number.");
-                        Console.WriteLine( s_bl.Volunteer.GetVolunteerDetails(userId));
+                        Console.WriteLine(s_bl.Volunteer.GetVolunteerDetails(userId));
                         break;
                     case (VolunteerMenuShow.UpdateVolunteer):
                         Console.WriteLine("Enter your id:");
@@ -267,12 +263,6 @@ internal class Program
                 }
 
             } while (choice != VolunteerMenuShow.Exit); // Looping until the user chooses to exit
-        }
-        catch (Exception ExMsg)
-        {
-            Console.WriteLine(ExMsg);
-            VolunteerSubMenu();
-        }
     }
     private static void CallSubMenu()
     {
@@ -407,121 +397,121 @@ internal class Program
 
     public static void CallMenu()
     {
-        CallMenuShow choice;
-        do
-        {
-            CallSubMenu();
-            string st = Console.ReadLine() ?? throw new DalInvalidOperationException("Invalid input. Please select a valid option.");
-            if (!int.TryParse(st, out int parsedChoice)) throw new DalInvalidOperationException("Invalid input. Please enter a valid number.");
-            choice = (CallMenuShow)parsedChoice;
-            // Processing the user's menu selection
-            switch (choice)
+            CallMenuShow choice;
+            do
             {
-                case CallMenuShow.Exit:
-                    break;
-                case CallMenuShow.GetCallCounts:
-                    int[] count = s_bl.Call.CallAmount();
-                    foreach (int c in count)
-                    {
-                        Console.WriteLine(c);
-                    }
-                    break;
-                case CallMenuShow.ListOfCalls:
-                    BO.MySortInCallInList? filterField = GetFilterField();
-                    object? filterValue = GetFilterValue();
-                    BO.MySortInCallInList? sortField = GetSortField();
-                    var callList = s_bl.Call.GetCallList(filterField, filterValue, sortField);
-                    foreach (var c in callList)
-                    {
-                        Console.WriteLine(c);
-                    }
-                    break;
+                CallSubMenu();
+                string st = Console.ReadLine() ?? throw new DalInvalidOperationException("Invalid input. Please select a valid option.");
+                if (!int.TryParse(st, out int parsedChoice)) throw new DalInvalidOperationException("Invalid input. Please enter a valid number.");
+                choice = (CallMenuShow)parsedChoice;
+                // Processing the user's menu selection
+                switch (choice)
+                {
+                    case CallMenuShow.Exit:
+                        break;
+                    case CallMenuShow.GetCallCounts:
+                        int[] count = s_bl.Call.CallAmount();
+                        foreach (int c in count)
+                        {
+                            Console.WriteLine(c);
+                        }
+                        break;
+                    case CallMenuShow.ListOfCalls:
+                        BO.MySortInCallInList? filterField = GetFilterField();
+                        object? filterValue = GetFilterValue();
+                        BO.MySortInCallInList? sortField = GetSortField();
+                        var callList = s_bl.Call.GetCallList(filterField, filterValue, sortField);
+                        foreach (var c in callList)
+                        {
+                            Console.WriteLine(c);
+                        }
+                        break;
 
-                case CallMenuShow.GetCallDetails:
-                    Console.WriteLine("Enter your id:");
-                    string id = Console.ReadLine() ?? throw new FormatException("Invalid input. The ID must be a valid number.");
-                    if (!int.TryParse(id, out int userVId)) throw new FormatException("Invalid input. The ID must be a valid number.");
-                    Console.WriteLine(s_bl.Call.GetCallDetails(userVId)); 
-                    break;
-                case CallMenuShow.UpdateCall:
-                    BO.Call call = GetBOCall();
-                    s_bl.Call.UpdateCall(call);
-                    Console.WriteLine("update successfully");
-                    break;
-                case CallMenuShow.DeleteCall:
-                    Console.WriteLine("Enter your id:");
-                    id = Console.ReadLine() ?? throw new FormatException("Invalid input. The ID must be a valid number.");
-                    if (!int.TryParse(id, out int userId)) throw new FormatException("Invalid input. The ID must be a valid number.");
-                    s_bl.Call.DeleteCall(userId);
-                    Console.WriteLine( "deleted successfully");
-                    break;
-                case CallMenuShow.AddCall:
-                    call = GetBOCall();
-                    s_bl.Call.AddCall(call);
-                    Console.WriteLine(" successfully added");
-                    break;
-                case CallMenuShow.FilterClosedCallInLists:
-                    int volunteerId = GetVolunteerID();
-                    BO.MyCallType? callType = GetCallTypeFilter();
-                    CloseCall? sortType = GetSortTypeFilter();
+                    case CallMenuShow.GetCallDetails:
+                        Console.WriteLine("Enter your id:");
+                        string id = Console.ReadLine() ?? throw new FormatException("Invalid input. The ID must be a valid number.");
+                        if (!int.TryParse(id, out int userVId)) throw new FormatException("Invalid input. The ID must be a valid number.");
+                        Console.WriteLine(s_bl.Call.GetCallDetails(userVId));
+                        break;
+                    case CallMenuShow.UpdateCall:
+                        BO.Call call = GetBOCall();
+                        s_bl.Call.UpdateCall(call);
+                        Console.WriteLine("update successfully");
+                        break;
+                    case CallMenuShow.DeleteCall:
+                        Console.WriteLine("Enter your id:");
+                        id = Console.ReadLine() ?? throw new FormatException("Invalid input. The ID must be a valid number.");
+                        if (!int.TryParse(id, out int userId)) throw new FormatException("Invalid input. The ID must be a valid number.");
+                        s_bl.Call.DeleteCall(userId);
+                        Console.WriteLine("deleted successfully");
+                        break;
+                    case CallMenuShow.AddCall:
+                        call = GetBOCall();
+                        s_bl.Call.AddCall(call);
+                        Console.WriteLine(" successfully added");
+                        break;
+                    case CallMenuShow.FilterClosedCallInLists:
+                        int volunteerId = GetVolunteerID();
+                        BO.MyCallType? callType = GetCallTypeFilter();
+                        CloseCall? sortType = GetSortTypeFilter();
 
-                    // Retrieve the filtered and sorted list
-                    var closedCallList = s_bl.Call.SortClosedCalls(volunteerId, callType, sortType);
+                        // Retrieve the filtered and sorted list
+                        var closedCallList = s_bl.Call.SortClosedCalls(volunteerId, callType, sortType);
 
-                    // Print the results
-                    foreach (var c in closedCallList)
-                    {
-                        Console.WriteLine(c);
-                    }
-                    break;
-                case CallMenuShow.OpenCallInLists:
-                    int volId = RetrieveVolunteerID();
-                    BO.MyCallType? selectedCallType = RetrieveCallTypeFilter();
-                    OpenedCall? orderField = RetrieveSortField();
+                        // Print the results
+                        foreach (var c in closedCallList)
+                        {
+                            Console.WriteLine(c);
+                        }
+                        break;
+                    case CallMenuShow.OpenCallInLists:
+                        int volId = RetrieveVolunteerID();
+                        BO.MyCallType? selectedCallType = RetrieveCallTypeFilter();
+                        OpenedCall? orderField = RetrieveSortField();
 
-                    // Retrieve the filtered and sorted list of open calls
-                    var openCalls = s_bl.Call.SortOpenedCalls(volId, selectedCallType, orderField);
+                        // Retrieve the filtered and sorted list of open calls
+                        var openCalls = s_bl.Call.SortOpenedCalls(volId, selectedCallType, orderField);
 
-                    // Print the results
-                    foreach (var c in openCalls)
-                    {
-                        Console.WriteLine(c);
-                    }
-                    break;
-                case CallMenuShow.EndTreatment:
-                    int volunteerIdd = GetVolunteerIdentifier();
-                    int assignmentId = GetAssignmentIdentifier();
+                        // Print the results
+                        foreach (var c in openCalls)
+                        {
+                            Console.WriteLine(c);
+                        }
+                        break;
+                    case CallMenuShow.EndTreatment:
+                        int volunteerIdd = GetVolunteerIdentifier();
+                        int assignmentId = GetAssignmentIdentifier();
 
-                    // Update treatment end details
-                    s_bl.Call.UpdateCompleteAssignment(volunteerIdd, assignmentId);
-                    Console.WriteLine("The treatment has been successfully completed.");
-                    break;
+                        // Update treatment end details
+                        s_bl.Call.UpdateCompleteAssignment(volunteerIdd, assignmentId);
+                        Console.WriteLine("The treatment has been successfully completed.");
+                        break;
 
-                case CallMenuShow.CancelTreatment:
-                    Console.WriteLine("Enter your id:");
-                    id = Console.ReadLine() ?? throw new FormatException("Invalid input. The ID must be a valid number.");
-                    if (!int.TryParse(id, out userVId)) throw new FormatException("Invalid input. The ID must be a valid number.");
-                    Console.WriteLine("Enter call id:");
-                    string callid = Console.ReadLine() ?? throw new FormatException("Invalid input. The ID must be a valid number.");
-                    if (!int.TryParse(callid, out int userCId)) throw new FormatException("Invalid input. The ID must be a valid number.");
-                    s_bl.Call.SelectCallToTreat(userVId, userCId);
-                    Console.WriteLine($"Cancellation of treatment {userCId} was successful.");
-                    break;
-                case CallMenuShow.ChooseCall:
-                    Console.WriteLine("Enter your id:");
-                    id = Console.ReadLine() ?? throw new FormatException("Invalid input. The ID must be a valid number.");
-                    if (!int.TryParse(id, out userVId)) throw new FormatException("Invalid input. The ID must be a valid number.");
-                    Console.WriteLine("Enter call id:");
-                    callid = Console.ReadLine() ?? throw new FormatException("Invalid input. The ID must be a valid number.");
-                    if (!int.TryParse(callid, out userCId)) throw new FormatException("Invalid input. The ID must be a valid number.");
-                    s_bl.Call.SelectCallToTreat(userVId, userCId);
-                    Console.WriteLine($"The addition of {userVId} was successful.");
-                    break;
-                default:
-                    Console.WriteLine("Invalid option.");
-                    break;
-            }
-        } while (choice != CallMenuShow.Exit);
+                    case CallMenuShow.CancelTreatment:
+                        Console.WriteLine("Enter your id:");
+                        id = Console.ReadLine() ?? throw new FormatException("Invalid input. The ID must be a valid number.");
+                        if (!int.TryParse(id, out userVId)) throw new FormatException("Invalid input. The ID must be a valid number.");
+                        Console.WriteLine("Enter call id:");
+                        string callid = Console.ReadLine() ?? throw new FormatException("Invalid input. The ID must be a valid number.");
+                        if (!int.TryParse(callid, out int userCId)) throw new FormatException("Invalid input. The ID must be a valid number.");
+                        s_bl.Call.SelectCallToTreat(userVId, userCId);
+                        Console.WriteLine($"Cancellation of treatment {userCId} was successful.");
+                        break;
+                    case CallMenuShow.ChooseCall:
+                        Console.WriteLine("Enter your id:");
+                        id = Console.ReadLine() ?? throw new FormatException("Invalid input. The ID must be a valid number.");
+                        if (!int.TryParse(id, out userVId)) throw new FormatException("Invalid input. The ID must be a valid number.");
+                        Console.WriteLine("Enter call id:");
+                        callid = Console.ReadLine() ?? throw new FormatException("Invalid input. The ID must be a valid number.");
+                        if (!int.TryParse(callid, out userCId)) throw new FormatException("Invalid input. The ID must be a valid number.");
+                        s_bl.Call.SelectCallToTreat(userVId, userCId);
+                        Console.WriteLine($"The addition of {userVId} was successful.");
+                        break;
+                    default:
+                        Console.WriteLine("Invalid option.");
+                        break;
+                }
+            } while (choice != CallMenuShow.Exit);
     }
     private static void AdminSubMenu()
     {
@@ -663,18 +653,12 @@ internal class Program
         int TreatedCalls = GetTreatedCalls(id);
         int DeletedCalls = GetDeletedCalls(id);
         int ExpiredCalls = GetExpiredCalls(id);
-        BO.CallInProgress? CallOnTreatment = GetCallOnTreatment(id);
-
-        BO.Volunteer volunteer = new BO.Volunteer ( id,  fullName,phoneNumber, email, password, address, 0, 0, userRole, true,  maxCallDistance,  selectedDistanceType, TreatedCalls,   DeletedCalls,  ExpiredCalls );
+        BO.Volunteer volunteer = new BO.Volunteer(id, fullName, phoneNumber, email, password, address, 0, 0, userRole, true, maxCallDistance, selectedDistanceType, TreatedCalls, DeletedCalls, ExpiredCalls,null);
 
         return volunteer; // Returns the newly created Volunteer object
     }
     public static BO.Call GetBOCall()
     {
-        Console.WriteLine("Enter Call id:");
-        if (!int.TryParse(Console.ReadLine(), out int Id))
-            throw new DalDoesNotExistException($"Assignment with id={Id} does not exist");
-
         Console.WriteLine("Enter call type:");
         Console.WriteLine("0 - English");
         Console.WriteLine("1 - Math");
@@ -693,65 +677,20 @@ internal class Program
 
         Console.WriteLine("Enter call address:");
         string address = Console.ReadLine() ?? string.Empty;
-
-        Console.WriteLine("Enter latitude:");
-        if (!double.TryParse(Console.ReadLine(), out double latitude))
-            throw new DalInvalidOperationException("Invalid latitude! Please enter a valid number.");
-
-        Console.WriteLine("Enter longitude:");
-        if (!double.TryParse(Console.ReadLine(), out double longitude))
-            throw new DalInvalidOperationException("Invalid longitude! Please enter a valid number.");
-
-
         DateTime callOpenTime = s_bl.Admin.GetClock();
-        DateTime? callMaxCloseTime = s_bl.Admin.GetClock();
-        DO.Call tmpcall = new DO.Call()
-        {
-            CallType = doCallType,
-            Id = Id,
-           Address = address,
-            Latitude = latitude,
-            Longitude = longitude,
-            OpenTime = callOpenTime,
-            MaxFinishCall = callMaxCloseTime,
-            Description = description
-        };
-        BO.MyCallStatus callStatus = SetCallStatus(tmpcall);
-        List<BO.CallAssignInList>? callAssignments = CreateFilteredCallAssignList(Id);
-        BO.Call call = new BO.Call(Id, (BO.MyCallType)doCallType, address, latitude, longitude, callOpenTime, callMaxCloseTime, description, callStatus, callAssignments);
+        Console.WriteLine( "enter in how many times do you wamt the call will close");
+        DateTime?  callMaxCloseTime =Convert.ToDateTime( Console.ReadLine());
+        BO.MyCallStatus callStatus =BO.MyCallStatus.Open ;
+        BO.Call call = new BO.Call(0, (BO.MyCallType)doCallType, address, 0, 0, callOpenTime, callMaxCloseTime, description, callStatus, null);
         return call; // Returns the newly created Call object
     }
-    public static List<BO.CallAssignInList>? CreateFilteredCallAssignList(int id)
-    {
-        var allAssignments = _dal.Assignment.ReadAll()
-            .Where(assignment => assignment.CallId == id)
-            .Select(assignment => MapAssignmentDOtoAssignmentBO(assignment))
-            .ToList();
 
-        return allAssignments;
-    }
-    public static BO.CallAssignInList MapAssignmentDOtoAssignmentBO(DO.Assignment doAssignment)
-    {
-        var valunterr = _dal.Volunteer.Read(doAssignment.VolunteerId);
-        if (doAssignment == null)
-        {
-            return null;
-        }
-        return new BO.CallAssignInList
-        {
-            VolunteerId = doAssignment.Id,
-           VolunteerName = valunterr.FullName,
-            StartTreatmentTime = doAssignment.StartCall,
-            EndTreatmentTime = doAssignment.FinishCall,
-            EndType = (BO.MyFinishType?)(doAssignment.FinishType ?? default(DO.MyFinishType)),
-        };
-    }
     public static BO.MyCallStatus SetCallStatus(DO.Call doCall)
     {
         var assigment = _dal.Assignment.Read(doCall.Id);
         if (assigment == null)
         {
-            if (doCall.MaxFinishCall.HasValue && (doCall.MaxFinishCall.Value -DateTime.Now) <= _dal.Config.RiskRange)
+            if (doCall.MaxFinishCall.HasValue && (doCall.MaxFinishCall.Value - DateTime.Now) <= _dal.Config.RiskRange)
             {
                 return BO.MyCallStatus.OpenAtRisk;
             }
@@ -807,116 +746,90 @@ internal class Program
         return count;
 
     }
-    public static BO.CallInProgress? GetCallOnTreatment(int id)
-    {
-        int count = GetTreatedCalls(id);
-        if (count > 0)
-        {
-            DO.Assignment? assignment = _dal.Assignment.Read(id);
-            DO.Volunteer? volunteer = _dal.Volunteer.Read(id);
-            DO.Call? call = _dal.Call.Read(assignment.CallId);
+ 
+    //public static double CalculateDistance(DO.MyTypeDistance type, double? volunteerLatiude, double? volunteerLongitude, double? callLatitude, double? callLongitude)
+    //{
 
-            return new BO.CallInProgress
-            {
-                Id = assignment.Id,
-                CallId = call.Id,
-                CallType = (BO.MyCallType)call.CallType,
-                Description = call.Description,
-                Address = call.Address,
-                StartTime = call.OpenTime,
-                MaxEndTime = call.MaxFinishCall,
-                StartTreatmentTime = assignment.StartCall,
-                DistanceFromVolunteer = CalculateDistance(volunteer.TypeDistance, volunteer.Latitude ?? 0, volunteer.Longitude ?? 0, call.Latitude, call.Longitude),
-                Status = DetermineCallStatus(id)
+    //    switch (type)
+    //    {
 
-            };
-        }
-        return null;
+    //        case DO.MyTypeDistance.Walking:
+    //            if (!volunteerLatiude.HasValue || !volunteerLongitude.HasValue || !callLatitude.HasValue || !callLongitude.HasValue)
+    //            {
+    //                throw new ArgumentException("All coordinates must have valid values.");
+    //            }
 
-    }
-    public static double CalculateDistance(DO.MyTypeDistance type, double? volunteerLatiude, double? volunteerLongitude, double? callLatitude, double? callLongitude)
-    {
+    //            // בונים את ה-URL של הבקשה
+    //            var url1 = $"{GoogleMapsApiUrl}?origins={volunteerLatiude.Value},{volunteerLongitude.Value}&destinations={callLatitude.Value},{callLongitude.Value}&mode=walking&key={ApiKey}";
 
-        switch (type)
-        {
+    //            // יצירת HttpClient וביצוע הבקשה בצורה סינכרונית
+    //            using (var client = new HttpClient())
+    //            {
+    //                var response = client.GetStringAsync(url1).Result; // קריאה סינכרונית
 
-            case DO.MyTypeDistance.Walking:
-                if (!volunteerLatiude.HasValue || !volunteerLongitude.HasValue || !callLatitude.HasValue || !callLongitude.HasValue)
-                {
-                    throw new ArgumentException("All coordinates must have valid values.");
-                }
+    //                // פירוש התשובה ב- JSON
+    //                var jsonResponse = JsonDocument.Parse(response);
+    //                var distance = jsonResponse.RootElement
+    //                        .GetProperty("rows")[0]
+    //                        .GetProperty("elements")[0]
+    //                        .GetProperty("distance")
+    //                        .GetProperty("value")
+    //                        .GetInt32();
+    //                return distance / 1000.0;
+    //            }
 
-                // בונים את ה-URL של הבקשה
-                var url1 = $"{GoogleMapsApiUrl}?origins={volunteerLatiude.Value},{volunteerLongitude.Value}&destinations={callLatitude.Value},{callLongitude.Value}&mode=walking&key={ApiKey}";
+    //        case DO.MyTypeDistance.Traveling:
+    //            if (!volunteerLatiude.HasValue || !volunteerLongitude.HasValue || !callLatitude.HasValue || !callLongitude.HasValue)
+    //            {
+    //                throw new ArgumentException("All coordinates must have valid values.");
+    //            }
 
-                // יצירת HttpClient וביצוע הבקשה בצורה סינכרונית
-                using (var client = new HttpClient())
-                {
-                    var response = client.GetStringAsync(url1).Result; // קריאה סינכרונית
+    //            // בונים את ה-URL של הבקשה עם פרמטרים של הקואורדינטות וה-API Key
+    //            var url2 = $"{GoogleMapsApiUrl}?origins={volunteerLatiude.Value},{volunteerLongitude.Value}&destinations={callLatitude.Value},{callLongitude.Value}&mode=driving&key={ApiKey}";
 
-                    // פירוש התשובה ב- JSON
-                    var jsonResponse = JsonDocument.Parse(response);
-                    var distance = jsonResponse.RootElement
-                            .GetProperty("rows")[0]
-                            .GetProperty("elements")[0]
-                            .GetProperty("distance")
-                            .GetProperty("value")
-                            .GetInt32();
-                    return distance / 1000.0;
-                }
+    //            // יצירת HttpClient וביצוע הבקשה בצורה סינכרונית
+    //            using (var client = new HttpClient())
+    //            {
+    //                var response = client.GetStringAsync(url2).Result; // קריאה סינכרונית (ללא async/await)
 
-            case DO.MyTypeDistance.Traveling:
-                if (!volunteerLatiude.HasValue || !volunteerLongitude.HasValue || !callLatitude.HasValue || !callLongitude.HasValue)
-                {
-                    throw new ArgumentException("All coordinates must have valid values.");
-                }
+    //                // פירוש התשובה ב- JSON בעזרת System.Text.Json
+    //                var jsonResponse = JsonDocument.Parse(response);  // ניתוח ה- JSON בעזרת JsonDocument
+    //                var distance = jsonResponse.RootElement
+    //                                           .GetProperty("rows")[0]
+    //                                           .GetProperty("elements")[0]
+    //                                           .GetProperty("distance")
+    //                                           .GetProperty("value")
+    //                                           .GetInt32();
 
-                // בונים את ה-URL של הבקשה עם פרמטרים של הקואורדינטות וה-API Key
-                var url2 = $"{GoogleMapsApiUrl}?origins={volunteerLatiude.Value},{volunteerLongitude.Value}&destinations={callLatitude.Value},{callLongitude.Value}&mode=driving&key={ApiKey}";
-
-                // יצירת HttpClient וביצוע הבקשה בצורה סינכרונית
-                using (var client = new HttpClient())
-                {
-                    var response = client.GetStringAsync(url2).Result; // קריאה סינכרונית (ללא async/await)
-
-                    // פירוש התשובה ב- JSON בעזרת System.Text.Json
-                    var jsonResponse = JsonDocument.Parse(response);  // ניתוח ה- JSON בעזרת JsonDocument
-                    var distance = jsonResponse.RootElement
-                                               .GetProperty("rows")[0]
-                                               .GetProperty("elements")[0]
-                                               .GetProperty("distance")
-                                               .GetProperty("value")
-                                               .GetInt32();
-
-                    // המר mesק ממטרים לקילומטרים (המרה ממטרים לקילומטרים)
-                    return distance / 1000.0; // המרחק בקילומטרים
-                }
+    //                // המר mesק ממטרים לקילומטרים (המרה ממטרים לקילומטרים)
+    //                return distance / 1000.0; // המרחק בקילומטרים
+    //            }
 
 
-            case DO.MyTypeDistance.Aerial:
-                const double R = 6371; // רדיוס כדור הארץ בקילומטרים
+    //        case DO.MyTypeDistance.Aerial:
+    //            const double R = 6371; // רדיוס כדור הארץ בקילומטרים
 
-                // חישוב ההבדלים בין הקואורדינטות
-                double latDistance = DegreesToRadians(callLatitude.Value - volunteerLatiude.Value);
-                double lonDistance = DegreesToRadians(callLongitude.Value - volunteerLongitude.Value);
+    //            // חישוב ההבדלים בין הקואורדינטות
+    //            double latDistance = DegreesToRadians(callLatitude.Value - volunteerLatiude.Value);
+    //            double lonDistance = DegreesToRadians(callLongitude.Value - volunteerLongitude.Value);
 
-                // חישוב Haversine
-                double a = Math.Sin(latDistance / 2) * Math.Sin(latDistance / 2) +
-                           Math.Cos(DegreesToRadians(volunteerLatiude.Value)) * Math.Cos(DegreesToRadians(callLatitude.Value)) *
-                           Math.Sin(lonDistance / 2) * Math.Sin(lonDistance / 2);
-                double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+    //            // חישוב Haversine
+    //            double a = Math.Sin(latDistance / 2) * Math.Sin(latDistance / 2) +
+    //                       Math.Cos(DegreesToRadians(volunteerLatiude.Value)) * Math.Cos(DegreesToRadians(callLatitude.Value)) *
+    //                       Math.Sin(lonDistance / 2) * Math.Sin(lonDistance / 2);
+    //            double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
 
-                // חישוב המרחק בקילומטרים
-                return R * c;
+    //            // חישוב המרחק בקילומטרים
+    //            return R * c;
 
-        }
-        return 0;
+    //    }
+    //    return 0;
 
-    }
-    public static double DegreesToRadians(double degrees)
-    {
-        return degrees * (Math.PI / 180);
-    }
+    //}
+    //public static double DegreesToRadians(double degrees)
+    //{
+    //    return degrees * (Math.PI / 180);
+    //}
     public static BO.MyCallStatusByVolunteer DetermineCallStatus(int id)
     {
         DO.Call? call = _dal.Call.Read(id);
@@ -927,9 +840,9 @@ internal class Program
         return BO.MyCallStatusByVolunteer.InProgress;
     }
     private static void printVolunteers(IEnumerable<VolunteerInList> listV)
-    {
-        foreach (var v in listV)
-            Console.WriteLine(v + " ");
-    }
+{
+    foreach (var v in listV)
+        Console.WriteLine(v + " ");
+}
 }
 

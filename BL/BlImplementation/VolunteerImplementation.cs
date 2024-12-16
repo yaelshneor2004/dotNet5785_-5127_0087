@@ -23,10 +23,6 @@ internal class VolunteerImplementation:IVolunteer
         {
             throw new BO.BlDoesNotExistException($"User with the username '{username}' does not exist in the system");
         }
-        catch (Exception ex)
-        {
-            throw new BO.BlException("An error occurred while retrieving volunteer details.");
-        }
     }
     public void AddVolunteer(BO.Volunteer myVolunteer)
     {
@@ -40,10 +36,6 @@ internal class VolunteerImplementation:IVolunteer
         catch (DO.DalAlreadyExistsException ex)
         {
             throw new BO.BlAlreadyExistsException($"Volunteer with ID {myVolunteer.Id} already exists.", ex);
-        }
-        catch (Exception ex)
-        {
-            throw new BO.BlException("An error occurred while adding volunteer details.", ex);
         }
     }
     public void DeleteVolunteer(int volunteerId)
@@ -64,10 +56,6 @@ internal class VolunteerImplementation:IVolunteer
             {
                 throw new BO.BlDoesNotExistException($"Volunteer with ID {volunteerId} does not exist.", ex);
             }
-            catch (Exception ex)
-            {
-                throw new BO.BlException("An error occurred while deleting volunteer details.", ex);
-            }
        }
     public BO.Volunteer GetVolunteerDetails(int id)
     {
@@ -79,10 +67,6 @@ internal class VolunteerImplementation:IVolunteer
         catch (DO.DalDoesNotExistException ex)
         {
             throw new BO.BlDoesNotExistException($"Volunteer with ID {id} does not exist.", ex);
-        }
-        catch (Exception ex)
-        {
-            throw new BO.BlException("An error occurred while retrieving volunteer details.", ex);
         }
     }
     public IEnumerable<BO.VolunteerInList> GetVolunteerList(bool? isActive, BO.MySortInVolunteerInList? mySortInVolunteerInList)
@@ -113,10 +97,6 @@ internal class VolunteerImplementation:IVolunteer
         catch (DO.DalDoesNotExistException ex)
         {
             throw new BO.BlDoesNotExistException($"Volunteer with ID {myVolunteer.Id} does not exist.", ex);
-        }
-        catch (Exception ex)
-        {
-            throw new BO.BlException("An error occurred while updating volunteer details.", ex);
         }
     }
 
