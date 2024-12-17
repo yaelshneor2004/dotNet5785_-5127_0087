@@ -91,7 +91,7 @@ internal static class Tools
     }
 
     // חישוב מרחק בהליכה בין שתי נקודות קואורדינטות
-    private static double CalculateWalkingDistance(double lat1, double lon1, double lat2, double lon2)
+    public static double CalculateWalkingDistance(double lat1, double lon1, double lat2, double lon2)
     {
         using HttpClient client = new HttpClient();
         string url = $"https://routing.openstreetmap.de/routed-foot/route/v1/foot/{lon1},{lat1};{lon2},{lat2}?overview=false";
@@ -119,5 +119,7 @@ internal static class Tools
             throw;
         }
     }
+
+
 
 }

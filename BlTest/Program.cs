@@ -411,10 +411,11 @@ internal class Program
                         break;
                     case CallMenuShow.GetCallCounts:
                         int[] count = s_bl.Call.CallAmount();
-                        foreach (int c in count)
-                        {
-                            Console.WriteLine(c);
-                        }
+                    foreach (MyCallStatus status in Enum.GetValues(typeof(MyCallStatus)))
+                    {
+                        int count1 = count[(int)status]; 
+                        Console.WriteLine($"Status: {status}, Count: {count1}");
+                    }
                         break;
                     case CallMenuShow.ListOfCalls:
                         BO.MySortInCallInList? filterField = GetFilterField();
@@ -494,7 +495,7 @@ internal class Program
                         Console.WriteLine("Enter call id:");
                         string callid = Console.ReadLine() ?? throw new FormatException("Invalid input. The ID must be a valid number.");
                         if (!int.TryParse(callid, out int userCId)) throw new FormatException("Invalid input. The ID must be a valid number.");
-                        s_bl.Call.SelectCallToTreat(userVId, userCId);
+                        s_bl.Call.UpdateCancelTreatment(userVId, userCId);
                         Console.WriteLine($"Cancellation of treatment {userCId} was successful.");
                         break;
                     case CallMenuShow.ChooseCall:

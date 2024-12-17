@@ -1,5 +1,6 @@
 ﻿using BlApi;
 using BO;
+using DO;
 using Helpers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -89,11 +90,13 @@ internal class CallImplementation:ICall
             var call = _dal.Call.Read(idC);
 
             // Retrieve all assignments for the call
-            var assignments = _dal.Assignment.ReadAll().Where(a => a.CallId == idC).ToList();
 
-            // Check if there are any open assignments for the call
-            if (assignments.Any() && CallManager.IsOpenAssignment(assignments))
-                throw new BO.BlInvalidOperationException("The call is already being treated by another volunteer.");
+            //var assignments = _dal.Assignment.ReadAll();
+            //assignments= assignments.Where(a => a.CallId == idC).ToList();
+
+            //// Check if there are any open assignments for the call
+            //if (/*assignments.Any() &&*/ CallManager.IsOpenAssignment(assignments))
+            //    throw new BO.BlInvalidOperationException("The call is already being treated by another volunteer.");
 
             // Check if the call has expired
             if (ClockManager.Now > call.MaxFinishCall)
@@ -105,22 +108,19 @@ internal class CallImplementation:ICall
         {
             throw new BO.BlDoesNotExistException($"Call or assignment with ID {idC} does not exist.", ex);
         }
-        catch (Exception ex)
-        {
-            throw new BO.BlErrorException("An error occurred while selecting the call to treat.", ex);
-        }
     }
 
-    public IEnumerable<BO.ClosedCallInList> SortClosedCalls(int idV, MyCallType? callType, CloseCall? closeCall)
+    public IEnumerable<BO.ClosedCallInList> SortClosedCalls(int idV,BO. MyCallType? callType, CloseCall? closeCall)
     {
-        var closeList = _dal.Assignment.ReadAll().Where(a => a.VolunteerId == idV && CallManager.CloseCondition(a)).Select(a => convertAssignmentToClosed(a)).ToList();
-        closeList = callType.HasValue ? closeList.Where(call => call.Type == callType.Value).ToList() : closeList;
-        return CallManager.SortClosedCallsByField(closeList, closeCall);
+        var closeList = _dal.Assignment.ReadAll();
+       var closeListt= closeList.Where(a => a.VolunteerId == idV && CallManager.CloseCondition(a)).Select(a => convertAssignmentToClosed(a)).ToList();
+        closeListt = callType.HasValue ? closeListt.Where(call => call.Type == callType.Value).ToList() : closeListt;
+        return CallManager.SortClosedCallsByField(closeListt, closeCall);
     }
 
-    public IEnumerable<BO.OpenCallInList> SortOpenedCalls(int idV, MyCallType? callType,BO.OpenedCall? openedCall)
+    public IEnumerable<BO.OpenCallInList> SortOpenedCalls(int idV,BO. MyCallType? callType,BO.OpenedCall? openedCall)
     {
-        var openCalls = _dal.Assignment.ReadAll().Where(a=>a.VolunteerId==idV/*&&CallManager.OpenCondition(a)*/).Select(a => convertAssignmentToOpened(a)).ToList();
+        var openCalls = _dal.Assignment.ReadAll().Where(a=>a.VolunteerId==idV&&CallManager.OpenCondition(a)).Select(a => convertAssignmentToOpened(a)).ToList();
         openCalls = callType.HasValue ? openCalls.Where(call => call.Type == callType.Value).ToList() : openCalls;
         return CallManager.SortOpenCallsByField(openCalls, openedCall);
     }
@@ -146,7 +146,8 @@ internal class CallImplementation:ICall
         try
         {
             // Retrieve assignment details from the data layer
-            var assignment = _dal.Assignment.Read(idC);
+            var assignment = _dal.Assignment.Read(a => a.CallId == idC);
+            
 
             // Check authorization: the requester must be a manager or the volunteer assigned to the task
             if (assignment.VolunteerId != idV || !CallManager.IsManager(idV))
@@ -174,8 +175,7 @@ internal class CallImplementation:ICall
     {
         try
         {
-            // Retrieve assignment details from the data layer
-            var assignment = _dal.Assignment.Read(assignmentId);
+            var assignment = _dal.Assignment.Read(a => a.Id == assignmentId);
 
             // Check authorization: the volunteer must be the one assigned to the task
             if (assignment.VolunteerId != volunteerId)
@@ -193,7 +193,7 @@ internal class CallImplementation:ICall
             };
 
             // Attempt to update the assignment entity in the data layer
-            _dal.Assignment.Update(updatedAssignment);
+           _dal.Assignment.Update(updatedAssignment);
         }
         catch (DO.DalDoesNotExistException ex)
         {
