@@ -117,6 +117,7 @@ private static bool IsValidEmail(string email)
             return false;
         }
 
+
         // חישוב ספרת הביקורת
         int sum = 0;
         for (int i = 0; i < 8; i++)

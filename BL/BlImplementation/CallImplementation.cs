@@ -91,6 +91,7 @@ internal class CallImplementation:ICall
 
             // Retrieve all assignments for the call
 
+
             var assignments = _dal.Assignment.ReadAll();
             assignments = assignments.Where(a => a.CallId == idC).ToList();
 
