@@ -13,6 +13,7 @@ internal class VolunteerImplementation:IVolunteer
             var volunteers = _dal.Volunteer.ReadAll();
             // Search for the user by username
             var user = volunteers.FirstOrDefault(v => v.FullName == username);
+            password = VolunteerManager.Encrypt(password);
             if (user == null)
                 throw new BO.BlUnauthorizedAccessException($"Username {username} does not exist");
             if (user.Password != password)
@@ -29,8 +30,10 @@ internal class VolunteerImplementation:IVolunteer
         try
         {
             // Validate input values
+
             VolunteerManager.ValidateVolunteerDetails(myVolunteer);
             // Attempt to add the new volunteer to DAL
+            myVolunteer.Password=VolunteerManager.Encrypt(myVolunteer.Password);
             _dal.Volunteer.Create(VolunteerManager.ConvertFromBoToDo(myVolunteer));
         }
         catch (DO.DalAlreadyExistsException ex)

@@ -8,10 +8,7 @@ namespace Helpers;
 
 internal static class CallManager
 {
-    private const string ApiKey = "675ef7e408d33282453687qrh963303";
-    private const string GoogleGeocodingApiUrl = "https://geocode.maps.co/search?q={0}&api_key=675ef7e408d33282453687qrh963303";
-    private const string GoogleMapsApiUrl = "https://geocode.maps.co/reverse?lat=&lon=&api_key=675ef7e408d33282453687qrh963303";
-    private static IDal s_dal = Factory.Get;
+ private static IDal s_dal = Factory.Get;
     public static BO.Call ConvertFromDoToBo(DO.Call callData)
     {
         var assignmentsData = s_dal.Assignment.ReadAll(a => a.CallId == callData.Id).ToList();
@@ -82,7 +79,7 @@ internal static class CallManager
         // Check if the maximum end time is greater than the start time
         if (call.MaxEndTime.HasValue && call.MaxEndTime <= call.StartTime)
             throw new BO.BlInvalidOperationException("Max end time must be later than start time.");
-        var coordinates = GetCoordinates(call.Address);
+        var coordinates =Tools.GetCoordinates(call.Address);
         // Update the latitude and longitude based on the address
         call.Latitude = coordinates. Latitude;
         call.Longitude = coordinates.Longitude ;
@@ -90,51 +87,6 @@ internal static class CallManager
             throw new BO.BlInvalidOperationException("invalide callId.");
 
     }
-
-    public static (double Latitude, double Longitude) GetCoordinates(string address)
-    {
-        if (string.IsNullOrWhiteSpace(address))
-        {
-            throw new ArgumentException("Address cannot be null or empty.");
-        }
-
-        // URL מותאם עבור ה-API של Maps.co (הוספתי את המפתח בהתאם)
-        var url = $"https://geocode.maps.co/search?q={Uri.EscapeDataString(address)}&api_key={ApiKey}";
-
-        using (var client = new HttpClient())
-        {
-            var response = client.GetStringAsync(url).Result;
-
-            // ניתוח התשובה ב-JSON
-            var jsonResponse = JsonDocument.Parse(response);
-
-            // אם יש תוצאות בתשובה
-            if (jsonResponse.RootElement.GetArrayLength() > 0)
-            {
-                // הפנייה לתוצאה הראשונה
-                var firstResult = jsonResponse.RootElement[0];
-
-                // חילוץ הקואורדינטות
-                var latitude = firstResult.GetProperty("lat").GetString();
-                var longitude = firstResult.GetProperty("lon").GetString();
-
-                // המרה ל-double
-                if (double.TryParse(latitude, out double lat) && double.TryParse(longitude, out double lon))
-                {
-                    return (lat, lon);
-                }
-                else
-                {
-                    throw new Exception("Failed to parse latitude or longitude.");
-                }
-            }
-            else
-            {
-                throw new Exception("No results found for the given address.");
-            }
-        }
-    }
-
     public static BO.MyCallStatus GetCallStatus(DO.Call call)
     {
         var assignment = s_dal.Assignment.Read(call.Id);
@@ -304,23 +256,6 @@ internal static class CallManager
     {
         return assignments.Any(a => !a.FinishCall.HasValue && !a.FinishType.HasValue);
     }
-    //public static void PeriodicCallsUpdates(DateTime oldClock, DateTime newClock)
-    //{
-    //    var calls = s_dal.Call.ReadAll().ToList();
-
-    //    for (int i = 0; i < calls.Count; i++)
-    //    {
-    //        var call = calls[i];
-
-    //        אם הזמן המרבי לסגירת הקריאה עבר, מסמנים אותה כ"פגת תוקף"
-    //        if (call.MaxFinishCall.HasValue && (newClock > call.MaxFinishCall))
-    //        {
-    //            call = call with { my = DO.MyFinishType.ExpiredCancel };
-    //            s_dal.Call.Update(call); // עדכון הקריאה בבסיס הנתונים ישירות
-    //        }
-    //    }
-    //}
-
     internal static void PeriodicCallsUpdates() //stage 4
     {
         var callsList = s_dal.Call.ReadAll(call => call.MaxFinishCall < ClockManager.Now);

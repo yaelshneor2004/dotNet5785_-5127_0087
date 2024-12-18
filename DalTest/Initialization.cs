@@ -5,6 +5,7 @@ using DalApi;
 using DO;
 using Microsoft.VisualBasic;
 using System;
+using System.Security.Cryptography;
 using System.Text;
 
 public static class Initialization
@@ -13,6 +14,8 @@ public static class Initialization
     private static readonly Random s_rand = new(); // Random number generator
     private const int MIN_ID = 200000000;
     private const int MAX_ID = 400000000;
+    private static readonly byte[] Key = Encoding.UTF8.GetBytes("0123456789ABCDEF"); // מפתח של 16 בתים
+    private static readonly byte[] IV = Encoding.UTF8.GetBytes("ABCDEF9876543210");  // וקטור אתחול של 16 בתים
 
 
     /// <summary>
@@ -50,6 +53,8 @@ public static class Initialization
             double? latitude = callLatitudes[i]; // Latitude of the call at index i
             double? longitude = callLongitudes[i]; // Longitude of the call at index i
             string password = $"{new Random().Next(100000, 999999)}{(char)new Random().Next('A', 'Z' + 1)}{(char)new Random().Next('a', 'z' + 1)}"; // Generate random password with numbers and letters
+            password += "!";
+            password = Encrypt(password);
             string name = volunteerNames[i]; // Name of the volunteer at index i
             string address = addresses[i]; // Address from the array at index i
             string phone = "05" + s_rand.Next(10) + s_rand.Next(10000000, 100000000); // Generate random phone number
@@ -64,10 +69,11 @@ public static class Initialization
             // Create 15 Volunteer
             s_dal!.Volunteer.Create(new(id, name, phone, email, MyRole.Volunteer, MyTypeDistance.Aerial, password, address, latitude, longitude, maxDistance, true));
         }
-
+        string ayalaPassword = Encrypt("ayala19!"); 
+        string yaelPassword = Encrypt("yaelS2208!");
         // Create 2 managers
-        s_dal!.Volunteer.Create(new(327770087, "Ayala Ozeri", "0533328200", "ayala.ozeri@gmail.com", MyRole.Manager, MyTypeDistance.Aerial, "ayala19", "Rothschild 10, Tel Aviv, Israel", 32.0625, 34.7721, 10.0, true));
-        s_dal!.Volunteer.Create(new(326615127, "Yael Shneor", "0533859299", "y7697086@gmail.com", MyRole.Manager, MyTypeDistance.Aerial, "yaelS2208", "Derech Hevron 78, Jerusalem, Israel", 31.7525, 35.2121, 20.0, true));
+        s_dal!.Volunteer.Create(new(327770087, "Ayala Ozeri", "0533328200", "ayala.ozeri@gmail.com", MyRole.Manager, MyTypeDistance.Aerial, ayalaPassword, "Rothschild 10, Tel Aviv, Israel", 32.0625, 34.7721, 10.0, true));
+        s_dal!.Volunteer.Create(new(326615127, "Yael Shneor", "0533859299", "y7697086@gmail.com", MyRole.Manager, MyTypeDistance.Aerial, yaelPassword, "Derech Hevron 78, Jerusalem, Israel", 31.7525, 35.2121, 20.0, true));
     }
 
 
@@ -226,6 +232,21 @@ public static class Initialization
         createsCall();
         createsAssignment();
         Console.WriteLine("Data initialized successfully!");
+    }
+    private static string Encrypt(string plainText)
+    {
+        using (Aes aes = Aes.Create())
+        {
+            aes.Key = Key;
+            aes.IV = IV;
+
+            ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
+
+            byte[] plainBytes = Encoding.UTF8.GetBytes(plainText);
+            byte[] encryptedBytes = encryptor.TransformFinalBlock(plainBytes, 0, plainBytes.Length);
+
+            return Convert.ToBase64String(encryptedBytes);
+        }
     }
 }
 

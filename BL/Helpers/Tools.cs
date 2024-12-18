@@ -1,18 +1,19 @@
 ﻿
 using BO;
 using DalApi;
-using Newtonsoft.Json;
 using System.Reflection;
 using System.Text;
-using Newtonsoft.Json;
 using System.Xml.Linq;
-namespace Helpers;
 using System;
 using System.Net.Http;
-using Newtonsoft.Json;
+using System.Text.Json;
+namespace Helpers;
 internal static class Tools
 {
-    private static IDal s_dal = Factory.Get;
+    private const string ApiKey = "675ef7e408d33282453687qrh963303";
+    private const string GoogleGeocodingApiUrl = "https://geocode.maps.co/search?q={0}&api_key=675ef7e408d33282453687qrh963303";
+    private const string GoogleMapsApiUrl = "https://geocode.maps.co/reverse?lat=&lon=&api_key=675ef7e408d33282453687qrh963303";
+private static IDal s_dal = Factory.Get;
     public static string ToStringProperty<T>(this T t)
     {
         if (t == null)
@@ -70,45 +71,64 @@ internal static class Tools
     {
         return angle * (Math.PI / 180);
     }
-    private static double CalculateDrivingDistance(double? lat1, double? lon1, double lat2, double lon2)
+    public static double CalculateDrivingDistance(double lat1, double lon1, double lat2, double lon2)
     {
-        var client = new HttpClient();
-        var response = client.GetAsync($"https://routing.openstreetmap.de/routed-car/route/v1/driving/{lon1},{lat1};{lon2},{lat2}?overview=false").Result;
+        using HttpClient client = new HttpClient();
+        string requestUrl = $"http://router.project-osrm.org/route/v1/driving/{lon1},{lat1};{lon2},{lat2}?overview=false";
 
-        if (response.IsSuccessStatusCode)
+        try
         {
-            var content = response.Content.ReadAsStringAsync().Result;
-            dynamic result = JsonConvert.DeserializeObject(content);
+            var response = client.GetAsync(requestUrl).Result;
 
-            if (result != null && result.routes != null && result.routes.Count > 0)
+            if (response.IsSuccessStatusCode)
             {
-                var distanceInMeters = result.routes[0].distance;
-                return distanceInMeters / 1000.0;
-            }
-        }
+                var content = response.Content.ReadAsStringAsync().Result;
+                using var jsonDocument = JsonDocument.Parse(content);
 
-        throw new BlInvalidOperationException("Failed to calculate driving distance.");
+                var root = jsonDocument.RootElement;
+                if (root.TryGetProperty("routes", out JsonElement routesElement) && routesElement.GetArrayLength() > 0)
+                {
+                    var firstRoute = routesElement[0];
+                    if (firstRoute.TryGetProperty("distance", out JsonElement distanceElement))
+                    {
+                        var distanceInMeters = distanceElement.GetDouble();
+                        return distanceInMeters / 1000.0; // המרחק בקילומטרים
+                    }
+                }
+            }
+            throw new Exception("Failed to calculate driving distance.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An error occurred: {ex.Message}");
+            throw;
+        }
     }
 
     // חישוב מרחק בהליכה בין שתי נקודות קואורדינטות
     public static double CalculateWalkingDistance(double lat1, double lon1, double lat2, double lon2)
     {
         using HttpClient client = new HttpClient();
-        string url = $"https://routing.openstreetmap.de/routed-foot/route/v1/foot/{lon1},{lat1};{lon2},{lat2}?overview=false";
+        string requestUrl = $"http://router.project-osrm.org/route/v1/foot/{lon1},{lat1};{lon2},{lat2}?overview=false";
 
         try
         {
-            var response = client.GetAsync(url).Result;
+            var response = client.GetAsync(requestUrl).Result;
 
             if (response.IsSuccessStatusCode)
             {
                 var content = response.Content.ReadAsStringAsync().Result;
-                dynamic result = JsonConvert.DeserializeObject(content);
+                using var jsonDocument = JsonDocument.Parse(content);
 
-                if (result != null && result.routes != null && result.routes.Count > 0)
+                var root = jsonDocument.RootElement;
+                if (root.TryGetProperty("routes", out JsonElement routesElement) && routesElement.GetArrayLength() > 0)
                 {
-                    var distanceInMeters = result.routes[0].distance;
-                    return distanceInMeters / 1000.0; // המרחק בקילומטרים
+                    var firstRoute = routesElement[0];
+                    if (firstRoute.TryGetProperty("distance", out JsonElement distanceElement))
+                    {
+                        var distanceInMeters = distanceElement.GetDouble();
+                        return distanceInMeters / 1000.0; // המרחק בקילומטרים
+                    }
                 }
             }
             throw new Exception("Failed to calculate walking distance.");
@@ -117,6 +137,49 @@ internal static class Tools
         {
             Console.WriteLine($"An error occurred: {ex.Message}");
             throw;
+        }
+    }
+    public static (double Latitude, double Longitude) GetCoordinates(string address)
+    {
+        if (string.IsNullOrWhiteSpace(address))
+        {
+            throw new ArgumentException("Address cannot be null or empty.");
+        }
+
+        // URL מותאם עבור ה-API של Maps.co (הוספתי את המפתח בהתאם)
+        var url = $"https://geocode.maps.co/search?q={Uri.EscapeDataString(address)}&api_key={ApiKey}";
+
+        using (var client = new HttpClient())
+        {
+            var response = client.GetStringAsync(url).Result;
+
+            // ניתוח התשובה ב-JSON
+            var jsonResponse = JsonDocument.Parse(response);
+
+            // אם יש תוצאות בתשובה
+            if (jsonResponse.RootElement.GetArrayLength() > 0)
+            {
+                // הפנייה לתוצאה הראשונה
+                var firstResult = jsonResponse.RootElement[0];
+
+                // חילוץ הקואורדינטות
+                var latitude = firstResult.GetProperty("lat").GetString();
+                var longitude = firstResult.GetProperty("lon").GetString();
+
+                // המרה ל-double
+                if (double.TryParse(latitude, out double lat) && double.TryParse(longitude, out double lon))
+                {
+                    return (lat, lon);
+                }
+                else
+                {
+                    throw new Exception("Failed to parse latitude or longitude.");
+                }
+            }
+            else
+            {
+                throw new Exception("No results found for the given address.");
+            }
         }
     }
 

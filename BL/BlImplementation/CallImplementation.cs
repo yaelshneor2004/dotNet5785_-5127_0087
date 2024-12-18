@@ -91,12 +91,12 @@ internal class CallImplementation:ICall
 
             // Retrieve all assignments for the call
 
-            //var assignments = _dal.Assignment.ReadAll();
-            //assignments= assignments.Where(a => a.CallId == idC).ToList();
+            var assignments = _dal.Assignment.ReadAll();
+            assignments = assignments.Where(a => a.CallId == idC).ToList();
 
-            //// Check if there are any open assignments for the call
-            //if (/*assignments.Any() &&*/ CallManager.IsOpenAssignment(assignments))
-            //    throw new BO.BlInvalidOperationException("The call is already being treated by another volunteer.");
+            // Check if there are any open assignments for the call
+            if (assignments.Any() && CallManager.IsOpenAssignment(assignments))
+                throw new BO.BlInvalidOperationException("The call is already being treated by another volunteer.");
 
             // Check if the call has expired
             if (ClockManager.Now > call.MaxFinishCall)

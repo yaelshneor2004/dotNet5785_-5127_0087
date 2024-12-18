@@ -15,14 +15,15 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Net;
 using System.Text.Json;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Helpers;
 internal static class VolunteerManager
 {
     private static IDal s_dal = DalApi. Factory.Get;
-    private const string ApiKey = "675ef7e408d33282453687qrh963303";
-    private const string GoogleGeocodingApiUrl = "https://geocode.maps.co/search?q={0}&api_key=675ef7e408d33282453687qrh963303";
-    private const string GoogleMapsApiUrl = "https://geocode.maps.co/reverse?lat=&lon=&api_key=675ef7e408d33282453687qrh963303";
+    private static readonly byte[] Key = Encoding.UTF8.GetBytes("0123456789ABCDEF"); // מפתח של 16 בתים
+    private static readonly byte[] IV = Encoding.UTF8.GetBytes("ABCDEF9876543210");  // וקטור אתחול של 16 בתים
 
     public static BO.MyCallStatusByVolunteer DetermineCallStatus(DateTime? maxFinishTime)
     {
@@ -50,9 +51,9 @@ internal static class VolunteerManager
             throw new BO.BlInvalidOperationException("Invalid email format.");
         if (!IsStrongPassword(volunteer.Password))
             throw new BO.BlInvalidOperationException($"this Password is not strong enough.");
-         var coordinates = GetCoordinates(volunteer.Address);
-        volunteer.Latitude = coordinates.Longitude;
-            volunteer.Longitude = coordinates.Longitude;
+         var coordinates = Tools.GetCoordinates(volunteer.Address);
+        volunteer.Latitude = coordinates.Latitude;
+    volunteer.Longitude = coordinates.Longitude;
         }
     private static bool IsStrongPassword(string password)
     {
@@ -142,50 +143,6 @@ public static bool IsValidFirstName(string name)
         }
         return true;
     }
-    public static (double Latitude, double Longitude) GetCoordinates(string address)
-    {
-        if (string.IsNullOrWhiteSpace(address))
-        {
-            throw new ArgumentException("Address cannot be null or empty.");
-        }
-
-        // URL מותאם עבור ה-API של Maps.co (הוספתי את המפתח בהתאם)
-        var url = $"https://geocode.maps.co/search?q={Uri.EscapeDataString(address)}&api_key={ApiKey}";
-
-        using (var client = new HttpClient())
-        {
-            var response = client.GetStringAsync(url).Result;
-
-            // ניתוח התשובה ב-JSON
-            var jsonResponse = JsonDocument.Parse(response);
-
-            // אם יש תוצאות בתשובה
-            if (jsonResponse.RootElement.GetArrayLength() > 0)
-            {
-                // הפנייה לתוצאה הראשונה
-                var firstResult = jsonResponse.RootElement[0];
-
-                // חילוץ הקואורדינטות
-                var latitude = firstResult.GetProperty("lat").GetString();
-                var longitude = firstResult.GetProperty("lon").GetString();
-
-                // המרה ל-double
-                if (double.TryParse(latitude, out double lat) && double.TryParse(longitude, out double lon))
-                {
-                    return (lat, lon);
-                }
-                else
-                {
-                    throw new Exception("Failed to parse latitude or longitude.");
-                }
-            }
-            else
-            {
-                throw new Exception("No results found for the given address.");
-            }
-        }
-    }
-
     // Helper method to sort the volunteer list
     public static IEnumerable<BO.VolunteerInList> SortVolunteers(IEnumerable<BO.VolunteerInList> volunteers, BO.MySortInVolunteerInList sortBy)
     {
@@ -220,13 +177,15 @@ public static bool IsValidFirstName(string name)
     {
         var assignments = s_dal.Assignment.ReadAll(a => a.VolunteerId == myVolunteer.Id).ToList();
 
+
+
         return new BO.Volunteer
         (
             id: myVolunteer.Id,
             fullName: myVolunteer.FullName,
             phone: myVolunteer.Phone,
             email: myVolunteer.Email,
-            password: myVolunteer.Password ?? null,
+            password: VolunteerManager.Decrypt( myVolunteer.Password) ?? null,
             address: myVolunteer.Address ?? null,
             latitude: myVolunteer.Latitude ?? null,
             longitude: myVolunteer.Longitude ?? null,
@@ -298,8 +257,36 @@ public static bool IsValidFirstName(string name)
         // Update volunteers in the database
         volunteerUpdates.ForEach(volunteer => s_dal.Volunteer.Update(volunteer));
     }
+    public static string Encrypt(string plainText)
+    {
+        using (Aes aes = Aes.Create())
+        {
+            aes.Key = Key;
+            aes.IV = IV;
 
+            ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
 
+            byte[] plainBytes = Encoding.UTF8.GetBytes(plainText);
+            byte[] encryptedBytes = encryptor.TransformFinalBlock(plainBytes, 0, plainBytes.Length);
+
+            return Convert.ToBase64String(encryptedBytes);
+        }
+    }
+    public static string Decrypt(string encryptedText)
+    {
+        using (Aes aes = Aes.Create())
+        {
+            aes.Key = Key;
+            aes.IV = IV;
+
+            ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
+
+            byte[] encryptedBytes = Convert.FromBase64String(encryptedText);
+            byte[] plainBytes = decryptor.TransformFinalBlock(encryptedBytes, 0, encryptedBytes.Length);
+
+            return Encoding.UTF8.GetString(plainBytes);
+        }
+    }
 
 }
 
