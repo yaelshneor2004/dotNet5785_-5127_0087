@@ -5,6 +5,7 @@ namespace BlImplementation;
 internal class VolunteerImplementation:IVolunteer
 {
     private readonly DalApi.IDal _dal = DalApi.Factory.Get;
+    // Authenticate user and return their role
     public BO.MyRole Login(string username, string password)
     {
         try
@@ -25,6 +26,7 @@ internal class VolunteerImplementation:IVolunteer
             throw new BO.BlDoesNotExistException($"User with the username '{username}' does not exist in the system");
         }
     }
+    // Validate input values and attempt to add the new volunteer to DAL
     public void AddVolunteer(BO.Volunteer myVolunteer)
     {
         try
@@ -41,6 +43,7 @@ internal class VolunteerImplementation:IVolunteer
             throw new BO.BlAlreadyExistsException($"Volunteer with ID {myVolunteer.Id} already exists.", ex);
         }
     }
+    // Attempt to delete a volunteer if they are not currently handling or have handled calls
     public void DeleteVolunteer(int volunteerId)
         {
             try
@@ -60,6 +63,7 @@ internal class VolunteerImplementation:IVolunteer
                 throw new BO.BlDoesNotExistException($"Volunteer with ID {volunteerId} does not exist.", ex);
             }
        }
+    // Retrieves volunteer details by ID
     public BO.Volunteer GetVolunteerDetails(int id)
     {
         try
@@ -72,6 +76,7 @@ internal class VolunteerImplementation:IVolunteer
             throw new BO.BlDoesNotExistException($"Volunteer with ID {id} does not exist.", ex);
         }
     }
+    // Retrieves a list of volunteers, optionally filtered by activity status and sorted by a specified field
     public IEnumerable<BO.VolunteerInList> GetVolunteerList(bool? isActive, BO.MySortInVolunteerInList? mySortInVolunteerInList)
     {
         var volunteers = _dal.Volunteer.ReadAll();
@@ -83,6 +88,7 @@ internal class VolunteerImplementation:IVolunteer
         // Sort by the defined field value or by Id
         return VolunteerManager.SortVolunteers(filteredVolunteers, mySortInVolunteerInList.Value).ToList();
     }
+    // Update volunteer details, ensuring requester is a manager or the volunteer themselves
     public void UpdateVolunteer(int id, BO.Volunteer myVolunteer)
     {
         try

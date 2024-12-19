@@ -14,8 +14,8 @@ public static class Initialization
     private static readonly Random s_rand = new(); // Random number generator
     private const int MIN_ID = 200000000;
     private const int MAX_ID = 400000000;
-    private static readonly byte[] Key = Encoding.UTF8.GetBytes("0123456789ABCDEF"); // מפתח של 16 בתים
-    private static readonly byte[] IV = Encoding.UTF8.GetBytes("ABCDEF9876543210");  // וקטור אתחול של 16 בתים
+    private static readonly byte[] Key = Encoding.UTF8.GetBytes("0123456789ABCDEF"); // 16-byte key
+    private static readonly byte[] IV = Encoding.UTF8.GetBytes("ABCDEF9876543210");  // 16-byte initialization vector
 
 
     /// <summary>

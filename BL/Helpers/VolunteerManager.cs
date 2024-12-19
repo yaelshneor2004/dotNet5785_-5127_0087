@@ -111,39 +111,47 @@ private static bool IsValidEmail(string email)
     // Validate the logical correctness of the ID number
     private static bool ValidateIdNumber(string idNumber)
     {
-        // בדיקה שאורך המחרוזת הוא בדיוק 9 תווים וכוללת רק ספרות
+        // Check that the string length is exactly 9 characters and contains only digits
         if (idNumber.Length != 8 || !idNumber.All(char.IsDigit))
         {
             return false;
         }
 
-
-        // חישוב ספרת הביקורת
+        // Calculate the check digit
         int sum = 0;
         for (int i = 0; i < 8; i++)
         {
-            int digit = idNumber[i] - '0'; // המרת תו למספר
-            int weight = (i % 2) + 1; // משקל: 1 למיקומים אי-זוגיים, 2 למיקומים זוגיים
+            int digit = idNumber[i] - '0'; // Convert character to number
+            int weight = (i % 2) + 1; // Weight: 1 for odd positions, 2 for even positions
             int product = digit * weight;
-            sum += product > 9 ? product - 9 : product; // אם המוצר גדול מ-9, סכום הספרות של המוצר
+            sum += product > 9 ? product - 9 : product; // If product is greater than 9, sum the digits of the product
         }
 
-        // בדיקת תקינות ספרת הביקורת
+        // Verify the check digit
         int checkDigit = sum % 10 == 0 ? 0 : 10 - (sum % 10);
         return checkDigit == (idNumber[8] - '0');
     }
 
-public static bool IsValidFirstName(string name)
+
+    /// <summary>
+    /// Checks if the provided name contains only letters and spaces.
+    /// </summary>
+    /// <param name="name">The name to validate.</param>
+    /// <returns>True if the name contains only letters and spaces, otherwise false.</returns>
+    public static bool IsValidFirstName(string name)
     {
+        // Iterate through each character in the name
         foreach (char c in name)
         {
+            // Check if the character is not a letter and not a space
             if (!char.IsLetter(c) && c != ' ')
             {
                 return false;
             }
         }
-        return true;
+        return true; // All characters are valid
     }
+
     // Helper method to sort the volunteer list
     public static IEnumerable<BO.VolunteerInList> SortVolunteers(IEnumerable<BO.VolunteerInList> volunteers, BO.MySortInVolunteerInList sortBy)
     {
@@ -174,11 +182,14 @@ public static bool IsValidFirstName(string name)
             Role = (DO.MyRole)myVolunteer.Role
         };
     }
+    /// <summary>
+    /// Converts a DO.Volunteer object to a BO.Volunteer object with additional data.
+    /// </summary>
+    /// <param name="myVolunteer">The DO.Volunteer object to convert.</param>
+    /// <returns>A BO.Volunteer object with populated data.</returns>
     public static BO.Volunteer ConvertFromDoToBo(DO.Volunteer myVolunteer)
     {
         var assignments = s_dal.Assignment.ReadAll(a => a.VolunteerId == myVolunteer.Id).ToList();
-
-
 
         return new BO.Volunteer
         (
@@ -186,7 +197,7 @@ public static bool IsValidFirstName(string name)
             fullName: myVolunteer.FullName,
             phone: myVolunteer.Phone,
             email: myVolunteer.Email,
-            password: VolunteerManager.Decrypt( myVolunteer.Password) ?? null,
+            password: VolunteerManager.Decrypt(myVolunteer.Password) ?? null,
             address: myVolunteer.Address ?? null,
             latitude: myVolunteer.Latitude ?? null,
             longitude: myVolunteer.Longitude ?? null,
@@ -215,6 +226,10 @@ public static bool IsValidFirstName(string name)
         );
     }
 
+    /// <summary>
+    /// Converts a DO.Volunteer object to a BO.VolunteerInList object with additional data.
+    /// </summary>
+    /// <param name="VolunteerData">The DO.Volunteer object to convert.</param>
     public static BO.VolunteerInList ConvertToVolunteerInList(DO.Volunteer VolunteerData)
     {
         return new BO.VolunteerInList
@@ -231,7 +246,12 @@ public static bool IsValidFirstName(string name)
         };
     }
 
-  public static void PeriodicVolunteersUpdates(DateTime oldClock, DateTime newClock)
+    /// <summary>
+    /// Periodically updates the status and role of volunteers based on their activity.
+    /// </summary>
+    /// <param name="oldClock">The previous date and time.</param>
+    /// <param name="newClock">The current date and time.</param>
+    public static void PeriodicVolunteersUpdates(DateTime oldClock, DateTime newClock)
         {
             var volunteers = s_dal.Volunteer.ReadAll().ToList();
             var assignments = s_dal.Assignment.ReadAll().ToList();
@@ -258,6 +278,12 @@ public static bool IsValidFirstName(string name)
         // Update volunteers in the database
         volunteerUpdates.ForEach(volunteer => s_dal.Volunteer.Update(volunteer));
     }
+
+    /// <summary>
+    /// Encrypts a plain text string using AES encryption.
+    /// </summary>
+    /// <param name="plainText">The plain text to encrypt.</param>
+    /// <returns>The encrypted text as a base64 string.</returns>
     public static string Encrypt(string plainText)
     {
         using (Aes aes = Aes.Create())
@@ -273,6 +299,11 @@ public static bool IsValidFirstName(string name)
             return Convert.ToBase64String(encryptedBytes);
         }
     }
+    /// <summary>
+    /// Decrypts an encrypted text string using AES encryption.
+    /// </summary>
+    /// <param name="encryptedText">The encrypted text to decrypt.</param>
+    /// <returns>The decrypted plain text.</returns>
     public static string Decrypt(string encryptedText)
     {
         using (Aes aes = Aes.Create())

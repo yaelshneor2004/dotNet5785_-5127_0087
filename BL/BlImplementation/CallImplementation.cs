@@ -20,7 +20,10 @@ internal class CallImplementation:ICall
         // Attempt to add the new call in the data layer
         _dal.Call.Create(ConvertBOToDO(call)); 
     }
-
+    /// <summary>
+    /// Calculates the number of calls for each call status.
+    /// </summary>
+    /// <returns>An array of integers representing the count of calls for each status.</returns>
     public int[] CallAmount()
     {
         var calls = from call in _dal.Call.ReadAll()
@@ -37,7 +40,12 @@ internal class CallImplementation:ICall
             callAmounts[(int)group.Status] = group.Count;
         return callAmounts;
     }
-
+    /// <summary>
+    /// Deletes a call if it is open and has never been assigned.
+    /// </summary>
+    /// <param name="callId">The ID of the call to delete.</param>
+    /// <exception cref="BO.BlUnauthorizedAccessException">Thrown if the call is not open or has been assigned.</exception>
+    /// <exception cref="BO.BlDoesNotExistException">Thrown if the call does not exist.</exception>
     public void DeleteCall(int callId)
     {
         try
@@ -57,6 +65,12 @@ internal class CallImplementation:ICall
             throw new BO.BlDoesNotExistException($"Call with ID {callId} does not exist.", ex);
         }
     }
+    /// <summary>
+    /// Retrieves the details of a call by its ID.
+    /// </summary>
+    /// <param name="callId">The ID of the call to retrieve.</param>
+    /// <returns>A BO.Call object with the call details.</returns>
+    /// <exception cref="BO.BlDoesNotExistException">Thrown if the call does not exist.</exception>
     public BO.Call GetCallDetails(int callId)
     { 
         try
@@ -71,7 +85,13 @@ internal class CallImplementation:ICall
             throw new BO.BlDoesNotExistException($"Call with ID {callId} does not exist.", ex);
         }
     }
-
+    /// <summary>
+    /// Retrieves a list of calls, optionally filtered and sorted based on specified criteria.
+    /// </summary>
+    /// <param name="callFilter">The field to filter calls by.</param>
+    /// <param name="filterValue">The value to filter calls by.</param>
+    /// <param name="callSort">The field to sort calls by.</param>
+    /// <returns>A filtered and sorted list of BO.CallInList objects.</returns>
     public IEnumerable< BO.CallInList> GetCallList(BO.MySortInCallInList? callFilter, object? filterValue, BO.MySortInCallInList? callSort)
     {
         var calls = _dal.Call.ReadAll();
@@ -81,7 +101,13 @@ internal class CallImplementation:ICall
             callsBo = callsBo.Where(call =>CallManager.GetFieldValue(call, callFilter.Value)==(filterValue)).ToList();
         return CallManager.SortCalls(callsBo, callSort.Value).ToList();
     }
-
+    /// <summary>
+    /// Selects a call to treat by creating an assignment for the volunteer.
+    /// </summary>
+    /// <param name="idV">The ID of the volunteer.</param>
+    /// <param name="idC">The ID of the call.</param>
+    /// <exception cref="BO.BlInvalidOperationException">Thrown if the call is already being treated or has expired.</exception>
+    /// <exception cref="BO.BlDoesNotExistException">Thrown if the call or assignment does not exist.</exception>
     public void SelectCallToTreat(int idV, int idC)
     {
         try
@@ -110,7 +136,13 @@ internal class CallImplementation:ICall
             throw new BO.BlDoesNotExistException($"Call or assignment with ID {idC} does not exist.", ex);
         }
     }
-
+    /// <summary>
+    /// Sorts closed calls for a specific volunteer, optionally filtered by call type and sorted by a specified field.
+    /// </summary>
+    /// <param name="idV">The ID of the volunteer.</param>
+    /// <param name="callType">The type of calls to filter by</param>
+    /// <param name="closeCall">The field to sort the closed calls by</param>
+    /// <returns>A sorted and optionally filtered collection of BO.ClosedCallInList objects.</returns>
     public IEnumerable<BO.ClosedCallInList> SortClosedCalls(int idV,BO. MyCallType? callType, CloseCall? closeCall)
     {
         var closeList = _dal.Assignment.ReadAll();
@@ -119,6 +151,13 @@ internal class CallImplementation:ICall
         return CallManager.SortClosedCallsByField(closeListt, closeCall);
     }
 
+    /// <summary>
+    /// Sorts opened calls for a specific volunteer, optionally filtered by call type and sorted by a specified field.
+    /// </summary>
+    /// <param name="idV">The ID of the volunteer.</param>
+    /// <param name="callType">The type of calls to filter by</param>
+    /// <param name="openedCall">The field to sort the opened calls by</param>
+    /// <returns>A sorted and optionally filtered collection of BO.OpenCallInList objects.</returns>
     public IEnumerable<BO.OpenCallInList> SortOpenedCalls(int idV,BO. MyCallType? callType,BO.OpenedCall? openedCall)
     {
         var openCalls = _dal.Assignment.ReadAll().Where(a=>a.VolunteerId==idV&&CallManager.OpenCondition(a)).Select(a => convertAssignmentToOpened(a)).ToList();
@@ -172,6 +211,14 @@ internal class CallImplementation:ICall
             throw new BO.BlDoesNotExistException($"Assignment with ID {idC} does not exist.", ex);
         }
     }
+    /// <summary>
+    /// Updates an assignment as complete for a specific volunteer.
+    /// </summary>
+    /// <param name="volunteerId">The ID of the volunteer.</param>
+    /// <param name="assignmentId">The ID of the assignment.</param>
+    /// <exception cref="BO.BlUnauthorizedAccessException">Thrown if the volunteer is not authorized to complete the assignment.</exception>
+    /// <exception cref="BO.BlInvalidOperationException">Thrown if the assignment has already been completed or canceled.</exception>
+    /// <exception cref="BO.BlDoesNotExistException">Thrown if the assignment does not exist.</exception>
     public void UpdateCompleteAssignment(int volunteerId, int assignmentId)
     {
         try

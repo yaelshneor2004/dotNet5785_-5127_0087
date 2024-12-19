@@ -782,6 +782,7 @@ internal class Program
         foreach (var v in listV)
             Console.WriteLine(v + " ");
     }
+    //Create a strong password
     private static string GenerateValidPassword()
     {
 
