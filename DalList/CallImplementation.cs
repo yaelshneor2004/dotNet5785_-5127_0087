@@ -50,7 +50,9 @@ internal class CallImplementation : ICall
     {
             if (DataSource.Calls.RemoveAll(it => it.Id == item.Id) == 0)
             throw new DalDoesNotExistException($"An object of type Call with such an ID={item.Id} does not exist");
-        DataSource.Calls.Add(item);
+        int nextId = Config.NextCallId;
+        Call newCall = item with { Id = nextId };
+        DataSource.Calls.Add(newCall);
       }
     
 }

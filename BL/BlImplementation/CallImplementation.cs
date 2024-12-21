@@ -15,11 +15,8 @@ internal class CallImplementation:ICall
             CallManager. ValidateCallFormat(call);
             // Validate the logical correctness of the values
            CallManager. ValidateCallLogic(call);
-
-
         // Attempt to add the new call in the data layer
-        _dal.Call.Create(ConvertBOToDO(call)); 
-    }
+    
     /// <summary>
     /// Calculates the number of calls for each call status.
     /// </summary>
@@ -85,6 +82,10 @@ internal class CallImplementation:ICall
             throw new BO.BlDoesNotExistException($"Call with ID {callId} does not exist.", ex);
         }
     }
+        public IEnumerable<BO.CallInList> GetCallList(BO.MySortInCallInList? callFilter, object? filterValue, BO.MySortInCallInList? callSort)
+        {
+            var calls = _dal.Call.ReadAll();
+            var callsBo = calls.Select(callData => CallManager.ConvertToCallInList(callData)).Distinct().ToList();
     /// <summary>
     /// Retrieves a list of calls, optionally filtered and sorted based on specified criteria.
     /// </summary>
@@ -97,6 +98,50 @@ internal class CallImplementation:ICall
         var calls = _dal.Call.ReadAll();
         var callsBo = calls.Select(callData =>CallManager.ConvertToCallInList(callData)).Distinct().ToList();
 
+            if (callFilter.HasValue && filterValue != null)
+            {
+                switch (callFilter)
+                {
+                    case BO.MySortInCallInList.Type:
+                        if (Enum.TryParse(typeof(BO.MyCallType), filterValue.ToString(), out var resultO))
+                            callsBo = callsBo.Where(c => c.Type == (BO.MyCallType)resultO).ToList();
+                        break;
+
+                    case BO.MySortInCallInList.StartTime:
+                        if (DateTime.TryParse(filterValue.ToString(), out var resultT))
+                            callsBo = callsBo.Where(c => c.StartTime ==(DateTime) resultT).ToList();
+                        break;
+
+                    case BO.MySortInCallInList.TimeRemaining:
+                        if (TimeSpan.TryParse(filterValue.ToString(), out var resultTR))
+                            callsBo = callsBo.Where(c => c.TimeRemaining ==(TimeSpan) resultTR).ToList();
+                        break;
+
+                    case BO.MySortInCallInList.CompletionTime:
+                        if (TimeSpan.TryParse(filterValue.ToString(), out var resultCT))
+                            callsBo = callsBo.Where(c => c.CompletionTime ==(TimeSpan) resultCT).ToList();
+                        break;
+
+                    case BO.MySortInCallInList.Status:
+                        if (Enum.TryParse(typeof(BO.MyCallStatus), filterValue.ToString(), out var resultS))
+                            callsBo = callsBo.Where(c => c.Status == (BO.MyCallStatus)resultS).ToList();
+                        break;
+
+                    case BO.MySortInCallInList.TotalAssignments:
+                        if (int.TryParse(filterValue.ToString(), out var resultTA))
+                            callsBo = callsBo.Where(c => c.TotalAssignments == resultTA).ToList();
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+
+            return CallManager.SortCalls(callsBo, callSort.Value).ToList();
+        }
+
+
+        public void SelectCallToTreat(int idV, int idC)
         if (callFilter.HasValue && filterValue != null)
             callsBo = callsBo.Where(call =>CallManager.GetFieldValue(call, callFilter.Value)==(filterValue)).ToList();
         return CallManager.SortCalls(callsBo, callSort.Value).ToList();
@@ -192,7 +237,6 @@ internal class CallImplementation:ICall
             // Check authorization: the requester must be a manager or the volunteer assigned to the task
             if (assignment.VolunteerId != idV || !CallManager.IsManager(idV))
                 throw new BO.BlUnauthorizedAccessException("The requester is not authorized to cancel this assignment.");
-
             // Check that the assignment is still open and not already completed or canceled
             if (assignment.FinishCall.HasValue || assignment.FinishType.HasValue)
                 throw new BO.BlInvalidOperationException("The assignment has already been completed or canceled.");
@@ -204,6 +248,13 @@ internal class CallImplementation:ICall
             };
             // Attempt to update the assignment entity in the data layer
             _dal.Assignment.Update(updatedAssignment);
+            if (CallManager.IsManager(idV))
+            {
+                var volunteer = _dal.Volunteer.Read(assignment.VolunteerId);
+                var subject = "Assignment Cancelled";
+                var body = $"Your assignment for call {assignment.CallId} has been cancelled.";
+                SendEmail(volunteer.Email, subject, body);
+            }
         }
         catch (DO.DalDoesNotExistException ex)
         {

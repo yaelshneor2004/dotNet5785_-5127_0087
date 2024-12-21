@@ -1,22 +1,16 @@
 ﻿using System;
-using System.Net.Http;
-using Newtonsoft.Json;
-using DalApi;
-using System.Text.RegularExpressions;
-using BlApi;
-using System.Xml.Linq;
-using System;
-using System.Net.Http;
-using System.Threading.Tasks;
-using static Helpers.VolunteerManager;
-using System;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 using System.Net;
-using System.Text.Json;
+using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Xml.Linq;
+using BlApi;
+using DalApi;
+using Newtonsoft.Json;
+using static Helpers.VolunteerManager;
 
 namespace Helpers;
 internal static class VolunteerManager
@@ -116,18 +110,15 @@ private static bool IsValidEmail(string email)
         {
             return false;
         }
-
-        // Calculate the check digit
         int sum = 0;
         for (int i = 0; i < 8; i++)
         {
-            int digit = idNumber[i] - '0'; // Convert character to number
-            int weight = (i % 2) + 1; // Weight: 1 for odd positions, 2 for even positions
+            int digit = idNumber[i] - '0'; 
+            int weight = (i % 2) + 1; 
             int product = digit * weight;
-            sum += product > 9 ? product - 9 : product; // If product is greater than 9, sum the digits of the product
+            sum += product > 9 ? product - 9 : product;
         }
 
-        // Verify the check digit
         int checkDigit = sum % 10 == 0 ? 0 : 10 - (sum % 10);
         return checkDigit == (idNumber[8] - '0');
     }
@@ -220,7 +211,7 @@ private static bool IsValidEmail(string email)
                               StartTime = callData.OpenTime,
                               MaxEndTime = callData.MaxFinishCall,
                               StartTreatmentTime = a.StartCall,
-                              DistanceFromVolunteer = Tools.GlobalDistance(myVolunteer.Latitude, myVolunteer.Longitude, callData.Latitude, callData.Longitude, myVolunteer.TypeDistance),
+                              DistanceFromVolunteer = Tools.GlobalDistance(myVolunteer.Address, callData.Address,  myVolunteer.TypeDistance),
                               Status = VolunteerManager.DetermineCallStatus(callData.MaxFinishCall)
                           }).FirstOrDefault() // Assuming CurrentCall should be the first open call or null
         );

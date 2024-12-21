@@ -15,8 +15,8 @@ internal class CallImplementation : ICall
         if (Calls.RemoveAll(it => it.Id == item.Id) == 0)
             throw new DalDoesNotExistException($"Course with ID={item.Id} does Not exist");
         int nextId = Config.NextCallId;
-        Call copy = item with { Id = nextId };
-        Calls.Add(copy);
+        Call newCall = item with { Id = nextId };
+        Calls.Add(newCall);
         XMLTools.SaveListToXMLSerializer(Calls, Config.s_calls_xml);
     }
 
