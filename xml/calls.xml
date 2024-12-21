@@ -670,4 +670,24 @@
     <Description>call number: 1 of type: English at: 18 Sokolov St, Ramat HaSharon</Description>
     <MaxFinishCall>2024-04-30T01:04:00</MaxFinishCall>
   </Call>
+  <Call>
+    <Id>68</Id>
+    <CallType>English</CallType>
+    <Address>Ibn Gvirol 30, Tel Aviv, Israel</Address>
+    <Latitude>32.075175</Latitude>
+    <Longitude>34.78205</Longitude>
+    <OpenTime>2024-12-19T00:41:44</OpenTime>
+    <Description>FCDRF</Description>
+    <MaxFinishCall>2025-11-12T00:00:00</MaxFinishCall>
+  </Call>
+  <Call>
+    <Id>69</Id>
+    <CallType>English</CallType>
+    <Address>30 Ibn Gvirol,Tel Aviv ,Israel</Address>
+    <Latitude>32.075175</Latitude>
+    <Longitude>34.78205</Longitude>
+    <OpenTime>2024-12-19T00:41:44</OpenTime>
+    <Description>f4edw</Description>
+    <MaxFinishCall>2025-11-12T00:00:00</MaxFinishCall>
+  </Call>
 </ArrayOfCall>

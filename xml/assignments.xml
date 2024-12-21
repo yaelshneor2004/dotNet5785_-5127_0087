@@ -400,4 +400,12 @@
     <FinishType>ExpiredCancel</FinishType>
     <FinishCall>2024-02-29T20:01:00</FinishCall>
   </Assignment>
+  <Assignment>
+    <Id>51</Id>
+    <CallId>68</CallId>
+    <VolunteerId>326615127</VolunteerId>
+    <StartCall>2024-12-19T00:41:44</StartCall>
+    <FinishType />
+    <FinishCall />
+  </Assignment>
 </ArrayOfAssignment>

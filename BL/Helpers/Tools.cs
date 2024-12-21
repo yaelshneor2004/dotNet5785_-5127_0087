@@ -71,74 +71,80 @@ private static IDal s_dal = Factory.Get;
     {
         return angle * (Math.PI / 180);
     }
+  
+  
+   
+    // Calculate the distance in kilometers
     public static double CalculateDrivingDistance(double lat1, double lon1, double lat2, double lon2)
     {
+        var apiKey = "AIzaSyDp5JA_AxKyCcz9QK9q1btolMB6Y8jusc4";
+        var url = $"https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins={lat1},{lon1}&destinations={lat2},{lon2}&mode=driving&key={apiKey}";
+
         using HttpClient client = new HttpClient();
-        string requestUrl = $"http://router.project-osrm.org/route/v1/driving/{lon1},{lat1};{lon2},{lat2}?overview=false";
+        var response = client.GetAsync(url).Result;
 
-        try
+        if (response.IsSuccessStatusCode)
         {
-            var response = client.GetAsync(requestUrl).Result;
+            var content = response.Content.ReadAsStringAsync().Result;
+            using var jsonDocument = JsonDocument.Parse(content);
 
-            if (response.IsSuccessStatusCode)
+            if (jsonDocument.RootElement.TryGetProperty("rows", out JsonElement rowsElement) && rowsElement.GetArrayLength() > 0)
             {
-                var content = response.Content.ReadAsStringAsync().Result;
-                using var jsonDocument = JsonDocument.Parse(content);
-
-                var root = jsonDocument.RootElement;
-                if (root.TryGetProperty("routes", out JsonElement routesElement) && routesElement.GetArrayLength() > 0)
+                var firstRow = rowsElement[0];
+                if (firstRow.TryGetProperty("elements", out JsonElement elementsElement) && elementsElement.GetArrayLength() > 0)
                 {
-                    var firstRoute = routesElement[0];
-                    if (firstRoute.TryGetProperty("distance", out JsonElement distanceElement))
+                    var firstElement = elementsElement[0];
+                    if (firstElement.TryGetProperty("distance", out JsonElement distanceElement))
                     {
-                        var distanceInMeters = distanceElement.GetDouble();
-                        return distanceInMeters / 1000.0; // המרחק בקילומטרים
+                        var distanceInMeters = distanceElement.GetProperty("value").GetDouble();
+                        return distanceInMeters / 1000.0; // distance in kilometers
                     }
                 }
             }
             throw new Exception("Failed to calculate driving distance.");
         }
-        catch (Exception ex)
+        else
         {
-            Console.WriteLine($"An error occurred: {ex.Message}");
-            throw;
+            throw new Exception($"Failed to call API: {response.ReasonPhrase}");
         }
     }
 
-    // חישוב מרחק בהליכה בין שתי נקודות קואורדינטות
-    public static double CalculateWalkingDistance(double lat1, double lon1, double lat2, double lon2)
+
+    // Calculate walking distance between two coordinate points
+    private static double CalculateWalkingDistance(double lat1, double lon1, double lat2, double lon2)
     {
+        var apiKey = "AIzaSyDp5JA_AxKyCcz9QK9q1btolMB6Y8jusc4";
+        var url = $"https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins={lat1},{lon1}&destinations={lat2},{lon2}&mode=walking&key={apiKey}";
+
         using HttpClient client = new HttpClient();
-        string requestUrl = $"http://router.project-osrm.org/route/v1/foot/{lon1},{lat1};{lon2},{lat2}?overview=false";
+        var response = client.GetAsync(url).Result;
 
-        try
+        if (response.IsSuccessStatusCode)
         {
-            var response = client.GetAsync(requestUrl).Result;
+            var content = response.Content.ReadAsStringAsync().Result;
+            using var jsonDocument = JsonDocument.Parse(content);
 
-            if (response.IsSuccessStatusCode)
+            if (jsonDocument.RootElement.TryGetProperty("rows", out JsonElement rowsElement) && rowsElement.GetArrayLength() > 0)
             {
-                var content = response.Content.ReadAsStringAsync().Result;
-                using var jsonDocument = JsonDocument.Parse(content);
-
-                var root = jsonDocument.RootElement;
-                if (root.TryGetProperty("routes", out JsonElement routesElement) && routesElement.GetArrayLength() > 0)
+                var firstRow = rowsElement[0];
+                if (firstRow.TryGetProperty("elements", out JsonElement elementsElement) && elementsElement.GetArrayLength() > 0)
                 {
-                    var firstRoute = routesElement[0];
-                    if (firstRoute.TryGetProperty("distance", out JsonElement distanceElement))
+                    var firstElement = elementsElement[0];
+                    if (firstElement.TryGetProperty("distance", out JsonElement distanceElement))
                     {
-                        var distanceInMeters = distanceElement.GetDouble();
-                        return distanceInMeters / 1000.0; // המרחק בקילומטרים
+                        var distanceInMeters = distanceElement.GetProperty("value").GetDouble();
+                        return distanceInMeters / 1000.0; // distance in kilometers
                     }
                 }
             }
             throw new Exception("Failed to calculate walking distance.");
         }
-        catch (Exception ex)
+        else
         {
-            Console.WriteLine($"An error occurred: {ex.Message}");
-            throw;
+            throw new Exception($"Failed to call API: {response.ReasonPhrase}");
         }
     }
+
     public static (double Latitude, double Longitude) GetCoordinates(string address)
     {
         if (string.IsNullOrWhiteSpace(address))
@@ -146,35 +152,27 @@ private static IDal s_dal = Factory.Get;
             throw new ArgumentException("Address cannot be null or empty.");
         }
 
-        // URL מותאם עבור ה-API של Maps.co (הוספתי את המפתח בהתאם)
-        var url = $"https://geocode.maps.co/search?q={Uri.EscapeDataString(address)}&api_key={ApiKey}";
+        var apiKey = "AIzaSyDp5JA_AxKyCcz9QK9q1btolMB6Y8jusc4";
+        var url = $"https://maps.googleapis.com/maps/api/geocode/json?address={Uri.EscapeDataString(address)}&key={apiKey}";
 
         using (var client = new HttpClient())
         {
             var response = client.GetStringAsync(url).Result;
 
-            // ניתוח התשובה ב-JSON
+            // Analyze the response in JSON format
             var jsonResponse = JsonDocument.Parse(response);
 
-            // אם יש תוצאות בתשובה
-            if (jsonResponse.RootElement.GetArrayLength() > 0)
+            if (jsonResponse.RootElement.TryGetProperty("results", out JsonElement results) && results.GetArrayLength() > 0)
             {
-                // הפנייה לתוצאה הראשונה
-                var firstResult = jsonResponse.RootElement[0];
+                // The reference to the first result
+                var firstResult = results[0];
 
-                // חילוץ הקואורדינטות
-                var latitude = firstResult.GetProperty("lat").GetString();
-                var longitude = firstResult.GetProperty("lon").GetString();
+                // Extracting the coordinates
+                var location = firstResult.GetProperty("geometry").GetProperty("location");
+                var latitude = location.GetProperty("lat").GetDouble();
+                var longitude = location.GetProperty("lng").GetDouble();
 
-                // המרה ל-double
-                if (double.TryParse(latitude, out double lat) && double.TryParse(longitude, out double lon))
-                {
-                    return (lat, lon);
-                }
-                else
-                {
-                    throw new Exception("Failed to parse latitude or longitude.");
-                }
+                return (latitude, longitude);
             }
             else
             {
@@ -182,7 +180,4 @@ private static IDal s_dal = Factory.Get;
             }
         }
     }
-
-
-
 }
