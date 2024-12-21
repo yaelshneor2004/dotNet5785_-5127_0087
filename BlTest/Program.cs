@@ -432,6 +432,7 @@ internal class Program
                     }
                     break;
 
+
                 case CallMenuShow.GetCallDetails:
                     Console.WriteLine("Enter your id:");
                     string id = Console.ReadLine() ?? throw new FormatException("Invalid input. The ID must be a valid number.");
