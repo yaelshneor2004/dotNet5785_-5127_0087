@@ -3,7 +3,9 @@ using BO;
 using DalApi;
 using Newtonsoft.Json;
 using System.Text.Json;
-
+using System;
+using System.Net;
+using System.Net.Mail;
 namespace Helpers;
 
 internal static class CallManager
@@ -160,6 +162,27 @@ internal static class CallManager
             };
 
     }
+    public static void SendEmail(string toEmail, string subject, string body)
+    {
+        var fromEmail = "y7697086@gmail.com";
+        var smtpClient = new SmtpClient("smtp.gmail.com")
+        {
+            Port = 587,
+            Credentials = new NetworkCredential("y7697086@gmail.com", "zrth ljnd mujf muxt"),
+            EnableSsl = true,
+        };
+
+        var mailMessage = new MailMessage
+        {
+            From = new MailAddress(fromEmail),
+            Subject = subject,
+            Body = body,
+            IsBodyHtml = true,
+        };
+        mailMessage.To.Add(toEmail);
+
+        smtpClient.Send(mailMessage);
+    }
 
     public static DO.Call ConvertBOToDO(BO.Call myCall)
     {
@@ -244,7 +267,7 @@ internal static class CallManager
             Address = callDetails.Address,
             StartTime = callDetails.OpenTime,
             MaxEndTime = callDetails.MaxFinishCall,
-            DistanceFromVolunteer = Tools.GlobalDistance(volunteer.Longitude, volunteer.Latitude, callDetails.Longitude, callDetails.Latitude, volunteer.TypeDistance)
+            DistanceFromVolunteer = Tools.GlobalDistance(volunteer.Address, callDetails.Address, volunteer.TypeDistance)
         };
     }
 

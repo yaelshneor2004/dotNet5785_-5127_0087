@@ -439,13 +439,14 @@ internal class Program
                     Console.WriteLine(s_bl.Call.GetCallDetails(userVId));
                     break;
                 case CallMenuShow.UpdateCall:
-                    id = Console.ReadLine() ?? "";
-                   int tz =int.Parse( Console.ReadLine()??" ");
-                    BO.Call call = GetBOCall();
-                    //call = call with { Id = tz };
+                    Console.WriteLine("Enter the number of the call you want to update:");
+                    int idCall = int.Parse(Console.ReadLine());
+                    BO.Call call = GetBOCall(idCall);
                     s_bl.Call.UpdateCall(call);
-                    Console.WriteLine("update successfully");
+
+                    Console.WriteLine("Update successfully");
                     break;
+
                 case CallMenuShow.DeleteCall:
                     Console.WriteLine("Enter your id:");
                     id = Console.ReadLine() ?? throw new FormatException("Invalid input. The ID must be a valid number.");
@@ -678,6 +679,33 @@ internal class Program
 
         return volunteer; // Returns the newly created Volunteer object
     }
+    public static BO.Call GetBOCall(int idC)
+    {
+        Console.WriteLine("Enter call type:");
+        Console.WriteLine("0 - English");
+        Console.WriteLine("1 - Math");
+        Console.WriteLine("2 - ComputerScience");
+        Console.WriteLine("3 - Accounting");
+
+        if (!int.TryParse(Console.ReadLine(), out int callTypeInput) ||
+            !Enum.IsDefined(typeof(BO.MyCallType), callTypeInput))
+            throw new DalInvalidOperationException("Invalid call type! Please select a valid option.");
+
+        BO.MyCallType boCallType = (BO.MyCallType)callTypeInput;
+        DO.MyCallType doCallType = (DO.MyCallType)boCallType;
+
+        Console.WriteLine("Enter call description:");
+        string description = Console.ReadLine() ?? string.Empty;
+
+        Console.WriteLine("Enter call address:");
+        string address = Console.ReadLine() ?? string.Empty;
+        DateTime callOpenTime = s_bl.Admin.GetClock();
+        Console.WriteLine("enter in how many times do you wamt the call will close");
+        DateTime? callMaxCloseTime = Convert.ToDateTime(Console.ReadLine());
+        BO.MyCallStatus callStatus = BO.MyCallStatus.Open;
+        BO.Call call = new BO.Call(idC, (BO.MyCallType)doCallType, address, 0, 0, callOpenTime, callMaxCloseTime, description, callStatus, null);
+        return call; // Returns the newly created Call object
+    }
     public static BO.Call GetBOCall()
     {
         Console.WriteLine("Enter call type:");
@@ -705,7 +733,6 @@ internal class Program
         BO.Call call = new BO.Call(0, (BO.MyCallType)doCallType, address, 0, 0, callOpenTime, callMaxCloseTime, description, callStatus, null);
         return call; // Returns the newly created Call object
     }
-
     public static BO.MyCallStatus SetCallStatus(DO.Call doCall)
     {
         var assigment = _dal.Assignment.Read(doCall.Id);
@@ -808,8 +835,6 @@ internal class Program
         {
             password.Append(allChars[s_rand.Next(allChars.Length)]);
         }
-
-
         return new string(password.ToString().OrderBy(c => s_rand.Next()).ToArray());
     }
 }

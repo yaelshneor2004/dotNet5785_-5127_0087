@@ -1,22 +1,16 @@
 ﻿using System;
-using System.Net.Http;
-using Newtonsoft.Json;
-using DalApi;
-using System.Text.RegularExpressions;
-using BlApi;
-using System.Xml.Linq;
-using System;
-using System.Net.Http;
-using System.Threading.Tasks;
-using static Helpers.VolunteerManager;
-using System;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 using System.Net;
-using System.Text.Json;
+using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Xml.Linq;
+using BlApi;
+using DalApi;
+using Newtonsoft.Json;
+using static Helpers.VolunteerManager;
 
 namespace Helpers;
 internal static class VolunteerManager
@@ -111,24 +105,19 @@ private static bool IsValidEmail(string email)
     // Validate the logical correctness of the ID number
     private static bool ValidateIdNumber(string idNumber)
     {
-        // בדיקה שאורך המחרוזת הוא בדיוק 9 תווים וכוללת רק ספרות
         if (idNumber.Length != 8 || !idNumber.All(char.IsDigit))
         {
             return false;
         }
-
-
-        // חישוב ספרת הביקורת
         int sum = 0;
         for (int i = 0; i < 8; i++)
         {
-            int digit = idNumber[i] - '0'; // המרת תו למספר
-            int weight = (i % 2) + 1; // משקל: 1 למיקומים אי-זוגיים, 2 למיקומים זוגיים
+            int digit = idNumber[i] - '0'; 
+            int weight = (i % 2) + 1; 
             int product = digit * weight;
-            sum += product > 9 ? product - 9 : product; // אם המוצר גדול מ-9, סכום הספרות של המוצר
+            sum += product > 9 ? product - 9 : product;
         }
 
-        // בדיקת תקינות ספרת הביקורת
         int checkDigit = sum % 10 == 0 ? 0 : 10 - (sum % 10);
         return checkDigit == (idNumber[8] - '0');
     }
@@ -209,7 +198,7 @@ public static bool IsValidFirstName(string name)
                               StartTime = callData.OpenTime,
                               MaxEndTime = callData.MaxFinishCall,
                               StartTreatmentTime = a.StartCall,
-                              DistanceFromVolunteer = Tools.GlobalDistance(myVolunteer.Latitude, myVolunteer.Longitude, callData.Latitude, callData.Longitude, myVolunteer.TypeDistance),
+                              DistanceFromVolunteer = Tools.GlobalDistance(myVolunteer.Address, callData.Address,  myVolunteer.TypeDistance),
                               Status = VolunteerManager.DetermineCallStatus(callData.MaxFinishCall)
                           }).FirstOrDefault() // Assuming CurrentCall should be the first open call or null
         );

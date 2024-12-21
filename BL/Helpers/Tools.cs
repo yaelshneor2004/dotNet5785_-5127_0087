@@ -1,5 +1,4 @@
 ﻿
-using BO;
 using DalApi;
 using System.Reflection;
 using System.Text;
@@ -10,9 +9,6 @@ using System.Text.Json;
 namespace Helpers;
 internal static class Tools
 {
-    private const string ApiKey = "675ef7e408d33282453687qrh963303";
-    private const string GoogleGeocodingApiUrl = "https://geocode.maps.co/search?q={0}&api_key=675ef7e408d33282453687qrh963303";
-    private const string GoogleMapsApiUrl = "https://geocode.maps.co/reverse?lat=&lon=&api_key=675ef7e408d33282453687qrh963303";
 private static IDal s_dal = Factory.Get;
     public static string ToStringProperty<T>(this T t)
     {
@@ -44,107 +40,104 @@ private static IDal s_dal = Factory.Get;
 
         return sb.ToString();
     }
-    public static double GlobalDistance(double? lat1, double? lon1, double lat2, double lon2, DO.MyTypeDistance myTypeDistance)
+    public static double GlobalDistance(string volunterrAddress, string callAddress, DO.MyTypeDistance myTypeDistance)
     {
-        if (lat1 == null || lon1 == null)
-            throw new BlInvalidOperationException("Latitude and Longitude cannot be null.");
         return myTypeDistance switch
         {
-            DO.MyTypeDistance.Aerial => CalculateAerialDistance(lat1.Value, lon1.Value, lat2, lon2),
-            DO.MyTypeDistance.Walking => CalculateWalkingDistance(lat1.Value, lon1.Value, lat2, lon2),
-            DO.MyTypeDistance.Traveling => CalculateDrivingDistance(lat1.Value, lon1.Value, lat2, lon2),
+            DO.MyTypeDistance.Aerial => CalculateAerialDistance(callAddress,volunterrAddress),
+            DO.MyTypeDistance.Walking => CalcWalkingDistance(callAddress,volunterrAddress),
+            DO.MyTypeDistance.Traveling => CalcDrivingDistance(callAddress,volunterrAddress),
             _ => throw new BlInvalidOperationException("Invalid distance type")
         };
     }
-    private static double CalculateAerialDistance(double lat1, double lon1, double lat2, double lon2)
+    private static double CalculateAerialDistance(string volunteerAddress, string callAddress)
     {
-        const double R = 6371;
-        var lat = ToRadians(lat2 - lat1);
-        var lon = ToRadians(lon2 - lon1);
+        // Get coordinates of the volunteer's address
+        var (volunteerLat, volunteerLon) = GetCoordinates(volunteerAddress);
+
+        // Get coordinates of the call's address
+        var (callLat, callLon) = GetCoordinates(callAddress);
+
+        // Calculate the aerial distance between two coordinates using the Haversine formula
+        const double R = 6371; // Radius of the Earth in kilometers
+        var lat = ToRadians(callLat - volunteerLat);
+        var lon = ToRadians(callLon - volunteerLon);
         var a = Math.Sin(lat / 2) * Math.Sin(lat / 2) +
-                Math.Cos(ToRadians(lat1)) * Math.Cos(ToRadians(lat2)) *
+                Math.Cos(ToRadians(volunteerLat)) * Math.Cos(ToRadians(callLat)) *
                 Math.Sin(lon / 2) * Math.Sin(lon / 2);
         var c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
         return R * c;
     }
+
     private static double ToRadians(double angle)
     {
         return angle * (Math.PI / 180);
     }
-  
-  
-   
-    // Calculate the distance in kilometers
-    public static double CalculateDrivingDistance(double lat1, double lon1, double lat2, double lon2)
+
+
+    private static double CalcWalkingDistance(string callAddress, string volunteerAddress)
     {
-        var apiKey = "AIzaSyDp5JA_AxKyCcz9QK9q1btolMB6Y8jusc4";
-        var url = $"https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins={lat1},{lon1}&destinations={lat2},{lon2}&mode=driving&key={apiKey}";
-
-        using HttpClient client = new HttpClient();
-        var response = client.GetAsync(url).Result;
-
-        if (response.IsSuccessStatusCode)
+        using (var client = new HttpClient())
         {
-            var content = response.Content.ReadAsStringAsync().Result;
-            using var jsonDocument = JsonDocument.Parse(content);
+            string apiKey = "AIzaSyDp5JA_AxKyCcz9QK9q1btolMB6Y8jusc4";
+            string requestUri = $"https://maps.googleapis.com/maps/api/distancematrix/xml?origins={Uri.EscapeDataString(volunteerAddress)}&destinations={Uri.EscapeDataString(callAddress)}&mode=walking&units=metric&key={apiKey}";
 
-            if (jsonDocument.RootElement.TryGetProperty("rows", out JsonElement rowsElement) && rowsElement.GetArrayLength() > 0)
+            var response = client.GetAsync(requestUri).Result;
+            if (response.IsSuccessStatusCode)
             {
-                var firstRow = rowsElement[0];
-                if (firstRow.TryGetProperty("elements", out JsonElement elementsElement) && elementsElement.GetArrayLength() > 0)
+                var content = response.Content.ReadAsStringAsync().Result;
+                var xmlDoc = new System.Xml.XmlDocument();
+                xmlDoc.LoadXml(content);
+                var distanceNode = xmlDoc.SelectSingleNode("//DistanceMatrixResponse/row/element/distance/value");
+                if (distanceNode != null)
                 {
-                    var firstElement = elementsElement[0];
-                    if (firstElement.TryGetProperty("distance", out JsonElement distanceElement))
-                    {
-                        var distanceInMeters = distanceElement.GetProperty("value").GetDouble();
-                        return distanceInMeters / 1000.0; // distance in kilometers
-                    }
+                    double distance = double.Parse(distanceNode.InnerText);
+                    return distance / 1000; // Convert meters to kilometers
+                }
+                else
+                {
+                    throw new BlInvalidOperationException("Unable to calculate walking distance using Google Distance Matrix API.");
                 }
             }
-            throw new Exception("Failed to calculate driving distance.");
-        }
-        else
-        {
-            throw new Exception($"Failed to call API: {response.ReasonPhrase}");
+            else
+            {
+                throw new BlInvalidOperationException("Unable to calculate walking distance using Google Distance Matrix API.");
+            }
         }
     }
 
 
-    // Calculate walking distance between two coordinate points
-    private static double CalculateWalkingDistance(double lat1, double lon1, double lat2, double lon2)
+
+    internal static double CalcDrivingDistance(string callAddress, string volunteerAddress)
     {
-        var apiKey = "AIzaSyDp5JA_AxKyCcz9QK9q1btolMB6Y8jusc4";
-        var url = $"https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins={lat1},{lon1}&destinations={lat2},{lon2}&mode=walking&key={apiKey}";
-
-        using HttpClient client = new HttpClient();
-        var response = client.GetAsync(url).Result;
-
-        if (response.IsSuccessStatusCode)
+        using (var client = new HttpClient())
         {
-            var content = response.Content.ReadAsStringAsync().Result;
-            using var jsonDocument = JsonDocument.Parse(content);
+            string apiKey = "AIzaSyDp5JA_AxKyCcz9QK9q1btolMB6Y8jusc4";
+            string requestUri = $"https://maps.googleapis.com/maps/api/distancematrix/xml?origins={Uri.EscapeDataString(volunteerAddress)}&destinations={Uri.EscapeDataString(callAddress)}&units=metric&key={apiKey}";
 
-            if (jsonDocument.RootElement.TryGetProperty("rows", out JsonElement rowsElement) && rowsElement.GetArrayLength() > 0)
+            var response = client.GetAsync(requestUri).Result;
+            if (response.IsSuccessStatusCode)
             {
-                var firstRow = rowsElement[0];
-                if (firstRow.TryGetProperty("elements", out JsonElement elementsElement) && elementsElement.GetArrayLength() > 0)
+                var content = response.Content.ReadAsStringAsync().Result;
+                var xmlDoc = new System.Xml.XmlDocument();
+                xmlDoc.LoadXml(content);
+                var distanceNode = xmlDoc.SelectSingleNode("//DistanceMatrixResponse/row/element/distance/value");
+                if (distanceNode != null)
                 {
-                    var firstElement = elementsElement[0];
-                    if (firstElement.TryGetProperty("distance", out JsonElement distanceElement))
-                    {
-                        var distanceInMeters = distanceElement.GetProperty("value").GetDouble();
-                        return distanceInMeters / 1000.0; // distance in kilometers
-                    }
+                    double distance = double.Parse(distanceNode.InnerText);
+                    return distance / 1000; // Convert meters to kilometers
+                }
+                else
+                {
+                    throw new BlInvalidOperationException("Unable to calculate driving distance using Google Distance Matrix API.");
                 }
             }
-            throw new Exception("Failed to calculate walking distance.");
-        }
-        else
-        {
-            throw new Exception($"Failed to call API: {response.ReasonPhrase}");
+            else
+            {
+                throw new BlInvalidOperationException("Unable to calculate driving distance using Google Distance Matrix API.");
+            }
         }
     }
-
     public static (double Latitude, double Longitude) GetCoordinates(string address)
     {
         if (string.IsNullOrWhiteSpace(address))
@@ -180,4 +173,20 @@ private static IDal s_dal = Factory.Get;
             }
         }
     }
+    public static IEnumerable<BO.Volunteer> GetVolunteersWithinDistance(string callAddress)
+    {
+        var volunteers = s_dal.Volunteer.ReadAll();
+
+        var newVolunteers = volunteers.Where(volunteer =>
+          {
+              if (volunteer.Latitude == null || volunteer.Longitude == null)
+              {
+                  return false; 
+              }
+              var distance = CalculateAerialDistance(volunteer.Address,callAddress);
+              return distance <= volunteer.MaxDistance;
+          });
+        return newVolunteers.Select(v => VolunteerManager.ConvertFromDoToBo(v)).ToList();
+    }
 }
+

@@ -28,11 +28,10 @@ public IEnumerable<BO.ClosedCallInList> SortClosedCalls(int idV, MyCallType? cal
 // Sorts the opened calls for a specific volunteer with optional filtering and sorting
 public IEnumerable<BO.OpenCallInList> SortOpenedCalls(int idV, MyCallType? callType, BO.OpenedCall? openedCall);
 
-// Updates the details of a specific call
-public void UpdateCall(BO.Call myCall);
-
-// Cancels the treatment of an assignment
-public void UpdateCancelTreatment(int idV, int idC);
+    // Updates the details of a specific call
+   public void UpdateCall(BO.Call myCall);
+    // Cancels the treatment of an assignment
+    public void UpdateCancelTreatment(int idV, int idC);
 
 // Completes an assignment
 public void UpdateCompleteAssignment(int volunteerId, int assignmentId);
