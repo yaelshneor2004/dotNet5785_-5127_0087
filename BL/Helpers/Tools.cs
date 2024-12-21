@@ -1,4 +1,5 @@
 ﻿
+
 using DalApi;
 using System.Reflection;
 using System.Text;
@@ -6,6 +7,7 @@ using System.Xml.Linq;
 using System;
 using System.Net.Http;
 using System.Text.Json;
+using BO;
 namespace Helpers;
 internal static class Tools
 {
@@ -51,7 +53,7 @@ private static IDal s_dal = Factory.Get;
             DO.MyTypeDistance.Walking => CalcWalkingDistance(callAddress,volunterrAddress),
             DO.MyTypeDistance.Traveling => CalcDrivingDistance(callAddress,volunterrAddress),
             _ => throw new BlInvalidOperationException("Invalid distance type")
-        };
+        }; 
     }
     private static double CalculateAerialDistance(string volunteerAddress, string callAddress)
     {
