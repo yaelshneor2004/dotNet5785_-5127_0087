@@ -8,6 +8,6 @@ public interface  IAdmin
     DateTime GetClock();
     TimeSpan GetRiskRange();
     void SetRiskRange(TimeSpan time);
-    void initialization();
+    void Initialization();
     void Reset();
 }

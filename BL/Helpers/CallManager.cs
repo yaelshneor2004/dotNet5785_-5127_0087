@@ -1,16 +1,16 @@
-﻿
-using BO;
-using DalApi;
-using Newtonsoft.Json;
-using System.Text.Json;
-using System;
+﻿using DalApi;
 using System.Net;
 using System.Net.Mail;
 namespace Helpers;
-
 internal static class CallManager
 {
- private static IDal s_dal = Factory.Get;
+    private static IDal s_dal = Factory.Get;
+    /// <summary>
+    /// Converts an instance of DO.Call to an instance of BO.Call.
+    /// This includes converting the related assignments to BO.CallAssignInList objects.
+    /// </summary>
+    /// <param name="callData">The DO.Call instance to convert.</param>
+    /// <returns>A new BO.Call instance with the converted data.</returns>
     public static BO.Call ConvertFromDoToBo(DO.Call callData)
     {
         var assignmentsData = s_dal.Assignment.ReadAll(a => a.CallId == callData.Id).ToList();
@@ -29,18 +29,24 @@ internal static class CallManager
             assignments: assignmentsData.Select(a => new BO.CallAssignInList
             {
                 VolunteerId = a.VolunteerId != 0 ? a.VolunteerId : (int?)null,
-                 VolunteerName = a.VolunteerId != 0 ? s_dal.Volunteer.Read(a.VolunteerId)?.FullName : null,
+                VolunteerName = a.VolunteerId != 0 ? s_dal.Volunteer.Read(a.VolunteerId)?.FullName : null,
                 StartTreatmentTime = a.StartCall,
                 EndTreatmentTime = a.FinishCall,
                 EndType = a.FinishType != null ? (BO.MyFinishType)a.FinishType : (BO.MyFinishType?)null
             }).ToList()
         );
     }
+
+    /// <summary>
+    /// Calculates the status of a call based on the latest assignment and the maximum end time.
+    /// </summary>
+    /// <param name="lastAssignment">The latest assignment associated with the call.</param>
+    /// <param name="maxEndTime">The maximum end time of the call.</param>
+    /// <returns>The status of the call.</returns>
     public static BO.MyCallStatus CalculateCallStatus(DO.Assignment lastAssignment, DateTime? maxEndTime)
     {
         var currentTime = ClockManager.Now;
         var isInRiskTimeRange = maxEndTime != null && (maxEndTime.Value - currentTime) <= s_dal.Config.RiskRange;
-
 
         if (lastAssignment == null)
         {
@@ -68,54 +74,72 @@ internal static class CallManager
 
         return BO.MyCallStatus.InProgress;
     }
-    // Method to validate the format of the values
+
+    /// <summary>
+    /// Validates the format of the call values.
+    /// Checks if the address is valid and not empty.
+    /// </summary>
+    /// <param name="call">The call object to validate.</param>
     public static void ValidateCallFormat(BO.Call call)
     {
-        // Check if the address is valid
         if (string.IsNullOrWhiteSpace(call.Address))
-            throw new BO.BlNullPropertyException("Address cannot be empty.");    }
+            throw new BO.BlNullPropertyException("Address cannot be empty.");
+    }
 
-    // Method to validate the logical correctness of the values
+    /// <summary>
+    /// Validates the logical correctness of the call values.
+    /// Ensures that the maximum end time is greater than the start time.
+    /// Updates the latitude and longitude based on the address.
+    /// </summary>
+    /// <param name="call">The call object to validate.</param>
     public static void ValidateCallLogic(BO.Call call)
     {
-        // Check if the maximum end time is greater than the start time
         if (call.MaxEndTime.HasValue && call.MaxEndTime <= call.StartTime)
             throw new BO.BlInvalidOperationException("Max end time must be later than start time.");
-        var coordinates =Tools.GetCoordinates(call.Address);
-        // Update the latitude and longitude based on the address
-        call.Latitude = coordinates. Latitude;
-        call.Longitude = coordinates.Longitude ;
-        if(call.Id<0)
-            throw new BO.BlInvalidOperationException("invalide callId.");
 
+        var coordinates = Tools.GetCoordinates(call.Address ??string.Empty);
+        call.Latitude = coordinates.Latitude;
+        call.Longitude = coordinates.Longitude;
+
+        if (call.Id < 0)
+            throw new BO.BlInvalidOperationException("Invalid callId.");
     }
+
+    /// <summary>
+    /// Determines the status of a call based on the current time and the assignment status.
+    /// </summary>
+    /// <param name="call">The call object.</param>
+    /// <returns>The status of the call.</returns>
     public static BO.MyCallStatus GetCallStatus(DO.Call call)
     {
         var assignment = s_dal.Assignment.Read(call.Id);
         var now = ClockManager.Now;
-        // Check if the call is in progress (if the assignment is active and has no finish time)
+
         if (assignment != null && assignment.FinishCall == null)
         {
-            // Check if the call is in progress at risk
             if (call.MaxFinishCall.HasValue && now > call.MaxFinishCall.Value - s_dal.Config.RiskRange)
                 return BO.MyCallStatus.InProgressAtRisk;
             return BO.MyCallStatus.InProgress;
         }
-        // Check if the call is expired
-        // Condition 1: The call has a max finish time and the current time is past that time
-        // Condition 2: The call has no active assignment and the current time is past the max finish time
+
         if (call.MaxFinishCall.HasValue && now > call.MaxFinishCall.Value && (assignment == null || assignment.FinishCall == null))
             return BO.MyCallStatus.Expired;
-        // Check if the call is closed (if the assignment has a finish time)
+
         if (assignment != null && assignment.FinishCall.HasValue)
             return BO.MyCallStatus.Closed;
-        // Check if the call is open at risk
-        if (call.MaxFinishCall.HasValue && now > call.OpenTime + (s_dal.Config.RiskRange))
+
+        if (call.MaxFinishCall.HasValue && now > call.OpenTime + s_dal.Config.RiskRange)
             return BO.MyCallStatus.OpenAtRisk;
-        // Default: Open call
+
         return BO.MyCallStatus.Open;
     }
 
+    /// <summary>
+    /// Sorts the list of calls based on the specified sorting criteria.
+    /// </summary>
+    /// <param name="calls">The list of calls to sort.</param>
+    /// <param name="sortBy">The sorting criteria.</param>
+    /// <returns>The sorted list of calls.</returns>
     public static IEnumerable<BO.CallInList> SortCalls(IEnumerable<BO.CallInList> calls, BO.MySortInCallInList sortBy)
     {
         return sortBy switch
@@ -129,7 +153,12 @@ internal static class CallManager
             _ => calls.OrderBy(call => call.CallId)
         };
     }
-
+    /// <summary>
+    /// Retrieves the value of the specified field from a BO.CallInList object.
+    /// </summary>
+    /// <param name="call">The BO.CallInList object.</param>
+    /// <param name="field">The field to retrieve.</param>
+    /// <returns>The value of the specified field.</returns>
     public static object? GetFieldValue(BO.CallInList call, BO.MySortInCallInList field)
     {
         return field switch
@@ -143,25 +172,39 @@ internal static class CallManager
             _ => null
         };
     }
+
+    /// <summary>
+    /// Converts an instance of DO.Call to an instance of BO.CallInList.
+    /// </summary>
+    /// <param name="callData">The DO.Call instance to convert.</param>
+    /// <returns>A new BO.CallInList instance with the converted data.</returns>
     public static BO.CallInList ConvertToCallInList(DO.Call callData)
     {
-            var assignmentsData = s_dal.Assignment.ReadAll(a => a.CallId == callData.Id).ToList();
+        var assignmentsData = s_dal.Assignment.ReadAll(a => a.CallId == callData.Id).ToList();
         var lastAssignment = assignmentsData.OrderByDescending(a => a.StartCall).FirstOrDefault();
-        return new BO.CallInList
-            {
-                Id = lastAssignment?.Id ?? 0,
-                CallId = callData.Id,
-                Type = (BO.MyCallType)callData.CallType,
-                StartTime = callData.OpenTime,
-            TimeRemaining = callData.MaxFinishCall.HasValue
-    ? (callData.MaxFinishCall.Value - ClockManager.Now < TimeSpan.Zero ? TimeSpan.Zero : callData.MaxFinishCall.Value - ClockManager.Now)  : (TimeSpan?)null,
-            LastVolunteerName = lastAssignment != null && lastAssignment.VolunteerId != 0 ? s_dal.Volunteer.Read(lastAssignment.VolunteerId)?.FullName : null,
-                CompletionTime = lastAssignment?.FinishCall.HasValue == true ? lastAssignment.FinishCall.Value - callData.OpenTime : (TimeSpan?)null,
-                Status = GetCallStatus(callData),
-                TotalAssignments = assignmentsData.Count()
-            };
 
+        return new BO.CallInList
+        {
+            Id = lastAssignment?.Id ?? 0,
+            CallId = callData.Id,
+            Type = (BO.MyCallType)callData.CallType,
+            StartTime = callData.OpenTime,
+            TimeRemaining = callData.MaxFinishCall.HasValue
+                ? (callData.MaxFinishCall.Value - ClockManager.Now < TimeSpan.Zero ? TimeSpan.Zero : callData.MaxFinishCall.Value - ClockManager.Now)
+                : (TimeSpan?)null,
+            LastVolunteerName = lastAssignment != null && lastAssignment.VolunteerId != 0 ? s_dal.Volunteer.Read(lastAssignment.VolunteerId)?.FullName : null,
+            CompletionTime = lastAssignment?.FinishCall.HasValue == true ? lastAssignment.FinishCall.Value - callData.OpenTime : (TimeSpan?)null,
+            Status = GetCallStatus(callData),
+            TotalAssignments = assignmentsData.Count()
+        };
     }
+
+    /// <summary>
+    /// Sends an email notification to the specified email address.
+    /// </summary>
+    /// <param name="toEmail">The recipient's email address.</param>
+    /// <param name="subject">The subject of the email.</param>
+    /// <param name="body">The body of the email.</param>
     public static void SendEmail(string toEmail, string subject, string body)
     {
         var fromEmail = "y7697086@gmail.com";
@@ -184,9 +227,14 @@ internal static class CallManager
         smtpClient.Send(mailMessage);
     }
 
+    /// <summary>
+    /// Converts an instance of BO.Call to an instance of DO.Call.
+    /// </summary>
+    /// <param name="myCall">The BO.Call instance to convert.</param>
+    /// <returns>A new DO.Call instance with the converted data.</returns>
     public static DO.Call ConvertBOToDO(BO.Call myCall)
     {
-       return new DO.Call
+        return new DO.Call
         {
             Id = myCall.Id,
             CallType = (DO.MyCallType)myCall.Type,
@@ -196,8 +244,15 @@ internal static class CallManager
             OpenTime = myCall.StartTime,
             Description = myCall.Description,
             MaxFinishCall = myCall.MaxEndTime
-        };   
+        };
     }
+
+    /// <summary>
+    /// Sorts a list of closed calls by the specified field.
+    /// </summary>
+    /// <param name="calls">The list of closed calls to sort.</param>
+    /// <param name="sortBy">The field to sort by.</param>
+    /// <returns>The sorted list of closed calls.</returns>
     public static IEnumerable<BO.ClosedCallInList> SortClosedCallsByField(IEnumerable<BO.ClosedCallInList> calls, BO.CloseCall? sortBy)
     {
         return from call in calls
@@ -213,7 +268,12 @@ internal static class CallManager
                select call;
     }
 
-
+    /// <summary>
+    /// Sorts a list of open calls by the specified field.
+    /// </summary>
+    /// <param name="openCallInList">The list of open calls to sort.</param>
+    /// <param name="sortBy">The field to sort by.</param>
+    /// <returns>The sorted list of open calls.</returns>
     public static IEnumerable<BO.OpenCallInList> SortOpenCallsByField(IEnumerable<BO.OpenCallInList> openCallInList, BO.OpenedCall? sortBy)
     {
         return sortBy switch
@@ -226,7 +286,12 @@ internal static class CallManager
             _ => openCallInList.OrderBy(call => call.Id)
         };
     }
-    
+
+    /// <summary>
+    /// Converts an instance of DO.Assignment to an instance of BO.ClosedCallInList.
+    /// </summary>
+    /// <param name="assignment">The DO.Assignment instance to convert.</param>
+    /// <returns>A new BO.ClosedCallInList instance with the converted data.</returns>
     public static BO.ClosedCallInList convertAssignmentToClosed(DO.Assignment assignment)
     {
         var callDetails = s_dal.Call.Read(assignment.CallId);
@@ -239,26 +304,43 @@ internal static class CallManager
             StartTime = callDetails.OpenTime,
             StartTreatmentTime = assignment.StartCall,
             EndTime = assignment.FinishCall,
-            EndType = (BO.MyFinishType)assignment.FinishType
-        };
-    }
-   public static bool OpenCondition(DO.Assignment assignment)
-    {
-        var callDetails = s_dal.Call.Read(assignment.CallId);
-        var call = ConvertFromDoToBo(callDetails);
-        return call.Status == MyCallStatus.Open || call.Status == MyCallStatus.OpenAtRisk;
+           EndType = assignment?.FinishType is null ? (BO.MyFinishType?)null : (BO.MyFinishType)assignment.FinishType     };
     }
 
+    /// <summary>
+    /// Determines if an assignment should be considered open based on its status.
+    /// </summary>
+    /// <param name="assignment">The assignment to check.</param>
+    /// <returns>True if the assignment is open, false otherwise.</returns>
+    public static bool OpenCondition(DO.Assignment assignment)
+    {
+        var callDetails = s_dal.Call.Read(assignment.CallId);
+        var call = callDetails != null ? ConvertFromDoToBo(callDetails) : null;
+        return (call?.Status == BO.MyCallStatus.Open || call?.Status == BO.MyCallStatus.OpenAtRisk) == true;
+    }
+
+    /// <summary>
+    /// Determines if an assignment should be considered closed based on its status.
+    /// </summary>
+    /// <param name="assignment">The assignment to check.</param>
+    /// <returns>True if the assignment is closed, false otherwise.</returns>
     public static bool CloseCondition(DO.Assignment assignment)
     {
         var callDetails = s_dal.Call.Read(assignment.CallId);
-        var call = ConvertFromDoToBo(callDetails);
-        return call.Status == MyCallStatus.Expired || call.Status == MyCallStatus.Closed;
+        var call = callDetails != null ? ConvertFromDoToBo(callDetails) : null;
+        return (call?.Status == BO.MyCallStatus.Expired || call?.Status == BO.MyCallStatus.Closed)==true;
     }
+
+    /// <summary>
+    /// Converts an instance of DO.Assignment to an instance of BO.OpenCallInList.
+    /// </summary>
+    /// <param name="assignment">The DO.Assignment instance to convert.</param>
+    /// <returns>A new BO.OpenCallInList instance with the converted data.</returns>
     public static BO.OpenCallInList convertAssignmentToOpened(DO.Assignment assignment)
     {
         var callDetails = s_dal.Call.Read(assignment.CallId);
         var volunteer = s_dal.Volunteer.Read(assignment.VolunteerId);
+
         return new BO.OpenCallInList
         {
             Id = assignment.CallId,
@@ -267,19 +349,34 @@ internal static class CallManager
             Address = callDetails.Address,
             StartTime = callDetails.OpenTime,
             MaxEndTime = callDetails.MaxFinishCall,
-            DistanceFromVolunteer = Tools.GlobalDistance(volunteer.Address, callDetails.Address, volunteer.TypeDistance)
+            DistanceFromVolunteer = volunteer != null ? Tools.GlobalDistance(volunteer.Address ?? string.Empty, callDetails.Address, volunteer.TypeDistance) : 0,
         };
     }
 
+    /// <summary>
+    /// Checks if a volunteer with the given ID is a manager.
+    /// </summary>
+    /// <param name="idV">The ID of the volunteer.</param>
+    /// <returns>True if the volunteer is a manager, false otherwise.</returns>
     public static bool IsManager(int idV)
     {
-       return s_dal.Volunteer.Read(idV).Role == DO.MyRole.Manager;
+        return s_dal.Volunteer.Read(idV)?.Role == DO.MyRole.Manager;
     }
+
+    /// <summary>
+    /// Determines if any assignment in the collection is open based on its status.
+    /// </summary>
+    /// <param name="assignments">The collection of assignments to check.</param>
+    /// <returns>True if any assignment is open, false otherwise.</returns>
     public static bool IsOpenAssignment(IEnumerable<DO.Assignment> assignments)
     {
         return assignments.Any(a => !a.FinishCall.HasValue && !a.FinishType.HasValue);
     }
-    internal static void PeriodicCallsUpdates() //stage 4
+
+    /// <summary>
+    /// Periodically updates the status of calls that have exceeded their maximum finish time.
+    /// </summary>
+    internal static void PeriodicCallsUpdates() // stage 4
     {
         var callsList = s_dal.Call.ReadAll(call => call.MaxFinishCall < ClockManager.Now);
 
@@ -315,5 +412,4 @@ internal static class CallManager
             }
         }
     }
-
 }
