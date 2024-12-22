@@ -1,29 +1,16 @@
 ﻿using BO;
 using DalApi;
 using DalTest;
-using BlTest;
 using DO;
-using Microsoft.VisualBasic;
 using System.Data;
-using System.Diagnostics.Metrics;
-using System.Net;
-using System.Net.Mail;
-using System.Text.Json;
-using System.Runtime.CompilerServices;
-using BlApi;
-using System.Security.Cryptography;
 using System.Text;
-using System;
-
 namespace BlTest;
-//yael shneor
 internal class Program
 {
     private static readonly Random s_rand = new(); // Random number generator
 
     static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
     private static IDal _dal = DalApi.Factory.Get; //stage 4
-    private const string ApiKey = "6755cb286fc03337717882gdo28c286";
   static void Main(string[] args)
     {
         BoFirstMenu choice = BO.BoFirstMenu.Call;
@@ -169,7 +156,7 @@ internal class Program
     private static object? GetFilterValue()
     {
         Console.WriteLine("Enter the filter value (or press Enter to skip):");
-        string input = Console.ReadLine();
+        string input = Console.ReadLine()??"";
         return string.IsNullOrEmpty(input) ? null : input;
     }
 
@@ -439,7 +426,7 @@ internal class Program
                     break;
                 case CallMenuShow.UpdateCall:
                     Console.WriteLine("Enter the number of the call you want to update:");
-                    int idCall = int.Parse(Console.ReadLine());
+                    int idCall = int.Parse(Console.ReadLine() ?? "");
                     BO.Call call = GetBOCall(idCall);
                     s_bl.Call.UpdateCall(call);
 
@@ -606,7 +593,7 @@ internal class Program
                     }
                     break;
                 case (AdminMenuShow.Initialization):
-                    s_bl.Admin.initialization();
+                    s_bl.Admin.Initialization();
                     break;
                 case (AdminMenuShow.Reset):
                     s_bl.Admin.Reset();
@@ -797,7 +784,7 @@ internal class Program
     public static BO.MyCallStatusByVolunteer DetermineCallStatus(int id)
     {
         DO.Call? call = _dal.Call.Read(id);
-        if (call.MaxFinishCall - DateTime.Now <= _dal.Config.RiskRange)
+        if (call?.MaxFinishCall != null && _dal?.Config?.Clock != null && _dal?.Config?.RiskRange != null  && (call.MaxFinishCall - _dal.Config.Clock <= _dal.Config.RiskRange))
         {
             return BO.MyCallStatusByVolunteer.AtRisk;
         }

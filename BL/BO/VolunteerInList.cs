@@ -18,7 +18,7 @@ namespace BO
     public class VolunteerInList
     {
         public int Id { get; init; }
-        public string FullName { get; set; }
+        public string FullName { get; set; } = string.Empty;
         public bool IsActive { get; set; }
         public int TotalCallsHandled { get; init; }
         public int TotalCallsCancelled { get; init; }

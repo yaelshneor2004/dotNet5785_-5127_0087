@@ -5,7 +5,14 @@ namespace BlImplementation;
 internal class VolunteerImplementation:IVolunteer
 {
     private readonly DalApi.IDal _dal = DalApi.Factory.Get;
-    // Authenticate user and return their role
+    /// <summary>
+    /// Logs in a volunteer using their username and password.
+    /// </summary>
+    /// <param name="username">The username of the volunteer.</param>
+    /// <param name="password">The password of the volunteer.</param>
+    /// <returns>The role of the volunteer.</returns>
+    /// <exception cref="BO.BlUnauthorizedAccessException">Thrown when the username or password is incorrect.</exception>
+    /// <exception cref="BO.BlDoesNotExistException">Thrown when the user does not exist in the system.</exception>
     public BO.MyRole Login(string username, string password)
     {
         try
@@ -23,19 +30,21 @@ internal class VolunteerImplementation:IVolunteer
         }
         catch (DO.DalDoesNotExistException ex)
         {
-            throw new BO.BlDoesNotExistException($"User with the username '{username}' does not exist in the system");
+            throw new BO.BlDoesNotExistException($"User with the username '{username}' does not exist in the system",ex);
         }
     }
-    // Validate input values and attempt to add the new volunteer to DAL
+    /// <summary>
+    /// Adds a new volunteer to the system.
+    /// </summary>
+    /// <param name="myVolunteer">The volunteer details to add.</param>
+    /// <exception cref="BO.BlAlreadyExistsException">Thrown when a volunteer with the same ID already exists.</exception>
     public void AddVolunteer(BO.Volunteer myVolunteer)
     {
         try
         {
-            // Validate input values
-
             VolunteerManager.ValidateVolunteerDetails(myVolunteer);
             // Attempt to add the new volunteer to DAL
-            myVolunteer.Password=VolunteerManager.Encrypt(myVolunteer.Password);
+            myVolunteer.Password = myVolunteer.Password != null ? VolunteerManager.Encrypt(myVolunteer.Password) : null;
             _dal.Volunteer.Create(VolunteerManager.ConvertFromBoToDo(myVolunteer));
         }
         catch (DO.DalAlreadyExistsException ex)
@@ -43,7 +52,12 @@ internal class VolunteerImplementation:IVolunteer
             throw new BO.BlAlreadyExistsException($"Volunteer with ID {myVolunteer.Id} already exists.", ex);
         }
     }
-    // Attempt to delete a volunteer if they are not currently handling or have handled calls
+    /// <summary>
+    /// Deletes a volunteer from the system.
+    /// </summary>
+    /// <param name="volunteerId">The ID of the volunteer to delete.</param>
+    /// <exception cref="BO.BlInvalidOperationException">Thrown when the volunteer is currently handling or has handled calls.</exception>
+    /// <exception cref="BO.BlDoesNotExistException">Thrown when the volunteer does not exist.</exception>
     public void DeleteVolunteer(int volunteerId)
         {
             try
@@ -63,7 +77,12 @@ internal class VolunteerImplementation:IVolunteer
                 throw new BO.BlDoesNotExistException($"Volunteer with ID {volunteerId} does not exist.", ex);
             }
        }
-    // Retrieves volunteer details by ID
+    /// <summary>
+    /// Retrieves the details of a specific volunteer.
+    /// </summary>
+    /// <param name="id">The ID of the volunteer to retrieve.</param>
+    /// <returns>The details of the volunteer.</returns>
+    /// <exception cref="BO.BlDoesNotExistException">Thrown when the volunteer does not exist.</exception>
     public BO.Volunteer GetVolunteerDetails(int id)
     {
         try
@@ -76,7 +95,12 @@ internal class VolunteerImplementation:IVolunteer
             throw new BO.BlDoesNotExistException($"Volunteer with ID {id} does not exist.", ex);
         }
     }
-    // Retrieves a list of volunteers, optionally filtered by activity status and sorted by a specified field
+    /// <summary>
+    /// Retrieves the details of a specific volunteer.
+    /// </summary>
+    /// <param name="id">The ID of the volunteer to retrieve.</param>
+    /// <returns>The details of the volunteer.</returns>
+    /// <exception cref="BO.BlDoesNotExistException">Thrown when the volunteer does not exist.</exception>
     public IEnumerable<BO.VolunteerInList> GetVolunteerList(bool? isActive, BO.MySortInVolunteerInList? mySortInVolunteerInList)
     {
         var volunteers = _dal.Volunteer.ReadAll();
@@ -86,9 +110,15 @@ internal class VolunteerImplementation:IVolunteer
             volunteers = volunteers.Where(v => v.IsActive == isActive.Value);
         var filteredVolunteers= volunteers.Select(v=>VolunteerManager.ConvertToVolunteerInList(v)).ToList();
         // Sort by the defined field value or by Id
-        return VolunteerManager.SortVolunteers(filteredVolunteers, mySortInVolunteerInList.Value).ToList();
+        return VolunteerManager.SortVolunteers(filteredVolunteers, mySortInVolunteerInList ?? new BO.MySortInVolunteerInList()).ToList();
     }
-    // Update volunteer details, ensuring requester is a manager or the volunteer themselves
+    /// <summary>
+    /// Updates the details of a specific volunteer.
+    /// </summary>
+    /// <param name="id">The ID of the volunteer to update.</param>
+    /// <param name="myVolunteer">The updated volunteer details.</param>
+    /// <exception cref="BO.BlUnauthorizedAccessException">Thrown when the requester is not authorized to update the details.</exception>
+    /// <exception cref="BO.BlDoesNotExistException">Thrown when the volunteer does not exist.</exception>
     public void UpdateVolunteer(int id, BO.Volunteer myVolunteer)
     {
         try
@@ -96,7 +126,7 @@ internal class VolunteerImplementation:IVolunteer
             // Retrieve requester details from DAL
             var volunteer = _dal.Volunteer.Read(id);
             // Verify that the requester is a manager or the same volunteer
-            if (!volunteer.Role.Equals(BO.MyRole.Manager) && volunteer.Id != myVolunteer.Id)
+            if (volunteer?.Role != null && !volunteer.Role.Equals(BO.MyRole.Manager) && volunteer.Id != myVolunteer?.Id)
                 throw new BO.BlUnauthorizedAccessException("Only managers or the volunteer themselves can update the details.");
             VolunteerManager.ValidateVolunteerDetails(myVolunteer);
             var updatedVolunteer = VolunteerManager.ConvertFromBoToDo(myVolunteer);

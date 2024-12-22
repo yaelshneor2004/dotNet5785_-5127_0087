@@ -19,7 +19,7 @@
         public int CallId { get; set; }
         public MyCallType CallType { get; set; }
         public string? Description { get; set; }
-        public string Address { get; set; }
+        public string Address { get; set; }=string.Empty;
         public DateTime StartTime { get; set; }
         public DateTime? MaxEndTime { get; set; }
         public DateTime StartTreatmentTime { get; set; }

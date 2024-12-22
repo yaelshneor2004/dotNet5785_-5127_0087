@@ -16,7 +16,7 @@ namespace BO
     {
         public int Id { get; init; }
         public MyCallType Type { get; set; }
-        public string Address { get; set; }
+        public string Address { get; set; } = string.Empty;
         public DateTime StartTime { get; set; }
         public DateTime StartTreatmentTime { get; set; }
         public DateTime? EndTime { get; set; }

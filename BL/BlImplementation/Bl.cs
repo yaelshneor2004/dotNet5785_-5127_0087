@@ -1,8 +1,5 @@
-﻿
-using BlApi;
-
+﻿using BlApi;
 namespace BlImplementation;
-
 internal class Bl:IBl
 {
     public IVolunteer Volunteer { get; } = new VolunteerImplementation();
