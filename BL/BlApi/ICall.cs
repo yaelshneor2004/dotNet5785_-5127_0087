@@ -2,7 +2,7 @@
 
 namespace BlApi;
 
-public interface  ICall
+public interface  ICall : IObservable
 {
     // Adds a new call to the system
     public void AddCall(BO.Call call);

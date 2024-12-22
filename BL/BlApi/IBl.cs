@@ -1,5 +1,5 @@
 ﻿namespace BlApi;
-public interface IBl
+public interface IBl : IObservable
 {
     ICall Call { get; }
     IVolunteer Volunteer { get; }

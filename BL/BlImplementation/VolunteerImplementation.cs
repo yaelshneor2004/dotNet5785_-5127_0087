@@ -1,5 +1,6 @@
 ﻿using BlApi;
 using Helpers;
+using System;
 using System.Linq;
 namespace BlImplementation;
 internal class VolunteerImplementation:IVolunteer
@@ -46,6 +47,8 @@ internal class VolunteerImplementation:IVolunteer
             // Attempt to add the new volunteer to DAL
             myVolunteer.Password = myVolunteer.Password != null ? VolunteerManager.Encrypt(myVolunteer.Password) : null;
             _dal.Volunteer.Create(VolunteerManager.ConvertFromBoToDo(myVolunteer));
+            VolunteerManager.Observers.NotifyListUpdated();                                                  
+
         }
         catch (DO.DalAlreadyExistsException ex)
         {
@@ -71,8 +74,10 @@ internal class VolunteerImplementation:IVolunteer
                     throw new BO.BlInvalidOperationException("Cannot delete volunteer who is currently handling or has handled calls.");
                 // Attempt to delete the volunteer from DAL
                 _dal.Volunteer.Delete(volunteerId);
-            }
-            catch (DO.DalDoesNotExistException ex)
+            VolunteerManager.Observers.NotifyListUpdated();  	
+
+        }
+        catch (DO.DalDoesNotExistException ex)
             {
                 throw new BO.BlDoesNotExistException($"Volunteer with ID {volunteerId} does not exist.", ex);
             }
@@ -132,6 +137,9 @@ internal class VolunteerImplementation:IVolunteer
             var updatedVolunteer = VolunteerManager.ConvertFromBoToDo(myVolunteer);
             // Attempt to update the volunteer in DAL
             _dal.Volunteer.Update(updatedVolunteer);
+            VolunteerManager.Observers.NotifyItemUpdated(updatedVolunteer.Id);  
+            VolunteerManager.Observers.NotifyListUpdated();  
+
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -139,4 +147,14 @@ internal class VolunteerImplementation:IVolunteer
         }
     }
 
+    public void AddObserver(Action listObserver) =>
+VolunteerManager.Observers.AddListObserver(listObserver); //stage 5
+    public void AddObserver(int id, Action observer) =>
+VolunteerManager.Observers.AddObserver(id, observer); //stage 5
+    public void RemoveObserver(Action listObserver) =>
+VolunteerManager.Observers.RemoveListObserver(listObserver); //stage 5
+    public void RemoveObserver(int id, Action observer) =>
+VolunteerManager.Observers.RemoveObserver(id, observer); //stage 5
+
 }
+

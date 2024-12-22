@@ -23,8 +23,10 @@ internal class CallImplementation : ICall
         CallManager.ValidateCallLogic(call);
         // Attempt to add the new call in the data layer
         _dal.Call.Create(ConvertBOToDO(call));
+        CallManager.Observers.NotifyListUpdated();                                                   
 
-var volunteers = Tools.GetVolunteersWithinDistance(call.Address ?? string.Empty);
+
+        var volunteers = Tools.GetVolunteersWithinDistance(call.Address ?? string.Empty);
         foreach (var volunteer in volunteers)
         {
             var subject = "New Call Opened";
@@ -73,6 +75,8 @@ var volunteers = Tools.GetVolunteersWithinDistance(call.Address ?? string.Empty)
                 throw new BO.BlUnauthorizedAccessException("Only open calls that have never been assigned can be deleted.");
             // Attempt to delete the call in the data layer
             _dal.Call.Delete(callId);
+            CallManager.Observers.NotifyListUpdated(); 	
+
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -232,6 +236,8 @@ var volunteers = Tools.GetVolunteersWithinDistance(call.Address ?? string.Empty)
             CallManager.ValidateCallLogic(myCall);
             // Attempt to update the call in the data layer
             _dal.Call.Update(CallManager.ConvertBOToDO(myCall));
+            CallManager.Observers.NotifyItemUpdated(myCall.Id); 
+            CallManager.Observers.NotifyListUpdated();  
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -318,4 +324,13 @@ var volunteers = Tools.GetVolunteersWithinDistance(call.Address ?? string.Empty)
             throw new BO.BlDoesNotExistException($"Assignment with ID {assignmentId} does not exist.", ex);
         }
     }
+    public void AddObserver(Action listObserver) =>
+CallManager.Observers.AddListObserver(listObserver); 
+    public void AddObserver(int id, Action observer) =>
+CallManager.Observers.AddObserver(id, observer); 
+    public void RemoveObserver(Action listObserver) =>
+CallManager.Observers.RemoveListObserver(listObserver); 
+    public void RemoveObserver(int id, Action observer) =>
+CallManager.Observers.RemoveObserver(id, observer); 
+
 }

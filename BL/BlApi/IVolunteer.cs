@@ -1,6 +1,6 @@
 ﻿namespace BlApi;
 
-public interface IVolunteer
+public interface IVolunteer : IObservable
 {
     //Returns the user role
     BO.MyRole Login(string username, string password);

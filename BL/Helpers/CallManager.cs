@@ -4,6 +4,8 @@ using System.Net.Mail;
 namespace Helpers;
 internal static class CallManager
 {
+    internal static ObserverManager Observers = new(); 
+
     private static IDal s_dal = Factory.Get;
     /// <summary>
     /// Converts an instance of DO.Call to an instance of BO.Call.

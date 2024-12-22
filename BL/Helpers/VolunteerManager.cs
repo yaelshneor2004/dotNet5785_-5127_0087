@@ -5,6 +5,8 @@ using DalApi;
 namespace Helpers;
 internal static class VolunteerManager
 {
+    internal static ObserverManager Observers = new(); 
+
     private static IDal s_dal = DalApi.Factory.Get;
     private static readonly byte[] Key = Encoding.UTF8.GetBytes("0123456789ABCDEF"); // 16-byte key
     private static readonly byte[] IV = Encoding.UTF8.GetBytes("ABCDEF9876543210");  // 16-byte initialization vector
