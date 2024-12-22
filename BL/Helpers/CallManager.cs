@@ -47,7 +47,7 @@ internal static class CallManager
     /// <returns>The status of the call.</returns>
     public static BO.MyCallStatus CalculateCallStatus(DO.Assignment lastAssignment, DateTime? maxEndTime)
     {
-        var currentTime = ClockManager.Now;
+        var currentTime = AdminManager.Now;
         var isInRiskTimeRange = maxEndTime != null && (maxEndTime.Value - currentTime) <= s_dal.Config.RiskRange;
 
         if (lastAssignment == null)
@@ -115,7 +115,7 @@ internal static class CallManager
     public static BO.MyCallStatus GetCallStatus(DO.Call call)
     {
         var assignment = s_dal.Assignment.Read(call.Id);
-        var now = ClockManager.Now;
+        var now = AdminManager.Now;
 
         if (assignment != null && assignment.FinishCall == null)
         {
@@ -192,7 +192,7 @@ internal static class CallManager
             Type = (BO.MyCallType)callData.CallType,
             StartTime = callData.OpenTime,
             TimeRemaining = callData.MaxFinishCall.HasValue
-                ? (callData.MaxFinishCall.Value - ClockManager.Now < TimeSpan.Zero ? TimeSpan.Zero : callData.MaxFinishCall.Value - ClockManager.Now)
+                ? (callData.MaxFinishCall.Value - AdminManager.Now < TimeSpan.Zero ? TimeSpan.Zero : callData.MaxFinishCall.Value - AdminManager.Now)
                 : (TimeSpan?)null,
             LastVolunteerName = lastAssignment != null && lastAssignment.VolunteerId != 0 ? s_dal.Volunteer.Read(lastAssignment.VolunteerId)?.FullName : null,
             CompletionTime = lastAssignment?.FinishCall.HasValue == true ? lastAssignment.FinishCall.Value - callData.OpenTime : (TimeSpan?)null,
@@ -378,9 +378,9 @@ internal static class CallManager
     /// <summary>
     /// Periodically updates the status of calls that have exceeded their maximum finish time.
     /// </summary>
-    internal static void PeriodicCallsUpdates() // stage 4
+    internal static void PeriodicCallsUpdates()
     {
-        var callsList = s_dal.Call.ReadAll(call => call.MaxFinishCall < ClockManager.Now);
+        var callsList = s_dal.Call.ReadAll(call => call.MaxFinishCall < AdminManager.Now);
 
         foreach (var call in callsList)
         {
@@ -391,12 +391,13 @@ internal static class CallManager
                 s_dal.Assignment.Create(new DO.Assignment
                 {
                     CallId = call.Id,
-                    StartCall = ClockManager.Now,
-                    FinishCall = ClockManager.Now,
+                    StartCall = AdminManager.Now,
+                    FinishCall = AdminManager.Now,
                     FinishType = DO.MyFinishType.ExpiredCancel,
                     VolunteerId = 0
                 });
-            }
+                Observers.NotifyItemUpdated(call.Id);  // Add call to NotifyItemUpdated
+        }
 
             DO.Assignment? assignmentInProgress = assignmentList.FirstOrDefault(a => a.FinishCall == null && a.FinishType == null);
 
@@ -408,10 +409,14 @@ internal static class CallManager
                     CallId = assignmentInProgress.CallId,
                     VolunteerId = assignmentInProgress.VolunteerId,
                     StartCall = assignmentInProgress.StartCall,
-                    FinishCall = ClockManager.Now,
+                    FinishCall = AdminManager.Now,
                     FinishType = DO.MyFinishType.ExpiredCancel
                 });
-            }
+                Observers.NotifyItemUpdated(assignmentInProgress.Id); // Add call to NotifyItemUpdated
         }
-    }
+        }
+
+        Observers.NotifyListUpdated(); // Add call to NotifyListUpdated
+}
+
 }

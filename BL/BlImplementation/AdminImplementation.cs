@@ -18,24 +18,24 @@ internal class AdminImplementation : IAdmin
         switch (advance)
         {
             case BO.Clock.Minute:
-                ClockManager.UpdateClock(ClockManager.Now.AddMinutes(1));
+                AdminManager.UpdateClock(AdminManager.Now.AddMinutes(1));
                 break;
             case BO.Clock.Hour:
-                ClockManager.UpdateClock(ClockManager.Now.AddHours(1));
+                AdminManager.UpdateClock(AdminManager.Now.AddHours(1));
                 break;
             case BO.Clock.Day:
-                ClockManager.UpdateClock(ClockManager.Now.AddDays(1));
+                AdminManager.UpdateClock(AdminManager.Now.AddDays(1));
                 break;
             case BO.Clock.Month:
-                ClockManager.UpdateClock(ClockManager.Now.AddMonths(1));
+                AdminManager.UpdateClock(AdminManager.Now.AddMonths(1));
                 break;
             case BO.Clock.Year:
-                ClockManager.UpdateClock(ClockManager.Now.AddYears(1));
+                AdminManager.UpdateClock(AdminManager.Now.AddYears(1));
                 break;
             default:
                 throw new Exception("invalid choice");
         }
-        ClockManager.UpdateClock(_dal.Config.Clock);
+        AdminManager.UpdateClock(_dal.Config.Clock);
         return _dal.Config.Clock;
     }
 
@@ -63,7 +63,9 @@ internal class AdminImplementation : IAdmin
     public void Initialization()
     {
         DalTest.Initialization.Do();
-        ClockManager.UpdateClock(GetClock());
+        AdminManager.UpdateClock(GetClock());
+        //AdminManager.MaxRange = AdminManager.MaxRange;
+        //AdminManagerלהוסיף פה את שאר משתני התצורה שצריך, מה שנעשה ב
     }
 
     /// <summary>
@@ -72,6 +74,9 @@ internal class AdminImplementation : IAdmin
     public void Reset()
     {
         _dal.ResetDB();
+        AdminManager.UpdateClock(GetClock());
+        //AdminManager.MaxRange = AdminManager.MaxRange;
+        //AdminManagerלהוסיף פה את שאר משתני התצורה שצריך, מה שנעשה ב
     }
 
     /// <summary>
@@ -82,4 +87,14 @@ internal class AdminImplementation : IAdmin
     {
         _dal.Config.RiskRange = time;
     }
+
+    public void AddClockObserver(Action clockObserver) =>
+AdminManager.ClockUpdatedObservers += clockObserver;
+    public void RemoveClockObserver(Action clockObserver) =>
+    AdminManager.ClockUpdatedObservers -= clockObserver;
+    public void AddConfigObserver(Action configObserver) =>
+   AdminManager.ConfigUpdatedObservers += configObserver;
+    public void RemoveConfigObserver(Action configObserver) =>
+    AdminManager.ConfigUpdatedObservers -= configObserver;
+
 }

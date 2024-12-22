@@ -295,12 +295,14 @@ internal static class VolunteerManager
             if (!volunteerAssignments.Any() || (newClock - volunteerAssignments.Max(a => a.FinishCall ?? DateTime.MinValue)).TotalDays > 2 * 365)
             {
                 volunteer = volunteer with { IsActive = false };
+                Observers.NotifyItemUpdated(volunteer.Id); // Add call to NotifyItemUpdated
             }
 
             // Upgrade the volunteer's role if he has handled more than 100 calls and is not a manager
             if (volunteerAssignments.Count(a => a.FinishType == DO.MyFinishType.Treated) >= 100 && volunteer.Role != DO.MyRole.Manager)
             {
                 volunteer = volunteer with { Role = DO.MyRole.Manager };
+                Observers.NotifyItemUpdated(volunteer.Id); // Add call to NotifyItemUpdated
             }
 
             return volunteer;
@@ -308,7 +310,12 @@ internal static class VolunteerManager
 
         // Update volunteers in the database
         volunteerUpdates.ForEach(volunteer => s_dal.Volunteer.Update(volunteer));
+
+        // Add call to NotifyListUpdated
+        Observers.NotifyListUpdated();
     }
+
+
 
     /// <summary>
     /// Encrypts a plain text string using AES encryption.

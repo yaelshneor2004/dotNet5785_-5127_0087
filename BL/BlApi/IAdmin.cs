@@ -10,4 +10,9 @@ public interface  IAdmin
     void SetRiskRange(TimeSpan time);
     void Initialization();
     void Reset();
+    void AddConfigObserver(Action configObserver);
+    void RemoveConfigObserver(Action configObserver);
+    void AddClockObserver(Action clockObserver);
+    void RemoveClockObserver(Action clockObserver);
+
 }
