@@ -35,8 +35,8 @@ internal class AdminImplementation : IAdmin
             default:
                 throw new Exception("invalid choice");
         }
-        AdminManager.UpdateClock(_dal.Config.Clock);
-        return _dal.Config.Clock;
+        AdminManager.UpdateClock(AdminManager.Clock);
+        return AdminManager.Clock;
     }
 
     /// <summary>
@@ -45,7 +45,7 @@ internal class AdminImplementation : IAdmin
     /// <returns>The current clock time.</returns>
     public DateTime GetClock()
     {
-        return _dal.Config.Clock;
+        return AdminManager.Clock;
     }
 
     /// <summary>
@@ -54,7 +54,7 @@ internal class AdminImplementation : IAdmin
     /// <returns>The current risk range time span.</returns>
     public TimeSpan GetRiskRange()
     {
-        return _dal.Config.RiskRange;
+        return AdminManager.RiskRange;
     }
 
     /// <summary>
@@ -85,7 +85,7 @@ internal class AdminImplementation : IAdmin
     /// <param name="time">The new risk range time span.</param>
     public void SetRiskRange(TimeSpan time)
     {
-        _dal.Config.RiskRange = time;
+        AdminManager.RiskRange = time;
     }
 
     public void AddClockObserver(Action clockObserver) =>

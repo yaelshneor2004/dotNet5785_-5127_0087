@@ -12,26 +12,34 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace PL.Call
+namespace PL.Call;
+
+/// <summary>
+/// Interaction logic for CallListWindow.xaml
+/// </summary>
+public partial class CallListWindow : Window
 {
-    /// <summary>
-    /// Interaction logic for CallListWindow.xaml
-    /// </summary>
-    public partial class CallListWindow : Window
+    static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
+    public BO.MySortInCallInList SortInCallInList { get; set; } = BO.MySortInCallInList.All;
+
+    public CallListWindow()
     {
-        public CallListWindow()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+    }
+    public IEnumerable<BO.CallInList> CallList
+    {
+        get { return (IEnumerable<BO.CallInList>)GetValue(CallListProperty); }
+        set { SetValue(CallListProperty, value); }
+    }
 
-        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
+    // Using a DependencyProperty as the backing store for CallList.  This enables animation, styling, binding, etc...
+    public static readonly DependencyProperty CallListProperty =
+        DependencyProperty.Register("CallList", typeof(IEnumerable<BO.CallInList>), typeof(CallListWindow), new PropertyMetadata(null));
 
-        }
 
-        private void DataGrid_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
+    private void cmbSelectChanges_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        CallList = (SortInCallInList == BO.MySortInCallInList.All) ? s_bl?.Call.GetCallList(null, null, null)! : s_bl?.Call.GetCallList(null, null, SortInCallInList)!;
     }
 }
+

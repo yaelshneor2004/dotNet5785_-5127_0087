@@ -19,7 +19,7 @@ internal static class VolunteerManager
     public static BO.MyCallStatusByVolunteer DetermineCallStatus(DateTime? maxFinishTime)
     {
         // Use the updated system clock from ClockManager
-        var remainingTime = maxFinishTime - ClockManager.Now;
+        var remainingTime = maxFinishTime - AdminManager.Now;
 
         if (remainingTime <= s_dal.Config.RiskRange)
         {

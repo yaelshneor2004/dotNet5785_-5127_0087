@@ -98,6 +98,7 @@ public enum MySortInVolunteerInList
 /// </summary>
 public enum MySortInCallInList
 {
+    All,
     Type,
     StartTime,
     TimeRemaining,

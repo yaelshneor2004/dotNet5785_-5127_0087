@@ -181,10 +181,10 @@ internal class CallImplementation : ICall
                 throw new BO.BlInvalidOperationException("The call is already being treated by another volunteer.");
 
             // Check if the call has expired
-            if (ClockManager.Now > call?.MaxFinishCall)
+            if (AdminManager.Now > call?.MaxFinishCall)
                 throw new BO.BlInvalidOperationException("The call has expired.");
 
-            _dal.Assignment.Create(new DO.Assignment(0, idC, idV, ClockManager.Now, null, null));
+            _dal.Assignment.Create(new DO.Assignment(0, idC, idV, AdminManager.Now, null, null));
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -267,7 +267,7 @@ internal class CallImplementation : ICall
             // Create a new assignment object with the updated finish time and finish type
             var updatedAssignment = assignment with
             {
-                FinishCall = ClockManager.Now,
+                FinishCall = AdminManager.Now,
                 FinishType = assignment.VolunteerId == idV ? DO.MyFinishType.SelfCancel : DO.MyFinishType.ManagerCancel
             };
             // Attempt to update the assignment entity in the data layer
@@ -311,7 +311,7 @@ internal class CallImplementation : ICall
             // Create a new assignment object with the updated finish time and finish type
             var updatedAssignment = assignment with
             {
-                FinishCall = ClockManager.Now,
+                FinishCall = AdminManager.Now,
                 FinishType = DO.MyFinishType.Treated
             };
 
