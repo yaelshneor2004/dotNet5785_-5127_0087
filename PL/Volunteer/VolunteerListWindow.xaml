@@ -24,7 +24,7 @@
         <Label Content="Label" Grid.Column="0" HorizontalAlignment="Left" Margin="90,10,0,0" VerticalAlignment="Top"/>
         <ComboBox SelectedValue="{Binding VolunteerInList, Mode=TwoWay}" ItemsSource="{Binding Source={StaticResource SortCollectionVolunteersInListKey}}"
                   Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SelectionChanged="cmbVolunteerInList_SelectionChanged"/>
-        <DataGrid Grid.Row="1" Margin="5" ItemsSource="{Binding Path=VolunteerInList}" AutoGenerateColumns="False"  SelectedItem="{Binding SelectedVolunteer}" MouseDoubleClick="UpdateVolunteerList_MouseDoubleClick">
+        <DataGrid Grid.Row="1" Margin="5" ItemsSource="{Binding Path=VolunteerInList}" AutoGenerateColumns="False"  SelectedItem="{Binding SelectedVolunteer}" MouseDoubleClick="UpdateVolunteerList_MouseDoubleClick" SelectionUnit="FullRow">
             
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Id}" Header="Id" Width="Auto"/>
