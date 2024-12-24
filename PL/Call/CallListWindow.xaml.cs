@@ -25,6 +25,8 @@ public partial class CallListWindow : Window
     public CallListWindow()
     {
         InitializeComponent();
+        Loaded += CallListWindow_Loaded;
+        Closed += CallListWindow_Closed;
     }
     public IEnumerable<BO.CallInList> CallList
     {
@@ -35,11 +37,38 @@ public partial class CallListWindow : Window
     // Using a DependencyProperty as the backing store for CallList.  This enables animation, styling, binding, etc...
     public static readonly DependencyProperty CallListProperty =
         DependencyProperty.Register("CallList", typeof(IEnumerable<BO.CallInList>), typeof(CallListWindow), new PropertyMetadata(null));
+    public BO.CallInList SelectedCall
+    {
+        get { return (BO.CallInList)GetValue(SelectedCallProperty); }
+        set { SetValue(SelectedCallProperty, value); }
+    }
+
+    // Using a DependencyProperty as the backing store for SelectedCall. This enables animation, styling, binding, etc...
+    public static readonly DependencyProperty SelectedCallProperty =
+        DependencyProperty.Register("SelectedCall", typeof(BO.CallInList), typeof(CallListWindow), new PropertyMetadata(null));
 
 
     private void cmbSelectChanges_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         CallList = (SortInCallInList == BO.MySortInCallInList.All) ? s_bl?.Call.GetCallList(null, null, null)! : s_bl?.Call.GetCallList(null, null, SortInCallInList)!;
     }
+    private void RefreshCallList()
+    {
+        CallList = (SortInCallInList == BO.MySortInCallInList.All) ? s_bl?.Call.GetCallList(null, null, null)! : s_bl?.Call.GetCallList(null, null, SortInCallInList)!;
+    }
+    private void OnCallListUpdated()
+    {
+        RefreshCallList();
+    }
+    private void CallListWindow_Loaded(object sender, RoutedEventArgs e)
+    {
+        s_bl.Call.AddObserver(OnCallListUpdated);
+    }
+
+    private void CallListWindow_Closed(object? sender, EventArgs e)
+    {
+        s_bl.Call.RemoveObserver(OnCallListUpdated);
+    }
+
 }
 

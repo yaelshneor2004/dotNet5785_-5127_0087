@@ -22,7 +22,7 @@ sealed internal class DalXml : IDal
     {
         Volunteer.DeleteAll();
         Call.DeleteAll();
-        Volunteer.DeleteAll();
+        Assignment.DeleteAll();
         Config.Reset();
     }
 }

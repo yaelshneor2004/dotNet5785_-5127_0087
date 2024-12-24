@@ -22,6 +22,7 @@ namespace PL
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = this;
             Loaded += MainWindow_Loaded;
             Closed += MainWindow_Closed;
         }
@@ -38,6 +39,7 @@ namespace PL
             get { return (DateTime)GetValue(CurrentTimeProperty); }
             set { SetValue(CurrentTimeProperty, value); }
         }
+
         public TimeSpan MaxRiskRange
         {
             get { return (TimeSpan)GetValue(MaxRiskRangeProperty); }
@@ -47,7 +49,7 @@ namespace PL
             DependencyProperty.Register("CurrentTime", typeof(DateTime), typeof(MainWindow));
         public static readonly DependencyProperty MaxRiskRangeProperty =
     DependencyProperty.Register("MaxRiskRange", typeof(TimeSpan), typeof(MainWindow));
-      private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+      private void MainWindow_Loaded(object sender, EventArgs e)
         {
             CurrentTime = s_bl.Admin.GetClock();
             MaxRiskRange = s_bl.Admin.GetRiskRange();
@@ -96,6 +98,7 @@ namespace PL
 
         private void btnInitDB_Click(object sender, RoutedEventArgs e)
         {
+            Mouse.OverrideCursor = Cursors.Wait;
             MessageBoxResult result = MessageBox.Show("Are you sure you want to initialize the database?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result == MessageBoxResult.Yes)
             {
@@ -111,12 +114,13 @@ namespace PL
                 // Call the initialization method
                 s_bl.Admin.Initialization();
                 // Change cursor to wait cursor
-                Mouse.OverrideCursor = Cursors.Wait;
+                Mouse.OverrideCursor =null;
             }
         }
 
         private void btnResetDB_Click(object sender, RoutedEventArgs e)
         {
+            Mouse.OverrideCursor = Cursors.Wait;
             MessageBoxResult result = MessageBox.Show("Are you sure you want to reset the database?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result == MessageBoxResult.Yes)
             {
@@ -128,11 +132,11 @@ namespace PL
                         window.Close();
                     }
                 }
-
                 // Call the reset method
                 s_bl.Admin.Reset();
                 // Change cursor to wait cursor
-                Mouse.OverrideCursor = Cursors.Wait;
+
+                Mouse.OverrideCursor = null;
 
             }
         }
