@@ -1,4 +1,5 @@
 ﻿using BlApi;
+using BO;
 using Helpers;
 using System;
 using System.Linq;
@@ -117,6 +118,18 @@ internal class VolunteerImplementation:IVolunteer
         // Sort by the defined field value or by Id
         return VolunteerManager.SortVolunteers(filteredVolunteers, mySortInVolunteerInList ?? new BO.MySortInVolunteerInList()).ToList();
     }
+
+
+    public IEnumerable<VolunteerInList> GetFilterVolunteerList(BO.MyCallType filter)
+    {
+        IEnumerable<DO.Volunteer> volunteers = _dal.Volunteer.ReadAll();
+        var volunteerList = volunteers.Select(v => VolunteerManager.ConvertToVolunteerInList(v)).ToList();
+
+        volunteerList = volunteerList.Where(v => v.CurrentCallType == filter).ToList();
+
+        return volunteerList;
+    }
+
     /// <summary>
     /// Updates the details of a specific volunteer.
     /// </summary>

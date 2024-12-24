@@ -22,7 +22,7 @@ namespace PL.Volunteer
     public partial class VolunteerListWindow : Window
     {
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
-
+        public BO.VolunteerInList? SelectedVolunteer { get; set; }
         public VolunteerListWindow()
         {
             InitializeComponent();
@@ -39,7 +39,7 @@ namespace PL.Volunteer
         public static readonly DependencyProperty VolunteerInListProperty =
             DependencyProperty.Register("VolunteerInList", typeof(IEnumerable<BO.VolunteerInList>), typeof(VolunteerListWindow), new PropertyMetadata(null));
 
-        public BO.MySortInVolunteerInList SortInVolunteerInList { get; set; } = BO.MySortInVolunteerInList.All;
+        public BO.MyCallType SortInVolunteerInList { get; set; } = BO.MyCallType.None;
 
         private void cmbVolunteerInList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -48,9 +48,9 @@ namespace PL.Volunteer
 
         private void queryVolunteerList()
         {
-            VolunteerInList = (SortInVolunteerInList == BO.MySortInVolunteerInList.All) ?
-                s_bl?.Volunteer.GetVolunteerList(null, null)! :
-                s_bl?.Volunteer.GetVolunteerList(null, SortInVolunteerInList)!;
+            VolunteerInList = (SortInVolunteerInList == BO.MyCallType.None) ?
+                s_bl?.Volunteer.GetFilterVolunteerList(BO.MyCallType.None)! :
+                s_bl?.Volunteer.GetFilterVolunteerList(SortInVolunteerInList)!;
         }
 
         private void VolunteerListObserver()
@@ -67,5 +67,41 @@ namespace PL.Volunteer
         {
             s_bl.Volunteer.RemoveObserver(VolunteerListObserver);
         }
+
+        private void UpdateVolunteerList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (SelectedVolunteer != null)
+                new VolunteerWindow(SelectedVolunteer.Id).Show();
+        }
+
+        private void AddVolunteerList_Click(object sender, RoutedEventArgs e)
+        {
+            new VolunteerWindow().Show();
+        }
+        private void DeleteVolunteer_Click(object sender, RoutedEventArgs e)
+        {
+
+            if (SelectedVolunteer == null)
+            {
+                MessageBox.Show("No volunteer selected.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            MessageBoxResult result = MessageBox.Show("Are you sure you want to delete this volunteer?", "Confirm Delete", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (result == MessageBoxResult.Yes)
+            {
+                try
+                {
+                    s_bl.Volunteer.DeleteVolunteer(SelectedVolunteer.Id);
+
+
+                    MessageBox.Show("Volunteer deleted successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Failed to delete volunteer: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
     }
 }

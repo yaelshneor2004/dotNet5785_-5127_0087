@@ -24,7 +24,8 @@
         <Label Content="Label" Grid.Column="0" HorizontalAlignment="Left" Margin="90,10,0,0" VerticalAlignment="Top"/>
         <ComboBox SelectedValue="{Binding VolunteerInList, Mode=TwoWay}" ItemsSource="{Binding Source={StaticResource SortCollectionVolunteersInListKey}}"
                   Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SelectionChanged="cmbVolunteerInList_SelectionChanged"/>
-        <DataGrid Grid.Row="1" Margin="5" ItemsSource="{Binding Path=VolunteerInList}" AutoGenerateColumns="False">
+        <DataGrid Grid.Row="1" Margin="5" ItemsSource="{Binding Path=VolunteerInList}" AutoGenerateColumns="False"  SelectedItem="{Binding SelectedVolunteer}" MouseDoubleClick="UpdateVolunteerList_MouseDoubleClick">
+            
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Id}" Header="Id" Width="Auto"/>
                 <DataGridTextColumn Binding="{Binding FullName}" Header="Full Name" Width="Auto"/>
@@ -40,8 +41,15 @@
                 <DataGridTextColumn Binding="{Binding TotalCallsExpired}" Header="Total Calls Expired" Width="Auto"/>
                 <DataGridTextColumn Binding="{Binding CurrentCallId}" Header="Current Call Id" Width="Auto"/>
                 <DataGridTextColumn Binding="{Binding CurrentCallType}" Header="Current Call Type" Width="Auto"/>
+                <DataGridTemplateColumn Header="Actions" Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Delete" Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding}" Click="DeleteVolunteer_Click" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <Button Content="Add" Grid.Row="2" HorizontalAlignment="Center" Height="50" Width="100"/>
+        <Button Content="Add" Grid.Row="2" HorizontalAlignment="Center" Height="50" Width="100" Click="AddVolunteerList_Click"/>
     </Grid>
 </Window>

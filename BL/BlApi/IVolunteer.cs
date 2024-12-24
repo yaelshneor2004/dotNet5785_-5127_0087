@@ -1,4 +1,6 @@
-﻿namespace BlApi;
+﻿using BO;
+
+namespace BlApi;
 
 public interface IVolunteer : IObservable
 {
@@ -10,6 +12,7 @@ public interface IVolunteer : IObservable
 
     //Returns the object it constructed
     BO.Volunteer GetVolunteerDetails(int id);
+    IEnumerable<VolunteerInList> GetFilterVolunteerList(BO.MyCallType filter);
 
    void UpdateVolunteer(int id, BO.Volunteer myVolunteer); //update
 

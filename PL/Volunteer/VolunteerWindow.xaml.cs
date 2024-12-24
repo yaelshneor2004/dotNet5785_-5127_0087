@@ -23,24 +23,82 @@ namespace PL.Volunteer
 
         public static readonly DependencyProperty ButtonTextProperty =
             DependencyProperty.Register("ButtonText", typeof(string), typeof(VolunteerWindow), new PropertyMetadata(string.Empty));
-
+        private int id = 0;
         public string ButtonText
         {
             get { return (string)GetValue(ButtonTextProperty); }
             set { SetValue(ButtonTextProperty, value); }
         }
 
-        public VolunteerWindow(int id)
+        public VolunteerWindow(int id = 0)
         {
+            this.id = id;
             ButtonText = id == 0 ? "Add" : "Update";
             InitializeComponent();
+            Loaded += VolunteerWindow_Loaded;
+            Closed += VolunteerWindow_Closed;
+            try
+            {
+                CurrentVolunteer = (id != 0) ? s_bl.Volunteer.GetVolunteerDetails(id) : new BO.Volunteer(0, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, null, null, BO.MyRole.Volunteer, true, null, BO.MyTypeDistance.Aerial, 0, 0, 0, null);
+                if (CurrentVolunteer!.Id != 0)
+                {
+                    s_bl.Volunteer.AddObserver(CurrentVolunteer.Id, VolunteerObserver);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void VolunteerWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (CurrentVolunteer!.Id != 0)
+                s_bl.Volunteer.AddObserver(CurrentVolunteer!.Id, VolunteerObserver);
+        }
+
+        private void VolunteerWindow_Closed(object? sender, EventArgs e)
+        {
+            if (CurrentVolunteer!.Id != 0)
+                s_bl.Volunteer.RemoveObserver(CurrentVolunteer!.Id, VolunteerObserver);
         }
 
         private void btnAddUpdate_Click(object sender, RoutedEventArgs e)
         {
-
+            if (CurrentVolunteer == null)
+            {
+                MessageBox.Show("Volunteer details are missing.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            if (ButtonText == "Add")
+            {
+                try
+                {
+                    s_bl.Volunteer.AddVolunteer(CurrentVolunteer);
+                    MessageBox.Show("Volunteer added successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            else
+            {
+                try
+                {
+                    s_bl.Volunteer.UpdateVolunteer(id, CurrentVolunteer);
+                    MessageBox.Show("Volunteer updated successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
         }
-        public BO.Volunteer? CurrentVolunteer//yael that the only change
+
+        public BO.Volunteer? CurrentVolunteer
         {
             get { return (BO.Volunteer?)GetValue(CurrentVolunteerProperty); }
             set { SetValue(CurrentVolunteerProperty, value); }
@@ -49,6 +107,13 @@ namespace PL.Volunteer
         public static readonly DependencyProperty CurrentVolunteerProperty =
             DependencyProperty.Register("CurrentVolunteer", typeof(BO.Volunteer), typeof(VolunteerWindow), new PropertyMetadata(null));
 
+        private void VolunteerObserver()
+        {
+            int id = CurrentVolunteer!.Id;
+            CurrentVolunteer = null;
+            CurrentVolunteer = s_bl.Volunteer.GetVolunteerDetails(id);
+        }
+       
     }
    
 }

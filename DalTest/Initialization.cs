@@ -205,7 +205,7 @@ public static class Initialization
         for (int i = 0; i < callAddresses.Length; i++)
         {
             string address = callAddresses[i];
-            MyCallType callType = 0;
+            MyCallType callType =(MyCallType) s_rand.Next(0,4);
             double latitude = callLatitudes[i];
             double longitude = callLongitudes[i];
             DateTime openTime = new DateTime((s_dal!.Config.Clock.Year - 1), 1, 1); // One year back from today

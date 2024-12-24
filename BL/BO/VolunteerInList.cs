@@ -24,7 +24,7 @@ namespace BO
         public int TotalCallsCancelled { get; init; }
         public int TotalCallsExpired { get; init; }
         public int? CurrentCallId { get; set; }
-        public MyCurrentCallType CurrentCallType { get; set; }
+        public BO.MyCallType CurrentCallType { get; set; }
         public override string ToString()
         {
             return $"Volunteer ID: {Id}, FullName: {FullName}, Active: {IsActive}, " + $"Total Calls Handled: {TotalCallsHandled}, Total Calls Cancelled: {TotalCallsCancelled}, " + $"Total Calls Expired: {TotalCallsExpired}, Current Call ID: {CurrentCallId}, " + $"Current Call Type: {CurrentCallType}";

@@ -31,8 +31,8 @@ public enum MyCallType
     Math,
     ComputerScience,
     Accounting
+    ,None
 }
-
 /// <summary>
 /// Enum representing completion or cancellation statuses for calls.
 /// Options include 'InProgress' for ongoing cases, 'AtRisk' for at-risk cases
@@ -41,17 +41,6 @@ public enum MyCallStatusByVolunteer
 {
     InProgress,
     AtRisk
-}
-
-/// <summary>
-/// Enum specifying the current call type in the system.
-/// Options include 'Emergency', 'Regular', and 'None' for no ongoing call
-/// </summary>
-public enum MyCurrentCallType
-{
-    Emergency,
-    Regular,
-    None // Added to handle cases where no call is in progress
 }
 
 /// <summary>
