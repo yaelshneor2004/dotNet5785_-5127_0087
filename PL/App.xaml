@@ -4,7 +4,7 @@
              xmlns:local="clr-namespace:PL"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-     <local:SortCollectionCallInList x:Key="SortCollectionCallInListKey"/>
-        
+        <local:SortCollectionCallInList x:Key="SortCollectionCallInListKey"/>
+        <local:SortCollectionVolunteersInList x:Key="SortCollectionVolunteersInListKey" />
     </Application.Resources>
 </Application>

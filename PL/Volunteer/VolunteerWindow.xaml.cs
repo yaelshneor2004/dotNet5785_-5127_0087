@@ -19,9 +19,26 @@ namespace PL.Volunteer
     /// </summary>
     public partial class VolunteerWindow : Window
     {
-        public VolunteerWindow()
+        static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
+
+        public static readonly DependencyProperty ButtonTextProperty =
+            DependencyProperty.Register("ButtonText", typeof(string), typeof(VolunteerWindow), new PropertyMetadata(string.Empty));
+
+        public string ButtonText
         {
+            get { return (string)GetValue(ButtonTextProperty); }
+            set { SetValue(ButtonTextProperty, value); }
+        }
+
+        public VolunteerWindow(int id)
+        {
+            ButtonText = id == 0 ? "Add" : "Update";
             InitializeComponent();
+        }
+
+        private void btnAddUpdate_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

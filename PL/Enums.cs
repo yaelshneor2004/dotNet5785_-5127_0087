@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 namespace PL;
-
 public class Enums
 {
     internal class SortCollectionCallInList : IEnumerable
@@ -10,5 +9,13 @@ public class Enums
 
         public IEnumerator GetEnumerator() => s_enums.GetEnumerator();
     }
+    internal class SortCollectionVolunteersInList : IEnumerable
+    {
+        static readonly IEnumerable<BO.MySortInVolunteerInList> s_enums =
+    (Enum.GetValues(typeof(BO.MySortInVolunteerInList)) as IEnumerable<BO.MySortInVolunteerInList>)!;
+
+        public IEnumerator GetEnumerator() => s_enums.GetEnumerator();
+    }
+
 
 }

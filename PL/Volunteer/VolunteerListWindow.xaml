@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.Volunteer"
         mc:Ignorable="d"
-        Title="VolunteerListWindow" Height="640" Width="800">
+        Title="VolunteerListWindow" Height="640" Width="800"
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
     <!--External Grid-->
     <Grid>
         <Grid.RowDefinitions>
@@ -21,11 +22,26 @@
             </Grid.ColumnDefinitions>
         </Grid>
         <Label Content="Label" Grid.Column="0" HorizontalAlignment="Left" Margin="90,10,0,0" VerticalAlignment="Top"/>
-        <ComboBox Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        <DataGrid Grid.Row="1" d:ItemsSource="{d:SampleData ItemCount=5}"/>
+        <ComboBox SelectedValue="{Binding VolunteerInList, Mode=TwoWay}" ItemsSource="{Binding Source={StaticResource SortCollectionVolunteersInListKey}}"
+                  Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SelectionChanged="cmbVolunteerInList_SelectionChanged"/>
+        <DataGrid Grid.Row="1" Margin="5" ItemsSource="{Binding Path=VolunteerInList}" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Id}" Header="Id" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding FullName}" Header="Full Name" Width="Auto"/>
+                <DataGridTemplateColumn Header="Is Active" Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox IsEnabled="False" IsChecked="{Binding Path=IsActive}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Binding="{Binding TotalCallsHandled}" Header="Total Calls Handled" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding TotalCallsCancelled}" Header="Total Calls Cancelled" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding TotalCallsExpired}" Header="Total Calls Expired" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding CurrentCallId}" Header="Current Call Id" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding CurrentCallType}" Header="Current Call Type" Width="Auto"/>
+            </DataGrid.Columns>
+        </DataGrid>
         <Button Content="Add" Grid.Row="2" HorizontalAlignment="Center" Height="50" Width="100"/>
-
-
     </Grid>
-
 </Window>

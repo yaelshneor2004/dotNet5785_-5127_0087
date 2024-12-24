@@ -50,24 +50,24 @@ public partial class CallListWindow : Window
 
     private void cmbSelectChanges_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        CallList = (SortInCallInList == BO.MySortInCallInList.All) ? s_bl?.Call.GetCallList(null, null, null)! : s_bl?.Call.GetCallList(null, null, SortInCallInList)!;
+        queryCallList();
     }
-    private void RefreshCallList()
+    private void queryCallList()
     {
         CallList = (SortInCallInList == BO.MySortInCallInList.All) ? s_bl?.Call.GetCallList(null, null, null)! : s_bl?.Call.GetCallList(null, null, SortInCallInList)!;
     }
-    private void OnCallListUpdated()
+    private void callListObserver()
     {
-        RefreshCallList();
+        queryCallList();
     }
     private void CallListWindow_Loaded(object sender, RoutedEventArgs e)
     {
-        s_bl.Call.AddObserver(OnCallListUpdated);
+        s_bl.Call.AddObserver(callListObserver);
     }
 
     private void CallListWindow_Closed(object? sender, EventArgs e)
     {
-        s_bl.Call.RemoveObserver(OnCallListUpdated);
+        s_bl.Call.RemoveObserver(callListObserver);
     }
 
 }

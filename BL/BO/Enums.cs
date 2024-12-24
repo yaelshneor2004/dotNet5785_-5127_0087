@@ -85,7 +85,7 @@ public enum MyFinishType
 /// Options include 'FullName', 'TotalCallsHandled', 'TotalCallsCancelled', and 'CurrentCallType'
 /// </summary>
 public enum MySortInVolunteerInList
-{
+{    All,
     FullName,
     TotalCallsHandled,
     TotalCallsCancelled,
