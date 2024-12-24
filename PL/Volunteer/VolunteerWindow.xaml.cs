@@ -40,5 +40,15 @@ namespace PL.Volunteer
         {
 
         }
+        public BO.Volunteer? CurrentVolunteer//yael that the only change
+        {
+            get { return (BO.Volunteer?)GetValue(CurrentVolunteerProperty); }
+            set { SetValue(CurrentVolunteerProperty, value); }
+        }
+
+        public static readonly DependencyProperty CurrentVolunteerProperty =
+            DependencyProperty.Register("CurrentVolunteer", typeof(BO.Volunteer), typeof(VolunteerWindow), new PropertyMetadata(null));
+
     }
+   
 }
