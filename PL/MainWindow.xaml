@@ -35,27 +35,33 @@
                 <Button Content="Reset DB" HorizontalAlignment="Left" Height="73" Margin="254,41,0,0" VerticalAlignment="Top" Width="127" Click="btnResetDB_Click"/>
                 <Button Content="Init DB" HorizontalAlignment="Left" Height="73" Margin="68,43,0,0" VerticalAlignment="Top" Width="127" Click="btnInitDB_Click"/>
             </Grid>
-            <Grid Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="264,7,0,0">
+            <Grid Grid.ColumnSpan="2" Margin="264,7,0,-3">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="499*"/>
                     <ColumnDefinition Width="36*"/>
                 </Grid.ColumnDefinitions>
+
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="169*"/>
-                    <RowDefinition Height="45*"/>
+                    <RowDefinition Height="172*"/>
+                    <RowDefinition Height="259*"/>
                     <RowDefinition Height="0"/>
                 </Grid.RowDefinitions>
-                <Label Content="{Binding CurrentTime, StringFormat=MM/dd/yyyy}" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="15" Margin="0,209,0,0"/>
-                
+
+
+                <Label Content="{Binding CurrentTime, StringFormat=MM/dd/yyyy}" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="15" Margin="0,18,0,0" Height="10" Grid.Row="1" Width="10"/>
+
                 <Button Content="Add One Minute" HorizontalAlignment="Left" Height="26" Margin="108,46,0,0" VerticalAlignment="Top" Width="369" Click="btnAddOneMinute_Click"/>
                 <Button Content="Add One Day" HorizontalAlignment="Left" Height="26" Margin="110,6,0,0" VerticalAlignment="Top" Width="369" Click="btnAddOneDay_Click"/>
-                <Button Content="Add One Hour" HorizontalAlignment="Left" Height="26" Margin="108,85,0,0" VerticalAlignment="Top" Width="369" Click="btnAddOneHour_Click"/>
+                <Button Content="Add One Hour" HorizontalAlignment="Left" Height="26" Margin="108,0,0,0" VerticalAlignment="Center" Width="369" Click="btnAddOneHour_Click"/>
                 <Button Content="Add One Month" HorizontalAlignment="Left" Height="26" Margin="83,15,0,0" VerticalAlignment="Top" Width="369" Click="btnAddOneMonth_Click" Grid.Row="1"/>
                 <Button Content="Add One Year" HorizontalAlignment="Left" Height="26" Margin="84,55,0,0" VerticalAlignment="Top" Width="369" Click="btnAddOneYear_Click" Grid.Row="1"/>
+
                 <Label Content="Max Range" HorizontalAlignment="Left" Height="28" Margin="-215,40,0,0" VerticalAlignment="Top" Width="157"/>
-                <TextBox Text="{Binding MaxRiskRange}" Margin="-250,94,617,77"/>
-                <Button Content="Update" HorizontalAlignment="Left" Height="26" Margin="-108,97,0,0" VerticalAlignment="Top" Width="60" Click="btnUpdate_Click"/>
+                <TextBox Text="{Binding MaxRiskRange}" Margin="-224,94,616,27"/>
+                <Button Content="Update" HorizontalAlignment="Left" Height="26" Margin="-108,0,0,0" VerticalAlignment="Center" Width="60" Click="btnUpdate_Click"/>
             </Grid>
+
         </Grid>
+
     </Grid>
 </Window>
