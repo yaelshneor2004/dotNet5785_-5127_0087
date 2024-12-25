@@ -5,6 +5,9 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <local:SortCollectionCallInList x:Key="SortCollectionCallInListKey"/>
-        <local:SortCollectionVolunteersInList x:Key="SortCollectionVolunteersInListKey"/>
+        <local:SortCollectionMyCallType x:Key="SortCollectionMyCallTypeKey"/>
+        <local:SortCollectionRoles x:Key="SortCollectionRolesKey"/>
+        <local:SortCollectionDistances x:Key="SortCollectionDistancesKey"/>
+        <local:SortCollectionCallStatusByVolunteer x:Key="SortCollectionCallStatusByVolunteerKey"/>
     </Application.Resources>
 </Application>

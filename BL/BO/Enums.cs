@@ -7,7 +7,8 @@
 public enum MyRole
 {
     Volunteer,
-    Manager
+    Manager,
+        None
 }
 
 /// <summary>
@@ -18,7 +19,8 @@ public enum MyTypeDistance
 {
     Aerial,
     Walking,
-    Traveling
+    Traveling,
+    None
 }
 
 /// <summary>
@@ -40,7 +42,8 @@ public enum MyCallType
 public enum MyCallStatusByVolunteer
 {
     InProgress,
-    AtRisk
+    AtRisk,
+    None
 }
 
 /// <summary>

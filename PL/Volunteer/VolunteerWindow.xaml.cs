@@ -21,6 +21,11 @@ namespace PL.Volunteer
     {
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
 
+        public BO.MyCallType CallType { get; set; } = BO.MyCallType.None;
+        public BO.MyTypeDistance TypeDistance { get; set; } = BO.MyTypeDistance.None;
+        public BO.MyRole Role { get; set; } = BO.MyRole.None;
+        public BO.MyCallStatusByVolunteer CallStatus{ get; set; } = BO.MyCallStatusByVolunteer.None;
+
         public static readonly DependencyProperty ButtonTextProperty =
             DependencyProperty.Register("ButtonText", typeof(string), typeof(VolunteerWindow), new PropertyMetadata(string.Empty));
         private int id = 0;

@@ -22,7 +22,7 @@ namespace PL.Volunteer
     public partial class VolunteerListWindow : Window
     {
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
-        public BO.VolunteerInList? SelectedVolunteer { get; set; }
+        public BO.MyCallType    ? SelectedVolunteer { get; set; }
         public VolunteerListWindow()
         {
             InitializeComponent();
@@ -91,8 +91,8 @@ namespace PL.Volunteer
             {
                 try
                 {
-                    s_bl.Volunteer.DeleteVolunteer(SelectedVolunteer.Id);
 
+                    s_bl.Volunteer.DeleteVolunteer(SelectedVolunteer.Id);
 
                     MessageBox.Show("Volunteer deleted successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
