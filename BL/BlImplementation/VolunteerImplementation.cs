@@ -124,10 +124,7 @@ internal class VolunteerImplementation:IVolunteer
     {
         IEnumerable<DO.Volunteer> volunteers = _dal.Volunteer.ReadAll();
         var volunteerList = volunteers.Select(v => VolunteerManager.ConvertToVolunteerInList(v)).ToList();
-
-        volunteerList = volunteerList.Where(v => v.CurrentCallType == filter).ToList();
-
-        return volunteerList;
+        return filter != BO.MyCallType.None ? volunteerList.Where(v => v.CurrentCallType == filter).ToList() : volunteerList;
     }
 
     /// <summary>

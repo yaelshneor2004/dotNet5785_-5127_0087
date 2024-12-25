@@ -28,7 +28,8 @@ public enum MyCallType
     English,
     Math,
     ComputerScience,
-    Accounting
+    Accounting,
+    None
 }
 
 /// <summary>

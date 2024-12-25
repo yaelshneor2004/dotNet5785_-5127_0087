@@ -69,7 +69,7 @@
         </Grid.RowDefinitions>
 
         <Label Content="ID:" Grid.Column="0" Height="23" Margin="10,0,0,0" Width="150"/>
-        <TextBox Text="{Binding Id}" Grid.Column="1" IsReadOnly="True" Margin="6,0,0,0" Height="15" Width="300"/>
+        <TextBox Text="{Binding Id}" Grid.Column="1" Margin="6,0,0,0" Height="15" Width="300"/>
 
         <Label Content="Full Name:" Grid.Row="1" Grid.Column="0" Height="24" Margin="10,0,0,0" Width="150"/>
         <TextBox Text="{Binding FullName}" Grid.Row="1" Grid.Column="1" Margin="6,0,0,0" Height="16" Width="300"/>
@@ -87,7 +87,7 @@
         <TextBox Text="{Binding Address}" Grid.Row="5" Grid.Column="1" Margin="6,0,0,0" Height="15" Width="300"/>
 
         <Label Content="Role:" Grid.Row="8" Grid.Column="0" Height="24" Margin="10,0,0,0" Width="150"/>
-        <ComboBox ItemsSource="{Binding Roles, Source={StaticResource SortCollectionRolesKey}}" SelectedItem="{Binding Role}" SelectedValue="{Binding Path=Role, Mode=TwoWay}" Grid.Row="8" Grid.Column="1" Margin="6,0,0,0" Height="20" Width="300"/>
+        <ComboBox ItemsSource="{Binding Source={StaticResource SortCollectionRolesKey}}" SelectedItem="{Binding Role}" SelectedValue="{Binding Path=Role, Mode=TwoWay}" Grid.Row="8" Grid.Column="1" Margin="6,0,0,0" Height="20" Width="300"/>
 
         <Label Content="Is Active:" Grid.Row="9" Grid.Column="0" Height="23" Margin="10,0,0,0" Width="150"/>
         <CheckBox IsChecked="{Binding IsActive, Mode=OneWay}" Grid.Row="9" Grid.Column="1" Margin="6,0,0,0" Height="15" Width="300"/>
@@ -96,13 +96,13 @@
         <TextBox Text="{Binding MaxDistance}" Grid.Row="10" Grid.Column="1" Margin="6,0,0,0" Height="15" Width="300"/>
 
         <Label Content="Type Distance:" Grid.Row="11" Grid.Column="0" Height="24" Margin="10,0,0,0" Width="150"/>
-        <ComboBox ItemsSource="{Binding TypeDistances, Source={StaticResource SortCollectionDistancesKey}}" SelectedItem="{Binding TypeDistance}" SelectedValue="{Binding Path=dis, Mode=TwoWay}" Grid.Row="11" Grid.Column="1" Margin="6,0,0,0" Height="20" Width="300"/>
+        <ComboBox ItemsSource="{Binding  Source={StaticResource SortCollectionDistancesKey}}" SelectedItem="{Binding TypeDistance}" SelectedValue="{Binding Path=TypeDistance, Mode=TwoWay}" Grid.Row="11" Grid.Column="1" Margin="6,0,0,0" Height="20" Width="300"/>
 
         <Button Content="{Binding ButtonText}" Grid.Row="15" Grid.Column="1" HorizontalAlignment="Center" Width="255" Click="btnAddUpdate_Click" Margin="0,23,0,43" Grid.RowSpan="6"/>
         <!-- New Fields Panel -->
         <StackPanel Grid.Row="0" Grid.Column="2" Grid.RowSpan="10" HorizontalAlignment="Left" VerticalAlignment="Center" Height="401" Margin="13,0,0,0" Width="320">
             <Label Content="Call Type:"/>
-            <ComboBox ItemsSource="{Binding CallTypes, Source={StaticResource SortCollectionMyCallTypeKey}}" SelectedItem="{Binding CallType}" SelectedValue="{Binding Path=CallType, Mode=TwoWay}"/>
+            <ComboBox ItemsSource="{Binding Source={StaticResource SortCollectionMyCallTypeKey}}" SelectedItem="{Binding CallType}" SelectedValue="{Binding Path=CallType, Mode=TwoWay}"/>
 
             <Label Content="Description:"/>
             <TextBox Text="{Binding Description}"/>
@@ -114,7 +114,7 @@
             <TextBox Text="{Binding CallAddress}"/>
 
             <Label Content="Status:"/>
-            <ComboBox ItemsSource="{Binding Statuses, Source={StaticResource SortCollectionCallStatusByVolunteerKey}}" SelectedItem="{Binding Status}" SelectedValue="{Binding Path=CallStatus, Mode=TwoWay}"/>
+            <ComboBox ItemsSource="{Binding  Source={StaticResource SortCollectionCallStatusByVolunteerKey}}" SelectedItem="{Binding Status}" SelectedValue="{Binding Path=CallStatus, Mode=TwoWay}"/>
         </StackPanel>
     </Grid>
 </Window>

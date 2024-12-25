@@ -135,12 +135,12 @@ internal static class VolunteerManager
     private static bool ValidateIdNumber(string idNumber)
     {
         // Check that the string length is exactly 9 characters and contains only digits
-        if (idNumber.Length != 8 || !idNumber.All(char.IsDigit))
+        if (idNumber.Length != 9 || !idNumber.All(char.IsDigit))
         {
             return false;
         }
         int sum = 0;
-        for (int i = 0; i < 8; i++)
+        for (int i = 0; i < 9; i++)
         {
             int digit = idNumber[i] - '0';
             int weight = (i % 2) + 1;
@@ -148,8 +148,7 @@ internal static class VolunteerManager
             sum += product > 9 ? product - 9 : product;
         }
 
-        int checkDigit = sum % 10 == 0 ? 0 : 10 - (sum % 10);
-        return checkDigit == (idNumber[8] - '0');
+        return sum % 10 == 0;
     }
 
     /// <summary>
@@ -272,9 +271,25 @@ internal static class VolunteerManager
             TotalCallsCancelled = s_dal.Assignment.ReadAll(a => a.VolunteerId == VolunteerData.Id && (a.FinishType == DO.MyFinishType.SelfCancel || a.FinishType == DO.MyFinishType.ManagerCancel)).Count(),
             TotalCallsExpired = s_dal.Assignment.ReadAll(a => a.VolunteerId == VolunteerData.Id && a.FinishType == DO.MyFinishType.ExpiredCancel).Count(),
             CurrentCallId = s_dal.Assignment.ReadAll(a => a.VolunteerId == VolunteerData.Id && a.FinishCall == null).Select(a => (int?)a.CallId).FirstOrDefault(),
-            CurrentCallType = s_dal.Assignment.ReadAll(a => a.VolunteerId == VolunteerData.Id && a.FinishCall == null)
-           .Select(a => s_dal.Call.ReadAll(c => c.Id == a.CallId).Select(c => (BO.MyCallType?)c.CallType).FirstOrDefault()).FirstOrDefault() ?? BO.MyCallType.None
+            CurrentCallType =(BO.MyCallType) GetCallType(VolunteerData.Id)
         };
+    }
+
+
+    private static DO.MyCallType GetCallType(int id)
+    {
+        var assignment = s_dal.Assignment.ReadAll();
+        DO.Assignment? ass = assignment.FirstOrDefault(a => a.VolunteerId == id);
+        if (ass != null)
+        {
+            var call = s_dal.Call.Read(ass.CallId);
+            if (call != null)
+            {
+                return call.CallType;
+            }
+        }
+        // If no assignment is found for the given volunteer ID, return MyCallType.None.
+        return DO.MyCallType.None;
     }
 
     /// <summary>

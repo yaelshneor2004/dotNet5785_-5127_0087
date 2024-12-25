@@ -20,6 +20,14 @@ namespace PL.Volunteer
     public partial class VolunteerWindow : Window
     {
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
+        public BO.Volunteer? CurrentVolunteer
+        {
+            get { return (BO.Volunteer?)GetValue(CurrentVolunteerProperty); }
+            set { SetValue(CurrentVolunteerProperty, value); }
+        }
+
+        public static readonly DependencyProperty CurrentVolunteerProperty =
+            DependencyProperty.Register("CurrentVolunteer", typeof(BO.Volunteer), typeof(VolunteerWindow), new PropertyMetadata(null));
 
         public BO.MyCallType CallType { get; set; } = BO.MyCallType.None;
         public BO.MyTypeDistance TypeDistance { get; set; } = BO.MyTypeDistance.None;
@@ -40,6 +48,7 @@ namespace PL.Volunteer
             this.id = id;
             ButtonText = id == 0 ? "Add" : "Update";
             InitializeComponent();
+
             Loaded += VolunteerWindow_Loaded;
             Closed += VolunteerWindow_Closed;
             try
@@ -54,6 +63,8 @@ namespace PL.Volunteer
             {
                 MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+
+            DataContext = CurrentVolunteer;
         }
 
         private void VolunteerWindow_Loaded(object sender, RoutedEventArgs e)
@@ -103,15 +114,7 @@ namespace PL.Volunteer
             }
         }
 
-        public BO.Volunteer? CurrentVolunteer
-        {
-            get { return (BO.Volunteer?)GetValue(CurrentVolunteerProperty); }
-            set { SetValue(CurrentVolunteerProperty, value); }
-        }
-
-        public static readonly DependencyProperty CurrentVolunteerProperty =
-            DependencyProperty.Register("CurrentVolunteer", typeof(BO.Volunteer), typeof(VolunteerWindow), new PropertyMetadata(null));
-
+       
         private void VolunteerObserver()
         {
             int id = CurrentVolunteer!.Id;

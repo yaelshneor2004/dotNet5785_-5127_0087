@@ -22,7 +22,9 @@ namespace PL.Volunteer
     public partial class VolunteerListWindow : Window
     {
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
-        public BO.MyCallType    ? SelectedVolunteer { get; set; }
+        public BO.VolunteerInList ? SelectedVolunteer { get; set; }
+        public BO.MyCallType SortInVolunteerInList { get; set; } = BO.MyCallType.None;
+
         public VolunteerListWindow()
         {
             InitializeComponent();
@@ -38,8 +40,6 @@ namespace PL.Volunteer
 
         public static readonly DependencyProperty VolunteerInListProperty =
             DependencyProperty.Register("VolunteerInList", typeof(IEnumerable<BO.VolunteerInList>), typeof(VolunteerListWindow), new PropertyMetadata(null));
-
-        public BO.MyCallType SortInVolunteerInList { get; set; } = BO.MyCallType.None;
 
         private void cmbVolunteerInList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
