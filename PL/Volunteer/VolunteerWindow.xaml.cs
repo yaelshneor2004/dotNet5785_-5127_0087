@@ -69,14 +69,14 @@ namespace PL.Volunteer
 
         private void VolunteerWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            if (CurrentVolunteer!.Id != 0)
-                s_bl.Volunteer.AddObserver(CurrentVolunteer!.Id, VolunteerObserver);
+            if (CurrentVolunteer!.Id != 0 && CurrentVolunteer!=null)
+                s_bl.Volunteer.AddObserver( VolunteerObserver);
         }
 
         private void VolunteerWindow_Closed(object? sender, EventArgs e)
         {
-            if (CurrentVolunteer!.Id != 0)
-                s_bl.Volunteer.RemoveObserver(CurrentVolunteer!.Id, VolunteerObserver);
+            if (CurrentVolunteer!.Id != 0 && CurrentVolunteer != null)
+                s_bl.Volunteer.RemoveObserver( VolunteerObserver);
         }
 
         private void btnAddUpdate_Click(object sender, RoutedEventArgs e)
@@ -114,7 +114,7 @@ namespace PL.Volunteer
             }
         }
 
-       
+
         private void VolunteerObserver()
         {
             int id = CurrentVolunteer!.Id;
