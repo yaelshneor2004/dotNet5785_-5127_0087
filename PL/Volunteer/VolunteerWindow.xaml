@@ -8,6 +8,7 @@
         Title="VolunteerWindow" Height="600" Width="1000"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
 
+    
     <Window.Resources>
         <Style TargetType="Label">
             <Setter Property="Margin" Value="10"/>
