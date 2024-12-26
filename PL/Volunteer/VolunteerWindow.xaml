@@ -102,19 +102,19 @@
         <!-- New Fields Panel -->
         <StackPanel Grid.Row="0" Grid.Column="2" Grid.RowSpan="10" HorizontalAlignment="Left" VerticalAlignment="Center" Height="401" Margin="13,0,0,0" Width="320">
             <Label Content="Call Type:"/>
-            <ComboBox ItemsSource="{Binding Source={StaticResource SortCollectionMyCallTypeKey}}" SelectedItem="{Binding CallType}" SelectedValue="{Binding Path=CallType, Mode=TwoWay}"/>
+            <ComboBox ItemsSource="{Binding Source={StaticResource SortCollectionMyCallTypeKey}}" SelectedItem="{Binding CallType}" SelectedValue="{Binding Path=CallType, Mode=TwoWay}" IsEnabled="False"/>
 
             <Label Content="Description:"/>
-            <TextBox Text="{Binding Description}"/>
+            <TextBox Text="{Binding Description}" IsReadOnly="True"/>
 
             <Label Content="Max End Time:"/>
-            <TextBox Text="{Binding MaxEndTime}"/>
+            <TextBox Text="{Binding MaxEndTime}" IsReadOnly="True"/>
 
             <Label Content="Call Address:"/>
-            <TextBox Text="{Binding CallAddress}"/>
+            <TextBox Text="{Binding CallAddress}" IsReadOnly="True"/>
 
             <Label Content="Status:"/>
-            <ComboBox ItemsSource="{Binding  Source={StaticResource SortCollectionCallStatusByVolunteerKey}}" SelectedItem="{Binding Status}" SelectedValue="{Binding Path=CallStatus, Mode=TwoWay}"/>
+            <ComboBox ItemsSource="{Binding  Source={StaticResource SortCollectionCallStatusByVolunteerKey}}" SelectedItem="{Binding Status}" SelectedValue="{Binding Path=CallStatus, Mode=TwoWay}" IsEnabled="False"/>
         </StackPanel>
     </Grid>
 </Window>

@@ -33,22 +33,19 @@ namespace PL.Volunteer
         public BO.MyTypeDistance TypeDistance { get; set; } = BO.MyTypeDistance.None;
         public BO.MyRole Role { get; set; } = BO.MyRole.None;
         public BO.MyCallStatusByVolunteer CallStatus{ get; set; } = BO.MyCallStatusByVolunteer.None;
-
-        public static readonly DependencyProperty ButtonTextProperty =
-            DependencyProperty.Register("ButtonText", typeof(string), typeof(VolunteerWindow), new PropertyMetadata(string.Empty));
-        private int id = 0;
+                private int id = 0;
         public string ButtonText
         {
             get { return (string)GetValue(ButtonTextProperty); }
             set { SetValue(ButtonTextProperty, value); }
         }
+        public static readonly DependencyProperty ButtonTextProperty =
+            DependencyProperty.Register("ButtonText", typeof(string), typeof(VolunteerWindow), new PropertyMetadata(string.Empty));
 
         public VolunteerWindow(int id = 0)
         {
-            this.id = id;
             ButtonText = id == 0 ? "Add" : "Update";
             InitializeComponent();
-
             Loaded += VolunteerWindow_Loaded;
             Closed += VolunteerWindow_Closed;
             try
@@ -69,14 +66,14 @@ namespace PL.Volunteer
 
         private void VolunteerWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            if (CurrentVolunteer!.Id != 0 && CurrentVolunteer!=null)
-                s_bl.Volunteer.AddObserver( VolunteerObserver);
+            if (CurrentVolunteer!.Id != 0 )
+                s_bl.Volunteer.AddObserver( CurrentVolunteer.Id,VolunteerObserver);
         }
 
         private void VolunteerWindow_Closed(object? sender, EventArgs e)
         {
-            if (CurrentVolunteer!.Id != 0 && CurrentVolunteer != null)
-                s_bl.Volunteer.RemoveObserver( VolunteerObserver);
+            if (CurrentVolunteer!.Id != 0 )
+                s_bl.Volunteer.RemoveObserver(CurrentVolunteer.Id, VolunteerObserver);
         }
 
         private void btnAddUpdate_Click(object sender, RoutedEventArgs e)

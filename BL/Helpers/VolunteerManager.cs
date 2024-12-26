@@ -211,33 +211,31 @@ internal static class VolunteerManager
             Role = (DO.MyRole)myVolunteer.Role
         };
     }
-    /// <summary>
+    // / <summary>
     /// Converts a DO.Volunteer to a BO.Volunteer.
     /// </summary>
-    /// <param name="myVolunteer">The DO.Volunteer object to convert.</param>
+    /// <param name = "myVolunteer" > The DO.Volunteer object to convert.</param>
     /// <returns>Returns the converted BO.Volunteer object.</returns>
     public static BO.Volunteer ConvertFromDoToBo(DO.Volunteer myVolunteer)
     {
         var assignments = s_dal.Assignment.ReadAll(a => a.VolunteerId == myVolunteer.Id).ToList();
-
-        return new BO.Volunteer
-        (
-            id: myVolunteer.Id,
-            fullName: myVolunteer.FullName,
-            phone: myVolunteer.Phone,
-            email: myVolunteer.Email,
-            password: VolunteerManager.Decrypt(myVolunteer.Password ?? string.Empty) ?? null,
-            address: myVolunteer.Address ?? null,
-            latitude: myVolunteer.Latitude ?? null,
-            longitude: myVolunteer.Longitude ?? null,
-            role: (BO.MyRole)myVolunteer.Role,
-            isActive: myVolunteer.IsActive,
-            maxDistance: myVolunteer.MaxDistance ?? null,
-            typeDistance: (BO.MyTypeDistance)myVolunteer.TypeDistance,
-            totalCallsHandled: s_dal.Assignment.ReadAll(a => a.VolunteerId == myVolunteer.Id && a.FinishType == DO.MyFinishType.Treated).Count(),
-            totalCallsCancelled: s_dal.Assignment.ReadAll(a => a.VolunteerId == myVolunteer.Id && (a.FinishType == DO.MyFinishType.SelfCancel || a.FinishType == DO.MyFinishType.ManagerCancel)).Count(),
-            totalCallsExpired: s_dal.Assignment.ReadAll(a => a.VolunteerId == myVolunteer.Id && a.FinishType == DO.MyFinishType.ExpiredCancel).Count(),
-            currentCall: (from a in assignments
+        return new BO.Volunteer {
+            Id=myVolunteer.Id,
+            FullName= myVolunteer.FullName,
+            Phone= myVolunteer.Phone,
+            Email= myVolunteer.Email,
+            Password= VolunteerManager.Decrypt(myVolunteer.Password ?? string.Empty),
+            Address= myVolunteer.Address,
+            Latitude= myVolunteer.Latitude,
+            Longitude= myVolunteer.Longitude,
+            Role= (BO.MyRole)myVolunteer.Role,
+            IsActive= myVolunteer.IsActive,
+            MaxDistance= myVolunteer.MaxDistance,
+            TypeDistance= (BO.MyTypeDistance)myVolunteer.TypeDistance,
+            TotalCallsHandled= s_dal.Assignment.ReadAll(a => a.VolunteerId == myVolunteer.Id && a.FinishType == DO.MyFinishType.Treated).Count(),
+            TotalCallsCancelled= s_dal.Assignment.ReadAll(a => a.VolunteerId == myVolunteer.Id && (a.FinishType == DO.MyFinishType.SelfCancel || a.FinishType == DO.MyFinishType.ManagerCancel)).Count(),
+            TotalCallsExpired= s_dal.Assignment.ReadAll(a => a.VolunteerId == myVolunteer.Id && a.FinishType == DO.MyFinishType.ExpiredCancel).Count(),
+            CurrentCall= (from a in assignments
                           let callData = s_dal.Call.Read(a.CallId)
                           select new BO.CallInProgress
                           {
@@ -251,9 +249,10 @@ internal static class VolunteerManager
                               StartTreatmentTime = a.StartCall,
                               DistanceFromVolunteer = Tools.GlobalDistance(myVolunteer.Address ?? string.Empty, callData.Address, myVolunteer.TypeDistance),
                               Status = VolunteerManager.DetermineCallStatus(callData.MaxFinishCall)
-                          }).FirstOrDefault() // Assuming CurrentCall should be the first open call or null
-        );
+                          }).FirstOrDefault()
+        };
     }
+
 
     /// <summary>
     /// Converts a DO.Volunteer to a BO.VolunteerInList.

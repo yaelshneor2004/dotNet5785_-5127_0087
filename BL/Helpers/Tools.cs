@@ -69,7 +69,7 @@ internal static class Tools
     {
         using (var client = new HttpClient())
         {
-            string apiKey = "YOUR_GOOGLE_MAPS_API_KEY";
+            string apiKey = "AIzaSyDp5JA_AxKyCcz9QK9q1btolMB6Y8jusc4";
             string requestUri = $"https://maps.googleapis.com/maps/api/distancematrix/xml?origins={Uri.EscapeDataString(volunteerAddress)}&destinations={Uri.EscapeDataString(callAddress)}&mode=walking&units=metric&key={apiKey}";
 
             var response = client.GetAsync(requestUri).Result;
@@ -106,7 +106,7 @@ internal static class Tools
     {
         using (var client = new HttpClient())
         {
-            string apiKey = "YOUR_GOOGLE_MAPS_API_KEY";
+            string apiKey = "AIzaSyDp5JA_AxKyCcz9QK9q1btolMB6Y8jusc4";
             string requestUri = $"https://maps.googleapis.com/maps/api/distancematrix/xml?origins={Uri.EscapeDataString(volunteerAddress)}&destinations={Uri.EscapeDataString(callAddress)}&units=metric&key={apiKey}";
 
             var response = client.GetAsync(requestUri).Result;
@@ -145,7 +145,7 @@ internal static class Tools
             throw new ArgumentException("Address cannot be null or empty.");
         }
 
-        var apiKey = "YOUR_GOOGLE_MAPS_API_KEY";
+        var apiKey = "AIzaSyDp5JA_AxKyCcz9QK9q1btolMB6Y8jusc4";
         var url = $"https://maps.googleapis.com/maps/api/geocode/json?address={Uri.EscapeDataString(address)}&key={apiKey}";
 
         using (var client = new HttpClient())

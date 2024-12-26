@@ -238,4 +238,18 @@
     <MaxDistance>20</MaxDistance>
     <IsActive>true</IsActive>
   </Volunteer>
+  <Volunteer>
+    <Id>208799387</Id>
+    <FullName>yael </FullName>
+    <Phone>0533859299</Phone>
+    <Email>y7697086@gmail.com</Email>
+    <Role>Volunteer</Role>
+    <TypeDistance>Aerial</TypeDistance>
+    <Password>53pbvAzG/X1FndOKBN5eHA==</Password>
+    <Address>Yigal Alon 120, Tel Aviv, Israel</Address>
+    <Latitude>32.0737482</Latitude>
+    <Longitude>34.7953709</Longitude>
+    <MaxDistance>12</MaxDistance>
+    <IsActive>true</IsActive>
+  </Volunteer>
 </ArrayOfVolunteer>

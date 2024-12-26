@@ -38,6 +38,7 @@ namespace BO
         public int TotalCallsCancelled { get; init; }
         public int TotalCallsExpired { get; init; }
         public BO.CallInProgress? CurrentCall { get; set; }
+        public Volunteer() { }
         public Volunteer(
     int id,
     string fullName,
