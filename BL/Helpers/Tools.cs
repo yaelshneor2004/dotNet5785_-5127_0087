@@ -145,6 +145,7 @@ internal static class Tools
             throw new ArgumentException("Address cannot be null or empty.");
         }
 
+
         var apiKey = "AIzaSyDp5JA_AxKyCcz9QK9q1btolMB6Y8jusc4";
         var url = $"https://maps.googleapis.com/maps/api/geocode/json?address={Uri.EscapeDataString(address)}&key={apiKey}";
 
