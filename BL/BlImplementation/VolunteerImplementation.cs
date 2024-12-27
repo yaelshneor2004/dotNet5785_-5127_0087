@@ -93,7 +93,7 @@ internal class VolunteerImplementation:IVolunteer
     {
         try
         {
-           var volunteerData = _dal.Volunteer.Read(id) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID {id} does not exist."); ;
+           var volunteerData = _dal.Volunteer.Read(id) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID {id} does not exist.");
             return VolunteerManager.ConvertFromDoToBo(volunteerData);
         }
         catch (DO.DalDoesNotExistException ex)

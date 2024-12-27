@@ -1,4 +1,9 @@
-﻿<Application x:Class="PL.App" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:local="clr-namespace:PL" StartupUri="MainWindow.xaml">
+﻿
+    <Application x:Class="PL.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:PL"
+             StartupUri="MainWindow.xaml">
     <Application.Resources>
         <local:SortCollectionCallInList x:Key="SortCollectionCallInListKey"/>
         <local:SortCollectionMyCallType x:Key="SortCollectionMyCallTypeKey"/>
@@ -7,3 +12,5 @@
         <local:SortCollectionCallStatusByVolunteer x:Key="SortCollectionCallStatusByVolunteerKey"/>
     </Application.Resources>
 </Application>
+
+    
