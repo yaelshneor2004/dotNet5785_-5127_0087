@@ -7,6 +7,7 @@
         mc:Ignorable="d"
         Title="VolunteerListWindow" Height="640" Width="800"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
+   
     <!--External Grid-->
     <Grid>
         <Grid.RowDefinitions>

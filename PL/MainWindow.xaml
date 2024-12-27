@@ -9,6 +9,7 @@
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Loaded="MainWindow_Loaded" 
         Closed="MainWindow_Closed">
+  
     <!--grid in all the window-->
     <Grid>
         <Grid.ColumnDefinitions>
