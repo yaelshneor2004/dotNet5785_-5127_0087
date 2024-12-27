@@ -9,42 +9,61 @@
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Loaded="MainWindow_Loaded" 
         Closed="MainWindow_Closed">
-  
     <!--grid in all the window-->
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="1*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- Clock and buttons area -->
-        <StackPanel Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10">
-            <Label Content="{Binding CurrentTime, StringFormat=MM/dd/yyyy}" FontSize="15" Margin="0,0,0,10"/>
-            <Button Content="Add One Minute" Width="150" Margin="0,0,0,5" Click="btnAddOneMinute_Click"/>
-            <Button Content="Add One Hour" Width="150" Margin="0,0,0,5" Click="btnAddOneHour_Click"/>
-            <Button Content="Add One Day" Width="150" Margin="0,0,0,5" Click="btnAddOneDay_Click"/>
-            <Button Content="Add One Month" Width="150" Margin="0,0,0,5" Click="btnAddOneMonth_Click"/>
-            <Button Content="Add One Year" Width="150" Margin="0,0,0,5" Click="btnAddOneYear_Click"/>
-        </StackPanel>
+        <!-- גריד עבור כפתורי השעון -->
+        <Grid Grid.Row="0" Grid.Column="0" Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Label Content="{Binding CurrentTime, StringFormat=MM/dd/yyyy}" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="15" Margin="0,10,0,0" Grid.Row="0"/>
+            <Button Content="Add One Minute" HorizontalAlignment="Center" Height="26" Margin="10,10,0,0" VerticalAlignment="Top" Width="150" Click="btnAddOneMinute_Click" Grid.Row="1"/>
+            <Button Content="Add One Hour" HorizontalAlignment="Center" Height="26" Margin="10,10,0,0" VerticalAlignment="Top" Width="150" Click="btnAddOneHour_Click" Grid.Row="2"/>
+            <Button Content="Add One Day" HorizontalAlignment="Center" Height="26" Margin="10,10,0,0" VerticalAlignment="Top" Width="150" Click="btnAddOneDay_Click" Grid.Row="3"/>
+            <Button Content="Add One Month" HorizontalAlignment="Center" Height="26" Margin="10,10,0,0" VerticalAlignment="Top" Width="150" Click="btnAddOneMonth_Click" Grid.Row="4"/>
+            <Button Content="Add One Year" HorizontalAlignment="Center" Height="26" Margin="10,10,0,0" VerticalAlignment="Top" Width="150" Click="btnAddOneYear_Click" Grid.Row="5"/>
+        </Grid>
 
-        <!-- Main buttons area -->
-        <StackPanel Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10">
-            <Button Content="Init DB" Width="150" Margin="0,0,0,5" Click="btnInitDB_Click"/>
-            <Button Content="Reset DB" Width="150" Margin="0,0,0,5" Click="btnResetDB_Click"/>
-            <Button Content="Handle Volunteers" Width="150" Margin="0,0,0,5" Click="btnHandleVolunteers_Click"/>
-            <Button Content="Handle Calls" Width="150" Margin="0,0,0,5" Click="btnHandleCalls_Click"/>
-        </StackPanel>
+        <!-- גריד עבור שאר הכפתורים -->
+        <Grid Grid.Row="0" Grid.Column="1" Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Button Content="Init DB" HorizontalAlignment="Center" Height="50" Width="150" Click="btnInitDB_Click" Grid.Row="0"/>
+            <Button Content="Reset DB" HorizontalAlignment="Center" Height="50" Width="150" Click="btnResetDB_Click" Grid.Row="1"/>
+            <Button Content="Handle Volunteers" HorizontalAlignment="Center" Height="50" Width="150" Click="btnHandleVolunteers_Click" Grid.Row="2"/>
+            <Button Content="Handle Calls" HorizontalAlignment="Center" Height="50" Width="150" Click="btnHandleCalls_Click" Grid.Row="3"/>
+        </Grid>
 
-        <!-- Risk range area -->
-        <StackPanel Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10">
-            <Label Content="Max Range" Width="150" Margin="0,0,0,5"/>
-            <TextBox Text="{Binding MaxRiskRange}" Width="150" Margin="0,0,0,5"/>
-            <Button Content="Update" Width="150" Margin="0,0,0,5" Click="btnUpdate_Click"/>
-        </StackPanel>
+        <!-- גריד עבור תחום העדכונים -->
+        <Grid Grid.Row="1" Grid.ColumnSpan="2" Margin="20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Label Content="Max Range" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0" Grid.Column="0"/>
+            <TextBox Text="{Binding MaxRiskRange}" Grid.Column="0" Margin="10,0,0,0"/>
+            <Button Content="Update" HorizontalAlignment="Left" Width="100" Height="30" Click="btnUpdate_Click" Grid.Column="1" Margin="10,0,0,0"/>
+        </Grid>
     </Grid>
 </Window>

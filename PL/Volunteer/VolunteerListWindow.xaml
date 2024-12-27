@@ -7,12 +7,47 @@
         mc:Ignorable="d"
         Title="VolunteerListWindow" Height="640" Width="800"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
-
+    <Window.Resources>
+        <!-- סגנונות משותפים -->
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="LightCyan"/>
+            <Setter Property="BorderBrush" Value="DeepSkyBlue"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Foreground" Value="Blue"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+        <Style TargetType="Label">
+            <Setter Property="Foreground" Value="Blue"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Margin" Value="10,0"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Foreground" Value="Blue"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Margin" Value="10,0"/>
+            <Setter Property="BorderBrush" Value="DeepSkyBlue"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="Foreground" Value="Blue"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Margin" Value="10,0"/>
+            <Setter Property="BorderBrush" Value="DeepSkyBlue"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+        <Style TargetType="CheckBox">
+            <Setter Property="Foreground" Value="Blue"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Margin" Value="10,0"/>
+        </Style>
+    </Window.Resources>
     <!--External Grid-->
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40*"/>
-            <RowDefinition Height="500*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <!--Internal, Upper Grid-->
@@ -25,7 +60,7 @@
         <Label Content="Label" Grid.Column="0" HorizontalAlignment="Left" Margin="90,10,0,0" VerticalAlignment="Top"/>
         <ComboBox SelectedValue="{Binding SortInVolunteerInList, Mode=TwoWay}" ItemsSource="{Binding Source={StaticResource SortCollectionMyCallTypeKey}}"
                   Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SelectionChanged="cmbVolunteerInList_SelectionChanged"/>
-        <DataGrid Grid.Row="1" Margin="5" ItemsSource="{Binding Path=VolunteerInList}" AutoGenerateColumns="False"  SelectedItem="{Binding SelectedVolunteer}" MouseDoubleClick="UpdateVolunteerList_MouseDoubleClick" SelectionUnit="FullRow"
+        <DataGrid Grid.Row="1" Margin="5" ItemsSource="{Binding Path=VolunteerInList}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedVolunteer}" MouseDoubleClick="UpdateVolunteerList_MouseDoubleClick" SelectionUnit="FullRow"
                   IsReadOnly="True" RowDetailsVisibilityMode="VisibleWhenSelected" EnableRowVirtualization="True">
 
             <DataGrid.Columns>
@@ -34,7 +69,7 @@
                 <DataGridTemplateColumn Header="Is Active" Width="Auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <CheckBox IsEnabled="False" IsChecked="{Binding Path=IsActive}" />
+                            <CheckBox IsChecked="{Binding IsActive, Mode=OneWay}" IsEnabled="False"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -46,7 +81,7 @@
                 <DataGridTemplateColumn Header="Actions" Width="Auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Content="Delete" Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding}" Click="DeleteVolunteer_Click" />
+                            <Button Content="Delete" Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding}" Click="DeleteVolunteer_Click"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

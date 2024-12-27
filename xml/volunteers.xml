@@ -29,20 +29,6 @@
     <IsActive>true</IsActive>
   </Volunteer>
   <Volunteer>
-    <Id>371697939</Id>
-    <FullName>Yair Cohen</FullName>
-    <Phone>05399941439</Phone>
-    <Email>yaircohen@gmail.com</Email>
-    <Role>Volunteer</Role>
-    <TypeDistance>Aerial</TypeDistance>
-    <Password>vgKMgUQpyoMps05vWgyNOQ==</Password>
-    <Address>Ibn Gvirol 30, Tel Aviv, Israel</Address>
-    <Latitude>32.08404</Latitude>
-    <Longitude>34.78139</Longitude>
-    <MaxDistance xsi:nil="true" />
-    <IsActive>true</IsActive>
-  </Volunteer>
-  <Volunteer>
     <Id>229574637</Id>
     <FullName>Ariela Levin</FullName>
     <Phone>05210948739</Phone>
@@ -225,20 +211,6 @@
     <IsActive>true</IsActive>
   </Volunteer>
   <Volunteer>
-    <Id>326615127</Id>
-    <FullName>Yael Shneor</FullName>
-    <Phone>0533859299</Phone>
-    <Email>y7697086@gmail.com</Email>
-    <Role>Manager</Role>
-    <TypeDistance>Aerial</TypeDistance>
-    <Password>4Aa0guBmhrmrgF+t+EJTUw==</Password>
-    <Address>Derech Hevron 78, Jerusalem, Israel</Address>
-    <Latitude>31.7525</Latitude>
-    <Longitude>35.2121</Longitude>
-    <MaxDistance>20</MaxDistance>
-    <IsActive>true</IsActive>
-  </Volunteer>
-  <Volunteer>
     <Id>208799387</Id>
     <FullName>yael </FullName>
     <Phone>0533859299</Phone>
@@ -250,6 +222,34 @@
     <Latitude>32.0737482</Latitude>
     <Longitude>34.7953709</Longitude>
     <MaxDistance>12</MaxDistance>
+    <IsActive>true</IsActive>
+  </Volunteer>
+  <Volunteer>
+    <Id>371697939</Id>
+    <FullName>Yair Cohen</FullName>
+    <Phone>05399941439</Phone>
+    <Email>yaircohen@gmail.com</Email>
+    <Role>Volunteer</Role>
+    <TypeDistance>Aerial</TypeDistance>
+    <Password>806896Te!</Password>
+    <Address>Ibn Gvirol 30, Tel Aviv, Israel</Address>
+    <Latitude>32.0750419</Latitude>
+    <Longitude>34.7819586</Longitude>
+    <MaxDistance>3</MaxDistance>
+    <IsActive>true</IsActive>
+  </Volunteer>
+  <Volunteer>
+    <Id>326615127</Id>
+    <FullName>Yael Shneor</FullName>
+    <Phone>0533859299</Phone>
+    <Email>y7697086@gmail.com</Email>
+    <Role>Manager</Role>
+    <TypeDistance>Aerial</TypeDistance>
+    <Password>yaelS2208!</Password>
+    <Address>Derech Hevron 78, Jerusalem, Israel</Address>
+    <Latitude>31.7564779</Latitude>
+    <Longitude>35.2221262</Longitude>
+    <MaxDistance>20</MaxDistance>
     <IsActive>true</IsActive>
   </Volunteer>
 </ArrayOfVolunteer>
