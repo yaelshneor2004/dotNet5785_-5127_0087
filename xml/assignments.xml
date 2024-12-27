@@ -536,4 +536,13 @@
     <FinishType>ExpiredCancel</FinishType>
     <FinishCall>2024-12-25T14:23:09</FinishCall>
   </Assignment>
+	<Assignment>
+		<Id>68</Id>
+		<CallId>68</CallId>
+		<VolunteerId>327770087</VolunteerId>
+		<StartCall>2025-12-25T14:23:09</StartCall>
+		<FinishType></FinishType>
+		<FinishCall></FinishCall>
+	</Assignment>
+	
 </ArrayOfAssignment>
