@@ -40,6 +40,7 @@
             <Setter Property="FontSize" Value="10"/>
         </Style>
     </Window.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="219*"/>
@@ -47,7 +48,6 @@
             <ColumnDefinition Width="333*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -98,9 +98,10 @@
         <TextBox Text="{Binding MaxDistance}" Grid.Row="10" Grid.Column="1" Margin="6,0,0,0" Height="15" Width="300"/>
 
         <Label Content="Type Distance:" Grid.Row="11" Grid.Column="0" Height="24" Margin="10,0,0,0" Width="150"/>
-        <ComboBox ItemsSource="{Binding  Source={StaticResource SortCollectionDistancesKey}}" SelectedItem="{Binding TypeDistance}" SelectedValue="{Binding Path=TypeDistance, Mode=TwoWay}" Grid.Row="11" Grid.Column="1" Margin="6,0,0,0" Height="20" Width="300"/>
+        <ComboBox ItemsSource="{Binding Source={StaticResource SortCollectionDistancesKey}}" SelectedItem="{Binding TypeDistance}" SelectedValue="{Binding Path=TypeDistance, Mode=TwoWay}" Grid.Row="11" Grid.Column="1" Margin="6,0,0,0" Height="20" Width="300"/>
 
         <Button Content="{Binding ButtonText}" Grid.Row="15" Grid.Column="1" HorizontalAlignment="Center" Width="255" Click="btnAddUpdate_Click" Margin="0,23,0,43" Grid.RowSpan="6"/>
+
         <!-- New Fields Panel -->
         <StackPanel Grid.Row="0" Grid.Column="2" Grid.RowSpan="10" HorizontalAlignment="Left" VerticalAlignment="Center" Height="401" Margin="13,0,0,0" Width="320">
             <Label Content="Call Type:"/>
