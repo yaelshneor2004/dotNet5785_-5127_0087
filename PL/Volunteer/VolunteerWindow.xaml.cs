@@ -48,20 +48,67 @@ namespace PL.Volunteer
             InitializeComponent();
             Loaded += VolunteerWindow_Loaded;
             Closed += VolunteerWindow_Closed;
-            try
+            if (id == 0)
             {
-                CurrentVolunteer = (id != 0) ? s_bl.Volunteer.GetVolunteerDetails(id) : new BO.Volunteer(0, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, null, null, BO.MyRole.Volunteer, true, null, BO.MyTypeDistance.Aerial, 0, 0, 0, null);
-                if (CurrentVolunteer!.Id != 0)
+                CurrentVolunteer = (id != 0) ? s_bl.Volunteer.GetVolunteerDetails(id)! : new BO.Volunteer()
                 {
-                    s_bl.Volunteer.AddObserver(CurrentVolunteer.Id, VolunteerObserver);
-                }
+                    Id = 0,
+                    FullName = "",
+                    Phone = "",
+                    Email = "",
+                    Password = null,
+                    Address = null,
+                    Latitude = null,
+                    Longitude = null,
+                    Role = BO.MyRole.Volunteer,
+                    IsActive = true,
+                    MaxDistance = null,
+                    TypeDistance = BO.MyTypeDistance.Aerial,
+                    TotalCallsCancelled = 0,
+                    TotalCallsExpired = 0,
+                    TotalCallsHandled = 0,
+                    CurrentCall = null,
+                };
+
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                CurrentVolunteer = (id != 0) ? s_bl.Volunteer.GetVolunteerDetails(id)! : new BO.Volunteer()
+                {
+                    Id = CurrentVolunteer.Id,
+                    FullName = CurrentVolunteer.FullName,
+                    Phone = CurrentVolunteer.Phone,
+                    Email = CurrentVolunteer.Email,
+                    Password = CurrentVolunteer.Password,
+                    Address = CurrentVolunteer.Address,
+                    Latitude = CurrentVolunteer.Latitude,
+                    Longitude = CurrentVolunteer.Longitude,
+                    Role = CurrentVolunteer.Role,
+                    IsActive = CurrentVolunteer.IsActive,
+                    MaxDistance = CurrentVolunteer.MaxDistance,
+                    TypeDistance = CurrentVolunteer.TypeDistance,
+                    TotalCallsHandled = CurrentVolunteer.TotalCallsHandled,
+                    TotalCallsCancelled = CurrentVolunteer.TotalCallsCancelled,
+                    TotalCallsExpired = CurrentVolunteer.TotalCallsExpired,
+                    CurrentCall = CurrentVolunteer.CurrentCall,
+                };
             }
 
-            DataContext = CurrentVolunteer;
+
+            //try
+            //{
+            //    CurrentVolunteer = (id != 0) ? s_bl.Volunteer.GetVolunteerDetails(id) : new BO.Volunteer(0, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, null, null, BO.MyRole.Volunteer, true, null, BO.MyTypeDistance.Aerial, 0, 0, 0, null);
+            //    if (CurrentVolunteer!.Id != 0)
+            //    {
+            //        s_bl.Volunteer.AddObserver(CurrentVolunteer.Id, VolunteerObserver);
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            //}
+
+            //DataContext = CurrentVolunteer;
         }
 
         private void VolunteerWindow_Loaded(object sender, RoutedEventArgs e)

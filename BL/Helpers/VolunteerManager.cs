@@ -36,7 +36,7 @@ internal static class VolunteerManager
     public static void ValidateVolunteerDetails(BO.Volunteer volunteer)
     {
         // Check if the ID is numeric and valid
-        if (!IsNumeric(volunteer.Id.ToString()) || !ValidateIdNumber(volunteer.Id.ToString()))
+        if (!IsNumeric(volunteer.Id.ToString()) || !IsValidID(volunteer.Id))
             throw new BO.BlInvalidOperationException("Invalid ID format.");
         if (!IsValidFirstName(volunteer.FullName))
             throw new BO.BlInvalidOperationException($"Invalid name {volunteer.FullName}.");
@@ -132,25 +132,51 @@ internal static class VolunteerManager
     /// </summary>
     /// <param name="idNumber">The ID number to validate.</param>
     /// <returns>Returns true if the ID number is valid, otherwise false.</returns>
-    private static bool ValidateIdNumber(string idNumber)
+    //private static bool ValidateIdNumber(string idNumber)
+    //{
+    //    Check that the string length is exactly 9 characters and contains only digits
+    //    if (idNumber.Length != 9 || !idNumber.All(char.IsDigit))
+    //    {
+    //        return false;
+    //    }
+    //    int sum = 0;
+    //    for (int i = 0; i < 9; i++)
+    //    {
+    //        int digit = idNumber[i] - '0';
+    //        int weight = (i % 2) + 1;
+    //        int product = digit * weight;
+    //        sum += product > 9 ? product - 9 : product;
+    //    }
+
+    //    return sum % 10 == 0;
+    //}
+    private static bool IsValidID(int id)
     {
-        // Check that the string length is exactly 9 characters and contains only digits
-        if (idNumber.Length != 9 || !idNumber.All(char.IsDigit))
-        {
-            return false;
-        }
+        string idStr = id.ToString("D9"); //// pad with zeros if needed to make it 9 digits
         int sum = 0;
+
+        // Iterate over each digit of the ID
         for (int i = 0; i < 9; i++)
         {
-            int digit = idNumber[i] - '0';
-            int weight = (i % 2) + 1;
-            int product = digit * weight;
-            sum += product > 9 ? product - 9 : product;
+            int digit = int.Parse(idStr[i].ToString());
+
+            // If the position is odd (1-based index), multiply by 2
+            if (i % 2 == 1)
+            {
+                digit *= 2;
+                // If the result is greater than 9, subtract 9
+                if (digit > 9)
+                {
+                    digit -= 9;
+                }
+            }
+
+            sum += digit;
         }
 
+        // If the sum is divisible by 10, the ID is valid
         return sum % 10 == 0;
     }
-
     /// <summary>
     /// Checks if the name is valid.
     /// </summary>
@@ -195,13 +221,19 @@ internal static class VolunteerManager
     /// <returns>Returns the converted DO.Volunteer object.</returns>
     public static DO.Volunteer ConvertFromBoToDo(BO.Volunteer myVolunteer)
     {
+        string password = myVolunteer.Password;
+        if (password != null && IsEncrypted(password))
+        {
+            password = Encrypt(password);
+        }
+
         return new DO.Volunteer
         {
             Id = myVolunteer.Id,
             FullName = myVolunteer.FullName,
             Phone = myVolunteer.Phone,
             Email = myVolunteer.Email,
-            Password = myVolunteer.Password,
+            Password = password,
             Address = myVolunteer.Address,
             Latitude = myVolunteer.Latitude,
             Longitude = myVolunteer.Longitude,
@@ -210,6 +242,18 @@ internal static class VolunteerManager
             TypeDistance = (DO.MyTypeDistance)myVolunteer.TypeDistance,
             Role = (DO.MyRole)myVolunteer.Role
         };
+    }
+    private static bool IsEncrypted(string input)
+    {
+        try
+        {
+            Convert.FromBase64String(input);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
     }
     // / <summary>
     /// Converts a DO.Volunteer to a BO.Volunteer.

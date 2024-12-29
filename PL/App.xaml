@@ -10,7 +10,8 @@
         <local:SortCollectionRoles x:Key="SortCollectionRolesKey"/>
         <local:SortCollectionDistances x:Key="SortCollectionDistancesKey"/>
         <local:SortCollectionCallStatusByVolunteer x:Key="SortCollectionCallStatusByVolunteerKey"/>
-
+        <local:ConvertObjIdToTF x:Key="ConvertObjIdToTFKey"/>
+        <local:ConvertRoleToTF x:Key="ConvertRoleToTFKey"/>
         <!-- סגנון לכפתורים -->
         <Style TargetType="Button">
             <Setter Property="Background" Value="LightCyan"/>

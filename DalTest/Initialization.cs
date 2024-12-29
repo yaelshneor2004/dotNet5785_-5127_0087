@@ -23,7 +23,8 @@ public static class Initialization
     /// </summary>
     private static void createVolunteer()
     {
-        string[] volunteerNames  =
+   
+        string[] volunteerNames =
         {
         "Dani Levy", "Eli Amar", "Yair Cohen", "Ariela Levin", "Dina Klein", "Shira Israelof", "David Ben-Gurion",
         "Golda Meir", "Yitzhak Rabin", "Chaim Weizmann", "Menachem Begin", "Ariel Sharon", "Moshe Dayan", "Shimon Peres", "Yigal Alon"
@@ -50,6 +51,7 @@ public static class Initialization
 
         for (int i = 0; i < 15; i++)
         {
+            int id=0;
             double? latitude = callLatitudes[i]; // Latitude of the call at index i
             double? longitude = callLongitudes[i]; // Longitude of the call at index i
             string password = $"{new Random().Next(100000, 999999)}{(char)new Random().Next('A', 'Z' + 1)}{(char)new Random().Next('a', 'z' + 1)}"; // Generate random password with numbers and letters
@@ -60,23 +62,32 @@ public static class Initialization
             string phone = "05" + s_rand.Next(10) + s_rand.Next(10000000, 100000000); // Generate random phone number
             string email = $"{name.Replace(" ", "").ToLower()}@gmail.com"; // Construct email using name, removing spaces and converting to lowercase
             double? maxDistance = (s_rand.Next(2) == 0) ? (s_rand.NextDouble() * 95 + 5) : (double?)null; // Generate max distance or set to null
-            int id; // ID variable (uninitialized)
+            int[] validIds = new int[] {
+    967530684, 469333751, 128044765, 484501226, 975856709, 747695906,
+ 975363193, 674550785, 824564579, 680710332, 301150447, 190313205,
+ 781021860, 700156714, 721016087, 142161512, 698811734, 627262876,
+ 603051947, 421137647
+ };
+            // Iterate over volunteer names
+            foreach (var name1 in volunteerNames)
+            {
+                do
+                {
+                    // Generate a random volunteer ID
+                    id = validIds[s_rand.Next(validIds.Length)];
 
-            do
-                id = s_rand.Next(MIN_ID, MAX_ID);
-            while (s_dal!.Volunteer.Read(id) != null); // id
-
-            // Create 15 Volunteer
-            s_dal!.Volunteer.Create(new(id, name, phone, email, MyRole.Volunteer, MyTypeDistance.Aerial, password, address, latitude, longitude, maxDistance, true));
+                }
+                while (s_dal.Volunteer != null && s_dal.Volunteer.Read(id) != null);
+                // Create 15 Volunteer
+            }
+            s_dal?.Volunteer.Create(new(id, name, phone, email, MyRole.Volunteer, MyTypeDistance.Aerial, password, address, latitude, longitude, maxDistance, true));
         }
-        string ayalaPassword = Encrypt("ayala19!"); 
-        string yaelPassword = Encrypt("yaelS2208!");
-        // Create 2 managers
-        s_dal!.Volunteer.Create(new(327770087, "Ayala Ozeri", "0533328200", "ayala.ozeri@gmail.com", MyRole.Manager, MyTypeDistance.Aerial, ayalaPassword, "Rothschild 10, Tel Aviv, Israel", 32.0625, 34.7721, 10.0, true));
-        s_dal!.Volunteer.Create(new(326615127, "Yael Shneor", "0533859299", "y7697086@gmail.com", MyRole.Manager, MyTypeDistance.Aerial, yaelPassword, "Derech Hevron 78, Jerusalem, Israel", 31.7525, 35.2121, 20.0, true));
-    }
-
-
+        string ayalaPassword = Encrypt("ayala19!");
+            string yaelPassword = Encrypt("yaelS2208!");
+            // Create 2 managers
+            s_dal?.Volunteer.Create(new(327770087, "Ayala Ozeri", "0533328200", "ayala.ozeri@gmail.com", MyRole.Manager, MyTypeDistance.Aerial, ayalaPassword, "Rothschild 10, Tel Aviv, Israel", 32.0625, 34.7721, 10.0, true));
+            s_dal?.Volunteer.Create(new(326615127, "Yael Shneor", "0533859299", "y7697086@gmail.com", MyRole.Manager, MyTypeDistance.Aerial, yaelPassword, "Derech Hevron 78, Jerusalem, Israel", 31.7525, 35.2121, 20.0, true));
+        }
     /// <summary>
     /// The createsAssignment method reads volunteers and calls, then allocates volunteers to 50 calls, calculates start and finish times, assigns random finish types, and creates new assignments. 🌟
     /// </summary>
