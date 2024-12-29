@@ -1,6 +1,10 @@
 ﻿using System.Collections;
 namespace PL;
 
+/// <summary>
+/// Enumerator for sorting call-in list.
+/// This class implements IEnumerable to allow iteration over the enum values.
+/// </summary>
 internal class SortCollectionCallInList : IEnumerable
 {
     static readonly IEnumerable<BO.MySortInCallInList> s_enums =
@@ -9,6 +13,10 @@ internal class SortCollectionCallInList : IEnumerable
     public IEnumerator GetEnumerator() => s_enums.GetEnumerator();
 }
 
+/// <summary>
+/// Enumerator for sorting call types.
+/// This class implements IEnumerable to allow iteration over the enum values.
+/// </summary>
 internal class SortCollectionMyCallType : IEnumerable
 {
     static readonly IEnumerable<BO.MyCallType> s_enums =
@@ -17,6 +25,10 @@ internal class SortCollectionMyCallType : IEnumerable
     public IEnumerator GetEnumerator() => s_enums.GetEnumerator();
 }
 
+/// <summary>
+/// Enumerator for sorting roles.
+/// This class implements IEnumerable to allow iteration over the enum values.
+/// </summary>
 internal class SortCollectionRoles : IEnumerable
 {
     static readonly IEnumerable<BO.MyRole> s_enums =
@@ -25,6 +37,10 @@ internal class SortCollectionRoles : IEnumerable
     public IEnumerator GetEnumerator() => s_enums.GetEnumerator();
 }
 
+/// <summary>
+/// Enumerator for sorting distances.
+/// This class implements IEnumerable to allow iteration over the enum values.
+/// </summary>
 internal class SortCollectionDistances : IEnumerable
 {
     static readonly IEnumerable<BO.MyTypeDistance> s_enums =
@@ -33,6 +49,10 @@ internal class SortCollectionDistances : IEnumerable
     public IEnumerator GetEnumerator() => s_enums.GetEnumerator();
 }
 
+/// <summary>
+/// Enumerator for sorting call statuses by volunteer.
+/// This class implements IEnumerable to allow iteration over the enum values.
+/// </summary>
 internal class SortCollectionCallStatusByVolunteer : IEnumerable
 {
     static readonly IEnumerable<BO.MyCallStatusByVolunteer> s_enums =

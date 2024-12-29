@@ -42,6 +42,10 @@ namespace PL.Volunteer
         public static readonly DependencyProperty ButtonTextProperty =
             DependencyProperty.Register("ButtonText", typeof(string), typeof(VolunteerWindow), new PropertyMetadata(string.Empty));
 
+        /// <summary>
+        /// Constructor for VolunteerWindow. Initializes the window and sets up event handlers.
+        /// </summary>
+        /// <param name="id">The ID of the volunteer. If 0, a new volunteer is being added.</param>
         public VolunteerWindow(int id = 0)
         {
             ButtonText = id == 0 ? "Add" : "Update";
@@ -93,36 +97,35 @@ namespace PL.Volunteer
                     CurrentCall = CurrentVolunteer.CurrentCall,
                 };
             }
-
-
-            //try
-            //{
-            //    CurrentVolunteer = (id != 0) ? s_bl.Volunteer.GetVolunteerDetails(id) : new BO.Volunteer(0, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, null, null, BO.MyRole.Volunteer, true, null, BO.MyTypeDistance.Aerial, 0, 0, 0, null);
-            //    if (CurrentVolunteer!.Id != 0)
-            //    {
-            //        s_bl.Volunteer.AddObserver(CurrentVolunteer.Id, VolunteerObserver);
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            //}
-
-            //DataContext = CurrentVolunteer;
         }
 
+        /// <summary>
+        /// Event handler for the Loaded event. Adds an observer for the current volunteer.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">Event data.</param>
         private void VolunteerWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            if (CurrentVolunteer!.Id != 0 )
-                s_bl.Volunteer.AddObserver( CurrentVolunteer.Id,VolunteerObserver);
+            if (CurrentVolunteer!.Id != 0)
+                s_bl.Volunteer.AddObserver(CurrentVolunteer.Id, VolunteerObserver);
         }
 
+        /// <summary>
+        /// Event handler for the Closed event. Removes the observer for the current volunteer.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">Event data.</param>
         private void VolunteerWindow_Closed(object? sender, EventArgs e)
         {
-            if (CurrentVolunteer!.Id != 0 )
+            if (CurrentVolunteer!.Id != 0)
                 s_bl.Volunteer.RemoveObserver(CurrentVolunteer.Id, VolunteerObserver);
         }
 
+        /// <summary>
+        /// Event handler for the Add/Update button click event. Adds or updates the volunteer.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">Event data.</param>
         private void btnAddUpdate_Click(object sender, RoutedEventArgs e)
         {
             if (CurrentVolunteer == null)
@@ -159,6 +162,9 @@ namespace PL.Volunteer
         }
 
 
+        /// <summary>
+        /// Observer method for the volunteer. Updates the current volunteer details.
+        /// </summary>
         private void VolunteerObserver()
         {
             int id = CurrentVolunteer!.Id;

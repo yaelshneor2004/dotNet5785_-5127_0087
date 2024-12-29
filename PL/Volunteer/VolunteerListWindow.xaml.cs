@@ -41,11 +41,19 @@ namespace PL.Volunteer
         public static readonly DependencyProperty VolunteerInListProperty =
             DependencyProperty.Register("VolunteerInList", typeof(IEnumerable<BO.VolunteerInList>), typeof(VolunteerListWindow), new PropertyMetadata(null));
 
+        /// <summary>
+        /// Handles the selection change event for the volunteer list combo box.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event data.</param>
         private void cmbVolunteerInList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             queryVolunteerList();
         }
 
+        /// <summary>
+        /// Queries the volunteer list based on the selected sort type.
+        /// </summary>
         private void queryVolunteerList()
         {
             VolunteerInList = (SortInVolunteerInList == BO.MyCallType.None) ?
@@ -53,34 +61,61 @@ namespace PL.Volunteer
                 s_bl?.Volunteer.GetFilterVolunteerList(SortInVolunteerInList)!;
         }
 
+        /// <summary>
+        /// Observes changes in the volunteer list and updates it accordingly.
+        /// </summary>
         private void VolunteerListObserver()
         {
             queryVolunteerList();
         }
 
+        /// <summary>
+        /// Handles the window loaded event and adds the volunteer list observer.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event data.</param>
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             s_bl.Volunteer.AddObserver(VolunteerListObserver);
         }
 
+        /// <summary>
+        /// Handles the window closed event and removes the volunteer list observer.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event data.</param>
         private void Window_Closed(object? sender, EventArgs e)
         {
             s_bl.Volunteer.RemoveObserver(VolunteerListObserver);
         }
 
+        /// <summary>
+        /// Handles the mouse double-click event to update the volunteer list.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event data.</param>
         private void UpdateVolunteerList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (SelectedVolunteer != null)
                 new VolunteerWindow(SelectedVolunteer.Id).Show();
         }
 
+        /// <summary>
+        /// Handles the click event to add a new volunteer to the list.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event data.</param>
         private void AddVolunteerList_Click(object sender, RoutedEventArgs e)
         {
             new VolunteerWindow().Show();
         }
+        /// <summary>
+        /// Handles the click event to delete a selected volunteer from the list.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event data.</param>
         private void DeleteVolunteer_Click(object sender, RoutedEventArgs e)
         {
-
             if (SelectedVolunteer == null)
             {
                 MessageBox.Show("No volunteer selected.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -91,9 +126,7 @@ namespace PL.Volunteer
             {
                 try
                 {
-
                     s_bl.Volunteer.DeleteVolunteer(SelectedVolunteer.Id);
-
                     MessageBox.Show("Volunteer deleted successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (Exception ex)

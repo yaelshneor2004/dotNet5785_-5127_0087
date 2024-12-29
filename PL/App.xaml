@@ -4,7 +4,6 @@
              xmlns:local="clr-namespace:PL"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <!-- קיימים -->
         <local:SortCollectionCallInList x:Key="SortCollectionCallInListKey"/>
         <local:SortCollectionMyCallType x:Key="SortCollectionMyCallTypeKey"/>
         <local:SortCollectionRoles x:Key="SortCollectionRolesKey"/>
@@ -12,7 +11,6 @@
         <local:SortCollectionCallStatusByVolunteer x:Key="SortCollectionCallStatusByVolunteerKey"/>
         <local:ConvertObjIdToTF x:Key="ConvertObjIdToTFKey"/>
         <local:ConvertRoleToTF x:Key="ConvertRoleToTFKey"/>
-        <!-- סגנון לכפתורים -->
         <Style TargetType="Button">
             <Setter Property="Background" Value="LightCyan"/>
             <Setter Property="BorderBrush" Value="DeepSkyBlue"/>
@@ -22,15 +20,12 @@
             <Setter Property="Padding" Value="10,5"/>
             <Setter Property="Margin" Value="5"/>
         </Style>
-
-        <!-- סגנון ל-Label -->
         <Style TargetType="Label">
             <Setter Property="Foreground" Value="Blue"/>
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="Margin" Value="10,0"/>
         </Style>
 
-        <!-- סגנון ל-TextBox -->
         <Style TargetType="TextBox">
             <Setter Property="Foreground" Value="Blue"/>
             <Setter Property="FontSize" Value="12"/>
@@ -39,7 +34,6 @@
             <Setter Property="BorderThickness" Value="1"/>
         </Style>
 
-        <!-- סגנון ל-ComboBox -->
         <Style TargetType="ComboBox">
             <Setter Property="Foreground" Value="Blue"/>
             <Setter Property="FontSize" Value="12"/>
@@ -48,14 +42,12 @@
             <Setter Property="BorderThickness" Value="1"/>
         </Style>
 
-        <!-- סגנון ל-CheckBox -->
         <Style TargetType="CheckBox">
             <Setter Property="Foreground" Value="Blue"/>
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="Margin" Value="10,0"/>
         </Style>
 
-        <!-- סגנון ל-DatePicker -->
         <Style TargetType="DatePicker">
             <Setter Property="Foreground" Value="Blue"/>
             <Setter Property="FontSize" Value="12"/>

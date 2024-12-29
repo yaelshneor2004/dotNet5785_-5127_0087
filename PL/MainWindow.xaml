@@ -20,7 +20,6 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- גריד עבור כפתורי השעון -->
         <Grid Grid.Row="0" Grid.Column="0" Margin="20">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -38,7 +37,6 @@
             <Button Content="Add One Year" HorizontalAlignment="Left" Height="41" Margin="110,0,0,0" VerticalAlignment="Center" Width="150" Click="btnAddOneYear_Click" Grid.Row="5"/>
         </Grid>
 
-        <!-- גריד עבור שאר הכפתורים -->
         <Grid Grid.Row="0" Grid.Column="1" Margin="20">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
@@ -52,7 +50,6 @@
             <Button Content="Handle Calls" HorizontalAlignment="Center" Height="50" Width="150" Click="btnHandleCalls_Click" Grid.Row="3"/>
         </Grid>
 
-        <!-- גריד עבור תחום העדכונים -->
         <Grid Grid.Row="1" Grid.ColumnSpan="2" Margin="20">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
