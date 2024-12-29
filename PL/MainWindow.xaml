@@ -31,11 +31,11 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Label Content="{Binding CurrentTime, StringFormat=MM/dd/yyyy}" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="15" Margin="0,10,0,0" Grid.Row="0"/>
-            <Button Content="Add One Minute" HorizontalAlignment="Center" Height="26" Margin="10,10,0,0" VerticalAlignment="Top" Width="150" Click="btnAddOneMinute_Click" Grid.Row="1"/>
-            <Button Content="Add One Hour" HorizontalAlignment="Center" Height="26" Margin="10,10,0,0" VerticalAlignment="Top" Width="150" Click="btnAddOneHour_Click" Grid.Row="2"/>
-            <Button Content="Add One Day" HorizontalAlignment="Center" Height="26" Margin="10,10,0,0" VerticalAlignment="Top" Width="150" Click="btnAddOneDay_Click" Grid.Row="3"/>
-            <Button Content="Add One Month" HorizontalAlignment="Center" Height="26" Margin="10,10,0,0" VerticalAlignment="Top" Width="150" Click="btnAddOneMonth_Click" Grid.Row="4"/>
-            <Button Content="Add One Year" HorizontalAlignment="Center" Height="26" Margin="10,10,0,0" VerticalAlignment="Top" Width="150" Click="btnAddOneYear_Click" Grid.Row="5"/>
+            <Button Content="Add One Minute" HorizontalAlignment="Left" Height="41" Margin="110,0,0,0" VerticalAlignment="Center" Width="150" Click="btnAddOneMinute_Click" Grid.Row="1"/>
+            <Button Content="Add One Hour" HorizontalAlignment="Left" Height="41" Margin="110,0,0,0" VerticalAlignment="Center" Width="150" Click="btnAddOneHour_Click" Grid.Row="2"/>
+            <Button Content="Add One Day" HorizontalAlignment="Left" Height="40" Margin="110,0,0,0" VerticalAlignment="Center" Width="150" Click="btnAddOneDay_Click" Grid.Row="3"/>
+            <Button Content="Add One Month" HorizontalAlignment="Left" Height="41" Margin="110,0,0,0" VerticalAlignment="Center" Width="150" Click="btnAddOneMonth_Click" Grid.Row="4"/>
+            <Button Content="Add One Year" HorizontalAlignment="Left" Height="41" Margin="110,0,0,0" VerticalAlignment="Center" Width="150" Click="btnAddOneYear_Click" Grid.Row="5"/>
         </Grid>
 
         <!-- גריד עבור שאר הכפתורים -->
@@ -60,10 +60,11 @@
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Label Content="Max Range" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0" Grid.Column="0"/>
-            <TextBox Text="{Binding MaxRiskRange}" Grid.Column="0" Margin="10,0,0,0"/>
-            <Button Content="Update" HorizontalAlignment="Left" Width="100" Height="30" Click="btnUpdate_Click" Grid.Column="1" Margin="10,0,0,0"/>
+            <Label Content="Max Range" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="0" Margin="10,2,0,0" Grid.Row="0"/>
+            <TextBox Text="{Binding MaxRiskRange}" Grid.Column="0" Margin="10,0,0,0" Grid.Row="1"/>
+            <Button Content="Update" HorizontalAlignment="Left" Width="100" Height="30" Click="btnUpdate_Click" Grid.Column="1" Margin="10,0,0,0" Grid.Row="1"/>
         </Grid>
     </Grid>
 </Window>

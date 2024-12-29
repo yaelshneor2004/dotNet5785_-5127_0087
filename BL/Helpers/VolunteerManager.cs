@@ -221,11 +221,7 @@ internal static class VolunteerManager
     /// <returns>Returns the converted DO.Volunteer object.</returns>
     public static DO.Volunteer ConvertFromBoToDo(BO.Volunteer myVolunteer)
     {
-        string password = myVolunteer.Password;
-        if (password != null && IsEncrypted(password))
-        {
-            password = Encrypt(password);
-        }
+
 
         return new DO.Volunteer
         {
@@ -233,7 +229,7 @@ internal static class VolunteerManager
             FullName = myVolunteer.FullName,
             Phone = myVolunteer.Phone,
             Email = myVolunteer.Email,
-            Password = password,
+            Password =myVolunteer.Password,
             Address = myVolunteer.Address,
             Latitude = myVolunteer.Latitude,
             Longitude = myVolunteer.Longitude,

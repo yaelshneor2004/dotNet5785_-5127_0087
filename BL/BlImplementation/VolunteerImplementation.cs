@@ -144,6 +144,7 @@ internal class VolunteerImplementation:IVolunteer
             if (volunteer?.Role != null && !volunteer.Role.Equals(BO.MyRole.Manager) && volunteer.Id != myVolunteer?.Id)
                 throw new BO.BlUnauthorizedAccessException("Only managers or the volunteer themselves can update the details.");
             VolunteerManager.ValidateVolunteerDetails(myVolunteer);
+            myVolunteer.Password = myVolunteer.Password != null ? VolunteerManager.Encrypt(myVolunteer.Password) : null;
             var updatedVolunteer = VolunteerManager.ConvertFromBoToDo(myVolunteer);
             // Attempt to update the volunteer in DAL
             _dal.Volunteer.Update(updatedVolunteer);
