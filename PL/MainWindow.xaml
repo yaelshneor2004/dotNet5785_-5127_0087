@@ -16,12 +16,13 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="41*"/>
+            <RowDefinition Height="141*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <!-- גריד עבור כפתורי השעון -->
-        <Grid Grid.Row="0" Grid.Column="0" Margin="20">
+        <Grid Grid.Row="0" Grid.Column="0" Margin="20,20,20,20" Grid.RowSpan="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
@@ -39,7 +40,7 @@
         </Grid>
 
         <!-- גריד עבור שאר הכפתורים -->
-        <Grid Grid.Row="0" Grid.Column="1" Margin="20">
+        <Grid Grid.Row="0" Grid.Column="1" Margin="20,20,20,20" Grid.RowSpan="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
@@ -53,7 +54,7 @@
         </Grid>
 
         <!-- גריד עבור תחום העדכונים -->
-        <Grid Grid.Row="1" Grid.ColumnSpan="2" Margin="20">
+        <Grid Grid.Row="2" Grid.ColumnSpan="2" Margin="20,20,20,20">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
