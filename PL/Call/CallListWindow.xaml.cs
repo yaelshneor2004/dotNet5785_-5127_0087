@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BO;
+using PL.Volunteer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,8 +21,10 @@ namespace PL.Call;
 /// </summary>
 public partial class CallListWindow : Window
 {
+    public BO.CallInList? SelectedCall { get; set; }
+
     static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
-    public BO.MySortInCallInList SortInCallInList { get; set; } = BO.MySortInCallInList.All;
+    public BO.MyCallStatus SortInCallInList { get; set; } = BO.MyCallStatus.None;
 
     public CallListWindow()
     {
@@ -37,24 +41,16 @@ public partial class CallListWindow : Window
     // Using a DependencyProperty as the backing store for CallList.  This enables animation, styling, binding, etc...
     public static readonly DependencyProperty CallListProperty =
         DependencyProperty.Register("CallList", typeof(IEnumerable<BO.CallInList>), typeof(CallListWindow), new PropertyMetadata(null));
-    public BO.CallInList SelectedCall
-    {
-        get { return (BO.CallInList)GetValue(SelectedCallProperty); }
-        set { SetValue(SelectedCallProperty, value); }
-    }
-
-    // Using a DependencyProperty as the backing store for SelectedCall. This enables animation, styling, binding, etc...
-    public static readonly DependencyProperty SelectedCallProperty =
-        DependencyProperty.Register("SelectedCall", typeof(BO.CallInList), typeof(CallListWindow), new PropertyMetadata(null));
-
-
+   
     private void cmbSelectChanges_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         queryCallList();
     }
     private void queryCallList()
     {
-        CallList = (SortInCallInList == BO.MySortInCallInList.All) ? s_bl?.Call.GetCallList(null, null, null)! : s_bl?.Call.GetCallList(null, null, SortInCallInList)!;
+        CallList = (SortInCallInList == BO.MyCallStatus.None) ?
+          s_bl?.Call.GetFilterCallList(BO.MyCallStatus.None)! :
+          s_bl?.Call.GetFilterCallList(SortInCallInList)!;
     }
     private void callListObserver()
     {
@@ -70,5 +66,35 @@ public partial class CallListWindow : Window
         s_bl.Call.RemoveObserver(callListObserver);
     }
 
+    private void Button_Click(object sender, RoutedEventArgs e)
+    {
+        new CallWindow().Show();
+    }
+    private void UpdateCallList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+        if (SelectedCall != null)
+            new CallWindow(SelectedCall.Id).Show();
+    }
+    private void DeleteCall_Click(object sender, RoutedEventArgs e)
+    {
+        if (SelectedCall == null)
+        {
+            MessageBox.Show("No call selected.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            return;
+        }
+        MessageBoxResult result = MessageBox.Show("Are you sure you want to delete this call?", "Confirm Delete", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+        if (result == MessageBoxResult.Yes)
+        {
+            try
+            {
+                s_bl.Call.DeleteCall(SelectedCall.Id);
+                MessageBox.Show("Call deleted successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to delete call: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+    }
 }
 

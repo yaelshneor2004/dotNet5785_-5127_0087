@@ -35,4 +35,6 @@ public IEnumerable<BO.OpenCallInList> SortOpenedCalls(int idV, MyCallType? callT
 
 // Completes an assignment
 public void UpdateCompleteAssignment(int volunteerId, int assignmentId);
+   public IEnumerable<CallInList> GetFilterCallList(BO.MyCallStatus filter);
+
 }

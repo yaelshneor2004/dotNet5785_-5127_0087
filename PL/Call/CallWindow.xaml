@@ -5,8 +5,53 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.Call"
         mc:Ignorable="d"
-        Title="CallWindow" Height="450" Width="800">
+        Title="CallWindow" Height="450" Width="800"
+    DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
     <Grid>
-        
+        <StackPanel>
+            <Label Content="ID:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
+            <TextBox Text="{Binding CurrentCall.Id, Mode=TwoWay}" IsReadOnly="True" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>
+
+            <Label Content="Type:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
+            <TextBox Text="{Binding CurrentCall.Type}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>
+
+            <Label Content="Description:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
+            <TextBox Text="{Binding CurrentCall.Description}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>
+
+            <Label Content="Address:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
+            <TextBox Text="{Binding CurrentCall.Address}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>
+
+            <Label Content="Latitude:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
+            <TextBox Text="{Binding CurrentCall.Latitude}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>
+
+            <Label Content="Longitude:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
+            <TextBox Text="{Binding CurrentCall.Longitude}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>
+
+            <Label Content="Start Time:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
+            <TextBox Text="{Binding CurrentCall.StartTime}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>
+
+            <Label Content="Max End Time:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
+            <TextBox Text="{Binding CurrentCall.MaxEndTime}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>
+
+            <Label Content="Status:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
+            <TextBox Text="{Binding CurrentCall.Status}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>
+        </StackPanel>
+        <StackPanel>
+            <Label Content="Volunteer ID:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
+            <TextBox Text="{Binding CurrentCall.Assignments.}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>
+
+            <Label Content="Volunteer Name:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
+            <TextBox Text="{Binding CurrentCall.VolunteerName}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>
+
+            <Label Content="Start Treatment Time:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
+            <TextBox Text="{Binding CurrentCall.StartTreatmentTime}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>
+
+            <Label Content="End Treatment Time:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
+            <TextBox Text="{Binding CurrentCall.EndTreatmentTime}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>
+
+            <Label Content="End Type:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
+            <TextBox Text="{Binding CurrentCall.EndType}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>
+        </StackPanel>
     </Grid>
 </Window>
+

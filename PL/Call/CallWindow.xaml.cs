@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PL.Volunteer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,6 +20,15 @@ namespace PL.Call
     /// </summary>
     public partial class CallWindow : Window
     {
+        public BO.Call? CurrentCall
+        {
+            get { return (BO.Call?)GetValue(CurrentCallProperty); }
+            set { SetValue(CurrentCallProperty, value); }
+        }
+
+        public static readonly DependencyProperty CurrentCallProperty =
+            DependencyProperty.Register("CurrentCall", typeof(BO.Call), typeof(CallWindow), new PropertyMetadata(null));
+
         public CallWindow()
         {
             InitializeComponent();

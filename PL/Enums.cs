@@ -7,8 +7,8 @@ namespace PL;
 /// </summary>
 internal class SortCollectionCallInList : IEnumerable
 {
-    static readonly IEnumerable<BO.MySortInCallInList> s_enums =
-        (Enum.GetValues(typeof(BO.MySortInCallInList)) as IEnumerable<BO.MySortInCallInList>)!;
+    static readonly IEnumerable<BO.MyCallStatus> s_enums =
+        (Enum.GetValues(typeof(BO.MyCallStatus)) as IEnumerable<BO.MyCallStatus>)!;
 
     public IEnumerator GetEnumerator() => s_enums.GetEnumerator();
 }

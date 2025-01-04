@@ -1,4 +1,5 @@
 ﻿using BlApi;
+using BO;
 using Helpers;
 using static Helpers.CallManager;
 
@@ -324,6 +325,13 @@ internal class CallImplementation : ICall
             throw new BO.BlDoesNotExistException($"Assignment with ID {assignmentId} does not exist.", ex);
         }
     }
+    public IEnumerable<CallInList> GetFilterCallList(BO.MyCallStatus filter)
+    {
+        IEnumerable<DO.Call> calls = _dal.Call.ReadAll();
+        var callList = calls.Select(c => CallManager.ConvertToCallInList(c)).ToList();
+        return filter != BO.MyCallStatus.None ? callList.Where(v => v.Status == filter).ToList() : callList;
+    }
+
     public void AddObserver(Action listObserver) =>
 CallManager.Observers.AddListObserver(listObserver); 
     public void AddObserver(int id, Action observer) =>
