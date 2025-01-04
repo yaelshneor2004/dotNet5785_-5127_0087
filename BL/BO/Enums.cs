@@ -70,7 +70,8 @@ public enum MyFinishType
     Treated,
     SelfCancel,
     ManagerCancel,
-    ExpiredCancel
+    ExpiredCancel,
+    None
 }
 
 /// <summary>

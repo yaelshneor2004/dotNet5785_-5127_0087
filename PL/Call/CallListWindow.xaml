@@ -20,9 +20,9 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <ComboBox  Grid.Column="1" SelectedValue="{Binding SortInCallInList, Mode=TwoWay}"
-            ItemsSource="{Binding Source={StaticResource SortCollectionCallInListKey}}" VerticalAlignment="Top" SelectionChanged="cmbSelectChanges_SelectionChanged" Height="43"/>
-    
+            <ComboBox SelectedValue="{Binding SortInCallInList, Mode=TwoWay}"
+            ItemsSource="{Binding Source={StaticResource SortCollectionCallStatusKey}}" VerticalAlignment="Center" SelectionChanged="cmbSelectChanges_SelectionChanged" Height="43" Margin="8,0,8,0"/>
+
         </Grid>
         <DataGrid Margin="5" Grid.Row="1" ItemsSource="{Binding CallList}" AutoGenerateColumns="False" IsReadOnly="True" EnableRowVirtualization="True" RowDetailsVisibilityMode="VisibleWhenSelected" MouseDoubleClick="UpdateCallList_MouseDoubleClick" SelectedItem="{Binding SelectedCall}">
             <DataGrid.Columns>
@@ -31,7 +31,7 @@
                 <DataGridTextColumn Binding="{Binding Type}" Header="Type" Width="Auto"/>
                 <DataGridTextColumn Binding="{Binding StartTime}" Header="Start Time" Width="Auto"/>
                 <DataGridTextColumn Binding="{Binding TimeRemaining}" Header="Time Remaining" Width="Auto"/>
-                <DataGridTextColumn Binding="{Binding LastVolunteerName}" Header=" Volunteer Name" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding LastVolunteerName}" Header="L Volunteer Name" Width="Auto"/>
                 <DataGridTextColumn Binding="{Binding CompletionTime}" Header="Completion Time" Width="Auto"/>
                 <DataGridTextColumn Binding="{Binding Status}" Header="Status" Width="Auto"/>
                 <DataGridTextColumn Binding="{Binding TotalAssignments}" Header="Total Assignments" Width="Auto"/>

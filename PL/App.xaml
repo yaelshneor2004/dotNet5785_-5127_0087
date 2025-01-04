@@ -4,11 +4,12 @@
              xmlns:local="clr-namespace:PL"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <local:SortCollectionCallInList x:Key="SortCollectionCallInListKey"/>
+        <local:SortCollectionCallStatus x:Key="SortCollectionCallStatusKey"/>
         <local:SortCollectionMyCallType x:Key="SortCollectionMyCallTypeKey"/>
         <local:SortCollectionRoles x:Key="SortCollectionRolesKey"/>
         <local:SortCollectionDistances x:Key="SortCollectionDistancesKey"/>
         <local:SortCollectionCallStatusByVolunteer x:Key="SortCollectionCallStatusByVolunteerKey"/>
+        <local:SortCollectionMyFinishType x:Key="SortCollectionMyFinishTypeKey"/>
         <local:ConvertObjIdToTF x:Key="ConvertObjIdToTFKey"/>
         <local:ConvertRoleToTF x:Key="ConvertRoleToTFKey"/>
         <Style TargetType="Button">

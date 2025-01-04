@@ -1,26 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ArrayOfCall xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Call>
-    <Id>1</Id>
-    <CallType>ComputerScience</CallType>
-    <Address>10 Jaffa Street, Jerusalem</Address>
-    <Latitude>35.22119546257982</Latitude>
-    <Longitude>31.78130811991647</Longitude>
-    <OpenTime>2023-12-23T12:08:00</OpenTime>
-    <Description>Call number: 1 of type: ComputerScience at: 10 Jaffa Street, Jerusalem</Description>
-    <MaxFinishCall>2024-12-27T23:11:12</MaxFinishCall>
-  </Call>
-  <Call>
-    <Id>2</Id>
-    <CallType>Math</CallType>
-    <Address>20 Emek Refaim Street, Jerusalem</Address>
-    <Latitude>35.22123577032626</Latitude>
-    <Longitude>31.76543961779154</Longitude>
-    <OpenTime>2024-08-16T13:36:00</OpenTime>
-    <Description>Call number: 2 of type: Math at: 20 Emek Refaim Street, Jerusalem</Description>
-    <MaxFinishCall>2024-12-09T23:11:12</MaxFinishCall>
-  </Call>
-  <Call>
     <Id>3</Id>
     <CallType>English</CallType>
     <Address>30 Agripas Street, Jerusalem</Address>
@@ -669,5 +649,45 @@
     <OpenTime>2023-03-16T07:02:00</OpenTime>
     <Description>call number: 1 of type: Math at: 18 Sokolov St, Ramat HaSharon</Description>
     <MaxFinishCall>2023-03-17T07:02:00</MaxFinishCall>
+  </Call>
+  <Call>
+    <Id>68</Id>
+    <CallType>None</CallType>
+    <Address>10 Jaffa Street, Jerusalem</Address>
+    <Latitude>31.7810619</Latitude>
+    <Longitude>35.221174</Longitude>
+    <OpenTime>2023-12-23T12:08:00</OpenTime>
+    <Description>Call number: 1 of type: ComputerScience at: 10 Jaffa Street, Jerusalem</Description>
+    <MaxFinishCall>2024-12-27T23:11:12</MaxFinishCall>
+  </Call>
+  <Call>
+    <Id>69</Id>
+    <CallType>English</CallType>
+    <Address>18 Sokolov St, Ramat HaSharon</Address>
+    <Latitude>32.1394488</Latitude>
+    <Longitude>34.8360317</Longitude>
+    <OpenTime>2024-12-10T00:00:00</OpenTime>
+    <Description>gfhhgj</Description>
+    <MaxFinishCall>2025-12-19T00:00:00</MaxFinishCall>
+  </Call>
+  <Call>
+    <Id>70</Id>
+    <CallType>ComputerScience</CallType>
+    <Address>18 Sokolov St, Ramat HaSharon</Address>
+    <Latitude>32.1394488</Latitude>
+    <Longitude>34.8360317</Longitude>
+    <OpenTime>2024-11-11T00:00:00</OpenTime>
+    <Description>xdcgfhgvjbh</Description>
+    <MaxFinishCall>2025-11-11T00:00:00</MaxFinishCall>
+  </Call>
+  <Call>
+    <Id>71</Id>
+    <CallType>English</CallType>
+    <Address>20 Emek Refaim Street, Jerusalem</Address>
+    <Latitude>31.7652299</Latitude>
+    <Longitude>35.2212572</Longitude>
+    <OpenTime>2024-08-16T13:36:00</OpenTime>
+    <Description>Call number: 2 of type: Math at: 20 Emek Refaim Street, Jerusalem</Description>
+    <MaxFinishCall>2024-12-09T23:11:12</MaxFinishCall>
   </Call>
 </ArrayOfCall>

@@ -5,7 +5,7 @@ namespace PL;
 /// Enumerator for sorting call-in list.
 /// This class implements IEnumerable to allow iteration over the enum values.
 /// </summary>
-internal class SortCollectionCallInList : IEnumerable
+internal class SortCollectionCallStatus : IEnumerable
 {
     static readonly IEnumerable<BO.MyCallStatus> s_enums =
         (Enum.GetValues(typeof(BO.MyCallStatus)) as IEnumerable<BO.MyCallStatus>)!;
@@ -60,4 +60,10 @@ internal class SortCollectionCallStatusByVolunteer : IEnumerable
 
     public IEnumerator GetEnumerator() => s_enums.GetEnumerator();
 }
+internal class SortCollectionMyFinishType : IEnumerable
+{
+    static readonly IEnumerable<BO.MyFinishType> s_enums =
+        (Enum.GetValues(typeof(BO.MyFinishType)) as IEnumerable<BO.MyFinishType>)!;
 
+    public IEnumerator GetEnumerator() => s_enums.GetEnumerator();
+}

@@ -27,19 +27,24 @@
         public List<BO.CallAssignInList>? Assignments { get; set; }
 
 
-            public Call(int id, MyCallType type, string? address, double? latitude, double? longitude, DateTime startTime, DateTime? maxEndTime, string? description, MyCallStatus status, List<BO.CallAssignInList>? assignments = null)
-            {
-                Id = id;
-                Type = type;
-                Address = address;
-                Latitude = latitude;
-                Longitude = longitude;
-                StartTime = startTime;
-                MaxEndTime = maxEndTime;
-                Description = description;
-                Status = status;
-                Assignments = assignments ?? new List<BO.CallAssignInList>();
-            }
+                public Call(int id, MyCallType type, string? address, double? latitude, double? longitude, DateTime startTime, DateTime? maxEndTime, string? description, MyCallStatus status, List<BO.CallAssignInList>? assignments = null)
+                {
+                    Id = id;
+                    Type = type;
+                    Address = address;
+                    Latitude = latitude;
+                    Longitude = longitude;
+                    StartTime = startTime;
+                    MaxEndTime = maxEndTime;
+                    Description = description;
+                    Status = status;
+                    Assignments = assignments ?? new List<BO.CallAssignInList>();
+                }
+
+        public Call()
+        {
+        }
+
         public override string ToString()
         {
             return $"Id: {Id}, Type: {Type}, Description: {Description}, Address: {Address}, " +

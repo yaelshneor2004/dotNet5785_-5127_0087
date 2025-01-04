@@ -21,7 +21,7 @@ internal static class CallManager
         return new BO.Call
         (
             id: callData.Id,
-            type:(BO.MyCallType) GetCallType(callData.Id),
+            type:(BO.MyCallType)(callData.CallType),
             address: callData.Address,
             latitude: callData.Latitude,
             longitude: callData.Longitude,
@@ -40,26 +40,7 @@ internal static class CallManager
         );
     }
 
-    /// <summary>
-    /// Determines the type of call based on the volunteer ID.
-    /// </summary>
-    /// <param name="id">The ID of the volunteer.</param>
-    /// <returns>The type of call associated with the volunteer.</returns>
-    private static MyCallType GetCallType(int id)
-    {
-        var assignment = s_dal.Assignment.ReadAll();
-        DO.Assignment? ass = assignment.FirstOrDefault(a => a.VolunteerId == id);
-        if (ass != null)
-        {
-            var call = s_dal.Call.Read(ass.CallId);
-            if (call != null)
-            {
-                return call.CallType;
-            }
-        }
-        // If no assignment is found for the given volunteer ID, return MyCallType.None.
-        return MyCallType.None;
-    }
+ 
 
     /// <summary>
     /// Calculates the status of a call based on the latest assignment and the maximum end time.
