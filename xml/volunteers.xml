@@ -238,4 +238,18 @@
     <MaxDistance>10</MaxDistance>
     <IsActive>true</IsActive>
   </Volunteer>
+  <Volunteer>
+    <Id>128044765</Id>
+    <FullName>Yigal Alon</FullName>
+    <Phone>05171787631</Phone>
+    <Email>yigalalon@gmail.com</Email>
+    <Role>Volunteer</Role>
+    <TypeDistance>Aerial</TypeDistance>
+    <Password>557388Jt!</Password>
+    <Address>Eli Cohen 1, Ramat Gan, Israel</Address>
+    <Latitude>32.068424</Latitude>
+    <Longitude>34.824785</Longitude>
+    <MaxDistance xsi:nil="true" />
+    <IsActive>true</IsActive>
+  </Volunteer>
 </ArrayOfVolunteer>
