@@ -12,6 +12,7 @@
         <local:SortCollectionMyFinishType x:Key="SortCollectionMyFinishTypeKey"/>
         <local:ConvertObjIdToTF x:Key="ConvertObjIdToTFKey"/>
         <local:ConvertRoleToTF x:Key="ConvertRoleToTFKey"/>
+        <local:ConvertCallInProgressToVisibility x:Key="ConvertCallInProgressToVisibilityKey"/>
         <Style TargetType="Button">
             <Setter Property="Background" Value="LightCyan"/>
             <Setter Property="BorderBrush" Value="DeepSkyBlue"/>

@@ -140,6 +140,14 @@ internal class VolunteerImplementation:IVolunteer
         {
             // Retrieve requester details from DAL
             var volunteer = _dal.Volunteer.Read(id);
+            // Check if the address has changed and update the coordinates
+            if (volunteer.Address != myVolunteer.Address)
+            {
+                // Update the coordinates based on the new address
+                var (newLatitude, newLongitude) = Tools.GetCoordinates(myVolunteer.Address);
+                myVolunteer.Latitude = newLatitude;
+                myVolunteer.Longitude = newLongitude;
+            }
             // Verify that the requester is a manager or the same volunteer
             if (volunteer?.Role != null && !volunteer.Role.Equals(BO.MyRole.Manager) && volunteer.Id != myVolunteer?.Id)
                 throw new BO.BlUnauthorizedAccessException("Only managers or the volunteer themselves can update the details.");

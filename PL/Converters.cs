@@ -62,3 +62,28 @@ public class ConvertRoleToTF : IValueConverter
         throw new NotImplementedException();
     }
 }
+public class ConvertCallInProgressToVisibility : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        if (value is BO.Call currentCall)
+        {
+            // Check if the call is null or the status is expired
+            if (currentCall == null || currentCall.Status == BO.MyCallStatus.Expired)
+            {
+                return Visibility.Collapsed;
+            }
+
+            // Otherwise, make it visible
+            return Visibility.Visible;
+        }
+
+        // If the value is not a BO.CurrentCall, return Collapsed
+        return Visibility.Collapsed;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}

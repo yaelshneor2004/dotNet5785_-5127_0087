@@ -33,7 +33,7 @@ namespace PL.Volunteer
         public BO.MyTypeDistance TypeDistance { get; set; } = BO.MyTypeDistance.None;
         public BO.MyRole Role { get; set; } = BO.MyRole.None;
         public BO.MyCallStatusByVolunteer CallStatus{ get; set; } = BO.MyCallStatusByVolunteer.None;
-                private int id = 0;
+         private int id = 0;
         public string ButtonText
         {
             get { return (string)GetValue(ButtonTextProperty); }
