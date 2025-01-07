@@ -4,6 +4,7 @@
              xmlns:local="clr-namespace:PL"
              StartupUri="LoginWindow.xaml">
     <Application.Resources>
+        <local:ConvertIdToVisibility x:Key="IdToVisibilityConverterKey"/>
         <local:ConvertCallInProgressToVisibility x:Key="ConvertCallInProgressToVisibilityKey"/>
         <local:SortCollectionCallStatus x:Key="SortCollectionCallStatusKey"/>
         <local:SortCollectionMyCallType x:Key="SortCollectionMyCallTypeKey"/>

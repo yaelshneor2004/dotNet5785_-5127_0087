@@ -24,6 +24,22 @@ namespace PL
         {
             InitializeComponent();
         }
+
+        public string TextBoxId
+        {
+            get { return (string)GetValue(TextBoxIdProperty); }
+            set { SetValue(TextBoxIdProperty, value); }
+        }
+        public static readonly DependencyProperty TextBoxIdProperty =
+            DependencyProperty.Register("TextBoxId", typeof(string), typeof(LoginWindow), new PropertyMetadata(string.Empty));
+
+        public string TextBoxPassword
+        {
+            get { return (string)GetValue(TextBoxPasswordProperty); }
+            set { SetValue(TextBoxPasswordProperty, value); }
+        }
+        public static readonly DependencyProperty TextBoxPasswordProperty =
+            DependencyProperty.Register("TextBoxPassword", typeof(string), typeof(LoginWindow), new PropertyMetadata(string.Empty));
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
 
@@ -34,11 +50,21 @@ namespace PL
 
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void Login_Click(object sender, RoutedEventArgs e)
         {
-            int id =Convert.ToInt32( vgybuh.Text);
+            int id =Convert.ToInt32(TextBoxId);
             VolunteerUserWindow volunteerWindow = new VolunteerUserWindow(id);
             volunteerWindow.Show();
+        }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
