@@ -27,7 +27,7 @@ namespace PL
         private void Login_Click(object sender, RoutedEventArgs e)
         {
             int id = Convert.ToInt32(TextBoxId);
-            string password = PasswordBox.Password; // @קבלת הסיסמא מ-PasswordBox
+            string password = PasswordBox.Password; 
 
             BO.Volunteer v = s_bl.Volunteer.GetVolunteerDetails(id);
             if (v.Role == BO.MyRole.Manager)
@@ -52,7 +52,7 @@ namespace PL
             }
         }
 
-        private void TogglePasswordVisibility(object sender, RoutedEventArgs e) // @פונקציית שינוי מצב התצוגה
+        private void TogglePasswordVisibility(object sender, RoutedEventArgs e)
         {
             if (PasswordBox.Visibility == Visibility.Visible)
             {
@@ -68,7 +68,7 @@ namespace PL
             }
         }
 
-        private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e) // @הבטחת סינכרון
+        private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e) 
         {
             VisiblePassword.Text = PasswordBox.Password;
         }
