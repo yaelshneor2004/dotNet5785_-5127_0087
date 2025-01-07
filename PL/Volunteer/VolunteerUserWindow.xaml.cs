@@ -21,6 +21,7 @@ namespace PL.Volunteer;
 public partial class VolunteerUserWindow : Window
 {
     static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
+
     public BO.Volunteer? CurrentVolunteer
     {
         get { return (BO.Volunteer?)GetValue(CurrentVolunteerProperty); }
@@ -65,19 +66,19 @@ public partial class VolunteerUserWindow : Window
             CurrentCall = CurrentVolunteer.CurrentCall,
         };
 
-        CurrentCall = CurrentVolunteer.CurrentCall != null ? s_bl.Call.GetCallDetails(CurrentVolunteer.CurrentCall.CallId)! : new BO.Call()
-        {
-            Id = CurrentCall.Id,
-            Type = CurrentCall.Type,
-            Address = CurrentCall.Address,
-            Latitude = CurrentCall.Latitude,
-            Longitude = CurrentCall.Longitude,
-            StartTime = CurrentCall.StartTime,
-            MaxEndTime = CurrentCall.MaxEndTime,
-            Description = CurrentCall.Description,
-            Status = CurrentCall.Status,
-            Assignments = CurrentCall.Assignments
-        };
+        //CurrentCall = CurrentVolunteer.CurrentCall != null ? s_bl.Call.GetCallDetails(CurrentVolunteer.CurrentCall.CallId)! : new BO.Call()
+        //{
+        //    Id = CurrentCall.Id,
+        //    Type = CurrentCall.Type,
+        //    Address = CurrentCall.Address,
+        //    Latitude = CurrentCall.Latitude,
+        //    Longitude = CurrentCall.Longitude,
+        //    StartTime = CurrentCall.StartTime,
+        //    MaxEndTime = CurrentCall.MaxEndTime,
+        //    Description = CurrentCall.Description,
+        //    Status = CurrentCall.Status,
+        //    Assignments = CurrentCall.Assignments
+        //};
 
     }
     private void btnUpdate_Click(object sender, RoutedEventArgs e)
