@@ -1,16 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ArrayOfCall xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Call>
-    <Id>3</Id>
-    <CallType>English</CallType>
-    <Address>30 Agripas Street, Jerusalem</Address>
-    <Latitude>35.215657362641764</Latitude>
-    <Longitude>31.783470280009738</Longitude>
-    <OpenTime>2023-07-12T12:23:00</OpenTime>
-    <Description>Call number: 3 of type: English at: 30 Agripas Street, Jerusalem</Description>
-    <MaxFinishCall>2024-12-05T23:11:12</MaxFinishCall>
-  </Call>
-  <Call>
     <Id>4</Id>
     <CallType>Math</CallType>
     <Address>40 Shmuel HaNavi Street, Jerusalem</Address>
@@ -689,5 +679,15 @@
     <OpenTime>2024-08-16T13:36:00</OpenTime>
     <Description>Call number: 2 of type: Math at: 20 Emek Refaim Street, Jerusalem</Description>
     <MaxFinishCall>2024-12-09T23:11:12</MaxFinishCall>
+  </Call>
+  <Call>
+    <Id>72</Id>
+    <CallType>Math</CallType>
+    <Address>30 Agripas Street, Jerusalem</Address>
+    <Latitude>31.7832514</Latitude>
+    <Longitude>35.2157271</Longitude>
+    <OpenTime>2023-07-12T12:23:00</OpenTime>
+    <Description>Call number: 3 of type: English at: 30 Agripas Street, Jerusalem</Description>
+    <MaxFinishCall>2024-12-05T23:11:12</MaxFinishCall>
   </Call>
 </ArrayOfCall>
