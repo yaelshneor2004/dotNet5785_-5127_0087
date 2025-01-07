@@ -37,8 +37,7 @@ namespace PL
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             int id =Convert.ToInt32( vgybuh.Text);
-            VolunteerUserWindow volunteerWindow = new VolunteerUserWindow(id);
-            volunteerWindow.Show();
+          new VolunteerUserWindow(id).Show();
         }
     }
 }

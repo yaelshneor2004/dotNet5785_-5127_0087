@@ -411,16 +411,6 @@
     <MaxFinishCall>2023-11-13T05:49:00</MaxFinishCall>
   </Call>
   <Call>
-    <Id>45</Id>
-    <CallType>English</CallType>
-    <Address>8 HaOman Street, Jerusalem</Address>
-    <Latitude>35.208627</Latitude>
-    <Longitude>31.769767</Longitude>
-    <OpenTime>2023-10-19T20:00:00</OpenTime>
-    <Description>call number: 1 of type: English at: 8 HaOman Street, Jerusalem</Description>
-    <MaxFinishCall>2023-10-25T20:00:00</MaxFinishCall>
-  </Call>
-  <Call>
     <Id>46</Id>
     <CallType>English</CallType>
     <Address>5 Ibn Shaprut Street, Jerusalem</Address>
@@ -689,5 +679,15 @@
     <OpenTime>2023-07-12T12:23:00</OpenTime>
     <Description>Call number: 3 of type: English at: 30 Agripas Street, Jerusalem</Description>
     <MaxFinishCall>2024-12-05T23:11:12</MaxFinishCall>
+  </Call>
+  <Call>
+    <Id>73</Id>
+    <CallType>English</CallType>
+    <Address>8 HaOman Street, Jerusalem</Address>
+    <Latitude>31.7485909</Latitude>
+    <Longitude>35.2113729</Longitude>
+    <OpenTime>2023-10-19T20:00:00</OpenTime>
+    <Description>call number: 1 of type: English at: 8 HaOman Street, Jerusalem</Description>
+    <MaxFinishCall>2023-10-25T20:00:00</MaxFinishCall>
   </Call>
 </ArrayOfCall>

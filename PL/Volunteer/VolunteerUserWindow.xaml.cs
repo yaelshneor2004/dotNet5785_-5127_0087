@@ -100,11 +100,12 @@ public partial class VolunteerUserWindow : Window
     }
     private void btnCallHistory_Click(object sender, RoutedEventArgs e)
     {
-     //   new VolunteerCallHistoryWindow().Show();
+       new VolunteerCallHistoryWindow(CurrentVolunteer.Id).Show();
     }
+
     private void btnSelectCall_Click(object sender, RoutedEventArgs e)
     {
-       // new SelectCallToTreatWindow().Show();
+        new SelectCallToTreatWindow(CurrentVolunteer.Id).Show();
     }
 
     private void btnCancelCall_Click(object sender, RoutedEventArgs e)
@@ -151,7 +152,7 @@ public partial class VolunteerUserWindow : Window
             s_bl.Volunteer.AddObserver(CurrentVolunteer.Id, VolunteerObserver);
     }
 
-    private void VolunteerUserWindow_Closed(object sender, EventArgs e)
+    private void VolunteerUserWindow_Closed(object? sender, EventArgs e)
     {
         if (CurrentVolunteer!.Id != 0)
             s_bl.Volunteer.RemoveObserver(CurrentVolunteer.Id, VolunteerObserver);
@@ -160,7 +161,9 @@ public partial class VolunteerUserWindow : Window
     private void VolunteerObserver()
     { 
         int id = CurrentVolunteer!.Id;
+        int idC = CurrentCall.Id;
         CurrentVolunteer = null;
+        CurrentCall = null;
         CurrentVolunteer = s_bl.Volunteer.GetVolunteerDetails(id);
         CurrentCall = CurrentVolunteer?.CurrentCall != null ? s_bl.Call.GetCallDetails(CurrentVolunteer.CurrentCall.CallId)! : null;
     }

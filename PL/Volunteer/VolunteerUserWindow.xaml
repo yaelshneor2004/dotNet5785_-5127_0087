@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="VolunteerUserWindow" Height="450" Width="800"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
-    <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,1,0,-1">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,0,0,-876">
         <StackPanel>
             <Label Content="ID:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
             <TextBox Text="{Binding CurrentVolunteer.Id,Mode=TwoWay}" IsReadOnly="{Binding CurrentVolunteer.Id, Converter={StaticResource ConvertObjIdToTFKey}}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>
@@ -43,14 +43,10 @@
 
             <Label Content="Type Distance:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
             <ComboBox ItemsSource="{Binding Source={StaticResource SortCollectionDistancesKey}}" SelectedItem="{Binding TypeDistance}" SelectedValue="{Binding CurrentVolunteer.TypeDistance, Mode=TwoWay}" Style="{StaticResource {x:Type ComboBox}}" Foreground="Black"/>
-
-            <Button Content="Select call to treat" Width="255" Click="btnSelectCall_Click" HorizontalAlignment="Center" Margin="0,23,0,43"
-       Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/> 
-
             <!-- New Fields Panel call -->
             <StackPanel>
-                <Label Content="ID:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/> 
-                <TextBox Text="{Binding CurrentCall.Id, Mode=TwoWay}" IsReadOnly="{Binding CurrentCall.Id, Converter={StaticResource ConvertObjIdToTFKey}}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/> 
+                <Label Content="ID:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/>
+                <TextBox Text="{Binding CurrentCall.Id, Mode=TwoWay}" IsReadOnly="{Binding CurrentCall.Id, Converter={StaticResource ConvertObjIdToTFKey}}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/>
                 <Label Content="Type:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
                 <ComboBox ItemsSource="{Binding Source={StaticResource SortCollectionMyCallTypeKey}}" SelectedItem="{Binding CurrentCall.Type}" SelectedValue="{Binding CurrentCall.Type, Mode=TwoWay}" Style="{StaticResource {x:Type ComboBox}}" Foreground="Black" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/>
 
@@ -82,6 +78,8 @@
                 <Button Content="Cancel Call" Width="255" Click="btnCancelCall_Click" HorizontalAlignment="Center" Margin="0,23,0,43"/>
                 <Button Content="Finish Call" Width="255" Click="btnFinishCall_Click" HorizontalAlignment="Center" Margin="0,23,0,43"/>
             </StackPanel>
+            <Button Content="Select call to treat" Width="256" Click="btnSelectCall_Click"
+       Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/>
             <Button Content="Call History" Width="255" Click="btnCallHistory_Click" HorizontalAlignment="Center" Margin="0,23,0,43"/>
             <Button Content="Update" Width="255" Click="btnUpdate_Click" HorizontalAlignment="Center" Margin="0,23,0,43"/>
         </StackPanel>
