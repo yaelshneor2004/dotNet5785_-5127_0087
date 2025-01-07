@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="VolunteerUserWindow" Height="450" Width="800"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,1,0,-1">
         <StackPanel>
             <Label Content="ID:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
             <TextBox Text="{Binding CurrentVolunteer.Id,Mode=TwoWay}" IsReadOnly="{Binding CurrentVolunteer.Id, Converter={StaticResource ConvertObjIdToTFKey}}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>

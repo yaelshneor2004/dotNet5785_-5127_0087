@@ -8,5 +8,15 @@
         Title="LoginWindow" Height="450" Width="800">
     <Grid>
 
+        <Button Content="Button" HorizontalAlignment="Left" Height="51" Margin="122,328,0,0" VerticalAlignment="Top" Width="165" Click="Button_Click_1"/>
+        <Button Content="Button" HorizontalAlignment="Left" Height="51" Margin="480,328,0,0" VerticalAlignment="Top" Width="165"/>
+
+        <Label Content="Enter your password" HorizontalAlignment="Left" Height="29" Margin="122,80,0,0" VerticalAlignment="Top" Width="132"/>
+        <Label Content="Enter your id" HorizontalAlignment="Left" Height="29" Margin="122,138,0,0" VerticalAlignment="Top" Width="132"/>
+        <TextBox Name="vgybuh" HorizontalAlignment="Left" Height="29" Margin="259,80,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="130"/>
+        <TextBox HorizontalAlignment="Left" Height="29" Margin="259,138,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="130"/>
+        <Button Content="Button" HorizontalAlignment="Left" Height="51" Margin="291,230,0,0" VerticalAlignment="Top" Width="165"/>
+       
+
     </Grid>
 </Window>

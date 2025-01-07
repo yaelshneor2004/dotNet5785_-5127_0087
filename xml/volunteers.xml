@@ -211,20 +211,6 @@
     <IsActive>true</IsActive>
   </Volunteer>
   <Volunteer>
-    <Id>326615127</Id>
-    <FullName>Yael Shneor</FullName>
-    <Phone>0533859299</Phone>
-    <Email>y7697086@gmail.com</Email>
-    <Role>Manager</Role>
-    <TypeDistance>Aerial</TypeDistance>
-    <Password>4Aa0guBmhrmrgF+t+EJTUw==</Password>
-    <Address>Derech Hevron 78, Jerusalem, Israel</Address>
-    <Latitude>31.7525</Latitude>
-    <Longitude>35.2121</Longitude>
-    <MaxDistance>20</MaxDistance>
-    <IsActive>true</IsActive>
-  </Volunteer>
-  <Volunteer>
     <Id>327770087</Id>
     <FullName>Ayala Ozerfygtuyhiuj</FullName>
     <Phone>0533328200</Phone>
@@ -250,6 +236,20 @@
     <Latitude>32.068424</Latitude>
     <Longitude>34.824785</Longitude>
     <MaxDistance xsi:nil="true" />
+    <IsActive>true</IsActive>
+  </Volunteer>
+  <Volunteer>
+    <Id>326615127</Id>
+    <FullName>Yael Shneor</FullName>
+    <Phone>0533859299</Phone>
+    <Email>y7697086@gmail.com</Email>
+    <Role>Manager</Role>
+    <TypeDistance>Aerial</TypeDistance>
+    <Password>4Aa0guBmhrmrgF+t+EJTUw==</Password>
+    <Address>Derech Hevron 78, Jerusalem, Israel</Address>
+    <Latitude>31.7564779</Latitude>
+    <Longitude>35.2221262</Longitude>
+    <MaxDistance>20</MaxDistance>
     <IsActive>true</IsActive>
   </Volunteer>
 </ArrayOfVolunteer>

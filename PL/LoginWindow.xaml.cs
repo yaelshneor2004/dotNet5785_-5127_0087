@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PL.Volunteer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,6 +27,18 @@ namespace PL
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            int id =Convert.ToInt32( vgybuh.Text);
+            VolunteerUserWindow volunteerWindow = new VolunteerUserWindow(id);
+            volunteerWindow.Show();
         }
     }
 }
