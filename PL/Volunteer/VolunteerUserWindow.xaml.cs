@@ -100,11 +100,11 @@ public partial class VolunteerUserWindow : Window
     }
     private void btnCallHistory_Click(object sender, RoutedEventArgs e)
     {
-        new VolunteerCallHistoryWindow().Show();
+     //   new VolunteerCallHistoryWindow().Show();
     }
     private void btnSelectCall_Click(object sender, RoutedEventArgs e)
     {
-        new SelectCallToTreatWindow().Show();
+       // new SelectCallToTreatWindow().Show();
     }
 
     private void btnCancelCall_Click(object sender, RoutedEventArgs e)

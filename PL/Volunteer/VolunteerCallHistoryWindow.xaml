@@ -5,8 +5,48 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.Volunteer"
         mc:Ignorable="d"
-        Title="VolunteerCallHistoryWindow" Height="450" Width="800">
+        Title="VolunteerCallHistoryWindow" Height="450" Width="800"
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Internal, Upper Grid for Filters and Sorting -->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Grid.Row="0" VerticalAlignment="Center" Margin="8,0,8,0">
+            <!-- ComboBox for filtering calls by type -->
+            <ComboBox SelectedValue="{Binding FilterByType, Mode=TwoWay}" 
+                      ItemsSource="{Binding Source={StaticResource SortCollectionMyCallTypeKey}}" 
+                      VerticalAlignment="Center" 
+                      SelectionChanged="cmbFiltedrChanges_SelectionChanged" 
+                      Height="43" 
+                      Width="400"
+                      Margin="0,0,8,0"/>
+            <!-- ComboBox for sorting calls -->
+            <ComboBox SelectedValue="{Binding SortByClosedCall, Mode=TwoWay}" 
+                      ItemsSource="{Binding Source={StaticResource SortCollectionMyClosedCallKey}}" 
+                      VerticalAlignment="Center" 
+                      SelectionChanged="cmbSortChanges_SelectionChanged" 
+                      Height="43" 
+                      Width="400"
+                      Margin="0,0,8,0"/>
+        </StackPanel>
+
+        <!-- DataGrid for displaying calls -->
+        <DataGrid Grid.Row="1"
+                  AutoGenerateColumns="False"
+                  ItemsSource="{Binding Path=CloseCallList}" SelectedItem="{Binding SelectedClosedCall}"
+                IsReadOnly="True" RowDetailsVisibilityMode="VisibleWhenSelected" EnableRowVirtualization="True">
+                <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding Id}"/>
+                <DataGridTextColumn Header="Type" Binding="{Binding Type}"/>
+                <DataGridTextColumn Header="Address" Binding="{Binding Address}"/>
+                <DataGridTextColumn Header="Start Time" Binding="{Binding StartTime}"/>
+                <DataGridTextColumn Header="Start Treatment Time" Binding="{Binding StartTreatmentTime}"/>
+                <DataGridTextColumn Header="End Time" Binding="{Binding EndTime}"/>
+                <DataGridTextColumn Header="End Type" Binding="{Binding EndType}"/>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </Window>

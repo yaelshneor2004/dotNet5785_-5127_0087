@@ -67,3 +67,17 @@ internal class SortCollectionMyFinishType : IEnumerable
 
     public IEnumerator GetEnumerator() => s_enums.GetEnumerator();
 }
+internal class SortCollectionMyOpenedCall : IEnumerable
+{
+    static readonly IEnumerable<BO.OpenedCall> s_enums =
+        (Enum.GetValues(typeof(BO.OpenedCall)) as IEnumerable<BO.OpenedCall>)!;
+
+    public IEnumerator GetEnumerator() => s_enums.GetEnumerator();
+}
+internal class SortCollectionMyClosedCall : IEnumerable
+{
+    static readonly IEnumerable<BO.CloseCall> s_enums =
+        (Enum.GetValues(typeof(BO.CloseCall)) as IEnumerable<BO.CloseCall>)!;
+
+    public IEnumerator GetEnumerator() => s_enums.GetEnumerator();
+}

@@ -111,7 +111,8 @@ public enum CloseCall
     StartTime,
     StartTreatmentTime,
     EndTime,
-    EndType
+    EndType,
+    None
 }
 
 /// <summary>
@@ -124,7 +125,8 @@ public enum OpenedCall
     Address,
     StartTime,
     MaxEndTime,
-    DistanceFromVolunteer
+    DistanceFromVolunteer,
+    None
 }
 
 /// <summary>

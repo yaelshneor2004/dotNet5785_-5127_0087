@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,8 +20,71 @@ namespace PL.Call;
 /// </summary>
 public partial class SelectCallToTreatWindow : Window
 {
-    public SelectCallToTreatWindow()
+    public BO.OpenCallInList? SelectedOpenCall { get; set; }
+
+    static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
+    public BO.MyCallType FilterByType { get; set; } = BO.MyCallType.None;
+    public BO.OpenedCall SortByOpenedCall { get; set; } = BO.OpenedCall.None;
+
+    public IEnumerable<BO.OpenCallInList> OpenCallList
     {
+        get { return (IEnumerable<BO.OpenCallInList>)GetValue(OpenCallListProperty); }
+        set { SetValue(OpenCallListProperty, value); }
+    }
+
+    // Using a DependencyProperty as the backing store for CallList.  This enables animation, styling, binding, etc...
+    public static readonly DependencyProperty OpenCallListProperty =
+        DependencyProperty.Register("OpenCallList", typeof(IEnumerable<BO.OpenCallInList>), typeof(SelectCallToTreatWindow), new PropertyMetadata(null));
+
+    private int id;
+    public SelectCallToTreatWindow(int idV)
+    {id= idV;
         InitializeComponent();
+        Loaded += CallListWindow_Loaded;
+        Closed += CallListWindow_Closed;
+    }
+    private void CallListWindow_Loaded(object sender, RoutedEventArgs e)
+    {
+        s_bl.Call.AddObserver(callListObserver);
+    }
+    private void queryCallList()
+    {
+       // OpenCallList=s_bl.Call.GetFilterCallList(BO.MyCallStatus.Open)
+       // OpenCallList = (FilterByType == BO.MyCallType.None) ?
+       //s_bl?.Call.SortOpenedCalls(id, BO.MyCallType.None, null)! :
+       //s_bl?.Call.SortOpenedCalls(id, FilterByType, null)!;
+
+    }
+    private void callListObserver()
+    {
+        queryCallList();
+    }
+    private void CallListWindow_Closed(object? sender, EventArgs e)
+    {
+        s_bl.Call.RemoveObserver(callListObserver);
+    }
+
+    private void cmbFiltedrChanges_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        OpenCallList = (FilterByType == BO.MyCallType.None) ?
+          s_bl?.Call.SortOpenedCalls(id,BO.MyCallType.None,null)! :
+          s_bl?.Call.SortOpenedCalls(id,FilterByType,null)!;
+
+    }
+
+    private void cmbSortChanges_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        OpenCallList = (SortByOpenedCall == BO.OpenedCall.None) ?
+       s_bl?.Call.SortOpenedCalls(id, null, BO.OpenedCall.None)! :
+       s_bl?.Call.SortOpenedCalls(id, null, SortByOpenedCall )!;
+    }
+    private void SelectCall_Click(object sender, RoutedEventArgs e)
+    {
+        s_bl.Call.SelectCallToTreat(id, SelectedOpenCall!.Id);
+    }
+
+    private void UpdateAddress_Click(object sender, RoutedEventArgs e)
+    {
+       
     }
 }
