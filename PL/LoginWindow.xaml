@@ -8,15 +8,16 @@
         Title="LoginWindow" Height="450" Width="800"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
     <Grid>
-        <Button Content="Login" HorizontalAlignment="Left" Height="51" Margin="122,328,0,0" VerticalAlignment="Top" Width="165" Click="Login_Click"/>
-        <Button Content="Volunteer window" HorizontalAlignment="Left" Height="51" Margin="480,328,0,0" VerticalAlignment="Top" Width="165" 
-                Visibility="{Binding TextBoxId, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/>
+        <Button Content="Login" HorizontalAlignment="Left" Height="51" Margin="159,217,0,0" VerticalAlignment="Top" Width="165" Click="Login_Click"/>
 
         <Label Content="Enter your password" HorizontalAlignment="Left" Height="29" Margin="112,138,0,0" VerticalAlignment="Top" Width="132"/>
         <Label Content="Enter your id" HorizontalAlignment="Left" Height="29" Margin="122,80,0,0" VerticalAlignment="Top" Width="132"/>
         <TextBox Text="{Binding TextBoxId}" HorizontalAlignment="Left" Height="29" Margin="259,80,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="130"/>
-        <TextBox Text="{Binding TextBoxPassword}" HorizontalAlignment="Left" Height="29" Margin="259,138,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="130" />
-        <Button Content="Main window" HorizontalAlignment="Left" Height="51" Margin="291,230,0,0" VerticalAlignment="Top" Width="165" Click="Button_Click_1" 
-                Visibility="{Binding TextBoxId, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/>
+        <PasswordBox x:Name="PasswordBox" HorizontalAlignment="Left" Height="29" Margin="259,138,0,0" VerticalAlignment="Top" Width="130" PasswordChanged="PasswordBox_PasswordChanged"/>
+        <!-- @PasswordBox -->
+        <TextBox x:Name="VisiblePassword" HorizontalAlignment="Left" Height="29" Margin="259,138,0,0" VerticalAlignment="Top" Width="130" Visibility="Collapsed"/>
+        <!-- @TextBox מוצג כ- PasswordBox רגיל -->
+        <Button Content="👁️" HorizontalAlignment="Left" Height="29" Margin="394,138,0,0" VerticalAlignment="Top" Width="30" Click="TogglePasswordVisibility"/>
+        <!-- @כפתור תצוגה -->
     </Grid>
 </Window>

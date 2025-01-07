@@ -13,11 +13,14 @@ using System.Windows.Shapes;
 
 namespace PL
 {
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
+        private static bool isManagerLoggedIn = false;
+
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
 
         public MainWindow()
@@ -61,7 +64,15 @@ namespace PL
         {
             s_bl.Admin.RemoveClockObserver(clockObserver);
             s_bl.Admin.RemoveConfigObserver(configObserver);
+            isManagerLoggedIn = false; //Release the manager variable when a window is closed
         }
+        private void OpenManagerWindow()
+        {
+            MainWindow mainW = new MainWindow();
+            mainW.Closed += MainWindow_Closed; // Add the Closed event to the admin window
+            mainW.Show();
+        }
+
         private void btnAddOneDay_Click(object sender, RoutedEventArgs e)
         {
             s_bl.Admin.AdvanceClock(BO.Clock.Day);
