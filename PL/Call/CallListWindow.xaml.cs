@@ -73,7 +73,7 @@ public partial class CallListWindow : Window
     private void UpdateCallList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
         if (SelectedCall != null)
-            new CallWindow(SelectedCall.Id).Show();
+            new CallWindow(SelectedCall.CallId).Show();
     }
     private void DeleteCall_Click(object sender, RoutedEventArgs e)
     {

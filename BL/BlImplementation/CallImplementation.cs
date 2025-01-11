@@ -242,7 +242,7 @@ internal class CallImplementation : ICall
             }
             else
             {
-                throw new BO.BlInvalidOperationException("The call is already closed.");
+                throw new BO.BlInvalidOperationException("You cannot update a call that has ended or is in progress.");
             }
             CallManager.Observers.NotifyItemUpdated(myCall.Id); 
             CallManager.Observers.NotifyListUpdated();  

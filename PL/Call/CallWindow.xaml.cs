@@ -57,10 +57,10 @@ namespace PL.Call
                     Address = "",
                     Latitude = 0,
                     Longitude =0,
-                    StartTime =DateTime.MinValue,
-                    MaxEndTime =DateTime.MinValue,
+                    StartTime =s_bl.Admin.GetClock(),
+                    MaxEndTime =s_bl.Admin.GetClock(),
                     Description = "",
-                    Status =BO.MyCallStatus.None ,
+                    Status =BO.MyCallStatus.Open,
                     Assignments = null
                 };
             }

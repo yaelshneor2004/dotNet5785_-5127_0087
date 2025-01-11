@@ -10,7 +10,7 @@
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel>
-            
+           
             <Label Content="ID:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
             <TextBox Text="{Binding CurrentVolunteer.Id,Mode=TwoWay}" IsReadOnly="{Binding CurrentVolunteer.Id, Converter={StaticResource ConvertObjIdToTFKey}}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>
 
@@ -47,7 +47,7 @@
             <ComboBox ItemsSource="{Binding Source={StaticResource SortCollectionDistancesKey}}" SelectedItem="{Binding TypeDistance}" SelectedValue="{Binding CurrentVolunteer.TypeDistance, Mode=TwoWay}" Style="{StaticResource {x:Type ComboBox}}" Foreground="Black"/>
 
             <!-- New Fields Panel -->
-            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Height="Auto" Margin="13,0,0,0" Width="320">
+            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Height="Auto" Margin="13,0,0,0" Width="320" Visibility="{Binding CurrentVolunteer.Id, Converter={StaticResource ConvertObjIdToVisibilityKey}}">
                 <Label Content="Call Type:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
                 <ComboBox ItemsSource="{Binding Source={StaticResource SortCollectionMyCallTypeKey}}" SelectedItem="{Binding CallType}" SelectedValue="{Binding CurrentVolunteer.CurrentCall.CallType, Mode=TwoWay}" IsEnabled="False" Style="{StaticResource {x:Type ComboBox}}" Foreground="Black"/>
 

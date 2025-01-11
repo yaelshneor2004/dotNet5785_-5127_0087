@@ -661,13 +661,13 @@
     <MaxFinishCall>2024-04-13T09:16:00</MaxFinishCall>
   </Call>
   <Call>
-    <Id>69</Id>
-    <CallType>ComputerScience</CallType>
-    <Address>8 Bezalel Street, Jerusalem</Address>
-    <Latitude>31.7804985</Latitude>
-    <Longitude>35.2144826</Longitude>
-    <OpenTime>2024-10-15T00:30:00</OpenTime>
-    <Description>call number: 1 of type: Math at: 8 Bezalel Street, Jerusalem</Description>
-    <MaxFinishCall>2024-10-22T00:30:00</MaxFinishCall>
+    <Id>70</Id>
+    <CallType>Math</CallType>
+    <Address>"Rothschild 10, Tel Aviv, Israel"</Address>
+    <Latitude>32.06277670000001</Latitude>
+    <Longitude>34.77010850000001</Longitude>
+    <OpenTime>2025-01-01T00:00:00</OpenTime>
+    <Description>vgbh</Description>
+    <MaxFinishCall>2025-10-12T00:00:00</MaxFinishCall>
   </Call>
 </ArrayOfCall>
