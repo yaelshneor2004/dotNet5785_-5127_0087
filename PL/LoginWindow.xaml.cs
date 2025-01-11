@@ -43,7 +43,7 @@ namespace PL
                     if (result == MessageBoxResult.Yes)
                         new MainWindow().Show();
                     else
-                        new VolunteerWindow().Show();
+                        new VolunteerUserWindow(v.Id).Show();
                 }
             }
             else // this is volunteer

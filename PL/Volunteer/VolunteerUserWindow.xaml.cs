@@ -30,6 +30,7 @@ public partial class VolunteerUserWindow : Window
 
     public static readonly DependencyProperty CurrentVolunteerProperty =
         DependencyProperty.Register("CurrentVolunteer", typeof(BO.Volunteer), typeof(VolunteerWindow), new PropertyMetadata(null));
+
     public BO.Call? CurrentCall
     {
         get { return (BO.Call?)GetValue(CurrentCallProperty); }
@@ -41,6 +42,7 @@ public partial class VolunteerUserWindow : Window
 
     public BO.MyTypeDistance TypeDistance { get; set; } = BO.MyTypeDistance.None;
     public BO.MyRole Role { get; set; } = BO.MyRole.None;
+    private int id = 0;
     public VolunteerUserWindow(int id)
     {
         InitializeComponent();
@@ -66,20 +68,19 @@ public partial class VolunteerUserWindow : Window
             CurrentCall = CurrentVolunteer.CurrentCall,
         };
 
-        //CurrentCall = CurrentVolunteer.CurrentCall != null ? s_bl.Call.GetCallDetails(CurrentVolunteer.CurrentCall.CallId)! : new BO.Call()
-        //{
-        //    Id = CurrentCall.Id,
-        //    Type = CurrentCall.Type,
-        //    Address = CurrentCall.Address,
-        //    Latitude = CurrentCall.Latitude,
-        //    Longitude = CurrentCall.Longitude,
-        //    StartTime = CurrentCall.StartTime,
-        //    MaxEndTime = CurrentCall.MaxEndTime,
-        //    Description = CurrentCall.Description,
-        //    Status = CurrentCall.Status,
-        //    Assignments = CurrentCall.Assignments
-        //};
-
+        CurrentCall = CurrentVolunteer.CurrentCall != null ? s_bl.Call.GetCallDetails(CurrentVolunteer.CurrentCall.CallId)! : new BO.Call()
+        {
+            Id = CurrentCall.Id,
+            Type = CurrentCall.Type,
+            Address = CurrentCall.Address,
+            Latitude = CurrentCall.Latitude,
+            Longitude = CurrentCall.Longitude,
+            StartTime = CurrentCall.StartTime,
+            MaxEndTime = CurrentCall.MaxEndTime,
+            Description = CurrentCall.Description,
+            Status = CurrentCall.Status,
+            Assignments = CurrentCall.Assignments
+        };
     }
     private void btnUpdate_Click(object sender, RoutedEventArgs e)
     {
@@ -150,7 +151,10 @@ public partial class VolunteerUserWindow : Window
     private void VolunteerUserWindow_Loaded(object sender, RoutedEventArgs e)
     {
         if (CurrentVolunteer!.Id != 0)
+        { 
             s_bl.Volunteer.AddObserver(CurrentVolunteer.Id, VolunteerObserver);
+        VolunteerObserver(); 
+    }
     }
 
     private void VolunteerUserWindow_Closed(object? sender, EventArgs e)
@@ -161,8 +165,8 @@ public partial class VolunteerUserWindow : Window
 
     private void VolunteerObserver()
     { 
-        int id = CurrentVolunteer!.Id;
-        int idC = CurrentCall.Id;
+        int id = CurrentVolunteer?.Id??0;
+        int idC = CurrentCall?.Id??0;
         CurrentVolunteer = null;
         CurrentCall = null;
         CurrentVolunteer = s_bl.Volunteer.GetVolunteerDetails(id);

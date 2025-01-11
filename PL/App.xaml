@@ -4,7 +4,6 @@
              xmlns:local="clr-namespace:PL"
              StartupUri="LoginWindow.xaml">
     <Application.Resources>
-        <!--<local:ConvertIdToVisibility x:Key="IdToVisibilityConverterKey"/>-->
         <local:ConvertCallInProgressToVisibility x:Key="ConvertCallInProgressToVisibilityKey"/>
         <local:SortCollectionCallStatus x:Key="SortCollectionCallStatusKey"/>
         <local:SortCollectionMyCallType x:Key="SortCollectionMyCallTypeKey"/>
@@ -16,6 +15,7 @@
         <local:SortCollectionMyClosedCall x:Key="SortCollectionMyClosedCallKey"/>
         <local:ConvertObjIdToTF x:Key="ConvertObjIdToTFKey"/>
         <local:ConvertRoleToTF x:Key="ConvertRoleToTFKey"/>
+        <local:ConvertIdToVisibility x:Key="IdToVisibilityConverterKey"/>
         <Style TargetType="Button">
             <Setter Property="Background" Value="LightCyan"/>
             <Setter Property="BorderBrush" Value="DeepSkyBlue"/>

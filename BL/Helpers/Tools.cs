@@ -153,7 +153,7 @@ internal static class Tools
         {
             var response = client.GetStringAsync(url).Result;
 
-            // Analyze the response in JSON format
+            // Analyze the response in JSON format\
             var jsonResponse = JsonDocument.Parse(response);
 
             if (jsonResponse.RootElement.TryGetProperty("results", out JsonElement results) && results.GetArrayLength() > 0)
