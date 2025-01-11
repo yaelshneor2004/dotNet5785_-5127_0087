@@ -14,10 +14,7 @@
         <Label Content="Enter your id" HorizontalAlignment="Left" Height="29" Margin="122,80,0,0" VerticalAlignment="Top" Width="132"/>
         <TextBox Text="{Binding TextBoxId}" HorizontalAlignment="Left" Height="29" Margin="259,80,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="130"/>
         <PasswordBox x:Name="PasswordBox" HorizontalAlignment="Left" Height="29" Margin="259,138,0,0" VerticalAlignment="Top" Width="130" PasswordChanged="PasswordBox_PasswordChanged"/>
-        <!-- @PasswordBox -->
         <TextBox x:Name="VisiblePassword" HorizontalAlignment="Left" Height="29" Margin="259,138,0,0" VerticalAlignment="Top" Width="130" Visibility="Collapsed"/>
-        <!-- @TextBox מוצג כ- PasswordBox רגיל -->
         <Button Content="👁️" HorizontalAlignment="Left" Height="29" Margin="394,138,0,0" VerticalAlignment="Top" Width="30" Click="TogglePasswordVisibility"/>
-        <!-- @כפתור תצוגה -->
     </Grid>
 </Window>
