@@ -235,8 +235,15 @@ internal class CallImplementation : ICall
             CallManager.ValidateCallFormat(myCall);
             // Validate the logical correctness of the values
             CallManager.ValidateCallLogic(myCall);
-            // Attempt to update the call in the data layer
-            _dal.Call.Update(CallManager.ConvertBOToDO(myCall));
+            if(myCall.Status == BO.MyCallStatus.Open||myCall.Status==BO.MyCallStatus.OpenAtRisk)
+            {
+                // Attempt to update the call in the data layer
+                _dal.Call.Update(CallManager.ConvertBOToDO(myCall));
+            }
+            else
+            {
+                throw new BO.BlInvalidOperationException("The call is already closed.");
+            }
             CallManager.Observers.NotifyItemUpdated(myCall.Id); 
             CallManager.Observers.NotifyListUpdated();  
         }

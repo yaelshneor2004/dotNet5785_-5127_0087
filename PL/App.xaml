@@ -15,7 +15,7 @@
         <local:SortCollectionMyClosedCall x:Key="SortCollectionMyClosedCallKey"/>
         <local:ConvertObjIdToTF x:Key="ConvertObjIdToTFKey"/>
         <local:ConvertRoleToTF x:Key="ConvertRoleToTFKey"/>
-        <local:ConvertIdToVisibility x:Key="IdToVisibilityConverterKey"/>
+        <!--<local:ConvertIdToVisibility x:Key="IdToVisibilityConverterKey"/>-->
         <Style TargetType="Button">
             <Setter Property="Background" Value="LightCyan"/>
             <Setter Property="BorderBrush" Value="DeepSkyBlue"/>

@@ -6,48 +6,41 @@
         xmlns:local="clr-namespace:PL.Call"
         mc:Ignorable="d"
         Title="CallWindow" Height="600" Width="450"
-    DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
-  
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
+
     <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <StackPanel>
-            <Label Content="ID:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
-            <TextBox Text="{Binding CurrentCall.Id, Mode=TwoWay}" IsReadOnly="{Binding CurrentCall.Id, Converter={StaticResource ConvertObjIdToTFKey}}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>
-            <Label Content="Type:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
-            <ComboBox ItemsSource="{Binding Source={StaticResource SortCollectionMyCallTypeKey}}" SelectedItem="{Binding CurrentCall.Type}" SelectedValue="{Binding CurrentCall.Type, Mode=TwoWay}" Style="{StaticResource {x:Type ComboBox}}" Foreground="Black"/>
+        <StackPanel Margin="10">
+            <Label Content="ID:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Margin="0,5,0,5"/>
+            <TextBox Text="{Binding CurrentCall.Id, Mode=TwoWay}" IsReadOnly="{Binding CurrentCall.Id, Converter={StaticResource ConvertObjIdToTFKey}}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black" Margin="0,5,0,5"/>
+            <Label Content="Type:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Margin="0,5,0,5"/>
+            <ComboBox ItemsSource="{Binding Source={StaticResource SortCollectionMyCallTypeKey}}" SelectedItem="{Binding CurrentCall.Type}" SelectedValue="{Binding CurrentCall.Type, Mode=TwoWay}" Style="{StaticResource {x:Type ComboBox}}" Foreground="Black" Margin="0,5,0,5"/>
 
-            <Label Content="Description:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
-            <TextBox Text="{Binding CurrentCall.Description}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>
+            <Label Content="Description:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Margin="0,5,0,5"/>
+            <TextBox Text="{Binding CurrentCall.Description}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black" Margin="0,5,0,5"/>
 
-            <Label Content="Address:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
-            <TextBox Text="{Binding CurrentCall.Address}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>
+            <Label Content="Address:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Margin="0,5,0,5"/>
+            <TextBox Text="{Binding CurrentCall.Address}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black" Margin="0,5,0,5"/>
 
-            <Label Content="Start Time:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
-            <TextBox Text="{Binding CurrentCall.StartTime}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>
+            <Label Content="Start Time:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Margin="0,5,0,5"/>
+            <TextBox Text="{Binding CurrentCall.StartTime}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black" Margin="0,5,0,5"/>
 
-            <Label Content="Max End Time:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
-            <TextBox Text="{Binding CurrentCall.MaxEndTime}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>
+            <Label Content="Max End Time:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Margin="0,5,0,5"/>
+            <TextBox Text="{Binding CurrentCall.MaxEndTime}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black" Margin="0,5,0,5"/>
 
-            <Label Content="Status:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
-            <ComboBox ItemsSource="{Binding Source={StaticResource SortCollectionCallStatusKey}}" SelectedItem="{Binding CurrentCall.Status}" SelectedValue="{Binding CurrentCall.Status, Mode=TwoWay}" Style="{StaticResource {x:Type ComboBox}}" Foreground="Black"/>
-            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Height="Auto" Margin="13,0,0,0" Width="320">
-            
-                <Label Content="Volunteer ID:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
-                <TextBox Text="{Binding CurrentCall.Assignments[0].VolunteerId}" IsReadOnly="{Binding CurrentCall.Assignments[0].VolunteerId, Converter={StaticResource ConvertObjIdToTFKey}}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>
-               <Label Content="Volunteer Name:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
-            <TextBox Text="{Binding CurrentCall.Assignments[0].VolunteerName}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>
+            <Label Content="Status:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Margin="0,5,0,5"/>
+            <ComboBox ItemsSource="{Binding Source={StaticResource SortCollectionCallStatusKey}}" SelectedItem="{Binding CurrentCall.Status}" SelectedValue="{Binding CurrentCall.Status, Mode=TwoWay}" Style="{StaticResource {x:Type ComboBox}}" Foreground="Black" Margin="0,5,0,5"/>
 
-            <Label Content="Start Treatment Time:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
-                <TextBox Text="{Binding CurrentCall.Assignments[0].StartTreatmentTime}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>
+            <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding CurrentCall.Assignments}" Margin="0,5,0,5">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Volunteer ID" Binding="{Binding VolunteerId}" Foreground="Black"/>
+                    <DataGridTextColumn Header="Volunteer Name" Binding="{Binding VolunteerName}" Foreground="Black"/>
+                    <DataGridTextColumn Header="Start Treatment Time" Binding="{Binding StartTreatmentTime}" Foreground="Black"/>
+                    <DataGridTextColumn Header="End Treatment Time" Binding="{Binding EndTreatmentTime}" Foreground="Black"/>
+                    <DataGridComboBoxColumn Header="End Type" ItemsSource="{Binding Source={StaticResource SortCollectionMyFinishTypeKey}}" SelectedItemBinding="{Binding EndType}" SelectedValueBinding="{Binding EndType, Mode=TwoWay}"/>
+                </DataGrid.Columns>
+            </DataGrid>
 
-            <Label Content="End Treatment Time:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
-                <TextBox Text="{Binding CurrentCall.Assignments[0].EndTreatmentTime}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>
-
-            <Label Content="End Type:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
-                <ComboBox ItemsSource="{Binding Source={StaticResource SortCollectionMyFinishTypeKey}}" SelectedItem="{Binding CurrentCall.Assignments[0].EndType}" SelectedValue="{Binding CurrentCall.Assignments[0].EndType, Mode=TwoWay}" Style="{StaticResource {x:Type ComboBox}}" Foreground="Black"/>
-
-            </StackPanel>
             <Button Content="{Binding ButtonText}" Width="255" Click="btnAddUpdate_Click" HorizontalAlignment="Center" Margin="0,23,0,43"/>
         </StackPanel>
-</ScrollViewer>
+    </ScrollViewer>
 </Window>
-

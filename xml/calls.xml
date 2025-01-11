@@ -391,16 +391,6 @@
     <MaxFinishCall>2024-07-01T07:50:00</MaxFinishCall>
   </Call>
   <Call>
-    <Id>40</Id>
-    <CallType>Math</CallType>
-    <Address>8 Bezalel Street, Jerusalem</Address>
-    <Latitude>35.218213</Latitude>
-    <Longitude>31.763331</Longitude>
-    <OpenTime>2024-10-15T00:30:00</OpenTime>
-    <Description>call number: 1 of type: Math at: 8 Bezalel Street, Jerusalem</Description>
-    <MaxFinishCall>2024-10-22T00:30:00</MaxFinishCall>
-  </Call>
-  <Call>
     <Id>41</Id>
     <CallType>Accounting</CallType>
     <Address>9 Kiryat Moshe Street, Jerusalem</Address>
@@ -669,5 +659,15 @@
     <OpenTime>2024-04-05T09:16:00</OpenTime>
     <Description>call number: 1 of type: Math at: 18 Sokolov St, Ramat HaSharon</Description>
     <MaxFinishCall>2024-04-13T09:16:00</MaxFinishCall>
+  </Call>
+  <Call>
+    <Id>69</Id>
+    <CallType>ComputerScience</CallType>
+    <Address>8 Bezalel Street, Jerusalem</Address>
+    <Latitude>31.7804985</Latitude>
+    <Longitude>35.2144826</Longitude>
+    <OpenTime>2024-10-15T00:30:00</OpenTime>
+    <Description>call number: 1 of type: Math at: 8 Bezalel Street, Jerusalem</Description>
+    <MaxFinishCall>2024-10-22T00:30:00</MaxFinishCall>
   </Call>
 </ArrayOfCall>
