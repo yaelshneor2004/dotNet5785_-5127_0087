@@ -48,8 +48,6 @@ namespace PL.Call
             InitializeComponent();
             Loaded += CallWindow_Loaded;
             Closed += CallWindow_Closed ;
-            if (id == 0)
-            {
                 CurrentCall = (id != 0) ? s_bl.Call.GetCallDetails(id)! : new BO.Call()
                 {
                     Id =0,
@@ -63,23 +61,6 @@ namespace PL.Call
                     Status =BO.MyCallStatus.Open,
                     Assignments = null
                 };
-            }
-            else
-            {
-                CurrentCall = (id != 0) ? s_bl.Call.GetCallDetails(id)! : new BO.Call()
-                {
-                    Id = CurrentCall.Id,
-                    Type = CurrentCall.Type,
-                    Address = CurrentCall.Address,
-                    Latitude = CurrentCall.Latitude,
-                    Longitude = CurrentCall.Longitude,
-                    StartTime = CurrentCall.StartTime,
-                    MaxEndTime = CurrentCall.MaxEndTime,
-                    Description = CurrentCall.Description,
-                    Status = CurrentCall.Status,
-                    Assignments = CurrentCall.Assignments
-                };
-            }
 
         }
         private void btnAddUpdate_Click(object sender, RoutedEventArgs e)

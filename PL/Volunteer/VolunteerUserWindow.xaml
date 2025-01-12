@@ -43,45 +43,64 @@
 
             <Label Content="Type Distance:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
             <ComboBox ItemsSource="{Binding Source={StaticResource SortCollectionDistancesKey}}" SelectedItem="{Binding TypeDistance}" SelectedValue="{Binding CurrentVolunteer.TypeDistance, Mode=TwoWay}" Style="{StaticResource {x:Type ComboBox}}" Foreground="Black"/>
-            <!-- New Fields Panel call -->
-            <StackPanel>
-                <Label Content="ID:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/>
-                <TextBox Text="{Binding CurrentCall.Id, Mode=TwoWay}" IsReadOnly="{Binding CurrentCall.Id, Converter={StaticResource ConvertObjIdToTFKey}}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/>
-                <Label Content="Type:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
-                <ComboBox ItemsSource="{Binding Source={StaticResource SortCollectionMyCallTypeKey}}" SelectedItem="{Binding CurrentCall.Type}" SelectedValue="{Binding CurrentCall.Type, Mode=TwoWay}" Style="{StaticResource {x:Type ComboBox}}" Foreground="Black" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/>
+            <Button Content="Update" Width="130" Click="btnUpdate_Click" HorizontalAlignment="Center" Margin="10,10,10,10"/>
 
-                <Label Content="Description:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"  Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/>
-                <TextBox Text="{Binding CurrentCall.Description}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/>
+            <!-- New Fields Panel call -->
+            <StackPanel Margin="0,0,0,20">
+                <Label Content="ID:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/>
+                <TextBox Text="{Binding CurrentCall.Id, Mode=TwoWay}" IsReadOnly="True" Style="{StaticResource {x:Type TextBox}}" Foreground="Black" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/>
+
+                <Label Content="Type:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/>
+                <ComboBox ItemsSource="{Binding Source={StaticResource SortCollectionMyCallTypeKey}}" SelectedItem="{Binding CurrentCall.Type}" SelectedValue="{Binding CurrentCall.Type, Mode=TwoWay}" Style="{StaticResource {x:Type ComboBox}}" Foreground="Black" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}" IsEnabled="False"/>
+
+                <Label Content="Description:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/>
+                <TextBox Text="{Binding CurrentCall.Description}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}" IsReadOnly="True"/>
 
                 <Label Content="Address:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/>
-                <TextBox Text="{Binding CurrentCall.Address}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/>
+                <TextBox Text="{Binding CurrentCall.Address}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}" IsReadOnly="True"/>
 
                 <Label Content="Start Time:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/>
-                <TextBox Text="{Binding CurrentCall.StartTime}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/>
+                <TextBox Text="{Binding CurrentCall.StartTime}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}" IsReadOnly="True"/>
 
                 <Label Content="Max End Time:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/>
-                <TextBox Text="{Binding CurrentCall.MaxEndTime}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/>
+                <TextBox Text="{Binding CurrentCall.MaxEndTime}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}" IsReadOnly="True"/>
 
                 <Label Content="Status:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/>
-                <ComboBox ItemsSource="{Binding Source={StaticResource SortCollectionCallStatusKey}}" SelectedItem="{Binding CurrentCall.Status}" SelectedValue="{Binding CurrentCall.Status, Mode=TwoWay}" Style="{StaticResource {x:Type ComboBox}}" Foreground="Black" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/>
-                <!--new fields panel CallAssignInList-->
-                <DataGrid ItemsSource="{Binding CurrentCall.Assignments}" AutoGenerateColumns="False" CanUserAddRows="False" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Volunteer ID" Binding="{Binding VolunteerId}" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="Volunteer Name" Binding="{Binding VolunteerName}"/>
-                        <DataGridTextColumn Header="Start Treatment Time" Binding="{Binding StartTreatmentTime}"/>
-                        <DataGridTextColumn Header="End Treatment Time" Binding="{Binding EndTreatmentTime}"/>
-                        <DataGridComboBoxColumn Header="End Type" SelectedItemBinding="{Binding EndType}" 
-                                 ItemsSource="{Binding Source={StaticResource SortCollectionMyFinishTypeKey}}"/>
-                    </DataGrid.Columns>
-                </DataGrid>
-                <Button Content="Cancel Call" Width="255" Click="btnCancelCall_Click" HorizontalAlignment="Center" Margin="0,23,0,43"/>
-                <Button Content="Finish Call" Width="255" Click="btnFinishCall_Click" HorizontalAlignment="Center" Margin="0,23,0,43"/>
+                <StackPanel Margin="0,20,0,10">
+                    <DataGrid ItemsSource="{Binding CurrentCall.Assignments}" AutoGenerateColumns="False" CanUserAddRows="False" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}" IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Volunteer ID" Binding="{Binding VolunteerId}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Volunteer Name" Binding="{Binding VolunteerName}"/>
+                            <DataGridTextColumn Header="Start Treatment Time" Binding="{Binding StartTreatmentTime}"/>
+                            <DataGridTextColumn Header="End Treatment Time" Binding="{Binding EndTreatmentTime}"/>
+                            <DataGridComboBoxColumn Header="End Type" SelectedItemBinding="{Binding EndType}" 
+                                     ItemsSource="{Binding Source={StaticResource SortCollectionMyFinishTypeKey}}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10,10,10,10">
+                    <Button Content="Cancel Call" Width="130" Click="btnCancelCall_Click" Margin="10" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/>
+                    <Button Content="Finish Call" Width="130" Click="btnFinishCall_Click" Margin="10" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/>
+                </StackPanel>
             </StackPanel>
-            <Button Content="Select call to treat" Width="256" Click="btnSelectCall_Click"
-       Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/>
-            <Button Content="Call History" Width="255" Click="btnCallHistory_Click" HorizontalAlignment="Center" Margin="0,23,0,43"/>
-            <Button Content="Update" Width="255" Click="btnUpdate_Click" HorizontalAlignment="Center" Margin="0,23,0,43"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10,10,10,10">
+                <Button Content="Select call to treat" Width="130" Click="btnSelectCall_Click" Margin="10">
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}" Value="Collapsed">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}" Value="Visible">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                <Button Content="Call History" Width="130" Click="btnCallHistory_Click" Margin="10"/>
+            </StackPanel>
         </StackPanel>
     </ScrollViewer>
 </Window>

@@ -73,10 +73,10 @@ public partial class VolunteerCallHistoryWindow : Window
  s_bl?.Call.SortClosedCalls(id, FilterByType, null)!;
     }
 
-    private void cmbSortChanges_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-        CloseCallList = (SortByClosedCall == BO.CloseCall.None) ?
-s_bl?.Call.SortClosedCalls(id, null, BO.CloseCall.None)! :
-s_bl?.Call.SortClosedCalls(id, null, SortByClosedCall)!;
-    }
+//    private void cmbSortChanges_SelectionChanged(object sender, SelectionChangedEventArgs e)
+//    {
+//        CloseCallList = (SortByClosedCall == BO.CloseCall.None) ?
+//s_bl?.Call.SortClosedCalls(id, null, BO.CloseCall.None)! :
+//s_bl?.Call.SortClosedCalls(id, null, SortByClosedCall)!;
+//    }
 }
