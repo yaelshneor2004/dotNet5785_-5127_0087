@@ -1,4 +1,5 @@
 ﻿using BO;
+using PL.Volunteer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,6 @@ public partial class SelectCallToTreatWindow : Window
 
     static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
     public BO.MyCallType FilterByType { get; set; } = BO.MyCallType.None;
-    public BO.OpenedCall SortByOpenedCall { get; set; } = BO.OpenedCall.None;
 
     public IEnumerable<BO.OpenCallInList> OpenCallList
     {
@@ -35,13 +35,21 @@ public partial class SelectCallToTreatWindow : Window
     // Using a DependencyProperty as the backing store for CallList.  This enables animation, styling, binding, etc...
     public static readonly DependencyProperty OpenCallListProperty =
         DependencyProperty.Register("OpenCallList", typeof(IEnumerable<BO.OpenCallInList>), typeof(SelectCallToTreatWindow), new PropertyMetadata(null));
+    public BO.Volunteer? CurrentVolunteer
+    {
+        get { return (BO.Volunteer?)GetValue(CurrentVolunteerProperty); }
+        set { SetValue(CurrentVolunteerProperty, value); }
+    }
 
+    public static readonly DependencyProperty CurrentVolunteerProperty =
+        DependencyProperty.Register("CurrentVolunteer", typeof(BO.Volunteer), typeof(SelectCallToTreatWindow), new PropertyMetadata(null));
     private int id;
     public SelectCallToTreatWindow(int idV)
     {id= idV;
         InitializeComponent();
         Loaded += CallListWindow_Loaded;
         Closed += CallListWindow_Closed;
+        CurrentVolunteer = (id != 0) ? s_bl.Volunteer.GetVolunteerDetails(id)! : new BO.Volunteer();
     }
     private void CallListWindow_Loaded(object sender, RoutedEventArgs e)
     {
@@ -49,10 +57,9 @@ public partial class SelectCallToTreatWindow : Window
     }
     private void queryCallList()
     {
-       // OpenCallList=s_bl.Call.GetFilterCallList(BO.MyCallStatus.Open)
-       // OpenCallList = (FilterByType == BO.MyCallType.None) ?
-       //s_bl?.Call.SortOpenedCalls(id, BO.MyCallType.None, null)! :
-       //s_bl?.Call.SortOpenedCalls(id, FilterByType, null)!;
+        OpenCallList = (FilterByType == BO.MyCallType.None) ?
+       s_bl?.Call.SortOpenedCalls(id, null, null)! :
+       s_bl?.Call.SortOpenedCalls(id, FilterByType, null)!;
 
     }
     private void callListObserver()
@@ -66,25 +73,21 @@ public partial class SelectCallToTreatWindow : Window
 
     private void cmbFiltedrChanges_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        OpenCallList = (FilterByType == BO.MyCallType.None) ?
-          s_bl?.Call.SortOpenedCalls(id,BO.MyCallType.None,null)! :
-          s_bl?.Call.SortOpenedCalls(id,FilterByType,null)!;
+        queryCallList();
 
-    }
-
-    private void cmbSortChanges_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-        OpenCallList = (SortByOpenedCall == BO.OpenedCall.None) ?
-       s_bl?.Call.SortOpenedCalls(id, null, BO.OpenedCall.None)! :
-       s_bl?.Call.SortOpenedCalls(id, null, SortByOpenedCall )!;
     }
     private void SelectCall_Click(object sender, RoutedEventArgs e)
     {
         s_bl.Call.SelectCallToTreat(id, SelectedOpenCall!.Id);
+        MessageBox.Show("A call has been selected for treatment", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
+        Close();
     }
 
     private void UpdateAddress_Click(object sender, RoutedEventArgs e)
     {
-       
+
+        s_bl.Volunteer.UpdateVolunteer(id,CurrentVolunteer);
+        MessageBox.Show("The address has been updated successfully", "Message", MessageBoxButton.OK, MessageBoxImage.Information);
+            queryCallList();
     }
 }

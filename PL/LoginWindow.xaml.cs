@@ -34,18 +34,18 @@ namespace PL
             }
 
             string password = PasswordBox.Password;
-            if (string.IsNullOrWhiteSpace(password))
-            {
-                MessageBox.Show("Please enter your password.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
+            //if (string.IsNullOrWhiteSpace(password))
+            //{
+            //    MessageBox.Show("Please enter your password.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            //    return;
+            //}
 
             BO.Volunteer v = s_bl.Volunteer.GetVolunteerDetails(id);
-            if (v == null || v.Password != password)
-            {
-                MessageBox.Show("Invalid ID or password.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
+            //if (v == null || v.Password != password)
+            //{
+            //    MessageBox.Show("Invalid ID or password.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            //    return;
+            //}
 
             if (v.Role == BO.MyRole.Manager)
             {

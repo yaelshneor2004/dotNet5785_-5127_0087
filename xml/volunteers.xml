@@ -225,20 +225,6 @@
     <IsActive>true</IsActive>
   </Volunteer>
   <Volunteer>
-    <Id>326615127</Id>
-    <FullName>Yael Shneor</FullName>
-    <Phone>0533859299</Phone>
-    <Email>y7697086@gmail.com</Email>
-    <Role>Manager</Role>
-    <TypeDistance>Aerial</TypeDistance>
-    <Password>4Aa0guBmhrmrgF+t+EJTUw==</Password>
-    <Address>Derech Hevron 78, Jerusalem, Israel</Address>
-    <Latitude>31.7525</Latitude>
-    <Longitude>35.2121</Longitude>
-    <MaxDistance>20</MaxDistance>
-    <IsActive>true</IsActive>
-  </Volunteer>
-  <Volunteer>
     <Id>208799387</Id>
     <FullName>yafit</FullName>
     <Phone>0533859299</Phone>
@@ -246,10 +232,24 @@
     <Role>Volunteer</Role>
     <TypeDistance>Aerial</TypeDistance>
     <Password>Vi6l1zDjhNouaKd05iDlnA==</Password>
-    <Address>Rothschild 10, Tel Aviv, Israel</Address>
-    <Latitude>32.06277670000001</Latitude>
-    <Longitude>34.77010850000001</Longitude>
+    <Address>Yigal Alon 120, Tel Aviv, Israel</Address>
+    <Latitude>32.0737482</Latitude>
+    <Longitude>34.7953709</Longitude>
     <MaxDistance>12</MaxDistance>
+    <IsActive>true</IsActive>
+  </Volunteer>
+  <Volunteer>
+    <Id>326615127</Id>
+    <FullName>Yael Shneor</FullName>
+    <Phone>0533859299</Phone>
+    <Email>y7697086@gmail.com</Email>
+    <Role>Manager</Role>
+    <TypeDistance>Aerial</TypeDistance>
+    <Password>4Aa0guBmhrmrgF+t+EJTUw==</Password>
+    <Address>Reger Blvd 55, Be'er Sheva, Israel</Address>
+    <Latitude>31.2521018</Latitude>
+    <Longitude>34.7867691</Longitude>
+    <MaxDistance>30</MaxDistance>
     <IsActive>true</IsActive>
   </Volunteer>
 </ArrayOfVolunteer>

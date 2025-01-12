@@ -33,10 +33,10 @@
                    SelectedValue="{Binding CurrentVolunteer.Role, Mode=TwoWay}"
                    Style="{StaticResource {x:Type ComboBox}}"
                    Foreground="Black"
-                   IsReadOnly="{Binding CurrentVolunteer.Role, Converter={StaticResource ConvertRoleToTFKey}}"/>
+                   IsEnabled="False"/>
 
             <Label Content="Is Active:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
-            <CheckBox IsChecked="{Binding CurrentVolunteer.IsActive, Mode=OneWay}" Style="{StaticResource {x:Type CheckBox}}"/>
+            <CheckBox IsChecked="{Binding CurrentVolunteer.IsActive, Mode=TwoWay}" Style="{StaticResource {x:Type CheckBox}}" IsEnabled="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToReadOnlyKey}}"/>
 
             <Label Content="Max Distance:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
             <TextBox Text="{Binding CurrentVolunteer.MaxDistance}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>

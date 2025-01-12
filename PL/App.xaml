@@ -14,8 +14,8 @@
         <local:SortCollectionMyOpenedCall x:Key="SortCollectionMyOpenedCallKey"/>
         <local:SortCollectionMyClosedCall x:Key="SortCollectionMyClosedCallKey"/>
         <local:ConvertObjIdToTF x:Key="ConvertObjIdToTFKey"/>
-        <local:ConvertRoleToTF x:Key="ConvertRoleToTFKey"/>
         <local:ConvertObjIdToVisibility x:Key="ConvertObjIdToVisibilityKey"/>
+        <local:ConvertCallInProgressToReadOnly x:Key="ConvertCallInProgressToReadOnlyKey"/>
         <Style TargetType="Button">
             <Setter Property="Background" Value="LightCyan"/>
             <Setter Property="BorderBrush" Value="DeepSkyBlue"/>

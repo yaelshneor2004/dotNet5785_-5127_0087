@@ -87,9 +87,8 @@ public partial class VolunteerUserWindow : Window
         }
         try
         {
-            CurrentCall.Status = BO.MyCallStatus.Open;
-            s_bl.Call.UpdateCall(CurrentCall);
-            MessageBox.Show("Call updated successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            s_bl.Call.UpdateCancelTreatment(CurrentVolunteer.Id,CurrentCall.Id);
+            MessageBox.Show("Treatment cancellation successfully canceled", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             Close();
         }
         catch (Exception ex)
@@ -106,9 +105,8 @@ public partial class VolunteerUserWindow : Window
         }
         try
         {
-            CurrentCall.Status = BO.MyCallStatus.Closed;
-            s_bl.Call.UpdateCall(CurrentCall);
-            MessageBox.Show("Call updated successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            s_bl.Call.UpdateCompleteAssignment(CurrentVolunteer.Id, CurrentCall.Id);
+            MessageBox.Show("Treatment completed successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             Close();
         }
         catch (Exception ex)

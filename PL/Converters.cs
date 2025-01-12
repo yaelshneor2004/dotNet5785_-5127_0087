@@ -51,34 +51,34 @@ public class ConvertObjIdToVisibility : IValueConverter
 /// <param name="parameter">The converter parameter.</param>
 /// <param name="culture">The culture to use in the converter.</param>
 /// <returns>True if the role is Manager, otherwise false.</returns>
-public class ConvertRoleToTF : IValueConverter
-{
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        if (value != null && Enum.TryParse(value.ToString(), out BO.MyRole role))
-        {
-            // Directly return the result of the comparison
-            return role == BO.MyRole.Manager;
-        }
+//public class ConvertRoleToTF : IValueConverter
+//{
+//    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+//    {
+//        if (value != null && Enum.TryParse(value.ToString(), out BO.MyRole role))
+//        {
+//            // Directly return the result of the comparison
+//            return role == BO.MyRole.Manager;
+//        }
 
-        // Return false if the value could not be parsed to a BO.Roles
-        return false;
-    }
+//        // Return false if the value could not be parsed to a BO.Roles
+//        return false;
+//    }
 
-    /// <summary>
-    /// Not implemented.
-    /// </summary>
-    /// <param name="value">The value produced by the binding target.</param>
-    /// <param name="targetType">The type to convert to.</param>
-    /// <param name="parameter">The converter parameter to use.</param>
-    /// <param name="culture">The culture to use in the converter.</param>
-    /// <returns>A converted value.</returns>
-    /// <exception cref="NotImplementedException">Always thrown.</exception>
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        throw new NotImplementedException();
-    }
-}
+//    /// <summary>
+//    /// Not implemented.
+//    /// </summary>
+//    /// <param name="value">The value produced by the binding target.</param>
+//    /// <param name="targetType">The type to convert to.</param>
+//    /// <param name="parameter">The converter parameter to use.</param>
+//    /// <param name="culture">The culture to use in the converter.</param>
+//    /// <returns>A converted value.</returns>
+//    /// <exception cref="NotImplementedException">Always thrown.</exception>
+//    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+//    {
+//        throw new NotImplementedException();
+//    }
+//}
 public class ConvertCallInProgressToVisibility : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -97,6 +97,31 @@ public class ConvertCallInProgressToVisibility : IValueConverter
 
         // If the value is not a BO.CurrentCall, return Collapsed
         return Visibility.Collapsed;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}
+public class ConvertCallInProgressToReadOnly : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        if (value is BO.Call currentCall)
+        {
+            // Check if the call is null or the status is expired
+            if (currentCall == null || currentCall.Status == BO.MyCallStatus.Expired)
+            {
+                return true;
+            }
+
+            // Otherwise, make it visible
+            return false;
+        }
+
+        // If the value is not a BO.CurrentCall, return Collapsed
+        return true;
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
