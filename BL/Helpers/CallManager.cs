@@ -2,6 +2,7 @@
 using DO;
 using System.Net;
 using System.Net.Mail;
+using System.Runtime.Intrinsics.Arm;
 namespace Helpers;
 internal static class CallManager
 {
@@ -314,27 +315,29 @@ internal static class CallManager
     }
 
     /// <summary>
-    /// Determines if an assignment should be considered open based on its status.
+    /// Determines if a call should be considered open based on its status.
     /// </summary>
-    /// <param name="assignment">The assignment to check.</param>
-    /// <returns>True if the assignment is open, false otherwise.</returns>
-    public static bool OpenCondition(DO.Assignment assignment)
+    /// <param name="call">The call to check.</param>
+    /// <returns>True if the call is open, false otherwise.</returns>
+    public static bool OpenCondition(DO.Call call)
     {
-        var callDetails = s_dal.Call.Read(assignment.CallId);
-        var call = callDetails != null ? ConvertFromDoToBo(callDetails) : null;
-        return (call?.Status == BO.MyCallStatus.Open || call?.Status == BO.MyCallStatus.OpenAtRisk) == true;
+        // Convert DO.Call to BO.Call
+        var newCall = call != null ? ConvertFromDoToBo(call) : null;
+        // Check if the status of the call is Open or OpenAtRisk
+        return (newCall?.Status == BO.MyCallStatus.Open || newCall?.Status == BO.MyCallStatus.OpenAtRisk) == true;
     }
-
     /// <summary>
-    /// Determines if an assignment should be considered closed based on its status.
+    /// Determines if the call is within the volunteer's max distance.
     /// </summary>
-    /// <param name="assignment">The assignment to check.</param>
-    /// <returns>True if the assignment is closed, false otherwise.</returns>
-    public static bool CloseCondition(DO.Assignment assignment)
+    /// <param name="volunteer">The volunteer to check.</param>
+    /// <param name="call">The call to check.</param>
+    /// <returns>True if the call is within the max distance, false otherwise.</returns>
+    public static bool VolunteerArea(DO.Volunteer volunteer, DO.Call call)
     {
-        var callDetails = s_dal.Call.Read(assignment.CallId);
-        var call = callDetails != null ? ConvertFromDoToBo(callDetails) : null;
-        return (call?.Status == BO.MyCallStatus.Expired || call?.Status == BO.MyCallStatus.Closed)==true;
+        // Calculate the distance between the volunteer's address and the call's address
+        double distance = Tools.GlobalDistance(volunteer.Address, call.Address, volunteer.TypeDistance);
+        // Check if the distance is within the volunteer's max distance
+        return distance <= volunteer.MaxDistance;
     }
 
     /// <summary>
@@ -342,14 +345,11 @@ internal static class CallManager
     /// </summary>
     /// <param name="assignment">The DO.Assignment instance to convert.</param>
     /// <returns>A new BO.OpenCallInList instance with the converted data.</returns>
-    public static BO.OpenCallInList convertAssignmentToOpened(DO.Assignment assignment)
+    public static BO.OpenCallInList convertCallToOpened(DO.Volunteer volunteer,DO.Call callDetails)
     {
-        var callDetails = s_dal.Call.Read(assignment.CallId);
-        var volunteer = s_dal.Volunteer.Read(assignment.VolunteerId);
-
         return new BO.OpenCallInList
         {
-            Id = assignment.CallId,
+            Id = callDetails.Id,
             Type = (BO.MyCallType)callDetails.CallType,
             Description = callDetails.Description,
             Address = callDetails.Address,

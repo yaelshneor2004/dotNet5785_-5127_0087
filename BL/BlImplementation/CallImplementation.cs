@@ -203,9 +203,9 @@ internal class CallImplementation : ICall
     public IEnumerable<BO.ClosedCallInList> SortClosedCalls(int idV, BO.MyCallType? callType, BO.CloseCall? closeCall)
     {
         var closeList = _dal.Assignment.ReadAll();
-        var closeListt = closeList.Where(a => a.VolunteerId == idV && CallManager.CloseCondition(a)).Select(a => convertAssignmentToClosed(a)).ToList();
-        closeListt = callType.HasValue ? closeListt.Where(call => call.Type == callType.Value).ToList() : closeListt;
-        return CallManager.SortClosedCallsByField(closeListt, closeCall);
+        var closeListNew = closeList.Where(a => a.VolunteerId == idV &&a.FinishType!=null).Select(a => convertAssignmentToClosed(a)).ToList();
+        closeListNew = callType.HasValue ? closeListNew.Where(call => call.Type == callType.Value).ToList() : closeListNew;
+        return CallManager.SortClosedCallsByField(closeListNew, closeCall);
     }
 
     /// <summary>
@@ -217,7 +217,8 @@ internal class CallImplementation : ICall
     /// <returns>A list of opened calls.</returns>
     public IEnumerable<BO.OpenCallInList> SortOpenedCalls(int idV, BO.MyCallType? callType, BO.OpenedCall? openedCall)
     {
-        var openCalls = _dal.Assignment.ReadAll().Where(a => a.VolunteerId == idV && CallManager.OpenCondition(a)).Select(a => convertAssignmentToOpened(a)).ToList();
+        var volunteer=_dal.Volunteer.Read(idV);
+        var openCalls = _dal.Call.ReadAll().Where(c=>CallManager.OpenCondition(c)&&CallManager.VolunteerArea(volunteer, c)).Select(c => CallManager.convertCallToOpened(volunteer,c)).ToList();
         openCalls = callType.HasValue ? openCalls.Where(call => call.Type == callType.Value).ToList() : openCalls;
         return CallManager.SortOpenCallsByField(openCalls, openedCall);
     }
@@ -235,8 +236,15 @@ internal class CallImplementation : ICall
             CallManager.ValidateCallFormat(myCall);
             // Validate the logical correctness of the values
             CallManager.ValidateCallLogic(myCall);
-            // Attempt to update the call in the data layer
-            _dal.Call.Update(CallManager.ConvertBOToDO(myCall));
+            if(myCall.Status == BO.MyCallStatus.Open||myCall.Status==BO.MyCallStatus.OpenAtRisk)
+            {
+                // Attempt to update the call in the data layer
+                _dal.Call.Update(CallManager.ConvertBOToDO(myCall));
+            }
+            else
+            {
+                throw new BO.BlInvalidOperationException("You cannot update a call that has ended or is in progress.");
+            }
             CallManager.Observers.NotifyItemUpdated(myCall.Id); 
             CallManager.Observers.NotifyListUpdated();  
         }
@@ -258,7 +266,7 @@ internal class CallImplementation : ICall
         try
         {
             // Retrieve assignment details from the data layer
-            var assignment = _dal.Assignment.Read(a => a.CallId == idC);
+            var assignment = _dal.Assignment.Read(a => a.CallId == idC&&a.FinishType==null);
             // Check authorization: the requester must be a manager or the volunteer assigned to the task
             if (assignment?.VolunteerId != idV || !CallManager.IsManager(idV))
                 throw new BO.BlUnauthorizedAccessException("The requester is not authorized to cancel this assignment.");
@@ -295,11 +303,11 @@ internal class CallImplementation : ICall
     /// <exception cref="BO.BlUnauthorizedAccessException">Thrown if the volunteer is not authorized to complete the assignment</exception>
     /// <exception cref="BO.BlInvalidOperationException">Thrown if the assignment is already completed or canceled</exception>
     /// <exception cref="BO.BlDoesNotExistException">Thrown if the assignment does not exist</exception>
-    public void UpdateCompleteAssignment(int volunteerId, int assignmentId)
+    public void UpdateCompleteAssignment(int volunteerId, int idC)
     {
         try
         {
-            var assignment = _dal.Assignment.Read(a => a.Id == assignmentId);
+            var assignment = _dal.Assignment.Read(a => a.CallId == idC&&a.FinishType==null);
 
             // Check authorization: the volunteer must be the one assigned to the task
             if (assignment?.VolunteerId != volunteerId)
@@ -322,7 +330,7 @@ internal class CallImplementation : ICall
         catch (DO.DalDoesNotExistException ex)
         {
             // If the assignment does not exist, throw an appropriate exception to the presentation layer
-            throw new BO.BlDoesNotExistException($"Assignment with ID {assignmentId} does not exist.", ex);
+            throw new BO.BlDoesNotExistException($"Assignment with ID {idC} does not exist.", ex);
         }
     }
     public IEnumerable<CallInList> GetFilterCallList(BO.MyCallStatus filter)

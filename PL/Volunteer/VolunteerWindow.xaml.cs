@@ -52,51 +52,7 @@ namespace PL.Volunteer
             InitializeComponent();
             Loaded += VolunteerWindow_Loaded;
             Closed += VolunteerWindow_Closed;
-            if (id == 0)
-            {
-                CurrentVolunteer = (id != 0) ? s_bl.Volunteer.GetVolunteerDetails(id)! : new BO.Volunteer()
-                {
-                    Id = 0,
-                    FullName = "",
-                    Phone = "",
-                    Email = "",
-                    Password = null,
-                    Address = null,
-                    Latitude = null,
-                    Longitude = null,
-                    Role = BO.MyRole.Volunteer,
-                    IsActive = true,
-                    MaxDistance = null,
-                    TypeDistance = BO.MyTypeDistance.Aerial,
-                    TotalCallsCancelled = 0,
-                    TotalCallsExpired = 0,
-                    TotalCallsHandled = 0,
-                    CurrentCall = null,
-                };
-
-            }
-            else
-            {
-                CurrentVolunteer = (id != 0) ? s_bl.Volunteer.GetVolunteerDetails(id)! : new BO.Volunteer()
-                {
-                    Id = CurrentVolunteer.Id,
-                    FullName = CurrentVolunteer.FullName,
-                    Phone = CurrentVolunteer.Phone,
-                    Email = CurrentVolunteer.Email,
-                    Password = CurrentVolunteer.Password,
-                    Address = CurrentVolunteer.Address,
-                    Latitude = CurrentVolunteer.Latitude,
-                    Longitude = CurrentVolunteer.Longitude,
-                    Role = CurrentVolunteer.Role,
-                    IsActive = CurrentVolunteer.IsActive,
-                    MaxDistance = CurrentVolunteer.MaxDistance,
-                    TypeDistance = CurrentVolunteer.TypeDistance,
-                    TotalCallsHandled = CurrentVolunteer.TotalCallsHandled,
-                    TotalCallsCancelled = CurrentVolunteer.TotalCallsCancelled,
-                    TotalCallsExpired = CurrentVolunteer.TotalCallsExpired,
-                    CurrentCall = CurrentVolunteer.CurrentCall,
-                };
-            }
+                CurrentVolunteer = (id != 0) ? s_bl.Volunteer.GetVolunteerDetails(id)! : new BO.Volunteer();
         }
 
         /// <summary>

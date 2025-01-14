@@ -126,30 +126,11 @@ internal static class VolunteerManager
     {
         return int.TryParse(value, out _);
     }
-
     /// <summary>
-    /// Validates the logical correctness of the ID number.
+    /// 
     /// </summary>
-    /// <param name="idNumber">The ID number to validate.</param>
-    /// <returns>Returns true if the ID number is valid, otherwise false.</returns>
-    //private static bool ValidateIdNumber(string idNumber)
-    //{
-    //    Check that the string length is exactly 9 characters and contains only digits
-    //    if (idNumber.Length != 9 || !idNumber.All(char.IsDigit))
-    //    {
-    //        return false;
-    //    }
-    //    int sum = 0;
-    //    for (int i = 0; i < 9; i++)
-    //    {
-    //        int digit = idNumber[i] - '0';
-    //        int weight = (i % 2) + 1;
-    //        int product = digit * weight;
-    //        sum += product > 9 ? product - 9 : product;
-    //    }
-
-    //    return sum % 10 == 0;
-    //}
+    /// <param name="id"></param>
+    /// <returns></returns>
     private static bool IsValidID(int id)
     {
         string idStr = id.ToString("D9"); //// pad with zeros if needed to make it 9 digits
@@ -275,23 +256,28 @@ internal static class VolunteerManager
             TotalCallsHandled= s_dal.Assignment.ReadAll(a => a.VolunteerId == myVolunteer.Id && a.FinishType == DO.MyFinishType.Treated).Count(),
             TotalCallsCancelled= s_dal.Assignment.ReadAll(a => a.VolunteerId == myVolunteer.Id && (a.FinishType == DO.MyFinishType.SelfCancel || a.FinishType == DO.MyFinishType.ManagerCancel)).Count(),
             TotalCallsExpired= s_dal.Assignment.ReadAll(a => a.VolunteerId == myVolunteer.Id && a.FinishType == DO.MyFinishType.ExpiredCancel).Count(),
-            CurrentCall= (from a in assignments
-                          let callData = s_dal.Call.Read(a.CallId)
-                          select new BO.CallInProgress
-                          {
-                              Id = a.Id,
-                              CallId = a.CallId,
-                              CallType = (BO.MyCallType)callData.CallType,
-                              Description = callData.Description,
-                              Address = callData.Address,
-                              StartTime = callData.OpenTime,
-                              MaxEndTime = callData.MaxFinishCall,
-                              StartTreatmentTime = a.StartCall,
-                              DistanceFromVolunteer = Tools.GlobalDistance(myVolunteer.Address ?? string.Empty, callData.Address, myVolunteer.TypeDistance),
-                              Status = VolunteerManager.DetermineCallStatus(callData.MaxFinishCall)
-                          }).FirstOrDefault()
+             CurrentCall = assignments
+    .Where(a => a.FinishType == null)
+    .Select(a =>
+    {
+        var callData = s_dal.Call.Read(a.CallId);
+        return new BO.CallInProgress
+        {
+            Id = a.Id,
+            CallId = a.CallId,
+            CallType = (BO.MyCallType)callData.CallType,
+            Description = callData.Description,
+            Address = callData.Address,
+            StartTime = callData.OpenTime,
+            MaxEndTime = callData.MaxFinishCall,
+            StartTreatmentTime = a.StartCall,
+            DistanceFromVolunteer = Tools.GlobalDistance(myVolunteer.Address ?? string.Empty, callData.Address, myVolunteer.TypeDistance),
+            Status = VolunteerManager.DetermineCallStatus(callData.MaxFinishCall)
         };
-    }
+    })
+    .FirstOrDefault()
+    };
+  }
 
 
     /// <summary>

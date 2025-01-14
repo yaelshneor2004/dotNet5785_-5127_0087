@@ -27,9 +27,8 @@ public partial class VolunteerUserWindow : Window
         get { return (BO.Volunteer?)GetValue(CurrentVolunteerProperty); }
         set { SetValue(CurrentVolunteerProperty, value); }
     }
-
     public static readonly DependencyProperty CurrentVolunteerProperty =
-        DependencyProperty.Register("CurrentVolunteer", typeof(BO.Volunteer), typeof(VolunteerWindow), new PropertyMetadata(null));
+        DependencyProperty.Register("CurrentVolunteer", typeof(BO.Volunteer), typeof(VolunteerUserWindow), new PropertyMetadata(null));
 
     public BO.Call? CurrentCall
     {
@@ -38,7 +37,7 @@ public partial class VolunteerUserWindow : Window
     }
 
     public static readonly DependencyProperty CurrentCallProperty =
-        DependencyProperty.Register("CurrentCall", typeof(BO.Call), typeof(CallWindow), new PropertyMetadata(null));
+        DependencyProperty.Register("CurrentCall", typeof(BO.Call), typeof(VolunteerUserWindow), new PropertyMetadata(null));
 
     public BO.MyTypeDistance TypeDistance { get; set; } = BO.MyTypeDistance.None;
     public BO.MyRole Role { get; set; } = BO.MyRole.None;
@@ -48,39 +47,8 @@ public partial class VolunteerUserWindow : Window
         InitializeComponent();
         Loaded += VolunteerUserWindow_Loaded;
         Closed += VolunteerUserWindow_Closed;
-        CurrentVolunteer = (id != 0) ? s_bl.Volunteer.GetVolunteerDetails(id)! : new BO.Volunteer()
-        {
-            Id = CurrentVolunteer.Id,
-            FullName = CurrentVolunteer.FullName,
-            Phone = CurrentVolunteer.Phone,
-            Email = CurrentVolunteer.Email,
-            Password = CurrentVolunteer.Password,
-            Address = CurrentVolunteer.Address,
-            Latitude = CurrentVolunteer.Latitude,
-            Longitude = CurrentVolunteer.Longitude,
-            Role = CurrentVolunteer.Role,
-            IsActive = CurrentVolunteer.IsActive,
-            MaxDistance = CurrentVolunteer.MaxDistance,
-            TypeDistance = CurrentVolunteer.TypeDistance,
-            TotalCallsHandled = CurrentVolunteer.TotalCallsHandled,
-            TotalCallsCancelled = CurrentVolunteer.TotalCallsCancelled,
-            TotalCallsExpired = CurrentVolunteer.TotalCallsExpired,
-            CurrentCall = CurrentVolunteer.CurrentCall,
-        };
-
-        CurrentCall = CurrentVolunteer.CurrentCall != null ? s_bl.Call.GetCallDetails(CurrentVolunteer.CurrentCall.CallId)! : new BO.Call()
-        {
-            Id = CurrentCall.Id,
-            Type = CurrentCall.Type,
-            Address = CurrentCall.Address,
-            Latitude = CurrentCall.Latitude,
-            Longitude = CurrentCall.Longitude,
-            StartTime = CurrentCall.StartTime,
-            MaxEndTime = CurrentCall.MaxEndTime,
-            Description = CurrentCall.Description,
-            Status = CurrentCall.Status,
-            Assignments = CurrentCall.Assignments
-        };
+        CurrentVolunteer = (id != 0) ? s_bl.Volunteer.GetVolunteerDetails(id)! : new BO.Volunteer();
+        CurrentCall = CurrentVolunteer.CurrentCall != null ? s_bl.Call.GetCallDetails(CurrentVolunteer.CurrentCall.CallId)! : new BO.Call();
     }
     private void btnUpdate_Click(object sender, RoutedEventArgs e)
     {
@@ -119,9 +87,8 @@ public partial class VolunteerUserWindow : Window
         }
         try
         {
-            CurrentCall.Status = BO.MyCallStatus.Open;
-            s_bl.Call.UpdateCall(CurrentCall);
-            MessageBox.Show("Call updated successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            s_bl.Call.UpdateCancelTreatment(CurrentVolunteer.Id,CurrentCall.Id);
+            MessageBox.Show("Treatment cancellation successfully canceled", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             Close();
         }
         catch (Exception ex)
@@ -138,9 +105,8 @@ public partial class VolunteerUserWindow : Window
         }
         try
         {
-            CurrentCall.Status = BO.MyCallStatus.Closed;
-            s_bl.Call.UpdateCall(CurrentCall);
-            MessageBox.Show("Call updated successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            s_bl.Call.UpdateCompleteAssignment(CurrentVolunteer.Id, CurrentCall.Id);
+            MessageBox.Show("Treatment completed successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             Close();
         }
         catch (Exception ex)

@@ -73,7 +73,7 @@ public partial class CallListWindow : Window
     private void UpdateCallList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
         if (SelectedCall != null)
-            new CallWindow(SelectedCall.Id).Show();
+            new CallWindow(SelectedCall.CallId).Show();
     }
     private void DeleteCall_Click(object sender, RoutedEventArgs e)
     {
@@ -87,7 +87,7 @@ public partial class CallListWindow : Window
         {
             try
             {
-                s_bl.Call.DeleteCall(SelectedCall.Id);
+                s_bl.Call.DeleteCall(SelectedCall.CallId);
                 MessageBox.Show("Call deleted successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)

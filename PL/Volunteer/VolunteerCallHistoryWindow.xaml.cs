@@ -51,10 +51,9 @@ public partial class VolunteerCallHistoryWindow : Window
     }
     private void queryCallList()
     {
-        // OpenCallList=s_bl.Call.GetFilterCallList(BO.MyCallStatus.Open)
-        // OpenCallList = (FilterByType == BO.MyCallType.None) ?
-        //s_bl?.Call.SortOpenedCalls(id, BO.MyCallType.None, null)! :
-        //s_bl?.Call.SortOpenedCalls(id, FilterByType, null)!;
+        CloseCallList= (FilterByType == BO.MyCallType.None) ?
+        s_bl?.Call.SortClosedCalls(id,null, null)! :
+        s_bl?.Call.SortClosedCalls(id, FilterByType, null)!;
 
     }
     private void callListObserver()
@@ -68,15 +67,6 @@ public partial class VolunteerCallHistoryWindow : Window
 
     private void cmbFiltedrChanges_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        CloseCallList = (FilterByType == BO.MyCallType.None) ?
- s_bl?.Call.SortClosedCalls(id, BO.MyCallType.None, null)! :
- s_bl?.Call.SortClosedCalls(id, FilterByType, null)!;
-    }
-
-    private void cmbSortChanges_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-        CloseCallList = (SortByClosedCall == BO.CloseCall.None) ?
-s_bl?.Call.SortClosedCalls(id, null, BO.CloseCall.None)! :
-s_bl?.Call.SortClosedCalls(id, null, SortByClosedCall)!;
+        queryCallList();
     }
 }

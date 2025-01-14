@@ -14,8 +14,8 @@
         <local:SortCollectionMyOpenedCall x:Key="SortCollectionMyOpenedCallKey"/>
         <local:SortCollectionMyClosedCall x:Key="SortCollectionMyClosedCallKey"/>
         <local:ConvertObjIdToTF x:Key="ConvertObjIdToTFKey"/>
-        <local:ConvertRoleToTF x:Key="ConvertRoleToTFKey"/>
-        <!--<local:ConvertIdToVisibility x:Key="IdToVisibilityConverterKey"/>-->
+        <local:ConvertObjIdToVisibility x:Key="ConvertObjIdToVisibilityKey"/>
+        <local:ConvertCallInProgressToReadOnly x:Key="ConvertCallInProgressToReadOnlyKey"/>
         <Style TargetType="Button">
             <Setter Property="Background" Value="LightCyan"/>
             <Setter Property="BorderBrush" Value="DeepSkyBlue"/>
@@ -38,7 +38,11 @@
             <Setter Property="BorderBrush" Value="DeepSkyBlue"/>
             <Setter Property="BorderThickness" Value="1"/>
         </Style>
-
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="Blue"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Margin" Value="10,0"/>
+        </Style>
         <Style TargetType="ComboBox">
             <Setter Property="Foreground" Value="Blue"/>
             <Setter Property="FontSize" Value="12"/>

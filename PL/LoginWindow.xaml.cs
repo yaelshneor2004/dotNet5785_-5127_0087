@@ -26,10 +26,27 @@ namespace PL
 
         private void Login_Click(object sender, RoutedEventArgs e)
         {
-            int id = Convert.ToInt32(TextBoxId);
-            string password = PasswordBox.Password; 
+            int id;
+            if (string.IsNullOrWhiteSpace(TextBoxId) || !int.TryParse(TextBoxId, out id))
+            {
+                MessageBox.Show("Please enter a valid ID.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            string password = PasswordBox.Password;
+            //if (string.IsNullOrWhiteSpace(password))
+            //{
+            //    MessageBox.Show("Please enter your password.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            //    return;
+            //}
 
             BO.Volunteer v = s_bl.Volunteer.GetVolunteerDetails(id);
+            //if (v == null || v.Password != password)
+            //{
+            //    MessageBox.Show("Invalid ID or password.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            //    return;
+            //}
+
             if (v.Role == BO.MyRole.Manager)
             {
                 if (isManagerLoggedIn)

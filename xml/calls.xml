@@ -2,73 +2,73 @@
 <ArrayOfCall xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Call>
     <Id>1</Id>
-    <CallType>English</CallType>
+    <CallType>ComputerScience</CallType>
     <Address>10 Jaffa Street, Jerusalem</Address>
     <Latitude>35.22119546257982</Latitude>
     <Longitude>31.78130811991647</Longitude>
-    <OpenTime>2024-10-30T20:30:00</OpenTime>
-    <Description>Call number: 1 of type: English at: 10 Jaffa Street, Jerusalem</Description>
-    <MaxFinishCall>2024-12-12T19:44:36</MaxFinishCall>
+    <OpenTime>2024-10-19T18:23:00</OpenTime>
+    <Description>Call number: 1 of type: ComputerScience at: 10 Jaffa Street, Jerusalem</Description>
+    <MaxFinishCall>2024-12-20T01:08:30</MaxFinishCall>
   </Call>
   <Call>
     <Id>2</Id>
-    <CallType>Accounting</CallType>
+    <CallType>Math</CallType>
     <Address>20 Emek Refaim Street, Jerusalem</Address>
     <Latitude>35.22123577032626</Latitude>
     <Longitude>31.76543961779154</Longitude>
-    <OpenTime>2024-01-12T10:20:00</OpenTime>
-    <Description>Call number: 2 of type: Accounting at: 20 Emek Refaim Street, Jerusalem</Description>
-    <MaxFinishCall>2024-12-11T19:44:36</MaxFinishCall>
+    <OpenTime>2024-06-04T09:27:00</OpenTime>
+    <Description>Call number: 2 of type: Math at: 20 Emek Refaim Street, Jerusalem</Description>
+    <MaxFinishCall>2025-01-03T01:08:30</MaxFinishCall>
   </Call>
   <Call>
     <Id>3</Id>
-    <CallType>English</CallType>
+    <CallType>Math</CallType>
     <Address>30 Agripas Street, Jerusalem</Address>
     <Latitude>35.215657362641764</Latitude>
     <Longitude>31.783470280009738</Longitude>
-    <OpenTime>2024-12-09T21:47:00</OpenTime>
-    <Description>Call number: 3 of type: English at: 30 Agripas Street, Jerusalem</Description>
-    <MaxFinishCall>2025-01-01T19:44:36</MaxFinishCall>
+    <OpenTime>2024-01-09T23:55:00</OpenTime>
+    <Description>Call number: 3 of type: Math at: 30 Agripas Street, Jerusalem</Description>
+    <MaxFinishCall>2024-12-27T01:08:30</MaxFinishCall>
   </Call>
   <Call>
     <Id>4</Id>
-    <CallType>ComputerScience</CallType>
+    <CallType>Accounting</CallType>
     <Address>40 Shmuel HaNavi Street, Jerusalem</Address>
     <Latitude>35.224665335668945</Latitude>
     <Longitude>31.791048846509597</Longitude>
-    <OpenTime>2024-08-27T13:36:00</OpenTime>
-    <Description>Call number: 4 of type: ComputerScience at: 40 Shmuel HaNavi Street, Jerusalem</Description>
-    <MaxFinishCall>2024-12-14T19:44:36</MaxFinishCall>
+    <OpenTime>2024-08-31T16:05:00</OpenTime>
+    <Description>Call number: 4 of type: Accounting at: 40 Shmuel HaNavi Street, Jerusalem</Description>
+    <MaxFinishCall>2024-12-23T01:08:30</MaxFinishCall>
   </Call>
   <Call>
     <Id>5</Id>
-    <CallType>ComputerScience</CallType>
+    <CallType>Math</CallType>
     <Address>50 HaNevi'im Street, Jerusalem</Address>
     <Latitude>35.221665622205705</Latitude>
     <Longitude>31.78391107912798</Longitude>
-    <OpenTime>2024-09-29T02:50:00</OpenTime>
-    <Description>Call number: 5 of type: ComputerScience at: 50 HaNevi'im Street, Jerusalem</Description>
-    <MaxFinishCall>2024-12-10T19:44:36</MaxFinishCall>
+    <OpenTime>2024-12-13T20:10:00</OpenTime>
+    <Description>Call number: 5 of type: Math at: 50 HaNevi'im Street, Jerusalem</Description>
+    <MaxFinishCall>2024-12-18T01:08:30</MaxFinishCall>
   </Call>
   <Call>
     <Id>6</Id>
-    <CallType>Math</CallType>
+    <CallType>English</CallType>
     <Address>60 Gaza Street, Jerusalem</Address>
     <Latitude>35.21205714918638</Latitude>
     <Longitude>31.771053788166768</Longitude>
-    <OpenTime>2024-06-12T14:23:00</OpenTime>
-    <Description>call number: 1 of type: Math at: 60 Gaza Street, Jerusalem</Description>
-    <MaxFinishCall>2024-06-22T14:23:00</MaxFinishCall>
+    <OpenTime>2024-10-23T04:01:00</OpenTime>
+    <Description>call number: 1 of type: English at: 60 Gaza Street, Jerusalem</Description>
+    <MaxFinishCall>2024-10-24T04:01:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>7</Id>
-    <CallType>English</CallType>
+    <CallType>Math</CallType>
     <Address>4 Herzl Boulevard, Jerusalem</Address>
     <Latitude>35.19764122028971</Latitude>
     <Longitude>31.785777797665002</Longitude>
-    <OpenTime>2024-10-16T14:00:00</OpenTime>
-    <Description>call number: 1 of type: English at: 4 Herzl Boulevard, Jerusalem</Description>
-    <MaxFinishCall>2024-10-17T14:00:00</MaxFinishCall>
+    <OpenTime>2024-04-14T20:46:00</OpenTime>
+    <Description>call number: 1 of type: Math at: 4 Herzl Boulevard, Jerusalem</Description>
+    <MaxFinishCall>2024-04-16T20:46:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>8</Id>
@@ -76,9 +76,9 @@
     <Address>40 Masliansky Street, Jerusalem</Address>
     <Latitude>35.18968763754008</Latitude>
     <Longitude>31.817876781912197</Longitude>
-    <OpenTime>2024-07-04T16:01:00</OpenTime>
+    <OpenTime>2024-10-11T19:21:00</OpenTime>
     <Description>call number: 1 of type: English at: 40 Masliansky Street, Jerusalem</Description>
-    <MaxFinishCall>2024-07-09T16:01:00</MaxFinishCall>
+    <MaxFinishCall>2024-10-15T19:21:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>9</Id>
@@ -86,169 +86,169 @@
     <Address>10 Ben Yehuda Street, Jerusalem</Address>
     <Latitude>35.21774235102746</Latitude>
     <Longitude>31.78186936361579</Longitude>
-    <OpenTime>2024-08-05T14:14:00</OpenTime>
+    <OpenTime>2024-10-01T09:01:00</OpenTime>
     <Description>call number: 1 of type: ComputerScience at: 10 Ben Yehuda Street, Jerusalem</Description>
-    <MaxFinishCall>2024-08-16T14:14:00</MaxFinishCall>
+    <MaxFinishCall>2024-10-03T09:01:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>10</Id>
-    <CallType>ComputerScience</CallType>
+    <CallType>Math</CallType>
     <Address>150 Hebron Road, Jerusalem</Address>
     <Latitude>35.21658163568471</Latitude>
     <Longitude>31.74578724034863</Longitude>
-    <OpenTime>2024-08-03T11:10:00</OpenTime>
-    <Description>call number: 1 of type: ComputerScience at: 150 Hebron Road, Jerusalem</Description>
-    <MaxFinishCall>2024-08-14T11:10:00</MaxFinishCall>
+    <OpenTime>2024-10-17T22:44:00</OpenTime>
+    <Description>call number: 1 of type: Math at: 150 Hebron Road, Jerusalem</Description>
+    <MaxFinishCall>2024-10-25T22:44:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>11</Id>
-    <CallType>ComputerScience</CallType>
+    <CallType>Math</CallType>
     <Address>5 Hillel Street, Jerusalem</Address>
     <Latitude>35.21638617800225</Latitude>
     <Longitude>31.78068910546481</Longitude>
-    <OpenTime>2024-04-26T19:39:00</OpenTime>
-    <Description>call number: 1 of type: ComputerScience at: 5 Hillel Street, Jerusalem</Description>
-    <MaxFinishCall>2024-05-01T19:39:00</MaxFinishCall>
+    <OpenTime>2024-04-29T10:00:00</OpenTime>
+    <Description>call number: 1 of type: Math at: 5 Hillel Street, Jerusalem</Description>
+    <MaxFinishCall>2024-05-03T10:00:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>12</Id>
-    <CallType>Math</CallType>
+    <CallType>Accounting</CallType>
     <Address>6 Korazin Street, Jerusalem</Address>
     <Latitude>35.209312878017535</Latitude>
     <Longitude>31.78255160178496</Longitude>
-    <OpenTime>2024-07-22T08:46:00</OpenTime>
-    <Description>call number: 1 of type: Math at: 6 Korazin Street, Jerusalem</Description>
-    <MaxFinishCall>2024-07-26T08:46:00</MaxFinishCall>
+    <OpenTime>2024-02-06T15:05:00</OpenTime>
+    <Description>call number: 1 of type: Accounting at: 6 Korazin Street, Jerusalem</Description>
+    <MaxFinishCall>2024-02-17T15:05:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>13</Id>
-    <CallType>Math</CallType>
+    <CallType>English</CallType>
     <Address>35 King George Street, Jerusalem</Address>
     <Latitude>35.2159379</Latitude>
     <Longitude>31.779769</Longitude>
-    <OpenTime>2024-11-14T21:20:00</OpenTime>
-    <Description>call number: 1 of type: Math at: 35 King George Street, Jerusalem</Description>
-    <MaxFinishCall>2024-11-17T21:20:00</MaxFinishCall>
+    <OpenTime>2024-10-03T16:43:00</OpenTime>
+    <Description>call number: 1 of type: English at: 35 King George Street, Jerusalem</Description>
+    <MaxFinishCall>2024-10-07T16:43:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>14</Id>
-    <CallType>Accounting</CallType>
+    <CallType>ComputerScience</CallType>
     <Address>78 Ben Zvi Street, Jerusalem</Address>
     <Latitude>35.2092867</Latitude>
     <Longitude>31.7798566</Longitude>
-    <OpenTime>2024-09-22T14:19:00</OpenTime>
-    <Description>call number: 1 of type: Accounting at: 78 Ben Zvi Street, Jerusalem</Description>
-    <MaxFinishCall>2024-09-30T14:19:00</MaxFinishCall>
+    <OpenTime>2024-03-18T11:53:00</OpenTime>
+    <Description>call number: 1 of type: ComputerScience at: 78 Ben Zvi Street, Jerusalem</Description>
+    <MaxFinishCall>2024-03-24T11:53:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>15</Id>
-    <CallType>Math</CallType>
+    <CallType>Accounting</CallType>
     <Address>4 Devorah HaNeviah Street, Jerusalem</Address>
     <Latitude>35.224894</Latitude>
     <Longitude>31.789588</Longitude>
-    <OpenTime>2024-11-24T17:54:00</OpenTime>
-    <Description>call number: 1 of type: Math at: 4 Devorah HaNeviah Street, Jerusalem</Description>
-    <MaxFinishCall>2024-11-28T17:54:00</MaxFinishCall>
+    <OpenTime>2024-02-02T15:37:00</OpenTime>
+    <Description>call number: 1 of type: Accounting at: 4 Devorah HaNeviah Street, Jerusalem</Description>
+    <MaxFinishCall>2024-02-15T15:37:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>16</Id>
-    <CallType>Accounting</CallType>
+    <CallType>Math</CallType>
     <Address>15 Yehuda HaNasi Street, Jerusalem</Address>
     <Latitude>35.202146</Latitude>
     <Longitude>31.75577</Longitude>
-    <OpenTime>2024-04-14T19:35:00</OpenTime>
-    <Description>call number: 1 of type: Accounting at: 15 Yehuda HaNasi Street, Jerusalem</Description>
-    <MaxFinishCall>2024-04-19T19:35:00</MaxFinishCall>
+    <OpenTime>2024-02-29T01:27:00</OpenTime>
+    <Description>call number: 1 of type: Math at: 15 Yehuda HaNasi Street, Jerusalem</Description>
+    <MaxFinishCall>2024-03-08T01:27:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>17</Id>
-    <CallType>ComputerScience</CallType>
+    <CallType>English</CallType>
     <Address>5 Aliash Street, Jerusalem</Address>
     <Latitude>35.201317</Latitude>
     <Longitude>31.755974</Longitude>
-    <OpenTime>2024-05-14T05:50:00</OpenTime>
-    <Description>call number: 1 of type: ComputerScience at: 5 Aliash Street, Jerusalem</Description>
-    <MaxFinishCall>2024-05-24T05:50:00</MaxFinishCall>
+    <OpenTime>2024-09-19T23:06:00</OpenTime>
+    <Description>call number: 1 of type: English at: 5 Aliash Street, Jerusalem</Description>
+    <MaxFinishCall>2024-09-29T23:06:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>18</Id>
-    <CallType>Accounting</CallType>
+    <CallType>Math</CallType>
     <Address>15 Arlozorov Street, Jerusalem</Address>
     <Latitude>35.215236</Latitude>
     <Longitude>31.781584</Longitude>
-    <OpenTime>2024-06-03T19:30:00</OpenTime>
-    <Description>call number: 1 of type: Accounting at: 15 Arlozorov Street, Jerusalem</Description>
-    <MaxFinishCall>2024-06-07T19:30:00</MaxFinishCall>
+    <OpenTime>2024-12-30T00:12:00</OpenTime>
+    <Description>call number: 1 of type: Math at: 15 Arlozorov Street, Jerusalem</Description>
+    <MaxFinishCall>2025-01-08T00:12:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>19</Id>
-    <CallType>English</CallType>
+    <CallType>Math</CallType>
     <Address>13 Shamai Street, Jerusalem</Address>
     <Latitude>35.216455</Latitude>
     <Longitude>31.77261</Longitude>
-    <OpenTime>2024-01-14T14:11:00</OpenTime>
-    <Description>call number: 1 of type: English at: 13 Shamai Street, Jerusalem</Description>
-    <MaxFinishCall>2024-01-18T14:11:00</MaxFinishCall>
+    <OpenTime>2024-01-31T20:20:00</OpenTime>
+    <Description>call number: 1 of type: Math at: 13 Shamai Street, Jerusalem</Description>
+    <MaxFinishCall>2024-02-05T20:20:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>20</Id>
-    <CallType>Math</CallType>
+    <CallType>English</CallType>
     <Address>10 Tavor Street, Jerusalem</Address>
     <Latitude>35.218053</Latitude>
     <Longitude>31.781239</Longitude>
-    <OpenTime>2024-07-17T11:32:00</OpenTime>
-    <Description>call number: 1 of type: Math at: 10 Tavor Street, Jerusalem</Description>
-    <MaxFinishCall>2024-07-29T11:32:00</MaxFinishCall>
+    <OpenTime>2024-01-24T19:34:00</OpenTime>
+    <Description>call number: 1 of type: English at: 10 Tavor Street, Jerusalem</Description>
+    <MaxFinishCall>2024-01-30T19:34:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>21</Id>
-    <CallType>Accounting</CallType>
+    <CallType>ComputerScience</CallType>
     <Address>55 Ussishkin Street, Jerusalem</Address>
     <Latitude>35.213336</Latitude>
     <Longitude>31.782361</Longitude>
-    <OpenTime>2024-03-10T03:20:00</OpenTime>
-    <Description>call number: 1 of type: Accounting at: 55 Ussishkin Street, Jerusalem</Description>
-    <MaxFinishCall>2024-03-24T03:20:00</MaxFinishCall>
+    <OpenTime>2024-09-16T05:12:00</OpenTime>
+    <Description>call number: 1 of type: ComputerScience at: 55 Ussishkin Street, Jerusalem</Description>
+    <MaxFinishCall>2024-09-26T05:12:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>22</Id>
-    <CallType>English</CallType>
+    <CallType>Accounting</CallType>
     <Address>7 Helene HaMalka Street, Jerusalem</Address>
     <Latitude>35.212081</Latitude>
     <Longitude>31.780486</Longitude>
-    <OpenTime>2024-12-10T07:44:00</OpenTime>
-    <Description>call number: 1 of type: English at: 7 Helene HaMalka Street, Jerusalem</Description>
-    <MaxFinishCall>2024-12-18T07:44:00</MaxFinishCall>
+    <OpenTime>2024-02-22T08:27:00</OpenTime>
+    <Description>call number: 1 of type: Accounting at: 7 Helene HaMalka Street, Jerusalem</Description>
+    <MaxFinishCall>2024-02-23T08:27:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>23</Id>
-    <CallType>Math</CallType>
+    <CallType>ComputerScience</CallType>
     <Address>14 Lincoln Street, Jerusalem</Address>
     <Latitude>35.221056</Latitude>
     <Longitude>31.7820255</Longitude>
-    <OpenTime>2024-09-15T09:03:00</OpenTime>
-    <Description>call number: 1 of type: Math at: 14 Lincoln Street, Jerusalem</Description>
-    <MaxFinishCall>2024-09-27T09:03:00</MaxFinishCall>
+    <OpenTime>2024-10-29T17:00:00</OpenTime>
+    <Description>call number: 1 of type: ComputerScience at: 14 Lincoln Street, Jerusalem</Description>
+    <MaxFinishCall>2024-11-04T17:00:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>24</Id>
-    <CallType>Math</CallType>
+    <CallType>Accounting</CallType>
     <Address>40 Zerach Street, Jerusalem</Address>
     <Latitude>35.219964</Latitude>
     <Longitude>31.775421</Longitude>
-    <OpenTime>2024-02-10T22:45:00</OpenTime>
-    <Description>call number: 1 of type: Math at: 40 Zerach Street, Jerusalem</Description>
-    <MaxFinishCall>2024-02-24T22:45:00</MaxFinishCall>
+    <OpenTime>2024-12-20T08:43:00</OpenTime>
+    <Description>call number: 1 of type: Accounting at: 40 Zerach Street, Jerusalem</Description>
+    <MaxFinishCall>2025-01-02T08:43:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>25</Id>
-    <CallType>English</CallType>
+    <CallType>Math</CallType>
     <Address>22 Mea Shearim Street, Jerusalem</Address>
     <Latitude>35.190149</Latitude>
     <Longitude>31.816719</Longitude>
-    <OpenTime>2024-06-05T20:35:00</OpenTime>
-    <Description>call number: 1 of type: English at: 22 Mea Shearim Street, Jerusalem</Description>
-    <MaxFinishCall>2024-06-14T20:35:00</MaxFinishCall>
+    <OpenTime>2024-06-14T17:27:00</OpenTime>
+    <Description>call number: 1 of type: Math at: 22 Mea Shearim Street, Jerusalem</Description>
+    <MaxFinishCall>2024-06-26T17:27:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>26</Id>
@@ -256,89 +256,89 @@
     <Address>10 King David Street, Jerusalem</Address>
     <Latitude>35.222337</Latitude>
     <Longitude>31.787706</Longitude>
-    <OpenTime>2024-08-08T16:09:00</OpenTime>
+    <OpenTime>2024-01-09T21:51:00</OpenTime>
     <Description>call number: 1 of type: Math at: 10 King David Street, Jerusalem</Description>
-    <MaxFinishCall>2024-08-09T16:09:00</MaxFinishCall>
+    <MaxFinishCall>2024-01-23T21:51:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>27</Id>
-    <CallType>Math</CallType>
+    <CallType>ComputerScience</CallType>
     <Address>30 Ruth Street, Jerusalem</Address>
     <Latitude>35.222155</Latitude>
     <Longitude>31.776943</Longitude>
-    <OpenTime>2024-05-06T12:23:00</OpenTime>
-    <Description>call number: 1 of type: Math at: 30 Ruth Street, Jerusalem</Description>
-    <MaxFinishCall>2024-05-07T12:23:00</MaxFinishCall>
+    <OpenTime>2024-04-25T09:56:00</OpenTime>
+    <Description>call number: 1 of type: ComputerScience at: 30 Ruth Street, Jerusalem</Description>
+    <MaxFinishCall>2024-05-02T09:56:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>28</Id>
-    <CallType>English</CallType>
+    <CallType>Accounting</CallType>
     <Address>9 Beit HaDfus Street, Jerusalem</Address>
     <Latitude>35.217356</Latitude>
     <Longitude>31.7765005</Longitude>
-    <OpenTime>2024-06-04T06:37:00</OpenTime>
-    <Description>call number: 1 of type: English at: 9 Beit HaDfus Street, Jerusalem</Description>
-    <MaxFinishCall>2024-06-18T06:37:00</MaxFinishCall>
+    <OpenTime>2024-11-13T06:18:00</OpenTime>
+    <Description>call number: 1 of type: Accounting at: 9 Beit HaDfus Street, Jerusalem</Description>
+    <MaxFinishCall>2024-11-18T06:18:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>29</Id>
-    <CallType>Accounting</CallType>
+    <CallType>ComputerScience</CallType>
     <Address>5 David Yellin Street, Jerusalem</Address>
     <Latitude>35.18918</Latitude>
     <Longitude>31.785952</Longitude>
-    <OpenTime>2024-04-11T17:43:00</OpenTime>
-    <Description>call number: 1 of type: Accounting at: 5 David Yellin Street, Jerusalem</Description>
-    <MaxFinishCall>2024-04-15T17:43:00</MaxFinishCall>
+    <OpenTime>2025-01-07T06:41:00</OpenTime>
+    <Description>call number: 1 of type: ComputerScience at: 5 David Yellin Street, Jerusalem</Description>
+    <MaxFinishCall>2025-01-17T06:41:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>30</Id>
-    <CallType>Math</CallType>
+    <CallType>English</CallType>
     <Address>8 Shmuel HaNagid Street, Jerusalem</Address>
     <Latitude>35.216914</Latitude>
     <Longitude>31.786426</Longitude>
-    <OpenTime>2024-12-16T19:26:00</OpenTime>
-    <Description>call number: 1 of type: Math at: 8 Shmuel HaNagid Street, Jerusalem</Description>
-    <MaxFinishCall>2024-12-28T19:26:00</MaxFinishCall>
+    <OpenTime>2024-11-23T09:22:00</OpenTime>
+    <Description>call number: 1 of type: English at: 8 Shmuel HaNagid Street, Jerusalem</Description>
+    <MaxFinishCall>2024-11-29T09:22:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>31</Id>
-    <CallType>Accounting</CallType>
+    <CallType>ComputerScience</CallType>
     <Address>15 HaTzanhanim Street, Jerusalem</Address>
     <Latitude>35.214816</Latitude>
     <Longitude>31.780594</Longitude>
-    <OpenTime>2024-04-24T06:03:00</OpenTime>
-    <Description>call number: 1 of type: Accounting at: 15 HaTzanhanim Street, Jerusalem</Description>
-    <MaxFinishCall>2024-05-06T06:03:00</MaxFinishCall>
+    <OpenTime>2024-01-18T05:37:00</OpenTime>
+    <Description>call number: 1 of type: ComputerScience at: 15 HaTzanhanim Street, Jerusalem</Description>
+    <MaxFinishCall>2024-01-30T05:37:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>32</Id>
-    <CallType>English</CallType>
+    <CallType>Accounting</CallType>
     <Address>9 Rabbi Akiva Street, Jerusalem</Address>
     <Latitude>35.226296</Latitude>
     <Longitude>31.779808</Longitude>
-    <OpenTime>2024-08-27T16:35:00</OpenTime>
-    <Description>call number: 1 of type: English at: 9 Rabbi Akiva Street, Jerusalem</Description>
-    <MaxFinishCall>2024-09-05T16:35:00</MaxFinishCall>
+    <OpenTime>2024-12-16T12:32:00</OpenTime>
+    <Description>call number: 1 of type: Accounting at: 9 Rabbi Akiva Street, Jerusalem</Description>
+    <MaxFinishCall>2024-12-20T12:32:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>33</Id>
-    <CallType>ComputerScience</CallType>
+    <CallType>English</CallType>
     <Address>7 Greenberg Street, Jerusalem</Address>
     <Latitude>35.192176</Latitude>
     <Longitude>31.81637</Longitude>
-    <OpenTime>2024-08-03T16:12:00</OpenTime>
-    <Description>call number: 1 of type: ComputerScience at: 7 Greenberg Street, Jerusalem</Description>
-    <MaxFinishCall>2024-08-10T16:12:00</MaxFinishCall>
+    <OpenTime>2024-06-09T14:11:00</OpenTime>
+    <Description>call number: 1 of type: English at: 7 Greenberg Street, Jerusalem</Description>
+    <MaxFinishCall>2024-06-17T14:11:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>34</Id>
-    <CallType>English</CallType>
+    <CallType>Accounting</CallType>
     <Address>6 Henrietta Szold Street, Jerusalem</Address>
     <Latitude>35.218002</Latitude>
     <Longitude>31.779226</Longitude>
-    <OpenTime>2024-03-02T05:01:00</OpenTime>
-    <Description>call number: 1 of type: English at: 6 Henrietta Szold Street, Jerusalem</Description>
-    <MaxFinishCall>2024-03-15T05:01:00</MaxFinishCall>
+    <OpenTime>2024-11-16T10:48:00</OpenTime>
+    <Description>call number: 1 of type: Accounting at: 6 Henrietta Szold Street, Jerusalem</Description>
+    <MaxFinishCall>2024-11-23T10:48:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>35</Id>
@@ -346,19 +346,19 @@
     <Address>5 Shmuel HaNagid Street, Jerusalem</Address>
     <Latitude>35.1915</Latitude>
     <Longitude>31.817092</Longitude>
-    <OpenTime>2024-08-02T21:56:00</OpenTime>
+    <OpenTime>2024-11-21T17:26:00</OpenTime>
     <Description>call number: 1 of type: Accounting at: 5 Shmuel HaNagid Street, Jerusalem</Description>
-    <MaxFinishCall>2024-08-08T21:56:00</MaxFinishCall>
+    <MaxFinishCall>2024-11-25T17:26:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>36</Id>
-    <CallType>Math</CallType>
+    <CallType>Accounting</CallType>
     <Address>18 Beit Vagan Street, Jerusalem</Address>
     <Latitude>35.160694</Latitude>
     <Longitude>31.757365</Longitude>
-    <OpenTime>2024-03-20T17:02:00</OpenTime>
-    <Description>call number: 1 of type: Math at: 18 Beit Vagan Street, Jerusalem</Description>
-    <MaxFinishCall>2024-03-30T17:02:00</MaxFinishCall>
+    <OpenTime>2024-12-23T18:04:00</OpenTime>
+    <Description>call number: 1 of type: Accounting at: 18 Beit Vagan Street, Jerusalem</Description>
+    <MaxFinishCall>2025-01-01T18:04:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>37</Id>
@@ -366,59 +366,59 @@
     <Address>12 Neve Sha'anan Street, Jerusalem</Address>
     <Latitude>35.214955</Latitude>
     <Longitude>31.780274</Longitude>
-    <OpenTime>2024-03-31T02:59:00</OpenTime>
+    <OpenTime>2025-01-01T09:00:00</OpenTime>
     <Description>call number: 1 of type: Accounting at: 12 Neve Sha'anan Street, Jerusalem</Description>
-    <MaxFinishCall>2024-04-09T02:59:00</MaxFinishCall>
+    <MaxFinishCall>2025-01-04T09:00:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>38</Id>
-    <CallType>Accounting</CallType>
+    <CallType>ComputerScience</CallType>
     <Address>3 Rachel Imenu Street, Jerusalem</Address>
     <Latitude>35.183917</Latitude>
     <Longitude>31.771251</Longitude>
-    <OpenTime>2024-11-24T01:45:00</OpenTime>
-    <Description>call number: 1 of type: Accounting at: 3 Rachel Imenu Street, Jerusalem</Description>
-    <MaxFinishCall>2024-12-08T01:45:00</MaxFinishCall>
+    <OpenTime>2024-09-27T10:40:00</OpenTime>
+    <Description>call number: 1 of type: ComputerScience at: 3 Rachel Imenu Street, Jerusalem</Description>
+    <MaxFinishCall>2024-10-06T10:40:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>39</Id>
-    <CallType>ComputerScience</CallType>
+    <CallType>Math</CallType>
     <Address>15 Hillel Street, Jerusalem</Address>
     <Latitude>35.200909</Latitude>
     <Longitude>31.771493</Longitude>
-    <OpenTime>2024-06-24T07:50:00</OpenTime>
-    <Description>call number: 1 of type: ComputerScience at: 15 Hillel Street, Jerusalem</Description>
-    <MaxFinishCall>2024-07-01T07:50:00</MaxFinishCall>
+    <OpenTime>2024-06-28T13:52:00</OpenTime>
+    <Description>call number: 1 of type: Math at: 15 Hillel Street, Jerusalem</Description>
+    <MaxFinishCall>2024-07-05T13:52:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>40</Id>
-    <CallType>Math</CallType>
+    <CallType>English</CallType>
     <Address>8 Bezalel Street, Jerusalem</Address>
     <Latitude>35.218213</Latitude>
     <Longitude>31.763331</Longitude>
-    <OpenTime>2024-10-15T00:30:00</OpenTime>
-    <Description>call number: 1 of type: Math at: 8 Bezalel Street, Jerusalem</Description>
-    <MaxFinishCall>2024-10-22T00:30:00</MaxFinishCall>
+    <OpenTime>2024-07-29T03:59:00</OpenTime>
+    <Description>call number: 1 of type: English at: 8 Bezalel Street, Jerusalem</Description>
+    <MaxFinishCall>2024-08-09T03:59:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>41</Id>
-    <CallType>Accounting</CallType>
+    <CallType>English</CallType>
     <Address>9 Kiryat Moshe Street, Jerusalem</Address>
     <Latitude>35.217068</Latitude>
     <Longitude>31.780627</Longitude>
-    <OpenTime>2024-12-07T12:38:00</OpenTime>
-    <Description>call number: 1 of type: Accounting at: 9 Kiryat Moshe Street, Jerusalem</Description>
-    <MaxFinishCall>2024-12-19T12:38:00</MaxFinishCall>
+    <OpenTime>2024-07-13T00:51:00</OpenTime>
+    <Description>call number: 1 of type: English at: 9 Kiryat Moshe Street, Jerusalem</Description>
+    <MaxFinishCall>2024-07-15T00:51:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>42</Id>
-    <CallType>Accounting</CallType>
+    <CallType>ComputerScience</CallType>
     <Address>13 Pierre Koenig Street, Jerusalem</Address>
     <Latitude>35.214544</Latitude>
     <Longitude>31.780728</Longitude>
-    <OpenTime>2024-03-12T15:58:00</OpenTime>
-    <Description>call number: 1 of type: Accounting at: 13 Pierre Koenig Street, Jerusalem</Description>
-    <MaxFinishCall>2024-03-14T15:58:00</MaxFinishCall>
+    <OpenTime>2024-02-29T11:14:00</OpenTime>
+    <Description>call number: 1 of type: ComputerScience at: 13 Pierre Koenig Street, Jerusalem</Description>
+    <MaxFinishCall>2024-03-13T11:14:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>43</Id>
@@ -426,149 +426,149 @@
     <Address>24 Rabbi Herzog Street, Jerusalem</Address>
     <Latitude>35.195686</Latitude>
     <Longitude>31.786061</Longitude>
-    <OpenTime>2024-11-17T10:00:00</OpenTime>
+    <OpenTime>2024-02-10T17:11:00</OpenTime>
     <Description>call number: 1 of type: Math at: 24 Rabbi Herzog Street, Jerusalem</Description>
-    <MaxFinishCall>2024-11-23T10:00:00</MaxFinishCall>
+    <MaxFinishCall>2024-02-15T17:11:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>44</Id>
-    <CallType>Math</CallType>
+    <CallType>English</CallType>
     <Address>5 Ein Gedi Street, Jerusalem</Address>
     <Latitude>35.215021</Latitude>
     <Longitude>31.756843</Longitude>
-    <OpenTime>2024-03-06T21:43:00</OpenTime>
-    <Description>call number: 1 of type: Math at: 5 Ein Gedi Street, Jerusalem</Description>
-    <MaxFinishCall>2024-03-07T21:43:00</MaxFinishCall>
+    <OpenTime>2024-06-10T01:18:00</OpenTime>
+    <Description>call number: 1 of type: English at: 5 Ein Gedi Street, Jerusalem</Description>
+    <MaxFinishCall>2024-06-13T01:18:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>45</Id>
-    <CallType>Math</CallType>
+    <CallType>Accounting</CallType>
     <Address>8 HaOman Street, Jerusalem</Address>
     <Latitude>35.208627</Latitude>
     <Longitude>31.769767</Longitude>
-    <OpenTime>2024-05-02T22:06:00</OpenTime>
-    <Description>call number: 1 of type: Math at: 8 HaOman Street, Jerusalem</Description>
-    <MaxFinishCall>2024-05-10T22:06:00</MaxFinishCall>
+    <OpenTime>2024-02-19T19:18:00</OpenTime>
+    <Description>call number: 1 of type: Accounting at: 8 HaOman Street, Jerusalem</Description>
+    <MaxFinishCall>2024-02-27T19:18:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>46</Id>
-    <CallType>English</CallType>
+    <CallType>ComputerScience</CallType>
     <Address>5 Ibn Shaprut Street, Jerusalem</Address>
     <Latitude>35.221349</Latitude>
     <Longitude>31.753902</Longitude>
-    <OpenTime>2024-04-23T00:47:00</OpenTime>
-    <Description>call number: 1 of type: English at: 5 Ibn Shaprut Street, Jerusalem</Description>
-    <MaxFinishCall>2024-04-26T00:47:00</MaxFinishCall>
+    <OpenTime>2024-04-06T13:26:00</OpenTime>
+    <Description>call number: 1 of type: ComputerScience at: 5 Ibn Shaprut Street, Jerusalem</Description>
+    <MaxFinishCall>2024-04-07T13:26:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>47</Id>
-    <CallType>Math</CallType>
+    <CallType>Accounting</CallType>
     <Address>25 Bar Ilan Street, Jerusalem</Address>
     <Latitude>35.211373</Latitude>
     <Longitude>31.74881</Longitude>
-    <OpenTime>2024-01-27T02:52:00</OpenTime>
-    <Description>call number: 1 of type: Math at: 25 Bar Ilan Street, Jerusalem</Description>
-    <MaxFinishCall>2024-02-04T02:52:00</MaxFinishCall>
+    <OpenTime>2024-11-21T00:58:00</OpenTime>
+    <Description>call number: 1 of type: Accounting at: 25 Bar Ilan Street, Jerusalem</Description>
+    <MaxFinishCall>2024-11-27T00:58:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>48</Id>
-    <CallType>Accounting</CallType>
+    <CallType>ComputerScience</CallType>
     <Address>6 Yitzhak Kariv Street, Jerusalem</Address>
     <Latitude>35.211675</Latitude>
     <Longitude>31.776448</Longitude>
-    <OpenTime>2024-04-11T05:35:00</OpenTime>
-    <Description>call number: 1 of type: Accounting at: 6 Yitzhak Kariv Street, Jerusalem</Description>
-    <MaxFinishCall>2024-04-22T05:35:00</MaxFinishCall>
+    <OpenTime>2024-11-06T04:34:00</OpenTime>
+    <Description>call number: 1 of type: ComputerScience at: 6 Yitzhak Kariv Street, Jerusalem</Description>
+    <MaxFinishCall>2024-11-15T04:34:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>49</Id>
-    <CallType>Accounting</CallType>
+    <CallType>Math</CallType>
     <Address>17 Weizmann Street, Jerusalem</Address>
     <Latitude>35.218078</Latitude>
     <Longitude>31.794707</Longitude>
-    <OpenTime>2024-02-28T13:04:00</OpenTime>
-    <Description>call number: 1 of type: Accounting at: 17 Weizmann Street, Jerusalem</Description>
-    <MaxFinishCall>2024-03-06T13:04:00</MaxFinishCall>
+    <OpenTime>2024-08-27T20:58:00</OpenTime>
+    <Description>call number: 1 of type: Math at: 17 Weizmann Street, Jerusalem</Description>
+    <MaxFinishCall>2024-09-07T20:58:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>50</Id>
-    <CallType>Math</CallType>
+    <CallType>English</CallType>
     <Address>9 Shmuel HaNagid Street, Jerusalem</Address>
     <Latitude>35.224944</Latitude>
     <Longitude>31.777475</Longitude>
-    <OpenTime>2024-05-02T23:46:00</OpenTime>
-    <Description>call number: 1 of type: Math at: 9 Shmuel HaNagid Street, Jerusalem</Description>
-    <MaxFinishCall>2024-05-12T23:46:00</MaxFinishCall>
+    <OpenTime>2024-11-17T15:12:00</OpenTime>
+    <Description>call number: 1 of type: English at: 9 Shmuel HaNagid Street, Jerusalem</Description>
+    <MaxFinishCall>2024-11-18T15:12:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>51</Id>
-    <CallType>Math</CallType>
+    <CallType>English</CallType>
     <Address>7 Ben Ze'ev Street, Jerusalem</Address>
     <Latitude>35.198722</Latitude>
     <Longitude>31.790191</Longitude>
-    <OpenTime>2024-03-16T12:16:00</OpenTime>
-    <Description>call number: 1 of type: Math at: 7 Ben Ze'ev Street, Jerusalem</Description>
-    <MaxFinishCall>2024-03-26T12:16:00</MaxFinishCall>
+    <OpenTime>2024-05-17T22:15:00</OpenTime>
+    <Description>call number: 1 of type: English at: 7 Ben Ze'ev Street, Jerusalem</Description>
+    <MaxFinishCall>2024-05-18T22:15:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>52</Id>
-    <CallType>Math</CallType>
+    <CallType>English</CallType>
     <Address>10 Rivlin Street, Jerusalem</Address>
     <Latitude>35.214792</Latitude>
     <Longitude>31.779852</Longitude>
-    <OpenTime>2024-01-13T06:58:00</OpenTime>
-    <Description>call number: 1 of type: Math at: 10 Rivlin Street, Jerusalem</Description>
-    <MaxFinishCall>2024-01-14T06:58:00</MaxFinishCall>
+    <OpenTime>2024-04-19T20:28:00</OpenTime>
+    <Description>call number: 1 of type: English at: 10 Rivlin Street, Jerusalem</Description>
+    <MaxFinishCall>2024-04-29T20:28:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>53</Id>
-    <CallType>English</CallType>
+    <CallType>ComputerScience</CallType>
     <Address>120 Ibn Gabirol St, Tel Aviv</Address>
     <Latitude>35.220409</Latitude>
     <Longitude>31.780946</Longitude>
-    <OpenTime>2024-01-06T12:16:00</OpenTime>
-    <Description>call number: 1 of type: English at: 120 Ibn Gabirol St, Tel Aviv</Description>
-    <MaxFinishCall>2024-01-18T12:16:00</MaxFinishCall>
+    <OpenTime>2024-05-15T13:15:00</OpenTime>
+    <Description>call number: 1 of type: ComputerScience at: 120 Ibn Gabirol St, Tel Aviv</Description>
+    <MaxFinishCall>2024-05-27T13:15:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>54</Id>
-    <CallType>Math</CallType>
+    <CallType>English</CallType>
     <Address>13 Ben Gurion Blvd, Holon</Address>
     <Latitude>34.7818</Latitude>
     <Longitude>32.0853</Longitude>
-    <OpenTime>2024-04-19T15:36:00</OpenTime>
-    <Description>call number: 1 of type: Math at: 13 Ben Gurion Blvd, Holon</Description>
-    <MaxFinishCall>2024-04-22T15:36:00</MaxFinishCall>
+    <OpenTime>2024-10-20T03:07:00</OpenTime>
+    <Description>call number: 1 of type: English at: 13 Ben Gurion Blvd, Holon</Description>
+    <MaxFinishCall>2024-10-29T03:07:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>55</Id>
-    <CallType>English</CallType>
+    <CallType>Math</CallType>
     <Address>45 Jerusalem St, Ramat Gan</Address>
     <Latitude>34.7748</Latitude>
     <Longitude>32.0142</Longitude>
-    <OpenTime>2024-10-06T11:59:00</OpenTime>
-    <Description>call number: 1 of type: English at: 45 Jerusalem St, Ramat Gan</Description>
-    <MaxFinishCall>2024-10-11T11:59:00</MaxFinishCall>
+    <OpenTime>2024-09-02T21:48:00</OpenTime>
+    <Description>call number: 1 of type: Math at: 45 Jerusalem St, Ramat Gan</Description>
+    <MaxFinishCall>2024-09-11T21:48:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>56</Id>
-    <CallType>English</CallType>
+    <CallType>ComputerScience</CallType>
     <Address>200 Jabotinsky St, Petah Tikva</Address>
     <Latitude>34.8101</Latitude>
     <Longitude>32.0833</Longitude>
-    <OpenTime>2024-07-24T15:20:00</OpenTime>
-    <Description>call number: 1 of type: English at: 200 Jabotinsky St, Petah Tikva</Description>
-    <MaxFinishCall>2024-07-26T15:20:00</MaxFinishCall>
+    <OpenTime>2024-07-02T01:56:00</OpenTime>
+    <Description>call number: 1 of type: ComputerScience at: 200 Jabotinsky St, Petah Tikva</Description>
+    <MaxFinishCall>2024-07-13T01:56:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>57</Id>
-    <CallType>English</CallType>
+    <CallType>Accounting</CallType>
     <Address>30 Herzl Blvd, Rishon LeZion</Address>
     <Latitude>34.867</Latitude>
     <Longitude>32.0922</Longitude>
-    <OpenTime>2024-12-19T00:23:00</OpenTime>
-    <Description>call number: 1 of type: English at: 30 Herzl Blvd, Rishon LeZion</Description>
-    <MaxFinishCall>2024-12-29T00:23:00</MaxFinishCall>
+    <OpenTime>2024-05-25T22:21:00</OpenTime>
+    <Description>call number: 1 of type: Accounting at: 30 Herzl Blvd, Rishon LeZion</Description>
+    <MaxFinishCall>2025-06-07T22:21:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>58</Id>
@@ -576,19 +576,19 @@
     <Address>15 Rothschild St, Netanya</Address>
     <Latitude>34.7996</Latitude>
     <Longitude>31.9674</Longitude>
-    <OpenTime>2024-10-31T11:29:00</OpenTime>
+    <OpenTime>2024-11-18T03:02:00</OpenTime>
     <Description>call number: 1 of type: English at: 15 Rothschild St, Netanya</Description>
-    <MaxFinishCall>2024-11-07T11:29:00</MaxFinishCall>
+    <MaxFinishCall>2025-11-28T03:02:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>59</Id>
-    <CallType>Accounting</CallType>
+    <CallType>ComputerScience</CallType>
     <Address>88 HaNesi'im St, Be'er Sheva</Address>
     <Latitude>34.8532</Latitude>
     <Longitude>32.3295</Longitude>
-    <OpenTime>2024-01-19T20:52:00</OpenTime>
-    <Description>call number: 1 of type: Accounting at: 88 HaNesi'im St, Be'er Sheva</Description>
-    <MaxFinishCall>2024-01-29T20:52:00</MaxFinishCall>
+    <OpenTime>2024-08-18T07:14:00</OpenTime>
+    <Description>call number: 1 of type: ComputerScience at: 88 HaNesi'im St, Be'er Sheva</Description>
+    <MaxFinishCall>2025-08-24T07:14:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>60</Id>
@@ -596,39 +596,39 @@
     <Address>100 Yitzhak Rabin Blvd, Haifa</Address>
     <Latitude>34.7915</Latitude>
     <Longitude>31.2518</Longitude>
-    <OpenTime>2024-03-12T15:59:00</OpenTime>
+    <OpenTime>2024-10-27T13:39:00</OpenTime>
     <Description>call number: 1 of type: English at: 100 Yitzhak Rabin Blvd, Haifa</Description>
-    <MaxFinishCall>2024-03-23T15:59:00</MaxFinishCall>
+    <MaxFinishCall>2025-11-05T13:39:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>61</Id>
-    <CallType>Accounting</CallType>
+    <CallType>English</CallType>
     <Address>9 HaGefen St, Kfar Saba</Address>
     <Latitude>34.9896</Latitude>
     <Longitude>32.794</Longitude>
-    <OpenTime>2024-01-15T23:37:00</OpenTime>
-    <Description>call number: 1 of type: Accounting at: 9 HaGefen St, Kfar Saba</Description>
-    <MaxFinishCall>2024-01-22T23:37:00</MaxFinishCall>
+    <OpenTime>2024-03-23T20:28:00</OpenTime>
+    <Description>call number: 1 of type: English at: 9 HaGefen St, Kfar Saba</Description>
+    <MaxFinishCall>2025-03-26T20:28:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>62</Id>
-    <CallType>English</CallType>
+    <CallType>Math</CallType>
     <Address>70 Weizmann St, Herzliya</Address>
     <Latitude>34.9076</Latitude>
     <Longitude>32.1782</Longitude>
-    <OpenTime>2024-12-15T14:53:00</OpenTime>
-    <Description>call number: 1 of type: English at: 70 Weizmann St, Herzliya</Description>
-    <MaxFinishCall>2024-12-22T14:53:00</MaxFinishCall>
+    <OpenTime>2024-05-05T16:52:00</OpenTime>
+    <Description>call number: 1 of type: Math at: 70 Weizmann St, Herzliya</Description>
+    <MaxFinishCall>2025-05-07T16:52:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>63</Id>
-    <CallType>English</CallType>
+    <CallType>Math</CallType>
     <Address>22 HaBanim St, Givatayim</Address>
     <Latitude>34.8352</Latitude>
     <Longitude>32.1658</Longitude>
-    <OpenTime>2024-05-05T21:58:00</OpenTime>
-    <Description>call number: 1 of type: English at: 22 HaBanim St, Givatayim</Description>
-    <MaxFinishCall>2024-05-07T21:58:00</MaxFinishCall>
+    <OpenTime>2024-06-11T23:59:00</OpenTime>
+    <Description>call number: 1 of type: Math at: 22 HaBanim St, Givatayim</Description>
+    <MaxFinishCall>2025-06-12T23:59:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>64</Id>
@@ -636,9 +636,9 @@
     <Address>55 Allenby St, Tel Aviv</Address>
     <Latitude>34.8114</Latitude>
     <Longitude>32.0703</Longitude>
-    <OpenTime>2024-09-22T04:53:00</OpenTime>
+    <OpenTime>2024-09-29T10:35:00</OpenTime>
     <Description>call number: 1 of type: Math at: 55 Allenby St, Tel Aviv</Description>
-    <MaxFinishCall>2024-09-26T04:53:00</MaxFinishCall>
+    <MaxFinishCall>2025-10-01T10:35:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>65</Id>
@@ -646,28 +646,28 @@
     <Address>7 HaPalmach St, Ashdod</Address>
     <Latitude>34.7722</Latitude>
     <Longitude>32.0644</Longitude>
-    <OpenTime>2024-11-06T01:48:00</OpenTime>
+    <OpenTime>2024-04-07T22:10:00</OpenTime>
     <Description>call number: 1 of type: English at: 7 HaPalmach St, Ashdod</Description>
-    <MaxFinishCall>2024-11-17T01:48:00</MaxFinishCall>
+    <MaxFinishCall>2025-04-17T22:10:00</MaxFinishCall>
   </Call>
   <Call>
     <Id>66</Id>
-    <CallType>Accounting</CallType>
+    <CallType>English</CallType>
     <Address>10 HaYarkon St, Eilat</Address>
     <Latitude>34.6553</Latitude>
     <Longitude>31.8014</Longitude>
-    <OpenTime>2024-10-05T10:48:00</OpenTime>
-    <Description>call number: 1 of type: Accounting at: 10 HaYarkon St, Eilat</Description>
-    <MaxFinishCall>2024-10-17T10:48:00</MaxFinishCall>
+    <OpenTime>2024-01-03T18:59:00</OpenTime>
+    <Description>call number: 1 of type: English at: 10 HaYarkon St, Eilat</Description>
+    <MaxFinishCall>2025-01-09T18:59:00</MaxFinishCall>
   </Call>
   <Call>
-    <Id>67</Id>
-    <CallType>Math</CallType>
+    <Id>68</Id>
+    <CallType>English</CallType>
     <Address>18 Sokolov St, Ramat HaSharon</Address>
-    <Latitude>34.9519</Latitude>
-    <Longitude>29.5535</Longitude>
-    <OpenTime>2024-04-05T09:16:00</OpenTime>
-    <Description>call number: 1 of type: Math at: 18 Sokolov St, Ramat HaSharon</Description>
-    <MaxFinishCall>2024-04-13T09:16:00</MaxFinishCall>
+    <Latitude>32.1394488</Latitude>
+    <Longitude>34.8360317</Longitude>
+    <OpenTime>2024-08-18T04:59:00</OpenTime>
+    <Description>call number: 1 of type: English at: 18 Sokolov St, Ramat HaSharon</Description>
+    <MaxFinishCall>2025-08-29T04:59:00</MaxFinishCall>
   </Call>
 </ArrayOfCall>

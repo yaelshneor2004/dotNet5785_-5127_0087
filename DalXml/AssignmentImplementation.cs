@@ -70,23 +70,23 @@ internal class AssignmentImplementation : IAssignment
     {
         return XMLTools.LoadListFromXMLElement(Config.s_assignments_xml).Elements().Select(s => getAssignment(s)).FirstOrDefault(filter);
     }
- 
+
 
     //Updates an Assignment object in the XML file by removing the old element and adding the updated one.
     public void Update(Assignment item)
     {
         XElement assignmentsRootElem = XMLTools.LoadListFromXMLElement(Config.s_assignments_xml);
 
-        (assignmentsRootElem.Elements().FirstOrDefault(st => (int?)st.Element("Id") == item.Id)
-        ?? throw new DO.DalDoesNotExistException($"Assignment with ID={item.Id} does Not exist"))
-                .Remove();
-        int nextId = Config.NextAssignmentId;
-        Assignment copy = item with { Id = nextId };
-        assignmentsRootElem.Add(new XElement("Assignment", createAssignmentElement(copy)));
+        XElement? assignmentElem = assignmentsRootElem.Elements().FirstOrDefault(st => (int?)st.Element("Id") == item.Id);
+        if (assignmentElem == null)
+            throw new DO.DalDoesNotExistException($"Assignment with ID={item.Id} does not exist");
+
+        assignmentElem.Remove();
+
+        assignmentsRootElem.Add(createAssignmentElement(item));
+
         XMLTools.SaveListToXMLElement(assignmentsRootElem, Config.s_assignments_xml);
     }
-
-
     public void Create(Assignment item)
     {
         XElement assignmentsRootElem = XMLTools.LoadListFromXMLElement(Config.s_assignments_xml);
