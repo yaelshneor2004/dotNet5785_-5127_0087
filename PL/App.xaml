@@ -16,52 +16,92 @@
         <local:ConvertObjIdToTF x:Key="ConvertObjIdToTFKey"/>
         <local:ConvertObjIdToVisibility x:Key="ConvertObjIdToVisibilityKey"/>
         <local:ConvertCallInProgressToReadOnly x:Key="ConvertCallInProgressToReadOnlyKey"/>
+
+        <!-- Triggers -->
+        <Style TargetType="DataGridRow">
+            <Setter Property="Background" Value="#E6E6FA"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#9370DB"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="ComboBox">
+            <Setter Property="Foreground" Value="#9370DB"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Margin" Value="10,0"/>
+            <Setter Property="BorderBrush" Value="#9370DB"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background" Value="#E6E6FA"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#9370DB"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#E6E6FA"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+
         <Style TargetType="Button">
-            <Setter Property="Background" Value="LightCyan"/>
-            <Setter Property="BorderBrush" Value="DeepSkyBlue"/>
+            <Setter Property="Background" Value="#E6E6FA"/>
+            <Setter Property="BorderBrush" Value="#9370DB"/>
             <Setter Property="BorderThickness" Value="2"/>
-            <Setter Property="Foreground" Value="Blue"/>
+            <Setter Property="Foreground" Value="#9370DB"/>
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="Padding" Value="10,5"/>
             <Setter Property="Margin" Value="5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
+
         <Style TargetType="Label">
-            <Setter Property="Foreground" Value="Blue"/>
+            <Setter Property="Foreground" Value="#9370DB"/>
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="Margin" Value="10,0"/>
         </Style>
 
         <Style TargetType="TextBox">
-            <Setter Property="Foreground" Value="Blue"/>
+            <Setter Property="Foreground" Value="#9370DB"/>
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="Margin" Value="10,0"/>
-            <Setter Property="BorderBrush" Value="DeepSkyBlue"/>
-            <Setter Property="BorderThickness" Value="1"/>
-        </Style>
-        <Style TargetType="TextBlock">
-            <Setter Property="Foreground" Value="Blue"/>
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="Margin" Value="10,0"/>
-        </Style>
-        <Style TargetType="ComboBox">
-            <Setter Property="Foreground" Value="Blue"/>
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="Margin" Value="10,0"/>
-            <Setter Property="BorderBrush" Value="DeepSkyBlue"/>
+            <Setter Property="BorderBrush" Value="#9370DB"/>
             <Setter Property="BorderThickness" Value="1"/>
         </Style>
 
-        <Style TargetType="CheckBox">
-            <Setter Property="Foreground" Value="Blue"/>
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#9370DB"/>
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="Margin" Value="10,0"/>
+        </Style>
+
+        <Style TargetType="Control" x:Key="MergedStyle">
+            <Setter Property="Foreground" Value="#9370DB"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Margin" Value="10,0"/>
+            <Setter Property="BorderBrush" Value="#9370DB"/>
+            <Setter Property="BorderThickness" Value="1"/>
         </Style>
 
         <Style TargetType="DatePicker">
-            <Setter Property="Foreground" Value="Blue"/>
+            <Setter Property="Foreground" Value="#9370DB"/>
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="Margin" Value="10,0"/>
-            <Setter Property="BorderBrush" Value="DeepSkyBlue"/>
             <Setter Property="BorderThickness" Value="1"/>
         </Style>
     </Application.Resources>
