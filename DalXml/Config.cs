@@ -33,7 +33,7 @@ internal class Config
         NextAssignmentId = 1;
         NextCallId = 1;
         Clock = DateTime.Now;
-       RiskRange = TimeSpan.Zero;
+       RiskRange = TimeSpan.FromDays(14);
     }
 
 }

@@ -81,6 +81,11 @@ public partial class SelectCallToTreatWindow : Window
         s_bl.Call.SelectCallToTreat(id, SelectedOpenCall!.Id);
         MessageBox.Show("A call has been selected for treatment", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
         Close();
+        new VolunteerUserWindow(id).Show();
+    }
+    private void DataGrid_MouseLeftButtonUp(object sender, RoutedEventArgs e)
+    {
+        MessageBox.Show($"Description for treatment{SelectedOpenCall.Description}", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     private void UpdateAddress_Click(object sender, RoutedEventArgs e)

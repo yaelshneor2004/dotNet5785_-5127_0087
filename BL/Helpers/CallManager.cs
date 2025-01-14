@@ -212,7 +212,7 @@ internal static class CallManager
     /// <param name="toEmail">The recipient's email address.</param>
     /// <param name="subject">The subject of the email.</param>
     /// <param name="body">The body of the email.</param>
-    public static void SendEmail(string toEmail, string subject, string body)
+    public static void SendEmail(string toEmail, string subject,string body)
     {
         var fromEmail = "y7697086@gmail.com";
         var smtpClient = new SmtpClient("smtp.gmail.com")
@@ -226,11 +226,10 @@ internal static class CallManager
         {
             From = new MailAddress(fromEmail),
             Subject = subject,
-            Body = body,
-            IsBodyHtml = true,
+            Body =body,
+            IsBodyHtml = false,
         };
         mailMessage.To.Add(toEmail);
-
         smtpClient.Send(mailMessage);
     }
 
@@ -418,9 +417,8 @@ internal static class CallManager
                 });
                 Observers.NotifyItemUpdated(assignmentInProgress.Id); // Add call to NotifyItemUpdated
         }
-        }
-
-        Observers.NotifyListUpdated(); // Add call to NotifyListUpdated
+    }
+    Observers.NotifyListUpdated(); // Add call to NotifyListUpdated
 }
 
 }

@@ -18,11 +18,13 @@
             <!-- ComboBox for filtering calls by type -->
             <ComboBox SelectedValue="{Binding FilterByType, Mode=TwoWay}" 
                       ItemsSource="{Binding Source={StaticResource SortCollectionMyCallTypeKey}}" 
-                      VerticalAlignment="Center" 
                       SelectionChanged="cmbFiltedrChanges_SelectionChanged" 
                       Height="43" 
-                      Width="774"
-                      Margin="0,0,8,0"/>
+                      Width="778"/>
+            <!-- ComboBox for filtering calls by type -->
+            <!-- ComboBox for filtering calls by type -->
+            <!-- ComboBox for filtering calls by type -->
+            <!-- ComboBox for filtering calls by type -->
         </StackPanel>
 
         <!-- DataGrid for displaying calls -->
@@ -30,7 +32,7 @@
                   AutoGenerateColumns="False"
                   ItemsSource="{Binding Path=CloseCallList}" SelectedItem="{Binding SelectedClosedCall}"
                 IsReadOnly="True" RowDetailsVisibilityMode="VisibleWhenSelected" EnableRowVirtualization="True">
-                <DataGrid.Columns>
+            <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding Id}"/>
                 <DataGridTextColumn Header="Type" Binding="{Binding Type}"/>
                 <DataGridTextColumn Header="Address" Binding="{Binding Address}"/>
