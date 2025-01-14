@@ -35,7 +35,7 @@
                       SelectedValue="{Binding CurrentVolunteer.Role, Mode=TwoWay}"
                       Style="{StaticResource {x:Type ComboBox}}"
                       Foreground="Black"
-                      IsReadOnly="{Binding CurrentVolunteer.Role, Converter={StaticResource ConvertRoleToTFKey}}"/>
+            />
 
             <Label Content="Is Active:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
             <CheckBox IsChecked="{Binding CurrentVolunteer.IsActive, Mode=OneWay}" Style="{StaticResource {x:Type CheckBox}}"/>

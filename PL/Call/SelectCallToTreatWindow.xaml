@@ -26,21 +26,22 @@
                 <!-- ComboBox for filtering calls by type -->
                 <ComboBox SelectedValue="{Binding FilterByType, Mode=TwoWay}" 
               ItemsSource="{Binding Source={StaticResource SortCollectionMyCallTypeKey}}" 
-              VerticalAlignment="Center" 
               SelectionChanged="cmbFiltedrChanges_SelectionChanged" 
-              Height="43" 
-              Margin="0,0,8,0" 
-              HorizontalAlignment="Stretch"/>
+              Height="43" Width="785"/>
+                <!-- ComboBox for filtering calls by type -->
+                <!-- ComboBox for filtering calls by type -->
+                <!-- ComboBox for filtering calls by type -->
             </StackPanel>
         </Grid>
         <!-- DataGrid for displaying the list of open calls -->
-        <DataGrid Margin="5,5,5,218" Grid.Row="1" 
+        <DataGrid Margin="5,9,5,6" Grid.Row="1" 
                   ItemsSource="{Binding Path=OpenCallList}" 
                   AutoGenerateColumns="False" 
                   IsReadOnly="True" 
                   EnableRowVirtualization="True" 
                   RowDetailsVisibilityMode="VisibleWhenSelected" 
-                  SelectedItem="{Binding SelectedOpenCall}">
+                  SelectedItem="{Binding SelectedOpenCall}"
+                  MouseLeftButtonUp="DataGrid_MouseLeftButtonUp">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Id}" Header="Call Id" Width="Auto"/>
                 <DataGridTextColumn Binding="{Binding Type}" Header="Type" Width="Auto"/>
@@ -58,10 +59,6 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-
-        <!-- TextBox to display selected call details -->
-        <TextBox Grid.Row="2" Text="{Binding SelectedOpenCall.Description}" Width="Auto" Height="200" Margin="5" VerticalAlignment="Top" HorizontalAlignment="Stretch" IsReadOnly="True" Visibility=""/>
-
         <!-- TextBox and Button for changing volunteer address -->
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center" Margin="8,0,8,0">
             <TextBox Text="{Binding CurrentVolunteer.Address, Mode=TwoWay}" Width="200" Margin="0,0,8,0" />

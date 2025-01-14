@@ -1,5 +1,6 @@
 ﻿using PL.Call;
 using PL.Volunteer;
+using System;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,23 +14,54 @@ using System.Windows.Shapes;
 
 namespace PL
 {
-
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
+       
         private static bool isManagerLoggedIn = false;
-
+            
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
+        public class helper
+        {
+            public int index { get; set; }
+            public BO.MyCallStatus value { get; set; }
+        }
+
+
+
 
         public MainWindow()
         {
+
             InitializeComponent();
             DataContext = this;
+            var callAmounts = s_bl.Call.CallAmount();
+            var statusList = callAmounts
+                .Select((count, index) => new helper
+                {
+                    index = count,
+                    value = (BO.MyCallStatus)index
+                })
+                .ToList();
+
+            StatusList = statusList;
+
             Loaded += MainWindow_Loaded;
             Closed += MainWindow_Closed;
         }
+         public helper selectedValue { get; set; }
+        public IEnumerable<helper> StatusList
+        {
+            get { return (IEnumerable<helper>)GetValue(StatusListProperty); }
+            set { SetValue(StatusListProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for StatusList.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty StatusListProperty =
+            DependencyProperty.Register("StatusList", typeof(IEnumerable<helper>), typeof(MainWindow), new PropertyMetadata(null));
+
         private void clockObserver()
         {
             CurrentTime = s_bl.Admin.GetClock();
@@ -157,10 +189,13 @@ namespace PL
         {
             new VolunteerListWindow().Show();
         }
-
         private void btnHandleCalls_Click(object sender, RoutedEventArgs e)
         {
             new CallListWindow().Show();
+        }
+        private void DataGrid_MouseLeftButtonUp(object sender, RoutedEventArgs e)
+        {
+           new CallListWindow(selectedValue.value).Show();
         }
     }
 }

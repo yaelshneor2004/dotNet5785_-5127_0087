@@ -76,6 +76,7 @@ public partial class VolunteerUserWindow : Window
     private void btnSelectCall_Click(object sender, RoutedEventArgs e)
     {
         new SelectCallToTreatWindow(CurrentVolunteer.Id).Show();
+        Close();
     }
 
     private void btnCancelCall_Click(object sender, RoutedEventArgs e)
@@ -136,6 +137,7 @@ public partial class VolunteerUserWindow : Window
         CurrentVolunteer = null;
         CurrentCall = null;
         CurrentVolunteer = s_bl.Volunteer.GetVolunteerDetails(id);
-        CurrentCall = CurrentVolunteer?.CurrentCall != null ? s_bl.Call.GetCallDetails(CurrentVolunteer.CurrentCall.CallId)! : null;
+        CurrentCall= CurrentVolunteer?.CurrentCall != null ? s_bl.Call.GetCallDetails(CurrentVolunteer.CurrentCall.CallId): null;
     }
+
 }

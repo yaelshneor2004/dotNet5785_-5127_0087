@@ -8,7 +8,11 @@
         Title="MainWindow" Height="450" Width="800"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Loaded="MainWindow_Loaded" 
-        Closed="MainWindow_Closed">
+        Closed="MainWindow_Closed"
+        Language="he-IL">
+
+
+
     <!--grid in all the window-->
     <Grid>
         <Grid.ColumnDefinitions>
@@ -20,7 +24,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0" Grid.Column="0" Margin="20">
+        <Grid Grid.Row="0" Grid.Column="0" Margin="0,29,40,11">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
@@ -36,8 +40,23 @@
             <Button Content="Add One Month" HorizontalAlignment="Left" Height="41" Margin="110,0,0,0" VerticalAlignment="Center" Width="150" Click="btnAddOneMonth_Click" Grid.Row="4"/>
             <Button Content="Add One Year" HorizontalAlignment="Left" Height="41" Margin="110,0,0,0" VerticalAlignment="Center" Width="150" Click="btnAddOneYear_Click" Grid.Row="5"/>
         </Grid>
+        <!-- Updated Grid for DataGrid display on the top right -->
+        <Grid Grid.Row="0" Grid.Column="1" Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Label Content="Status Quantities" HorizontalAlignment="Left" FontSize="15" Margin="208,10,0,10" Grid.Row="0"/>
+            <DataGrid  AutoGenerateColumns="False" IsReadOnly="True" ItemsSource="{Binding StatusList, Mode=TwoWay}"  Background="Transparent" MouseLeftButtonUp="DataGrid_MouseLeftButtonUp" Margin="130,43,9,145" Grid.RowSpan="2" SelectedItem="{Binding selectedValue,Mode=TwoWay}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding value}" Header="Status" Width="*"/>
+                    <DataGridTextColumn Binding="{Binding index}" Header="Quantity" Width="*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
 
-        <Grid Grid.Row="0" Grid.Column="1" Margin="20">
+
+        <Grid Grid.Row="0" Margin="240,40,200,0" Grid.ColumnSpan="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>

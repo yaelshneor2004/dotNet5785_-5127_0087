@@ -26,8 +26,9 @@ public partial class CallListWindow : Window
     static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
     public BO.MyCallStatus SortInCallInList { get; set; } = BO.MyCallStatus.None;
 
-    public CallListWindow()
+    public CallListWindow(BO.MyCallStatus status=BO.MyCallStatus.None)
     {
+        SortInCallInList = status;
         InitializeComponent();
         Loaded += CallListWindow_Loaded;
         Closed += CallListWindow_Closed;

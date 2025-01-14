@@ -25,13 +25,17 @@ internal class CallImplementation : ICall
         // Attempt to add the new call in the data layer
         _dal.Call.Create(ConvertBOToDO(call));
         CallManager.Observers.NotifyListUpdated();                                                   
-
-
         var volunteers = Tools.GetVolunteersWithinDistance(call.Address ?? string.Empty);
         foreach (var volunteer in volunteers)
         {
-            var subject = "New Call Opened";
-            var body = $"A new call has been opened. Details: {call.Description}";
+            var subject = $"New Call Opened for {call.Id}";
+            var body = $"Hello Volunteers,\n\n" +  // General greeting
+                   $"A new call has been opened. Here are the details:\n\n" +
+                   $"Description: {call.Description}\n" +
+                   $"Location: {call.Address}\n" +
+                   $"Open Time: {call.StartTime}\n" +
+                   $"Maximum Time: {call.MaxEndTime}\n" +
+                   $"Please log in to the system to accept the call."; // Body of the email;
             CallManager.SendEmail(volunteer.Email, subject, body);
         }
     }
@@ -42,20 +46,23 @@ internal class CallImplementation : ICall
     /// <returns>An array of call counts by status.</returns>
     public int[] CallAmount()
     {
-        var calls = from call in _dal.Call.ReadAll()
-                    let boCall = ConvertFromDoToBo(call)
-                    group boCall by boCall.Status into groupedCalls
-                    select new
-                    {
-                        Status = groupedCalls.Key,
-                        Count = groupedCalls.Count()
-                    };
+        var callStatuses = from call in _dal.Call.ReadAll()
+                           group call by (int)CallManager.GetCallStatus(call) into g
+                           orderby g.Key
+                           select new { Status = g.Key, Count = g.Count() };
 
-        var callAmounts = new int[Enum.GetValues(typeof(BO.MyCallStatus)).Length];
-        foreach (var group in calls)
-            callAmounts[(int)group.Status] = group.Count;
+        // Prepare an array with six cells (or more if there are more statuses)
+        var callAmounts = new int[Enum.GetValues(typeof(BO.MyCallStatus)).Length-1];
+
+        // Fill the array with values from the grouping, or zeros if there are no calls in the status
+        foreach (var status in callStatuses)
+        {
+            callAmounts[status.Status] = status.Count;
+        }
+
         return callAmounts;
     }
+
 
     /// <summary>
     /// Deletes a call from the system.
@@ -284,7 +291,7 @@ internal class CallImplementation : ICall
             if (CallManager.IsManager(idV))
             {
                 var volunteer = _dal.Volunteer.Read(assignment.VolunteerId);
-                var subject = "Assignment Cancelled";
+                var subject = $"Assignment Cancelled";
                 var body = $"Your assignment for call {assignment.CallId} has been cancelled.";
                 SendEmail(volunteer?.Email ?? string.Empty, subject, body);
             }
