@@ -16,6 +16,8 @@
         <local:ConvertObjIdToTF x:Key="ConvertObjIdToTFKey"/>
         <local:ConvertObjIdToVisibility x:Key="ConvertObjIdToVisibilityKey"/>
         <local:ConvertCallInProgressToReadOnly x:Key="ConvertCallInProgressToReadOnlyKey"/>
+        <local:ConvertVolunteerToReadOnly x:Key="ConvertVolunteerToReadOnlyKey"/>
+        <local:ConvertVolunteerToVisibility x:Key="ConvertVolunteerToVisibilityKey"/>
 
         <!-- Triggers -->
         <Style TargetType="DataGridRow">

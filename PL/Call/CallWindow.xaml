@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:PL.Call"
         mc:Ignorable="d"
         Title="CallWindow" Height="600" Width="450"
-        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
+        Language="he-IL">
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Margin="10">
@@ -22,7 +23,7 @@
             <TextBox Text="{Binding CurrentCall.Address}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black" Margin="0,5,0,5"/>
 
             <Label Content="Start Time:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Margin="0,5,0,5"/>
-            <TextBox Text="{Binding CurrentCall.StartTime}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black" Margin="0,5,0,5"/>
+            <TextBox Text="{Binding CurrentCall.StartTime}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black" Margin="0,5,0,5" IsReadOnly="True"/>
 
             <Label Content="Max End Time:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Margin="0,5,0,5"/>
             <TextBox Text="{Binding CurrentCall.MaxEndTime}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black" Margin="0,5,0,5"/>
@@ -31,7 +32,7 @@
             <TextBox Text="{Binding CurrentCall.Status}" Style="{StaticResource {x:Type TextBox}}" IsReadOnly="True" Foreground="Black" Margin="0,5,0,5"/>
 
             <Label Content="Assignment List:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Margin="0,20,0,5" Visibility="{Binding CurrentCall.Id, Converter={StaticResource ConvertObjIdToVisibilityKey}}"/>
-            <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding CurrentCall.Assignments}" Margin="0,20,0,5" Visibility="{Binding CurrentCall.Id, Converter={StaticResource ConvertObjIdToVisibilityKey}}">
+            <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding CurrentCall.Assignments}" Margin="0,20,0,5" Visibility="{Binding CurrentCall.Id, Converter={StaticResource ConvertObjIdToVisibilityKey}}" IsReadOnly="True">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Volunteer ID" Binding="{Binding VolunteerId}" Foreground="Black"/>
                     <DataGridTextColumn Header="Volunteer Name" Binding="{Binding VolunteerName}" Foreground="Black"/>

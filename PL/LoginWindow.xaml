@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
         Title="LoginWindow" Height="450" Width="800"
-        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
+        >
     <Grid>
         <Button Content="Login" HorizontalAlignment="Left" Height="51" Margin="192,237,0,0" VerticalAlignment="Top" Width="230" Click="Login_Click"/>
 

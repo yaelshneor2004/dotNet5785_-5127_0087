@@ -15,20 +15,6 @@
     <IsActive>true</IsActive>
   </Volunteer>
   <Volunteer>
-    <Id>975363193</Id>
-    <FullName>Eli Amar</FullName>
-    <Phone>05092536034</Phone>
-    <Email>eliamar@gmail.com</Email>
-    <Role>Volunteer</Role>
-    <TypeDistance>Aerial</TypeDistance>
-    <Password>1EW2Uo2lS/Akt9yBIxf+MQ==</Password>
-    <Address>Yigal Alon 120, Tel Aviv, Israel</Address>
-    <Latitude>32.0618</Latitude>
-    <Longitude>34.79152</Longitude>
-    <MaxDistance>36.522041654021386</MaxDistance>
-    <IsActive>true</IsActive>
-  </Volunteer>
-  <Volunteer>
     <Id>967530684</Id>
     <FullName>Yair Cohen</FullName>
     <Phone>05521945440</Phone>
@@ -99,20 +85,6 @@
     <IsActive>true</IsActive>
   </Volunteer>
   <Volunteer>
-    <Id>142161512</Id>
-    <FullName>Golda Meir</FullName>
-    <Phone>05836884650</Phone>
-    <Email>goldameir@gmail.com</Email>
-    <Role>Volunteer</Role>
-    <TypeDistance>Aerial</TypeDistance>
-    <Password>LL/JCJtxmjoi0k8JOBtQZQ==</Password>
-    <Address>Moriah Blvd 70, Haifa, Israel</Address>
-    <Latitude>32.79406</Latitude>
-    <Longitude>34.98264</Longitude>
-    <MaxDistance>87.1339194763273</MaxDistance>
-    <IsActive>true</IsActive>
-  </Volunteer>
-  <Volunteer>
     <Id>128044765</Id>
     <FullName>Yitzhak Rabin</FullName>
     <Phone>05494798909</Phone>
@@ -124,20 +96,6 @@
     <Latitude>32.81912</Latitude>
     <Longitude>34.98865</Longitude>
     <MaxDistance>17.33388760962174</MaxDistance>
-    <IsActive>true</IsActive>
-  </Volunteer>
-  <Volunteer>
-    <Id>721016087</Id>
-    <FullName>Chaim Weizmann</FullName>
-    <Phone>05825886959</Phone>
-    <Email>chaimweizmann@gmail.com</Email>
-    <Role>Volunteer</Role>
-    <TypeDistance>Aerial</TypeDistance>
-    <Password>rbocJO7sdLUC4lTeoWXInw==</Password>
-    <Address>Rav Shauli 5, Be'er Sheva, Israel</Address>
-    <Latitude>31.25297</Latitude>
-    <Longitude>34.79223</Longitude>
-    <MaxDistance>52.185141719271286</MaxDistance>
     <IsActive>true</IsActive>
   </Volunteer>
   <Volunteer>
@@ -165,20 +123,6 @@
     <Address>Johanna Jabotinsky 15, Be'er Sheva, Israel</Address>
     <Latitude>31.2536</Latitude>
     <Longitude>34.78251</Longitude>
-    <MaxDistance xsi:nil="true" />
-    <IsActive>true</IsActive>
-  </Volunteer>
-  <Volunteer>
-    <Id>421137647</Id>
-    <FullName>Moshe Dayan</FullName>
-    <Phone>05479178049</Phone>
-    <Email>moshedayan@gmail.com</Email>
-    <Role>Volunteer</Role>
-    <TypeDistance>Aerial</TypeDistance>
-    <Password>TjLuHPD7HfVZrDIKNOZHQw==</Password>
-    <Address>Begin Way 234, Petah Tikva, Israel</Address>
-    <Latitude>32.09077</Latitude>
-    <Longitude>34.88718</Longitude>
     <MaxDistance xsi:nil="true" />
     <IsActive>true</IsActive>
   </Volunteer>
@@ -225,6 +169,20 @@
     <IsActive>true</IsActive>
   </Volunteer>
   <Volunteer>
+    <Id>421137647</Id>
+    <FullName>Moshe Dayan</FullName>
+    <Phone>05479178049</Phone>
+    <Email>moshedayan@gmail.com</Email>
+    <Role>Volunteer</Role>
+    <TypeDistance>Aerial</TypeDistance>
+    <Password>TjLuHPD7HfVZrDIKNOZHQw==</Password>
+    <Address>Begin Way 234, Petah Tikva, Israel</Address>
+    <Latitude>32.084041</Latitude>
+    <Longitude>34.887762</Longitude>
+    <MaxDistance>50</MaxDistance>
+    <IsActive>true</IsActive>
+  </Volunteer>
+  <Volunteer>
     <Id>326615127</Id>
     <FullName>Yael Shneor</FullName>
     <Phone>0533859299</Phone>
@@ -233,9 +191,51 @@
     <TypeDistance>Aerial</TypeDistance>
     <Password>4Aa0guBmhrmrgF+t+EJTUw==</Password>
     <Address>Derech Hevron 78, Jerusalem, Israel</Address>
-    <Latitude>31.7525</Latitude>
-    <Longitude>35.2121</Longitude>
+    <Latitude>31.7564779</Latitude>
+    <Longitude>35.2221262</Longitude>
     <MaxDistance>20</MaxDistance>
     <IsActive>true</IsActive>
+  </Volunteer>
+  <Volunteer>
+    <Id>142161512</Id>
+    <FullName>Golda Meir</FullName>
+    <Phone>05836884650</Phone>
+    <Email>goldameir@gmail.com</Email>
+    <Role>Volunteer</Role>
+    <TypeDistance>Aerial</TypeDistance>
+    <Password>LL/JCJtxmjoi0k8JOBtQZQ==</Password>
+    <Address>Moriah Blvd 70, Haifa, Israel</Address>
+    <Latitude>32.7950513</Latitude>
+    <Longitude>34.98488700000001</Longitude>
+    <MaxDistance>87.1339194763273</MaxDistance>
+    <IsActive>true</IsActive>
+  </Volunteer>
+  <Volunteer>
+    <Id>721016087</Id>
+    <FullName>Chaim Weizmann</FullName>
+    <Phone>05825886959</Phone>
+    <Email>chaimweizmann@gmail.com</Email>
+    <Role>Volunteer</Role>
+    <TypeDistance>Aerial</TypeDistance>
+    <Password>rbocJO7sdLUC4lTeoWXInw==</Password>
+    <Address>Rav Shauli 5, Be'er Sheva, Israel</Address>
+    <Latitude>31.2521018</Latitude>
+    <Longitude>34.7867691</Longitude>
+    <MaxDistance>52.185141719271286</MaxDistance>
+    <IsActive>true</IsActive>
+  </Volunteer>
+  <Volunteer>
+    <Id>975363193</Id>
+    <FullName>Eli Amar</FullName>
+    <Phone>05092536034</Phone>
+    <Email>eliamar@gmail.com</Email>
+    <Role>Volunteer</Role>
+    <TypeDistance>Aerial</TypeDistance>
+    <Password>1EW2Uo2lS/Akt9yBIxf+MQ==</Password>
+    <Address>Yigal Alon 120, Tel Aviv, Israel</Address>
+    <Latitude>32.0737482</Latitude>
+    <Longitude>34.7953709</Longitude>
+    <MaxDistance>36.522041654021386</MaxDistance>
+    <IsActive>false</IsActive>
   </Volunteer>
 </ArrayOfVolunteer>

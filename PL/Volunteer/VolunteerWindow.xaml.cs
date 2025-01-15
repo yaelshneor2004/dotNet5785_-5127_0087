@@ -46,8 +46,9 @@ namespace PL.Volunteer
         /// Constructor for VolunteerWindow. Initializes the window and sets up event handlers.
         /// </summary>
         /// <param name="id">The ID of the volunteer. If 0, a new volunteer is being added.</param>
-        public VolunteerWindow(int id = 0)
+        public VolunteerWindow(int idV = 0)
         {
+            id = idV;
             ButtonText = id == 0 ? "Add" : "Update";
             InitializeComponent();
             Loaded += VolunteerWindow_Loaded;

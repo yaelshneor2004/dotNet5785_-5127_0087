@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:PL.Volunteer"
         mc:Ignorable="d"
         Title="VolunteerCallHistoryWindow" Height="450" Width="800"
-        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
+        Language="he-IL">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>

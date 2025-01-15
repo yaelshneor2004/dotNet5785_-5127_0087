@@ -148,6 +148,20 @@ internal class VolunteerImplementation:IVolunteer
                 myVolunteer.Latitude = newLatitude;
                 myVolunteer.Longitude = newLongitude;
             }
+            if (volunteer.Role!= (DO.MyRole)myVolunteer.Role)
+            {
+                int count = _dal.Volunteer.ReadAll().Where(v => v.Role ==DO.MyRole.Manager).Count();
+                if (volunteer.Role == DO.MyRole.Manager)
+                {
+                    if (count == 1)
+                        throw new BO.BlInvalidOperationException("Cannot remove the last manager from the system.");
+                }
+                else
+                {
+                    if (count == 2)
+                        throw new BO.BlInvalidOperationException("Cannot add  more then 2 managers to the system.");
+                }
+            }
             // Verify that the requester is a manager or the same volunteer
             if (volunteer?.Role != null && !volunteer.Role.Equals(BO.MyRole.Manager) && volunteer.Id != myVolunteer?.Id)
                 throw new BO.BlUnauthorizedAccessException("Only managers or the volunteer themselves can update the details.");

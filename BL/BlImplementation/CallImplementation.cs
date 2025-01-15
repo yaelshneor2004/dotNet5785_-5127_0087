@@ -120,6 +120,7 @@ internal class CallImplementation : ICall
     /// <param name="filterValue">The value to filter by.</param>
     /// <param name="callSort">Sort by the specified field.</param>
     /// <returns>A list of calls.</returns>
+    /// 
     public IEnumerable<BO.CallInList> GetCallList(BO.MySortInCallInList? callFilter, object? filterValue, BO.MySortInCallInList? callSort)
     {
         var calls = _dal.Call.ReadAll();

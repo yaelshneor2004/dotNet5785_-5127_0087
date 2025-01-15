@@ -116,11 +116,9 @@ public class ConvertCallInProgressToReadOnly : IValueConverter
                 return true;
             }
 
-            // Otherwise, make it visible
             return false;
         }
 
-        // If the value is not a BO.CurrentCall, return Collapsed
         return true;
     }
 
@@ -129,5 +127,51 @@ public class ConvertCallInProgressToReadOnly : IValueConverter
         throw new NotImplementedException();
     }
 }
+public class ConvertVolunteerToVisibility : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        if (value is BO.Volunteer volunteer)
+        {
+            // Check if the volnteer is null or the current call is null
+            if (volunteer == null || volunteer.CurrentCall == null)
+            {
+                return Visibility.Collapsed;
+            }
+
+            // Otherwise, make it visible
+            return Visibility.Visible;
+        }
+        return Visibility.Collapsed;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}
+public class ConvertVolunteerToReadOnly : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        if (value is BO.Volunteer volunteer)
+        {
+            // Check if the volnteer is null or the current call is null
+            if (volunteer == null || volunteer.CurrentCall == null)
+            {
+                return true;
+            }
+
+            return false;
+        }
+        return true;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}
+
 
 
