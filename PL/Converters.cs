@@ -172,6 +172,49 @@ public class ConvertVolunteerToReadOnly : IValueConverter
         throw new NotImplementedException();
     }
 }
+public class ConvertCallToReadOnly : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        if (value is BO.Call call)
+        {
+            if (call.Status==BO.MyCallStatus.InProgress|| call.Status == BO.MyCallStatus.InProgressAtRisk)
+            {
+                return false;
+            }
+
+            return true;
+        }
+        return false;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}
+
+public class ConvertMaxEndToReadOnly : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        if (value is BO.Call call)
+        {
+            if (call.Status == BO.MyCallStatus.Closed || call.Status == BO.MyCallStatus.Expired)
+            {
+                return true;
+            }
+
+            return false;
+        }
+        return true;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}
 
 
 

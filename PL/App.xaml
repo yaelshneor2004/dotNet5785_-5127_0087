@@ -18,6 +18,10 @@
         <local:ConvertCallInProgressToReadOnly x:Key="ConvertCallInProgressToReadOnlyKey"/>
         <local:ConvertVolunteerToReadOnly x:Key="ConvertVolunteerToReadOnlyKey"/>
         <local:ConvertVolunteerToVisibility x:Key="ConvertVolunteerToVisibilityKey"/>
+        <local:ConvertCallToReadOnly x:Key="ConvertCallToReadOnlyKey"/>
+        <local:ConvertMaxEndToReadOnly x:Key="ConvertMaxEndToReadOnlyKey"/>
+
+        
 
         <!-- Triggers -->
         <Style TargetType="DataGridRow">
