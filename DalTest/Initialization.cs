@@ -26,7 +26,7 @@ public static class Initialization
    
         string[] volunteerNames =
         {
-        "Dani Levy", "Eli Amar", "Yair Cohen", "Ariela Levin", "Dina Klein", "Shira Israelof", "David Ben-Gurion",
+        "Dani Levy", "Eli Amar", "Yair Cohen", "Ariela Levin", "Dina Klein", "Shira Israelof", "David BenGurion",
         "Golda Meir", "Yitzhak Rabin", "Chaim Weizmann", "Menachem Begin", "Ariel Sharon", "Moshe Dayan", "Shimon Peres", "Yigal Alon"
     };
         string[] addresses =
@@ -61,7 +61,8 @@ public static class Initialization
             string address = addresses[i]; // Address from the array at index i
             string phone = "05" + s_rand.Next(10) + s_rand.Next(10000000, 100000000); // Generate random phone number
             string email = $"{name.Replace(" ", "").ToLower()}@gmail.com"; // Construct email using name, removing spaces and converting to lowercase
-            double? maxDistance = (s_rand.Next(2) == 0) ? (s_rand.NextDouble() * 95 + 5) : (double?)null; // Generate max distance or set to null
+           int typeD = s_rand.Next(0, 3);
+            double? maxDistance = s_rand.NextDouble() * 90 + 10;  // Generate max distance or set to null
             int[] validIds = new int[] {
     967530684, 469333751, 128044765, 484501226, 975856709, 747695906,
  975363193, 674550785, 824564579, 680710332, 301150447, 190313205,
@@ -80,27 +81,26 @@ public static class Initialization
                 while (s_dal.Volunteer != null && s_dal.Volunteer.Read(id) != null);
                 // Create 15 Volunteer
             }
-            s_dal?.Volunteer.Create(new(id, name, phone, email, MyRole.Volunteer, MyTypeDistance.Aerial, password, address, latitude, longitude, maxDistance, true));
+            s_dal?.Volunteer.Create(new(id, name, phone, email, MyRole.Volunteer,(DO.MyTypeDistance)typeD, password, address, latitude, longitude, maxDistance, true));
         }
         string ayalaPassword = Encrypt("ayala19!");
             string yaelPassword = Encrypt("yaelS2208!");
             // Create 2 managers
             s_dal?.Volunteer.Create(new(327770087, "Ayala Ozeri", "0533328200", "ayala.ozeri@gmail.com", MyRole.Manager, MyTypeDistance.Aerial, ayalaPassword, "Rothschild 10, Tel Aviv, Israel", 32.0625, 34.7721, 10.0, true));
-            s_dal?.Volunteer.Create(new(326615127, "Yael Shneor", "0533859299", "y7697086@gmail.com", MyRole.Manager, MyTypeDistance.Aerial, yaelPassword, "Derech Hevron 78, Jerusalem, Israel", 31.7525, 35.2121, 20.0, true));
+            s_dal?.Volunteer.Create(new(326615127, "Yael Shneor", "0533859299", "y7697086@gmail.com", MyRole.Manager, MyTypeDistance.Traveling, yaelPassword, "Derech Hevron 78, Jerusalem, Israel", 31.7525, 35.2121, 20.0, true));
         }
     /// <summary>
     /// The createsAssignment method reads volunteers and calls, then allocates volunteers to 50 calls, calculates start and finish times, assigns random finish types, and creates new assignments. 🌟
     /// </summary>
     private static void createsAssignment()
-    {
-        int index = 1;
+    { int count = 0;
         var volunteers = s_dal?.Volunteer.ReadAll();
         var calls = s_dal?.Call.ReadAll()?.Where(call => call != null).Take(50)?.ToList();
         int volunteerId;
         var volunteerList = volunteers?.ToList();
         foreach (var call in calls ?? Enumerable.Empty<Call>())
         {
-          
+            count++;
             int callId = call.Id;
             do
             {
@@ -108,27 +108,20 @@ public static class Initialization
                ? volunteerList[s_rand.Next(volunteerList.Count)].Id : 0;
             }
             while (!volunteers.Any(v => v.Id == volunteerId));
-            DateTime startCall = call.OpenTime with { };
-            int range = (int)((call.MaxFinishCall?.AddHours(2) ?? startCall).Subtract(startCall)).TotalHours;
-            if (range > 0)
+            DateTime startCall = call.OpenTime.AddHours(s_rand.Next(0, (int)(call.OpenTime.AddDays(21) - call.OpenTime).TotalHours) + 1);
+            DateTime? finishCall;
+            MyFinishType? finishType;
+            if (count>10&&count<35)
             {
-                startCall = startCall.AddHours(1); // Add one hour
-            }
-
-            DateTime finishCall = startCall with { }; // Creates a copy of startCall and stores it in finishCall
-            int range2 = (int)((call.MaxFinishCall?.AddHours(2) ?? finishCall).Subtract(finishCall)).TotalMinutes;
-            if (range2 > 0)
-            {
-                finishCall = finishCall.AddMinutes(s_rand.Next(range2)); // Adds random minutes to finishCall
+                finishCall = null;
+                finishType = null;
             }
             else
             {
-                // Handle the case where the range is 0 or negative
-                finishCall = finishCall.AddMinutes(1); // Add default value
-            }
-
-            MyFinishType finishType = (MyFinishType)s_rand.Next(0, 4);
-            s_dal?.Assignment.Create(new Assignment(index, callId, volunteerId, startCall, finishType, finishCall));
+                finishCall = startCall.AddDays(s_rand.Next(1, 54));
+                finishType = (MyFinishType)s_rand.Next(0, 4);
+       }
+            s_dal?.Assignment.Create(new Assignment(0, callId, volunteerId, startCall, finishType, finishCall));
         }
 
     }
@@ -219,11 +212,19 @@ public static class Initialization
             MyCallType callType =(MyCallType) s_rand.Next(0,4);
             double latitude = callLatitudes[i];
             double longitude = callLongitudes[i];
-            DateTime openTime = new DateTime((s_dal!.Config.Clock.Year - 1), 1, 1); // One year back from today
-            int range = Math.Max(1, (s_dal.Config.Clock - openTime).Days);
-            openTime = openTime.AddDays(s_rand.Next(range)).AddHours(s_rand.Next(24)).AddMinutes(s_rand.Next(60));
-            DateTime maxFinishCall = openTime.AddDays(s_rand.Next(1, 15)); // Valid for two weeks
+                DateTime openTime = DateTime.Now.AddYears(-1).AddDays(s_rand.Next((DateTime.Now -DateTime.Now.AddYears(-1)).Days));
+            DateTime maxFinishCall = openTime.AddDays(s_rand.Next(1, 50)); 
             string? description = $"call number: {idIndex} of type: {callType} at: {address}";
+            if (5 < i &&i< 35)
+            {
+                 openTime = DateTime.Now.AddDays(-s_rand.Next(0, 21));
+                 maxFinishCall = openTime.AddDays(s_rand.Next(1, 60));
+            }
+            if(i>50&&i<65)
+            {
+                openTime = DateTime.Now.AddDays(-s_rand.Next(0, 6));
+                maxFinishCall = openTime.AddDays(s_rand.Next(1, 60));
+            }
             if (i < 5)
             {
                 maxFinishCall = s_dal.Config.Clock.AddDays(-s_rand.Next(1, 30)); // 30 days before

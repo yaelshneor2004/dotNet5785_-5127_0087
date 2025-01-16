@@ -55,10 +55,15 @@ public partial class LoginWindow : Window
             }
             else
             {
-                isManagerLoggedIn = true;
                 MessageBoxResult result = MessageBox.Show("Do you want to open the main screen?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (result == MessageBoxResult.Yes)
-                    new MainWindow(v.Id).Show();
+                {
+                    var main = new MainWindow(id);
+                    main.Closed += (s, e) => isManagerLoggedIn = false;
+                    main.Show();
+                    isManagerLoggedIn = true;
+                }
+                    
                 else
             new VolunteerUserWindow(v.Id).Show();
     }

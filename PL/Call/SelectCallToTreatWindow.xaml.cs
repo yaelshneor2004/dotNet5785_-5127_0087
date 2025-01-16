@@ -85,7 +85,8 @@ public partial class SelectCallToTreatWindow : Window
     }
     private void DataGrid_MouseLeftButtonUp(object sender, RoutedEventArgs e)
     {
-        MessageBox.Show($"Description for treatment{SelectedOpenCall.Description}", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
+List<string> addresses = OpenCallList.Select(call => call.Address).ToList();
+        new CallDescription(addresses, CurrentVolunteer.Address,SelectedOpenCall.Description).Show();
     }
 
     private void UpdateAddress_Click(object sender, RoutedEventArgs e)

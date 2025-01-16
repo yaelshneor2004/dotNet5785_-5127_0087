@@ -19,8 +19,6 @@ namespace PL
     /// </summary>
     public partial class MainWindow : Window
     {
-       
-        private static bool isManagerLoggedIn = false;
         private static bool isHandleCalls = false;
         private static bool isHandleVolunteer = false;
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
@@ -97,7 +95,6 @@ namespace PL
         {
             s_bl.Admin.RemoveClockObserver(clockObserver);
             s_bl.Admin.RemoveConfigObserver(configObserver);
-            isManagerLoggedIn = false; //Release the manager variable when a window is closed
         }
         //private void OpenManagerWindow()
         //{
@@ -194,8 +191,10 @@ namespace PL
              }
              else
              {
-                    isHandleVolunteer = true;
-                new VolunteerListWindow().Show();
+                var Volunteer = new VolunteerListWindow();
+                Volunteer.Closed += (s, e) => isHandleVolunteer = false;
+                Volunteer.Show();
+                isHandleVolunteer = true;
               }
         }
         private void btnHandleCalls_Click(object sender, RoutedEventArgs e)
@@ -205,10 +204,11 @@ namespace PL
                 MessageBox.Show("Calls screen window is already open", "Confirmation", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             else 
-            { 
-
+            {
+                var call = new CallListWindow(idManager);
+                call.Closed += (s, e) => isHandleCalls = false;
+                call.Show();
                 isHandleCalls = true;
-                new CallListWindow(idManager).Show();
             }
         }
         private void DataGrid_MouseLeftButtonUp(object sender, RoutedEventArgs e)
