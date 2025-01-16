@@ -533,7 +533,7 @@
     <CallId>67</CallId>
     <VolunteerId>326615127</VolunteerId>
     <StartCall>2025-01-14T15:26:55</StartCall>
-    <FinishType></FinishType>
-    <FinishCall></FinishCall>
+    <FinishType>ManagerCancel</FinishType>
+    <FinishCall>2025-01-16T16:27:55</FinishCall>
   </Assignment>
 </ArrayOfAssignment>

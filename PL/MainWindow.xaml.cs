@@ -21,7 +21,8 @@ namespace PL
     {
        
         private static bool isManagerLoggedIn = false;
-            
+        private static bool isHandleCalls = false;
+        private static bool isHandleVolunteer = false;
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
         public class helper
         {
@@ -31,10 +32,10 @@ namespace PL
 
 
 
-
-        public MainWindow()
+        private int idManager;
+        public MainWindow(int id)
         {
-
+            idManager= id;
             InitializeComponent();
             DataContext = this;
             var callAmounts = s_bl.Call.CallAmount();
@@ -98,12 +99,12 @@ namespace PL
             s_bl.Admin.RemoveConfigObserver(configObserver);
             isManagerLoggedIn = false; //Release the manager variable when a window is closed
         }
-        private void OpenManagerWindow()
-        {
-            MainWindow mainW = new MainWindow();
-            mainW.Closed += MainWindow_Closed; // Add the Closed event to the admin window
-            mainW.Show();
-        }
+        //private void OpenManagerWindow()
+        //{
+        //    MainWindow mainW = new MainWindow();
+        //    mainW.Closed += MainWindow_Closed; // Add the Closed event to the admin window
+        //    mainW.Show();
+        //}
 
         private void btnAddOneDay_Click(object sender, RoutedEventArgs e)
         {
@@ -187,15 +188,32 @@ namespace PL
 
         private void btnHandleVolunteers_Click(object sender, RoutedEventArgs e)
         {
-            new VolunteerListWindow().Show();
+            if (isHandleVolunteer)
+            {
+                 MessageBox.Show("Volunteers screen window is already open", "Confirmation", MessageBoxButton.OK, MessageBoxImage.Information);
+             }
+             else
+             {
+                    isHandleVolunteer = true;
+                new VolunteerListWindow().Show();
+              }
         }
         private void btnHandleCalls_Click(object sender, RoutedEventArgs e)
         {
-            new CallListWindow().Show();
+            if (isHandleCalls)
+            {
+                MessageBox.Show("Calls screen window is already open", "Confirmation", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else 
+            { 
+
+                isHandleCalls = true;
+                new CallListWindow(idManager).Show();
+            }
         }
         private void DataGrid_MouseLeftButtonUp(object sender, RoutedEventArgs e)
         {
-           new CallListWindow(selectedValue.value).Show();
+           new CallListWindow(idManager,selectedValue.value).Show();
         }
     }
 }

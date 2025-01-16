@@ -11,28 +11,29 @@
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Margin="10">
-            <Label Content="ID:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Margin="0,5,0,5"/>
-            <TextBox Text="{Binding CurrentCall.Id, Mode=TwoWay}" IsReadOnly="True" Style="{StaticResource {x:Type TextBox}}" Foreground="Black" Margin="0,5,0,5"/>
+            <Label Content="ID:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Margin="0,5,0,5" Visibility="{Binding CurrentCall.Id,Converter={StaticResource ConvertIdCalltoVisibilityKey}}"/>
+            <TextBox Text="{Binding CurrentCall.Id, Mode=TwoWay}" IsReadOnly="True" Style="{StaticResource {x:Type TextBox}}" Foreground="Black" Margin="0,5,0,5" Visibility="{Binding CurrentCall.Id,Converter={StaticResource ConvertIdCalltoVisibilityKey}}"/>
             <Label Content="Type:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Margin="0,5,0,5"/>
-            <ComboBox ItemsSource="{Binding Source={StaticResource SortCollectionMyCallTypeKey}}" SelectedItem="{Binding CurrentCall.Type}" SelectedValue="{Binding CurrentCall.Type, Mode=TwoWay}" Style="{StaticResource {x:Type ComboBox}}" Foreground="Black" Margin="0,5,0,5"/>
+            <ComboBox ItemsSource="{Binding Source={StaticResource SortCollectionMyCallTypeKey}}" SelectedItem="{Binding CurrentCall.Type}" SelectedValue="{Binding CurrentCall.Type, Mode=TwoWay}" Style="{StaticResource {x:Type ComboBox}}" Foreground="Black" Margin="0,5,0,5"
+                  IsEnabled="{Binding CurrentCall,Converter={StaticResource ConvertCallComboboxToReadOnlyKey}}"/>
 
             <Label Content="Description:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Margin="0,5,0,5"/>
-            <TextBox Text="{Binding CurrentCall.Description}" Style="{StaticResource {x:Type TextBox}}" IsReadOnly="{Binding CurrentCall={StaticResource ConvertCallToReadOnlyKey}}" Foreground="Black" Margin="0,5,0,5"/>
+            <TextBox Text="{Binding CurrentCall.Description}" Style="{StaticResource {x:Type TextBox}}" IsReadOnly="{Binding CurrentCall,Converter={StaticResource ConvertCallToReadOnlyKey}}" Foreground="Black" Margin="0,5,0,5"/>
 
             <Label Content="Address:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Margin="0,5,0,5"/>
-            <TextBox Text="{Binding CurrentCall.Address}" Style="{StaticResource {x:Type TextBox}}" IsReadOnly="{Binding CurrentCall={StaticResource ConvertCallToReadOnlyKey}}" Foreground="Black" Margin="0,5,0,5"/>
+            <TextBox Text="{Binding CurrentCall.Address}" Style="{StaticResource {x:Type TextBox}}" IsReadOnly="{Binding CurrentCall,Converter={StaticResource ConvertCallToReadOnlyKey}}" Foreground="Black" Margin="0,5,0,5"/>
 
             <Label Content="Start Time:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Margin="0,5,0,5"/>
             <TextBox Text="{Binding CurrentCall.StartTime}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black" Margin="0,5,0,5" IsReadOnly="True"/>
 
             <Label Content="Max End Time:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Margin="0,5,0,5"/>
-            <TextBox Text="{Binding CurrentCall.MaxEndTime}" Style="{StaticResource {x:Type TextBox}}" IsReadOnly="{Binding CurrentCall={StaticResource ConvertMaxEndToReadOnlyKey}}" Foreground="Black" Margin="0,5,0,5"/>
+            <TextBox Text="{Binding CurrentCall.MaxEndTime}" Style="{StaticResource {x:Type TextBox}}" IsReadOnly="{Binding CurrentCall,Converter={StaticResource ConvertMaxEndToReadOnlyKey}}" Foreground="Black" Margin="0,5,0,5"/>
 
             <Label Content="Status:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Margin="0,5,0,5"/>
             <TextBox Text="{Binding CurrentCall.Status}" Style="{StaticResource {x:Type TextBox}}" IsReadOnly="True"  Foreground="Black" Margin="0,5,0,5"/>
 
-            <Label Content="Assignment List:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Margin="0,20,0,5" Visibility="{Binding CurrentCall.Id, Converter={StaticResource ConvertObjIdToVisibilityKey}}"/>
-            <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding CurrentCall.Assignments}" Margin="0,20,0,5" Visibility="{Binding CurrentCall.Id, Converter={StaticResource ConvertObjIdToVisibilityKey}}" IsReadOnly="True">
+            <Label Content="Assignment List:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Margin="0,20,0,5" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallToVisibilityKey}}"/>
+            <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding CurrentCall.Assignments}" Margin="0,20,0,5" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallToVisibilityKey}}" IsReadOnly="True">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Volunteer ID" Binding="{Binding VolunteerId}" Foreground="Black"/>
                     <DataGridTextColumn Header="Volunteer Name" Binding="{Binding VolunteerName}" Foreground="Black"/>
@@ -41,7 +42,7 @@
                     <DataGridComboBoxColumn Header="End Type" ItemsSource="{Binding Source={StaticResource SortCollectionMyFinishTypeKey}}" SelectedItemBinding="{Binding EndType}" SelectedValueBinding="{Binding EndType, Mode=TwoWay}"/>
                 </DataGrid.Columns>
             </DataGrid>
-            <Button Content="{Binding ButtonText}" Width="255" Click="btnAddUpdate_Click" HorizontalAlignment="Center" Margin="0,23,0,43"/>
+            <Button Content="{Binding ButtonText}" Width="255" Click="btnAddUpdate_Click" HorizontalAlignment="Center" Height="40" Margin="0,23,0,43"/>
         </StackPanel>
     </ScrollViewer>
 </Window>

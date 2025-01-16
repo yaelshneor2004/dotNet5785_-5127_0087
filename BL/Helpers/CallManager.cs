@@ -121,20 +121,19 @@ internal static class CallManager
         var assignment = s_dal.Assignment.Read(call.Id);
         var now = AdminManager.Now;
 
-        if (assignment != null && assignment.FinishCall == null)
-        {
-            if (call.MaxFinishCall.HasValue && now > call.MaxFinishCall.Value - s_dal.Config.RiskRange)
-                return BO.MyCallStatus.InProgressAtRisk;
-            return BO.MyCallStatus.InProgress;
-        }
-
         if (call.MaxFinishCall.HasValue && now > call.MaxFinishCall.Value && (assignment == null || assignment.FinishCall == null))
             return BO.MyCallStatus.Expired;
 
+        if (assignment != null && assignment.FinishCall == null)
+        {
+            if (call.MaxFinishCall.HasValue && call.MaxFinishCall - now <= s_dal.Config.RiskRange)
+                return BO.MyCallStatus.InProgressAtRisk;
+            return BO.MyCallStatus.InProgress;
+        }
         if (assignment != null && assignment.FinishCall.HasValue)
             return BO.MyCallStatus.Closed;
 
-        if (call.MaxFinishCall.HasValue && now > call.OpenTime + s_dal.Config.RiskRange)
+        if (call.MaxFinishCall.HasValue &&call.MaxFinishCall- now <=s_dal.Config.RiskRange)
             return BO.MyCallStatus.OpenAtRisk;
 
         return BO.MyCallStatus.Open;

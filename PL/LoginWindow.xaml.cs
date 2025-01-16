@@ -58,7 +58,7 @@ public partial class LoginWindow : Window
                 isManagerLoggedIn = true;
                 MessageBoxResult result = MessageBox.Show("Do you want to open the main screen?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (result == MessageBoxResult.Yes)
-                    new MainWindow().Show();
+                    new MainWindow(v.Id).Show();
                 else
             new VolunteerUserWindow(v.Id).Show();
     }

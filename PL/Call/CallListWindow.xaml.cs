@@ -25,9 +25,10 @@ public partial class CallListWindow : Window
 
     static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
     public BO.MyCallStatus SortInCallInList { get; set; } = BO.MyCallStatus.None;
-
-    public CallListWindow(BO.MyCallStatus status=BO.MyCallStatus.None)
+    private int idManager;
+    public CallListWindow(int id,BO.MyCallStatus status=BO.MyCallStatus.None)
     {
+        idManager = id;
         SortInCallInList = status;
         InitializeComponent();
         Loaded += CallListWindow_Loaded;
@@ -95,6 +96,22 @@ public partial class CallListWindow : Window
             {
                 MessageBox.Show($"Failed to delete call: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+    }
+    private void CancalAssignment_Click(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            if (SelectedCall.Status == BO.MyCallStatus.InProgress || SelectedCall.Status == BO.MyCallStatus.InProgressAtRisk)
+            {
+                s_bl.Call.UpdateCancelTreatment(idManager,SelectedCall.CallId);
+                MessageBox.Show("Call assignment canceled successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                queryCallList();
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Failed to cancal call assignment: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 }

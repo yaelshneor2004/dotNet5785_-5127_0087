@@ -660,14 +660,14 @@
     <Description>call number: 1 of type: Accounting at: 10 HaYarkon St, Eilat</Description>
     <MaxFinishCall>2024-09-27T19:44:00</MaxFinishCall>
   </Call>
-  <Call>
-    <Id>67</Id>
-    <CallType>Math</CallType>
-    <Address>18 Sokolov St, Ramat HaSharon</Address>
-    <Latitude>34.9519</Latitude>
-    <Longitude>29.5535</Longitude>
-    <OpenTime>2024-02-29T13:22:00</OpenTime>
-    <Description>call number: 1 of type: Math at: 18 Sokolov St, Ramat HaSharon</Description>
-    <MaxFinishCall>2025-03-04T13:22:00</MaxFinishCall>
-  </Call>
+	<Call>
+		<Id>67</Id>
+		<CallType>Math</CallType>
+		<Address>18 Sokolov St, Ramat HaSharon</Address>
+		<Latitude>34.9519</Latitude>
+		<Longitude>29.5535</Longitude>
+		<OpenTime>2024-02-29T13:22:00</OpenTime>
+		<Description>call number: 1 of type: Math at: 18 Sokolov St, Ramat HaSharon</Description>
+		<MaxFinishCall>2025-01-17T13:22:00</MaxFinishCall>
+	</Call>
 </ArrayOfCall>

@@ -285,7 +285,7 @@ internal class CallImplementation : ICall
             var updatedAssignment = assignment with
             {
                 FinishCall = AdminManager.Now,
-                FinishType = assignment.VolunteerId == idV ? DO.MyFinishType.SelfCancel : DO.MyFinishType.ManagerCancel
+                FinishType = assignment.VolunteerId == idV ? DO.MyFinishType.ManagerCancel: DO.MyFinishType.SelfCancel 
             };
             // Attempt to update the assignment entity in the data layer
             _dal.Assignment.Update(updatedAssignment);

@@ -18,11 +18,12 @@
         <local:ConvertCallInProgressToReadOnly x:Key="ConvertCallInProgressToReadOnlyKey"/>
         <local:ConvertVolunteerToReadOnly x:Key="ConvertVolunteerToReadOnlyKey"/>
         <local:ConvertVolunteerToVisibility x:Key="ConvertVolunteerToVisibilityKey"/>
-        <local:ConvertCallToReadOnly x:Key="ConvertCallToReadOnlyKey"/>
         <local:ConvertMaxEndToReadOnly x:Key="ConvertMaxEndToReadOnlyKey"/>
-
-        
-
+        <local:ConvertCallToReadOnly x:Key="ConvertCallToReadOnlyKey"/>
+        <local:ConvertCallToVisibility x:Key="ConvertCallToVisibilityKey"/>
+        <local:ConvertCallComboboxToReadOnly x:Key="ConvertCallComboboxToReadOnlyKey"/>
+        <local:ConvertIdCalltoVisibility x:Key="ConvertIdCalltoVisibilityKey"/>
+        <local:ConvertCancalAssignmentToVisibility x:Key="ConvertCancalAssignmentToVisibilityKey"/>
         <!-- Triggers -->
         <Style TargetType="DataGridRow">
             <Setter Property="Background" Value="#E6E6FA"/>
