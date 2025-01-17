@@ -86,7 +86,7 @@ public partial class SelectCallToTreatWindow : Window
     private void DataGrid_MouseLeftButtonUp(object sender, RoutedEventArgs e)
     {
 List<string> addresses = OpenCallList.Select(call => call.Address).ToList();
-        new CallDescription(addresses, CurrentVolunteer.Address,SelectedOpenCall.Description).Show();
+        new CallDescription(addresses, CurrentVolunteer.Address,id).Show();
     }
 
     private void UpdateAddress_Click(object sender, RoutedEventArgs e)

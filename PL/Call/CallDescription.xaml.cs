@@ -18,22 +18,28 @@ public partial class CallDescription : Window
 {
     private const string GoogleMapsApiKey = "AIzaSyDp5JA_AxKyCcz9QK9q1btolMB6Y8jusc4";
 
+    static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
+    public BO.Call? SelectedCall { get; set; }
 
 
-    public string description
+
+    public BO.Call? myCall
     {
-        get { return (string)GetValue(descriptionProperty); }
+        get { return (BO.Call?)GetValue(descriptionProperty); }
         set { SetValue(descriptionProperty, value); }
     }
 
     // Using a DependencyProperty as the backing store for description.  This enables animation, styling, binding, etc...
     public static readonly DependencyProperty descriptionProperty =
-        DependencyProperty.Register("description", typeof(string), typeof(CallDescription), new PropertyMetadata(null));
+        DependencyProperty.Register("myCall", typeof(BO.Call), typeof(CallDescription), new PropertyMetadata(null));
 
-
-    public CallDescription(List<string> callAddresses, string volunteerAddress,string description)
+    
+    public CallDescription(List<string> callAddresses, string volunteerAddress,int id) 
     {
         InitializeComponent();
+        myCall = s_bl.Call.GetCallDetails(id);
+        DataContext = this;
+
         //LoadMapAsync(callAddresses, volunteerAddress);
     }
 
