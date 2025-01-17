@@ -23,24 +23,40 @@ public partial class CallDescription : Window
 
 
 
-    public BO.Call? myCall
+    public BO.Call? CurrentCall
     {
-        get { return (BO.Call?)GetValue(descriptionProperty); }
-        set { SetValue(descriptionProperty, value); }
+        get { return (BO.Call?)GetValue(CurrentCallProperty); }
+        set { SetValue(CurrentCallProperty, value); }
     }
 
-    // Using a DependencyProperty as the backing store for description.  This enables animation, styling, binding, etc...
-    public static readonly DependencyProperty descriptionProperty =
-        DependencyProperty.Register("myCall", typeof(BO.Call), typeof(CallDescription), new PropertyMetadata(null));
+    public static readonly DependencyProperty CurrentCallProperty =
+        DependencyProperty.Register("CurrentCall", typeof(BO.Call), typeof(CallDescription), new PropertyMetadata(null));
 
-    
     public CallDescription(List<string> callAddresses, string volunteerAddress,int id) 
     {
         InitializeComponent();
-        myCall = s_bl.Call.GetCallDetails(id);
-        DataContext = this;
+        Loaded += CallWindow_Loaded;
+        Closed += CallWindow_Closed;
+        CurrentCall = s_bl.Call.GetCallDetails(id);
 
         //LoadMapAsync(callAddresses, volunteerAddress);
+    }
+    private void CallWindow_Loaded(object sender, RoutedEventArgs e)
+    {
+        if (CurrentCall!.Id != 0)
+            s_bl.Call.AddObserver(CurrentCall.Id, CallObserver);
+    }
+
+    private void CallWindow_Closed(object? sender, EventArgs e)
+    {
+        if (CurrentCall!.Id != 0)
+            s_bl.Call.RemoveObserver(CurrentCall.Id, CallObserver);
+    }
+    private void CallObserver()
+    {
+        int id = CurrentCall!.Id;
+        CurrentCall = null;
+        CurrentCall = s_bl.Call.GetCallDetails(id);
     }
 
     //private async void LoadMapAsync(List<string> callAddresses, string volunteerAddress)

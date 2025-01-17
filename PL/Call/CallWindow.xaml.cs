@@ -101,13 +101,13 @@ namespace PL.Call
         private void CallWindow_Loaded(object sender, RoutedEventArgs e)
         {
             if (CurrentCall!.Id != 0)
-                s_bl.Volunteer.AddObserver(CurrentCall.Id, CallObserver);
+                s_bl.Call.AddObserver(CurrentCall.Id, CallObserver);
         }
 
         private void CallWindow_Closed(object? sender, EventArgs e)
         {
             if (CurrentCall!.Id != 0)
-                s_bl.Volunteer.RemoveObserver(CurrentCall.Id, CallObserver);
+                s_bl.Call.RemoveObserver(CurrentCall.Id, CallObserver);
         }
         private void CallObserver()
         {

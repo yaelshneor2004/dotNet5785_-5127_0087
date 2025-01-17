@@ -15,7 +15,7 @@
 
         <StackPanel Orientation="Horizontal" Margin="10">
             <Label Content="Call Description:" VerticalAlignment="Center"/>
-            <TextBox Text="{Binding myCall.Description,Mode=TwoWay}" Width="200" Margin="5"/>
+            <TextBox Text="{Binding CurrentCall.Description, Mode=TwoWay}" Width="636" Height="46"/>
         </StackPanel>
 
         <!--<WebBrowser x:Name="webBrowser" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10"/>-->
