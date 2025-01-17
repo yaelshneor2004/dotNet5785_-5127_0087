@@ -14,7 +14,7 @@
         <Label Content="Enter your password" HorizontalAlignment="Left" Height="47" Margin="112,153,0,0" VerticalAlignment="Top" Width="142"/>
         <Label Content="Enter your id" HorizontalAlignment="Left" Height="53" Margin="122,80,0,0" VerticalAlignment="Top" Width="132"/>
         <TextBox Text="{Binding TextBoxId}" HorizontalAlignment="Left" Height="53" Margin="259,80,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="130"/>
-        <local:BindablePasswordBox Password="{Binding Password, Mode=TwoWay}" HorizontalAlignment="Left" Height="47" Margin="259,153,0,0" VerticalAlignment="Top" Width="130"/>
+        <PasswordBox x:Name="PasswordBox" HorizontalAlignment="Left" Height="47" Margin="259,153,0,0" VerticalAlignment="Top" Width="130" PasswordChanged="PasswordBox_PasswordChanged"/>
         <TextBox x:Name="VisiblePassword" HorizontalAlignment="Left" Height="29" Margin="259,138,0,0" VerticalAlignment="Top" Width="130" Visibility="Collapsed"/>
         <Button Content="👁️" HorizontalAlignment="Left" Height="35" Margin="411,163,0,0" VerticalAlignment="Top" Width="59" Click="TogglePasswordVisibility"/>
     </Grid>
