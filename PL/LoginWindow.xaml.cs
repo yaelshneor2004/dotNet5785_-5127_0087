@@ -63,15 +63,15 @@ public partial class LoginWindow : Window
                     main.Show();
                     isManagerLoggedIn = true;
                 }
-                    
+
                 else
-            new VolunteerUserWindow(v.Id).Show();
-    }
-}
+                    new VolunteerUserWindow(v.Id).Show();
+            }
+        }
         else // this is volunteer
         {
             new VolunteerUserWindow(id).Show();
-}
+        }
     }
 
     private void TogglePasswordVisibility(object sender, RoutedEventArgs e)
@@ -90,7 +90,7 @@ public partial class LoginWindow : Window
         }
     }
 
-    private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e) 
+    private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
     {
         VisiblePassword.Text = PasswordBox.Password;
     }
