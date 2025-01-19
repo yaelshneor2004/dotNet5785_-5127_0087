@@ -78,7 +78,7 @@ internal class CallImplementation : ICall
             var callData = _dal.Call.Read(callId);
             // Check if the call is open and has never been assigned
             var assignments = _dal.Assignment.ReadAll(a => a.CallId == callId).ToList();
-            var callBo = CallManager.ConvertFromDoToBo(callData ?? throw new ArgumentNullException(nameof(callData)));
+            var callBo = CallManager.ConvertFromDoToBo(callData ?? throw new BO.BlNullPropertyException(nameof(callData)));
             if (callBo.Status != BO.MyCallStatus.Open || assignments.Any())
                 throw new BO.BlUnauthorizedAccessException("Only open calls that have never been assigned can be deleted.");
             // Attempt to delete the call in the data layer

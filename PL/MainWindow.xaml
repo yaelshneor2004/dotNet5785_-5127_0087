@@ -24,7 +24,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0" Grid.Column="0" Margin="0,29,40,11">
+        <Grid Grid.Row="0" Grid.Column="0" Margin="-27,29,67,11">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
@@ -33,7 +33,10 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Label Content="{Binding CurrentTime, StringFormat=MM/dd/yyyy}" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="15" Margin="0,10,0,0" Grid.Row="0"/>
+            <Border BorderBrush="#9370DB" BorderThickness="2" Background="White" Padding="0" HorizontalAlignment="Center" CornerRadius="10">
+                <Label Content="{Binding CurrentTime, StringFormat=MM/dd/yyyy}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="100" Margin="0" FontWeight="Bold" RenderTransformOrigin="1.214,0.574"/>
+            </Border>
+
             <Button Content="Add One Minute" HorizontalAlignment="Left" Height="41" Margin="110,0,0,0" VerticalAlignment="Center" Width="150" Click="btnAddOneMinute_Click" Grid.Row="1"/>
             <Button Content="Add One Hour" HorizontalAlignment="Left" Height="41" Margin="110,0,0,0" VerticalAlignment="Center" Width="150" Click="btnAddOneHour_Click" Grid.Row="2"/>
             <Button Content="Add One Day" HorizontalAlignment="Left" Height="40" Margin="110,0,0,0" VerticalAlignment="Center" Width="150" Click="btnAddOneDay_Click" Grid.Row="3"/>
@@ -46,7 +49,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Label Content="Status Quantities" HorizontalAlignment="Left" FontSize="15" Margin="208,10,0,10" Grid.Row="0"/>
+            <Label Content="Status Quantities" HorizontalAlignment="Left" FontSize="15" Margin="130,13,0,7" Grid.Row="0" FontWeight="Bold"/>
             <DataGrid  AutoGenerateColumns="False" IsReadOnly="True" ItemsSource="{Binding StatusList, Mode=TwoWay}"  Background="Transparent" MouseLeftButtonUp="DataGrid_MouseLeftButtonUp" Margin="130,43,9,145" Grid.RowSpan="2" SelectedItem="{Binding selectedValue,Mode=TwoWay}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding value}" Header="Status" Width="*"/>
@@ -78,9 +81,10 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Label Content="Max Range" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="0" Margin="10,2,0,0" Grid.Row="0"/>
+
+            <Label Content="Max Range-[Maximum time for an open call After this time the call will expire.]" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="0" Margin="10,2,0,0" Grid.Row="0"/>
             <TextBox Text="{Binding MaxRiskRange}" Grid.Column="0" Margin="10,0,0,0" Grid.Row="1"/>
-            <Button Content="Update" HorizontalAlignment="Left" Width="100" Height="30" Click="btnUpdate_Click" Grid.Column="1" Margin="10,0,0,0" Grid.Row="1"/>
+            <Button Content="Update" HorizontalAlignment="Left" Width="112" Height="30" Click="btnUpdate_Click" Grid.Column="1" Margin="10,0,0,1" Grid.Row="1"/>
         </Grid>
     </Grid>
 </Window>

@@ -67,23 +67,23 @@ namespace PL
 
         private void TogglePasswordVisibility(object sender, RoutedEventArgs e)
         {
-            if (PasswordBox.Visibility == Visibility.Visible)
-            {
-                PasswordBox.Visibility = Visibility.Collapsed;
-                VisiblePassword.Visibility = Visibility.Visible;
-                VisiblePassword.Text = PasswordBox.Password;
-            }
-            else
-            {
-                PasswordBox.Visibility = Visibility.Visible;
-                VisiblePassword.Visibility = Visibility.Collapsed;
-                PasswordBox.Password = VisiblePassword.Text;
-            }
+            //if (PasswordBox.Visibility == Visibility.Visible)
+            //{
+            //    PasswordBox.Visibility = Visibility.Collapsed;
+            //    VisiblePassword.Visibility = Visibility.Visible;
+            //    VisiblePassword.Text = PasswordBox.Password;
+            //}
+            //else
+            //{
+            //    PasswordBox.Visibility = Visibility.Visible;
+            //    VisiblePassword.Visibility = Visibility.Collapsed;
+            //    PasswordBox.Password = VisiblePassword.Text;
+            //}
         }
 
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            VisiblePassword.Text = PasswordBox.Password;
+            //    VisiblePassword.Text = PasswordBox.Password;
         }
 
         private void VolunteerUserWindow_Click(object sender, RoutedEventArgs e)

@@ -27,9 +27,6 @@ namespace PL
             public int index { get; set; }
             public BO.MyCallStatus value { get; set; }
         }
-
-
-
         private int idManager;
         public MainWindow(int id)
         {
@@ -44,9 +41,7 @@ namespace PL
                     value = (BO.MyCallStatus)index
                 })
                 .ToList();
-
             StatusList = statusList;
-
             Loaded += MainWindow_Loaded;
             Closed += MainWindow_Closed;
         }

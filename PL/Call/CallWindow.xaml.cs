@@ -44,23 +44,35 @@ namespace PL.Call
 
         public CallWindow(int id=0)
         {
-            ButtonText = id == 0 ? "Add" : "Update";
-            InitializeComponent();
-            Loaded += CallWindow_Loaded;
-            Closed += CallWindow_Closed ;
+            try
+            {
+                ButtonText = id == 0 ? "Add" : "Update";
+                InitializeComponent();
+                Loaded += CallWindow_Loaded;
+                Closed += CallWindow_Closed;
                 CurrentCall = (id != 0) ? s_bl.Call.GetCallDetails(id)! : new BO.Call()
                 {
-                    Id =0,
-                    Type =BO.MyCallType.None,
+                    Id = 0,
+                    Type = BO.MyCallType.None,
                     Address = "",
                     Latitude = 0,
-                    Longitude =0,
-                    StartTime =s_bl.Admin.GetClock(),
-                    MaxEndTime =s_bl.Admin.GetClock(),
+                    Longitude = 0,
+                    StartTime = s_bl.Admin.GetClock(),
+                    MaxEndTime = s_bl.Admin.GetClock(),
                     Description = "",
-                    Status =BO.MyCallStatus.Open,
+                    Status = BO.MyCallStatus.Open,
                     Assignments = null
                 };
+            }
+            catch (BO.BlDoesNotExistException ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An unknown error occurred: {ex.Message}.", "Unknown Error");
+            }
 
         }
         private void btnAddUpdate_Click(object sender, RoutedEventArgs e)
@@ -72,16 +84,10 @@ namespace PL.Call
             }
             if (ButtonText == "Add")
             {
-                try
-                {
                     s_bl.Call.AddCall(CurrentCall);
                     MessageBox.Show("Call added successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                     Close();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+
             }
             else
             {
@@ -91,9 +97,17 @@ namespace PL.Call
                     MessageBox.Show("Call updated successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                     Close();
                 }
+                catch (BO.BlInvalidOperationException ex)
+                {
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                catch (BO.BlDoesNotExistException ex)
+                {
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show($"An unknown error occurred: {ex.Message}.", "Unknown Error");
                 }
             }
         }
@@ -111,9 +125,21 @@ namespace PL.Call
         }
         private void CallObserver()
         {
-            int id = CurrentCall!.Id;
-            CurrentCall = null;
-            CurrentCall = s_bl.Call.GetCallDetails(id);
+            try
+            {
+                int id = CurrentCall!.Id;
+                CurrentCall = null;
+                CurrentCall = s_bl.Call.GetCallDetails(id);
+            }
+            catch (BO.BlDoesNotExistException ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An unknown error occurred: {ex.Message}.", "Unknown Error");
+            }
         }
     }
 }

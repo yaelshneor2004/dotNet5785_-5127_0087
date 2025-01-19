@@ -50,9 +50,9 @@ public partial class CallListWindow : Window
     }
     private void queryCallList()
     {
-        CallList = (SortInCallInList == BO.MyCallStatus.None) ?
-          s_bl?.Call.GetFilterCallList(BO.MyCallStatus.None)! :
-          s_bl?.Call.GetFilterCallList(SortInCallInList)!;
+            CallList = (SortInCallInList == BO.MyCallStatus.None) ?
+              s_bl?.Call.GetFilterCallList(BO.MyCallStatus.None)! :
+              s_bl?.Call.GetFilterCallList(SortInCallInList)!;
     }
     private void callListObserver()
     {
@@ -92,9 +92,21 @@ public partial class CallListWindow : Window
                 s_bl.Call.DeleteCall(SelectedCall.CallId);
                 MessageBox.Show("Call deleted successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             }
+            catch (BO.BlDoesNotExistException ex)
+            {
+                MessageBox.Show( ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (BO.BlUnauthorizedAccessException ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (BO.BlNullPropertyException ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
             catch (Exception ex)
             {
-                MessageBox.Show($"Failed to delete call: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"An unknown error occurred: {ex.Message}.", "Unknown Error");
             }
         }
     }
@@ -109,9 +121,21 @@ public partial class CallListWindow : Window
                 queryCallList();
             }
         }
+        catch (BO.BlUnauthorizedAccessException ex)
+        {
+            MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        catch (BO.BlInvalidOperationException ex)
+        {
+            MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        catch (BO.BlDoesNotExistException ex)
+        {
+            MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
         catch (Exception ex)
         {
-            MessageBox.Show($"Failed to cancal call assignment: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show($"An unknown error occurred: {ex.Message}.", "Unknown Error");
         }
     }
 }

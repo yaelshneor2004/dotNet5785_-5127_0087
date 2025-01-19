@@ -129,9 +129,17 @@ namespace PL.Volunteer
                     s_bl.Volunteer.DeleteVolunteer(SelectedVolunteer.Id);
                     MessageBox.Show("Volunteer deleted successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
+                catch (BO.BlInvalidOperationException ex)
+                {
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                catch (BO.BlDoesNotExistException ex)
+                {
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Failed to delete volunteer: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show($"An unknown error occurred: {ex.Message}.", "Unknown Error");
                 }
             }
         }

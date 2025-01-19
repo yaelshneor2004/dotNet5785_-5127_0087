@@ -45,11 +45,24 @@ public partial class SelectCallToTreatWindow : Window
         DependencyProperty.Register("CurrentVolunteer", typeof(BO.Volunteer), typeof(SelectCallToTreatWindow), new PropertyMetadata(null));
     private int id;
     public SelectCallToTreatWindow(int idV)
-    {id= idV;
-        InitializeComponent();
-        Loaded += CallListWindow_Loaded;
-        Closed += CallListWindow_Closed;
-        CurrentVolunteer = (id != 0) ? s_bl.Volunteer.GetVolunteerDetails(id)! : new BO.Volunteer();
+    {
+        try
+        {
+            id = idV;
+            InitializeComponent();
+            Loaded += CallListWindow_Loaded;
+            Closed += CallListWindow_Closed;
+            CurrentVolunteer = (id != 0) ? s_bl.Volunteer.GetVolunteerDetails(id)! : new BO.Volunteer();
+
+        }
+        catch (BO.BlDoesNotExistException ex)
+        {
+            MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"An unknown error occurred: {ex.Message}.", "Unknown Error");
+        }
     }
     private void CallListWindow_Loaded(object sender, RoutedEventArgs e)
     {
@@ -78,10 +91,25 @@ public partial class SelectCallToTreatWindow : Window
     }
     private void SelectCall_Click(object sender, RoutedEventArgs e)
     {
-        s_bl.Call.SelectCallToTreat(id, SelectedOpenCall!.Id);
-        MessageBox.Show("A call has been selected for treatment", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
-        Close();
-        new VolunteerUserWindow(id).Show();
+        try
+        {
+            s_bl.Call.SelectCallToTreat(id, SelectedOpenCall!.Id);
+            MessageBox.Show("A call has been selected for treatment", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
+            Close();
+            new VolunteerUserWindow(id).Show();
+        }
+        catch (BO.BlDoesNotExistException ex)
+        {
+            MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        catch (BO.BlInvalidOperationException ex)
+        {
+            MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"An unknown error occurred: {ex.Message}.", "Unknown Error");
+        }
     }
     private void DataGrid_MouseLeftButtonUp(object sender, RoutedEventArgs e)
     {
@@ -91,9 +119,27 @@ List<string> addresses = OpenCallList.Select(call => call.Address).ToList();
 
     private void UpdateAddress_Click(object sender, RoutedEventArgs e)
     {
-
-        s_bl.Volunteer.UpdateVolunteer(id,CurrentVolunteer);
-        MessageBox.Show("The address has been updated successfully", "Message", MessageBoxButton.OK, MessageBoxImage.Information);
+        try
+        {
+            s_bl.Volunteer.UpdateVolunteer(id, CurrentVolunteer);
+            MessageBox.Show("The address has been updated successfully", "Message", MessageBoxButton.OK, MessageBoxImage.Information);
             queryCallList();
+        }
+        catch (BO.BlInvalidOperationException ex)
+        {
+            MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        catch (BO.BlUnauthorizedAccessException ex)
+        {
+            MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        catch (BO.BlDoesNotExistException ex)
+        {
+            MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"An unknown error occurred: {ex.Message}.", "Unknown Error");
+        }
     }
 }

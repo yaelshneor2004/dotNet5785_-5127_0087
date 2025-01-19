@@ -8,14 +8,28 @@
         Title="LoginWindow" Height="450" Width="800"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         >
-    <Grid>
-        <Button Content="Login" HorizontalAlignment="Left" Height="51" Margin="192,237,0,0" VerticalAlignment="Top" Width="230" Click="Login_Click"/>
+    <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+        <Border BorderBrush="Black" BorderThickness="2" Padding="10" CornerRadius="10">
+            <StackPanel>
+                <!-- Welcome Label with no border or background -->
+                <Label Content="WELCOME" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" FontFamily="Comic Sans MS" Foreground="Black" Margin="10" FontWeight="Bold"/>
 
-        <Label Content="Enter your password" HorizontalAlignment="Left" Height="47" Margin="112,153,0,0" VerticalAlignment="Top" Width="142"/>
-        <Label Content="Enter your id" HorizontalAlignment="Left" Height="53" Margin="122,80,0,0" VerticalAlignment="Top" Width="132"/>
-        <TextBox Text="{Binding TextBoxId}" HorizontalAlignment="Left" Height="53" Margin="259,80,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="130"/>
-        <PasswordBox x:Name="PasswordBox" HorizontalAlignment="Left" Height="47" Margin="259,153,0,0" VerticalAlignment="Top" Width="130" PasswordChanged="PasswordBox_PasswordChanged"/>
-        <TextBox x:Name="VisiblePassword" HorizontalAlignment="Left" Height="29" Margin="259,138,0,0" VerticalAlignment="Top" Width="130" Visibility="Collapsed"/>
-        <Button Content="👁" HorizontalAlignment="Left" Height="35" Margin="411,163,0,0" VerticalAlignment="Top" Width="59" Click="TogglePasswordVisibility"/>
+                <Label Content="Enter your id" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" FontSize="25" FontWeight="Bold"/>
+                <TextBox Text="{Binding TextBoxId}" HorizontalAlignment="Left" Height="30" Margin="5" TextWrapping="Wrap" Width="220" FontSize="15"/>
+
+                <Label Content="Enter your password" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" FontSize="25" FontWeight="Bold"/>
+                <Grid HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" Width="230" Height="30">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <PasswordBox Grid.Column="0" Height="30" VerticalAlignment="Center" PasswordChanged="PasswordBox_PasswordChanged" FontSize="15" Margin="0,0,10,0" />
+                    <Button Content="👁" Background="Transparent" BorderBrush="Transparent" Click="TogglePasswordVisibility" FontSize="20" Margin="181,0,10,0" />
+                </Grid>
+                <Button Content="Login" Height="30" Width="80" Click="Login_Click" FontSize="25" RenderTransformOrigin="0.25,0.557"/>
+
+                <!-- Login Button with more margin and centered alignment -->
+            </StackPanel>
+        </Border>
     </Grid>
 </Window>

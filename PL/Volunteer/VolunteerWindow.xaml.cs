@@ -48,12 +48,23 @@ namespace PL.Volunteer
         /// <param name="id">The ID of the volunteer. If 0, a new volunteer is being added.</param>
         public VolunteerWindow(int idV = 0)
         {
+            try { 
             id = idV;
             ButtonText = id == 0 ? "Add" : "Update";
             InitializeComponent();
             Loaded += VolunteerWindow_Loaded;
             Closed += VolunteerWindow_Closed;
                 CurrentVolunteer = (id != 0) ? s_bl.Volunteer.GetVolunteerDetails(id)! : new BO.Volunteer();
+
+            }
+            catch (BO.BlDoesNotExistException ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An unknown error occurred: {ex.Message}.", "Unknown Error");
+            }
         }
 
         /// <summary>
@@ -92,16 +103,10 @@ namespace PL.Volunteer
             }
             if (ButtonText == "Add")
             {
-                try
-                {
                     s_bl.Volunteer.AddVolunteer(CurrentVolunteer);
                     MessageBox.Show("Volunteer added successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                     Close();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+                
             }
             else
             {
@@ -111,9 +116,21 @@ namespace PL.Volunteer
                     MessageBox.Show("Volunteer updated successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                     Close();
                 }
+                catch (BO.BlInvalidOperationException ex)
+                {
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                catch (BO.BlDoesNotExistException ex)
+                {
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                catch (BO.BlUnauthorizedAccessException ex)
+                {
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show($"An unknown error occurred: {ex.Message}.", "Unknown Error");
                 }
             }
         }
@@ -124,9 +141,20 @@ namespace PL.Volunteer
         /// </summary>
         private void VolunteerObserver()
         {
-            int id = CurrentVolunteer!.Id;
-            CurrentVolunteer = null;
-            CurrentVolunteer = s_bl.Volunteer.GetVolunteerDetails(id);
+            try
+            {
+                int id = CurrentVolunteer!.Id;
+                CurrentVolunteer = null;
+                CurrentVolunteer = s_bl.Volunteer.GetVolunteerDetails(id);
+            }        
+        catch (BO.BlDoesNotExistException ex)
+        {
+            MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"An unknown error occurred: {ex.Message}.", "Unknown Error");
+        }
         }
        
     }

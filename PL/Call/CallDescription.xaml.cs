@@ -34,11 +34,22 @@ public partial class CallDescription : Window
 
     public CallDescription(List<string> callAddresses, string volunteerAddress,int id) 
     {
-        InitializeComponent();
-        Loaded += CallWindow_Loaded;
-        Closed += CallWindow_Closed;
-        CurrentCall = s_bl.Call.GetCallDetails(id);
-
+        try
+        {
+            InitializeComponent();
+            Loaded += CallWindow_Loaded;
+            Closed += CallWindow_Closed;
+            CurrentCall = s_bl.Call.GetCallDetails(id);
+        }
+        catch (BO.BlDoesNotExistException ex)
+        {
+            MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            Close();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"An unknown error occurred: {ex.Message}.", "Unknown Error");
+        }
         //LoadMapAsync(callAddresses, volunteerAddress);
     }
     private void CallWindow_Loaded(object sender, RoutedEventArgs e)
@@ -54,9 +65,20 @@ public partial class CallDescription : Window
     }
     private void CallObserver()
     {
-        int id = CurrentCall!.Id;
-        CurrentCall = null;
-        CurrentCall = s_bl.Call.GetCallDetails(id);
+        try
+        {
+            int id = CurrentCall!.Id;
+            CurrentCall = null;
+            CurrentCall = s_bl.Call.GetCallDetails(id);
+        }
+        catch (BO.BlDoesNotExistException ex)
+        {
+            MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"An unknown error occurred: {ex.Message}.", "Unknown Error");
+        }
     }
 
     //private async void LoadMapAsync(List<string> callAddresses, string volunteerAddress)

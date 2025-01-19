@@ -44,11 +44,23 @@ public partial class VolunteerUserWindow : Window
     private int id = 0;
     public VolunteerUserWindow(int id)
     {
-        InitializeComponent();
-        Loaded += VolunteerUserWindow_Loaded;
-        Closed += VolunteerUserWindow_Closed;
-        CurrentVolunteer = (id != 0) ? s_bl.Volunteer.GetVolunteerDetails(id)! : new BO.Volunteer();
-        CurrentCall = CurrentVolunteer.CurrentCall != null ? s_bl.Call.GetCallDetails(CurrentVolunteer.CurrentCall.CallId)! : new BO.Call();
+        try
+        {
+            InitializeComponent();
+            Loaded += VolunteerUserWindow_Loaded;
+            Closed += VolunteerUserWindow_Closed;
+            CurrentVolunteer = (id != 0) ? s_bl.Volunteer.GetVolunteerDetails(id)! : new BO.Volunteer();
+            CurrentCall = CurrentVolunteer.CurrentCall != null ? s_bl.Call.GetCallDetails(CurrentVolunteer.CurrentCall.CallId)! : new BO.Call();
+
+        }
+        catch (BO.BlDoesNotExistException ex)
+        {
+            MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"An unknown error occurred: {ex.Message}.", "Unknown Error");
+        }
     }
     private void btnUpdate_Click(object sender, RoutedEventArgs e)
     {
@@ -63,9 +75,21 @@ public partial class VolunteerUserWindow : Window
             MessageBox.Show("Volunteer updated successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             Close();
         }
+        catch (BO.BlInvalidOperationException ex)
+        {
+            MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        catch (BO.BlDoesNotExistException ex)
+        {
+            MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        catch (BO.BlUnauthorizedAccessException ex)
+        {
+            MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
         catch (Exception ex)
         {
-            MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show($"An unknown error occurred: {ex.Message}.", "Unknown Error");
         }
     }
     private void btnCallHistory_Click(object sender, RoutedEventArgs e)
@@ -92,9 +116,21 @@ public partial class VolunteerUserWindow : Window
             MessageBox.Show("Treatment cancellation successfully canceled", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             Close();
         }
+        catch (BO.BlInvalidOperationException ex)
+        {
+            MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        catch (BO.BlDoesNotExistException ex)
+        {
+            MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        catch (BO.BlUnauthorizedAccessException ex)
+        {
+            MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
         catch (Exception ex)
         {
-            MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show($"An unknown error occurred: {ex.Message}.", "Unknown Error");
         }
     }
     private void btnFinishCall_Click(object sender, RoutedEventArgs e)
@@ -110,9 +146,21 @@ public partial class VolunteerUserWindow : Window
             MessageBox.Show("Treatment completed successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             Close();
         }
+        catch (BO.BlInvalidOperationException ex)
+        {
+            MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        catch (BO.BlDoesNotExistException ex)
+        {
+            MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        catch (BO.BlUnauthorizedAccessException ex)
+        {
+            MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
         catch (Exception ex)
         {
-            MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show($"An unknown error occurred: {ex.Message}.", "Unknown Error");
         }
     }
     private void VolunteerUserWindow_Loaded(object sender, RoutedEventArgs e)
@@ -131,13 +179,23 @@ public partial class VolunteerUserWindow : Window
     }
 
     private void VolunteerObserver()
-    { 
+    {
+        try { 
         int id = CurrentVolunteer?.Id??0;
         int idC = CurrentCall?.Id??0;
         CurrentVolunteer = null;
         CurrentCall = null;
         CurrentVolunteer = s_bl.Volunteer.GetVolunteerDetails(id);
         CurrentCall= CurrentVolunteer?.CurrentCall != null ? s_bl.Call.GetCallDetails(CurrentVolunteer.CurrentCall.CallId): null;
+        }
+        catch (BO.BlDoesNotExistException ex)
+        {
+            MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"An unknown error occurred: {ex.Message}.", "Unknown Error");
+        }
     }
 
 }
