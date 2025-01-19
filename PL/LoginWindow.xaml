@@ -17,6 +17,7 @@
                 <Label Content="Enter your id" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" FontSize="25" FontWeight="Bold"/>
                 <TextBox Text="{Binding TextBoxId}" HorizontalAlignment="Left" Height="30" Margin="5" TextWrapping="Wrap" Width="220" FontSize="15"/>
 
+                
                 <Label Content="Enter your password" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" FontSize="25" FontWeight="Bold"/>
                 <Grid HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" Width="230" Height="30">
                     <Grid.ColumnDefinitions>
