@@ -24,12 +24,15 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <PasswordBox Grid.Column="0" Height="30" VerticalAlignment="Center" PasswordChanged="PasswordBox_PasswordChanged" FontSize="15" Margin="0,0,10,0" />
-                    <Button Content="👁" Background="Transparent" BorderBrush="Transparent" Click="TogglePasswordVisibility" FontSize="20" Margin="181,0,10,0" />
+                    <PasswordBox x:Name="PasswordBox" Grid.Column="0" Height="30" VerticalAlignment="Center" PasswordChanged="PasswordBox_PasswordChanged" FontSize="15" Margin="0,0,10,0" />
+                    <TextBox x:Name="VisiblePassword" Grid.Column="0" Height="30" VerticalAlignment="Center" FontSize="15" Visibility="Collapsed"/>
+                    <Button Content="👁" Background="Transparent" BorderBrush="Transparent" Click="TogglePasswordVisibility" FontSize="20" Margin="186,0,2,0" />
                 </Grid>
+
                 <Button Content="Login" Height="30" Width="80" Click="Login_Click" FontSize="25" RenderTransformOrigin="0.25,0.557"/>
 
-                <!-- Login Button with more margin and centered alignment -->
+
+    <!-- Login Button with more margin and centered alignment -->
             </StackPanel>
         </Border>
     </Grid>

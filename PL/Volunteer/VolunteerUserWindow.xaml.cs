@@ -16,7 +16,7 @@ using System.Windows.Shapes;
 namespace PL.Volunteer;
 
 /// <summary>
-/// Interaction logic for VolunteerUserWindow1.xaml
+/// Interaction logic for VolunteerUserWindow.xaml
 /// </summary>
 public partial class VolunteerUserWindow : Window
 {
@@ -42,6 +42,10 @@ public partial class VolunteerUserWindow : Window
     public BO.MyTypeDistance TypeDistance { get; set; } = BO.MyTypeDistance.None;
     public BO.MyRole Role { get; set; } = BO.MyRole.None;
     private int id = 0;
+
+    /// <summary>
+    /// Constructor for VolunteerUserWindow.
+    /// </summary>
     public VolunteerUserWindow(int id)
     {
         try
@@ -51,7 +55,6 @@ public partial class VolunteerUserWindow : Window
             Closed += VolunteerUserWindow_Closed;
             CurrentVolunteer = (id != 0) ? s_bl.Volunteer.GetVolunteerDetails(id)! : new BO.Volunteer();
             CurrentCall = CurrentVolunteer.CurrentCall != null ? s_bl.Call.GetCallDetails(CurrentVolunteer.CurrentCall.CallId)! : new BO.Call();
-
         }
         catch (BO.BlDoesNotExistException ex)
         {
@@ -62,6 +65,10 @@ public partial class VolunteerUserWindow : Window
             MessageBox.Show($"An unknown error occurred: {ex.Message}.", "Unknown Error");
         }
     }
+
+    /// <summary>
+    /// Event handler for updating volunteer details.
+    /// </summary>
     private void btnUpdate_Click(object sender, RoutedEventArgs e)
     {
         if (CurrentVolunteer == null)
@@ -92,17 +99,27 @@ public partial class VolunteerUserWindow : Window
             MessageBox.Show($"An unknown error occurred: {ex.Message}.", "Unknown Error");
         }
     }
+
+    /// <summary>
+    /// Event handler for viewing call history.
+    /// </summary>
     private void btnCallHistory_Click(object sender, RoutedEventArgs e)
     {
-       new VolunteerCallHistoryWindow(CurrentVolunteer.Id).Show();
+        new VolunteerCallHistoryWindow(CurrentVolunteer.Id).Show();
     }
 
+    /// <summary>
+    /// Event handler for selecting a call to treat.
+    /// </summary>
     private void btnSelectCall_Click(object sender, RoutedEventArgs e)
     {
         new SelectCallToTreatWindow(CurrentVolunteer.Id).Show();
         Close();
     }
 
+    /// <summary>
+    /// Event handler for canceling the current call.
+    /// </summary>
     private void btnCancelCall_Click(object sender, RoutedEventArgs e)
     {
         if (CurrentCall == null)
@@ -112,7 +129,7 @@ public partial class VolunteerUserWindow : Window
         }
         try
         {
-            s_bl.Call.UpdateCancelTreatment(CurrentVolunteer.Id,CurrentCall.Id);
+            s_bl.Call.UpdateCancelTreatment(CurrentVolunteer.Id, CurrentCall.Id);
             MessageBox.Show("Treatment cancellation successfully canceled", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             Close();
         }
@@ -133,6 +150,10 @@ public partial class VolunteerUserWindow : Window
             MessageBox.Show($"An unknown error occurred: {ex.Message}.", "Unknown Error");
         }
     }
+
+    /// <summary>
+    /// Event handler for finishing the current call.
+    /// </summary>
     private void btnFinishCall_Click(object sender, RoutedEventArgs e)
     {
         if (CurrentCall == null)
@@ -163,30 +184,41 @@ public partial class VolunteerUserWindow : Window
             MessageBox.Show($"An unknown error occurred: {ex.Message}.", "Unknown Error");
         }
     }
+
+    /// <summary>
+    /// Event handler for when the window is loaded.
+    /// </summary>
     private void VolunteerUserWindow_Loaded(object sender, RoutedEventArgs e)
     {
         if (CurrentVolunteer!.Id != 0)
-        { 
+        {
             s_bl.Volunteer.AddObserver(CurrentVolunteer.Id, VolunteerObserver);
-        VolunteerObserver(); 
-    }
+            VolunteerObserver();
+        }
     }
 
+    /// <summary>
+    /// Event handler for when the window is closed.
+    /// </summary>
     private void VolunteerUserWindow_Closed(object? sender, EventArgs e)
     {
         if (CurrentVolunteer!.Id != 0)
             s_bl.Volunteer.RemoveObserver(CurrentVolunteer.Id, VolunteerObserver);
     }
 
+    /// <summary>
+    /// Observer method to update volunteer and call details.
+    /// </summary>
     private void VolunteerObserver()
     {
-        try { 
-        int id = CurrentVolunteer?.Id??0;
-        int idC = CurrentCall?.Id??0;
-        CurrentVolunteer = null;
-        CurrentCall = null;
-        CurrentVolunteer = s_bl.Volunteer.GetVolunteerDetails(id);
-        CurrentCall= CurrentVolunteer?.CurrentCall != null ? s_bl.Call.GetCallDetails(CurrentVolunteer.CurrentCall.CallId): null;
+        try
+        {
+            int id = CurrentVolunteer?.Id ?? 0;
+            int idC = CurrentCall?.Id ?? 0;
+            CurrentVolunteer = null;
+            CurrentCall = null;
+            CurrentVolunteer = s_bl.Volunteer.GetVolunteerDetails(id);
+            CurrentCall = CurrentVolunteer?.CurrentCall != null ? s_bl.Call.GetCallDetails(CurrentVolunteer.CurrentCall.CallId) : null;
         }
         catch (BO.BlDoesNotExistException ex)
         {
@@ -197,5 +229,4 @@ public partial class VolunteerUserWindow : Window
             MessageBox.Show($"An unknown error occurred: {ex.Message}.", "Unknown Error");
         }
     }
-
 }

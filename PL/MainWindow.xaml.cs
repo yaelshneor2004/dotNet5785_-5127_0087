@@ -22,15 +22,25 @@ namespace PL
         private static bool isHandleCalls = false;
         private static bool isHandleVolunteer = false;
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
+
+        /// <summary>
+        /// Helper class for displaying call status.
+        /// </summary>
         public class helper
         {
             public int index { get; set; }
             public BO.MyCallStatus value { get; set; }
         }
+
         private int idManager;
+
+        /// <summary>
+        /// Constructor for MainWindow. Initializes components and loads call amounts.
+        /// </summary>
+        /// <param name="id">ID of the manager.</param>
         public MainWindow(int id)
         {
-            idManager= id;
+            idManager = id;
             InitializeComponent();
             DataContext = this;
             var callAmounts = s_bl.Call.CallAmount();
@@ -45,94 +55,135 @@ namespace PL
             Loaded += MainWindow_Loaded;
             Closed += MainWindow_Closed;
         }
-         public helper selectedValue { get; set; }
+
+        /// <summary>
+        /// Gets or sets the selected value.
+        /// </summary>
+        public helper selectedValue { get; set; }
+
+        /// <summary>
+        /// Gets or sets the status list.
+        /// </summary>
         public IEnumerable<helper> StatusList
         {
             get { return (IEnumerable<helper>)GetValue(StatusListProperty); }
             set { SetValue(StatusListProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for StatusList.  This enables animation, styling, binding, etc...
+        // Using a DependencyProperty as the backing store for StatusList. This enables animation, styling, binding, etc...
         public static readonly DependencyProperty StatusListProperty =
             DependencyProperty.Register("StatusList", typeof(IEnumerable<helper>), typeof(MainWindow), new PropertyMetadata(null));
 
+        /// <summary>
+        /// Observer method to update the current time.
+        /// </summary>
         private void clockObserver()
         {
             CurrentTime = s_bl.Admin.GetClock();
         }
+
+        /// <summary>
+        /// Observer method to update the maximum risk range.
+        /// </summary>
         private void configObserver()
         {
             MaxRiskRange = s_bl.Admin.GetRiskRange();
         }
+
+        /// <summary>
+        /// Gets or sets the current time.
+        /// </summary>
         public DateTime CurrentTime
         {
             get { return (DateTime)GetValue(CurrentTimeProperty); }
             set { SetValue(CurrentTimeProperty, value); }
         }
 
+        /// <summary>
+        /// Gets or sets the maximum risk range.
+        /// </summary>
         public TimeSpan MaxRiskRange
         {
             get { return (TimeSpan)GetValue(MaxRiskRangeProperty); }
             set { SetValue(MaxRiskRangeProperty, value); }
         }
+
         public static readonly DependencyProperty CurrentTimeProperty =
             DependencyProperty.Register("CurrentTime", typeof(DateTime), typeof(MainWindow));
         public static readonly DependencyProperty MaxRiskRangeProperty =
-    DependencyProperty.Register("MaxRiskRange", typeof(TimeSpan), typeof(MainWindow));
-      private void MainWindow_Loaded(object sender, EventArgs e)
+            DependencyProperty.Register("MaxRiskRange", typeof(TimeSpan), typeof(MainWindow));
+
+        /// <summary>
+        /// Event handler for window loaded event. Initializes current time and risk range, adds observers.
+        /// </summary>
+        private void MainWindow_Loaded(object sender, EventArgs e)
         {
             CurrentTime = s_bl.Admin.GetClock();
             MaxRiskRange = s_bl.Admin.GetRiskRange();
             s_bl.Admin.AddClockObserver(clockObserver);
             s_bl.Admin.AddConfigObserver(configObserver);
         }
+
+        /// <summary>
+        /// Event handler for window closed event. Removes observers.
+        /// </summary>
         private void MainWindow_Closed(object? sender, EventArgs e)
         {
             s_bl.Admin.RemoveClockObserver(clockObserver);
             s_bl.Admin.RemoveConfigObserver(configObserver);
         }
-        //private void OpenManagerWindow()
-        //{
-        //    MainWindow mainW = new MainWindow();
-        //    mainW.Closed += MainWindow_Closed; // Add the Closed event to the admin window
-        //    mainW.Show();
-        //}
 
+        /// <summary>
+        /// Event handler for advancing the clock by one day.
+        /// </summary>
         private void btnAddOneDay_Click(object sender, RoutedEventArgs e)
         {
             s_bl.Admin.AdvanceClock(BO.Clock.Day);
         }
 
+        /// <summary>
+        /// Event handler for advancing the clock by one minute.
+        /// </summary>
         private void btnAddOneMinute_Click(object sender, RoutedEventArgs e)
         {
             s_bl.Admin.AdvanceClock(BO.Clock.Minute);
-
         }
 
+        /// <summary>
+        /// Event handler for advancing the clock by one hour.
+        /// </summary>
         private void btnAddOneHour_Click(object sender, RoutedEventArgs e)
         {
             s_bl.Admin.AdvanceClock(BO.Clock.Hour);
-
         }
 
+        /// <summary>
+        /// Event handler for advancing the clock by one month.
+        /// </summary>
         private void btnAddOneMonth_Click(object sender, RoutedEventArgs e)
         {
             s_bl.Admin.AdvanceClock(BO.Clock.Month);
-
         }
 
+        /// <summary>
+        /// Event handler for advancing the clock by one year.
+        /// </summary>
         private void btnAddOneYear_Click(object sender, RoutedEventArgs e)
         {
             s_bl.Admin.AdvanceClock(BO.Clock.Year);
-
         }
 
+        /// <summary>
+        /// Event handler for updating the maximum risk range.
+        /// </summary>
         private void btnUpdate_Click(object sender, RoutedEventArgs e)
         {
             s_bl.Admin.SetRiskRange(MaxRiskRange);
-
         }
 
+        /// <summary>
+        /// Event handler for initializing the database.
+        /// </summary>
         private void btnInitDB_Click(object sender, RoutedEventArgs e)
         {
             Mouse.OverrideCursor = Cursors.Wait;
@@ -151,10 +202,13 @@ namespace PL
                 // Call the initialization method
                 s_bl.Admin.Initialization();
                 // Change cursor to wait cursor
-                Mouse.OverrideCursor =null;
+                Mouse.OverrideCursor = null;
             }
         }
 
+        /// <summary>
+        /// Event handler for resetting the database.
+        /// </summary>
         private void btnResetDB_Click(object sender, RoutedEventArgs e)
         {
             Mouse.OverrideCursor = Cursors.Wait;
@@ -172,33 +226,38 @@ namespace PL
                 // Call the reset method
                 s_bl.Admin.Reset();
                 // Change cursor to wait cursor
-
                 Mouse.OverrideCursor = null;
-
             }
         }
 
+        /// <summary>
+        /// Event handler for handling volunteers.
+        /// </summary>
         private void btnHandleVolunteers_Click(object sender, RoutedEventArgs e)
         {
             if (isHandleVolunteer)
             {
-                 MessageBox.Show("Volunteers screen window is already open", "Confirmation", MessageBoxButton.OK, MessageBoxImage.Information);
-             }
-             else
-             {
+                MessageBox.Show("Volunteers screen window is already open", "Confirmation", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
                 var Volunteer = new VolunteerListWindow();
                 Volunteer.Closed += (s, e) => isHandleVolunteer = false;
                 Volunteer.Show();
                 isHandleVolunteer = true;
-              }
+            }
         }
+
+        /// <summary>
+        /// Event handler for handling calls.
+        /// </summary>
         private void btnHandleCalls_Click(object sender, RoutedEventArgs e)
         {
             if (isHandleCalls)
             {
-                MessageBox.Show("Calls screen window is already open", "Confirmation", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("Calls screen window is already open", "Confirmation", MessageBoxButton.OK, MessageBoxImage.Information);
             }
-            else 
+            else
             {
                 var call = new CallListWindow(idManager);
                 call.Closed += (s, e) => isHandleCalls = false;
@@ -206,9 +265,13 @@ namespace PL
                 isHandleCalls = true;
             }
         }
+
+        /// <summary>
+        /// Event handler for mouse left button up event on the data grid. Opens the call list window.
+        /// </summary>
         private void DataGrid_MouseLeftButtonUp(object sender, RoutedEventArgs e)
         {
-           new CallListWindow(idManager,selectedValue.value).Show();
+            new CallListWindow(idManager, selectedValue.value).Show();
         }
     }
 }

@@ -23,6 +23,10 @@ namespace PL.Call
     public partial class CallWindow : Window
     {
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
+
+        /// <summary>
+        /// Gets or sets the current call.
+        /// </summary>
         public BO.Call? CurrentCall
         {
             get { return (BO.Call?)GetValue(CurrentCallProperty); }
@@ -31,18 +35,39 @@ namespace PL.Call
 
         public static readonly DependencyProperty CurrentCallProperty =
             DependencyProperty.Register("CurrentCall", typeof(BO.Call), typeof(CallWindow), new PropertyMetadata(null));
+
+        /// <summary>
+        /// Gets or sets the call type.
+        /// </summary>
         public BO.MyCallType CallType { get; set; } = BO.MyCallType.None;
-        public BO.MyFinishType FinishType { get; set; }=BO.MyFinishType.None;
+
+        /// <summary>
+        /// Gets or sets the finish type.
+        /// </summary>
+        public BO.MyFinishType FinishType { get; set; } = BO.MyFinishType.None;
+
+        /// <summary>
+        /// Gets or sets the call status.
+        /// </summary>
         public BO.MyCallStatus CallStatus { get; set; } = BO.MyCallStatus.None;
+
+        /// <summary>
+        /// Gets or sets the text of the button.
+        /// </summary>
         public string ButtonText
         {
             get { return (string)GetValue(ButtonTextProperty); }
             set { SetValue(ButtonTextProperty, value); }
         }
+
         public static readonly DependencyProperty ButtonTextProperty =
             DependencyProperty.Register("ButtonText", typeof(string), typeof(VolunteerWindow), new PropertyMetadata(string.Empty));
 
-        public CallWindow(int id=0)
+        /// <summary>
+        /// Constructor for CallWindow. Initializes components and loads call details if ID is provided.
+        /// </summary>
+        /// <param name="id">ID of the call (default is 0).</param>
+        public CallWindow(int id = 0)
         {
             try
             {
@@ -75,6 +100,10 @@ namespace PL.Call
             }
 
         }
+
+        /// <summary>
+        /// Event handler for Add/Update button click event. Adds or updates call details.
+        /// </summary>
         private void btnAddUpdate_Click(object sender, RoutedEventArgs e)
         {
             if (CurrentCall == null)
@@ -84,10 +113,9 @@ namespace PL.Call
             }
             if (ButtonText == "Add")
             {
-                    s_bl.Call.AddCall(CurrentCall);
-                    MessageBox.Show("Call added successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                    Close();
-
+                s_bl.Call.AddCall(CurrentCall);
+                MessageBox.Show("Call added successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                Close();
             }
             else
             {
@@ -112,17 +140,27 @@ namespace PL.Call
             }
         }
 
+        /// <summary>
+        /// Event handler for window loaded event. Adds observer for the current call.
+        /// </summary>
         private void CallWindow_Loaded(object sender, RoutedEventArgs e)
         {
             if (CurrentCall!.Id != 0)
                 s_bl.Call.AddObserver(CurrentCall.Id, CallObserver);
         }
 
+        /// <summary>
+        /// Event handler for window closed event. Removes observer for the current call.
+        /// </summary>
         private void CallWindow_Closed(object? sender, EventArgs e)
         {
             if (CurrentCall!.Id != 0)
                 s_bl.Call.RemoveObserver(CurrentCall.Id, CallObserver);
         }
+
+        /// <summary>
+        /// Observer method to update the current call details.
+        /// </summary>
         private void CallObserver()
         {
             try

@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Media;
 
 namespace PL;
     public class ConvertObjIdToTF : IValueConverter
@@ -265,6 +266,63 @@ public class ConvertCancalAssignmentToVisibility : IValueConverter
         throw new NotImplementedException();
     }
 }
+public class ConvertEyeWithLine : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        return (bool)value ? TextDecorations.Underline : TextDecorations.Strikethrough;
+
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}
+
+public class ConvertEyeColor : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        //return (bool)value ? new SolidColorBrush(Colors.Black) : new SolidColorBrush(Colors.Gray);
+        return (bool)value ? Brushes.Black : Brushes.Gray;
+
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}
+
+public class ShowPassword : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        return (bool)value ? Visibility.Visible : Visibility.Hidden;
+
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}
+
+public class HidePasswordDots : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        return (bool)value ? Visibility.Hidden : Visibility.Visible;
+
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}
+
 
 
 
