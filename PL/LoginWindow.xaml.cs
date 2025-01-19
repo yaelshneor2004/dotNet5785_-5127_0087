@@ -1,6 +1,8 @@
 ﻿using PL.Volunteer;
 using System;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace PL
 {
@@ -65,25 +67,63 @@ namespace PL
             }
         }
 
+        private static PasswordBox? FindPasswordBox(DependencyObject parent)
+        {
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+            {
+                var child = VisualTreeHelper.GetChild(parent, i);
+                if (child is PasswordBox passwordBox)
+                    return passwordBox;
+                var result = FindPasswordBox(child);
+                if (result != null)
+                    return result;
+            }
+            return null;
+        }
+
+        private static TextBox? FindPasswordTextBox(DependencyObject parent)
+        {
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+            {
+                var child = VisualTreeHelper.GetChild(parent, i);
+                if (child is TextBox textBox && textBox.Visibility == Visibility.Collapsed)
+                    return textBox;
+                var result = FindPasswordTextBox(child);
+                if (result != null)
+                    return result;
+            }
+            return null;
+        }
+
         private void TogglePasswordVisibility(object sender, RoutedEventArgs e)
         {
-            if (PasswordBox.Visibility == Visibility.Visible)
+            var passwordBox = FindPasswordBox(this);
+            var passwordTextBox = FindPasswordTextBox(this);
+
+            if (passwordBox == null || passwordTextBox == null)
+                return;
+
+            if (passwordBox.Visibility == Visibility.Visible)
             {
-                PasswordBox.Visibility = Visibility.Collapsed;
-                VisiblePassword.Visibility = Visibility.Visible;
-                VisiblePassword.Text = PasswordBox.Password;
+                passwordBox.Visibility = Visibility.Collapsed;
+                passwordTextBox.Visibility = Visibility.Visible;
+                passwordTextBox.Text = passwordBox.Password;
             }
             else
             {
-                PasswordBox.Visibility = Visibility.Visible;
-                VisiblePassword.Visibility = Visibility.Collapsed;
-                PasswordBox.Password = VisiblePassword.Text;
+                passwordBox.Visibility = Visibility.Visible;
+                passwordTextBox.Visibility = Visibility.Collapsed;
+                passwordBox.Password = passwordTextBox.Text;
             }
         }
 
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            VisiblePassword.Text = PasswordBox.Password;
+            var passwordBox = FindPasswordBox(this);
+            var passwordTextBox = FindPasswordTextBox(this);
+
+            if (passwordBox != null && passwordTextBox != null)
+                passwordTextBox.Text = passwordBox.Password;
         }
 
         private void VolunteerUserWindow_Click(object sender, RoutedEventArgs e)
