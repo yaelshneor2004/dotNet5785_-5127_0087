@@ -5,8 +5,6 @@ using Helpers;
 namespace BlImplementation;
 internal class AdminImplementation : IAdmin
 {
-    private static IDal _dal = DalApi.Factory.Get;
-
     /// <summary>
     /// Advances the system clock by a specified amount of time.
     /// </summary>
@@ -15,6 +13,7 @@ internal class AdminImplementation : IAdmin
     /// <exception cref="Exception">Thrown if an invalid time unit is specified.</exception>
     public DateTime AdvanceClock(BO.Clock advance)
     {
+        AdminManager.ThrowOnSimulatorIsRunning();
         switch (advance)
         {
             case BO.Clock.Minute:
@@ -35,8 +34,8 @@ internal class AdminImplementation : IAdmin
             default:
                 throw new Exception("invalid choice");
         }
-        AdminManager.UpdateClock(AdminManager.Clock);
-        return AdminManager.Clock;
+        AdminManager.UpdateClock(AdminManager.Now);
+        return AdminManager.Now;
     }
 
     /// <summary>
@@ -45,7 +44,7 @@ internal class AdminImplementation : IAdmin
     /// <returns>The current clock time.</returns>
     public DateTime GetClock()
     {
-        return AdminManager.Clock;
+        return AdminManager.Now;
     }
 
     /// <summary>
@@ -54,7 +53,7 @@ internal class AdminImplementation : IAdmin
     /// <returns>The current risk range time span.</returns>
     public TimeSpan GetRiskRange()
     {
-        return AdminManager.RiskRange;
+        return AdminManager.MaxRange;
     }
 
     /// <summary>
@@ -62,21 +61,19 @@ internal class AdminImplementation : IAdmin
     /// </summary>
     public void Initialization()
     {
-        DalTest.Initialization.Do();
-        AdminManager.UpdateClock(AdminManager.Now);
-        AdminManager.RiskRange = AdminManager.RiskRange;
-        AdminManager.Clock = AdminManager.Clock;
-    }
-    /// <summary>
-    /// Resets the database to its initial state.
-    /// </summary>
-    public void Reset()
-    {
+        AdminManager.ThrowOnSimulatorIsRunning();
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
+            AdminManager.InitializeDB(); //stage 7
+        }
 
-        // Reset the database to its initial state
-        _dal.ResetDB();
-        AdminManager.RiskRange = AdminManager.RiskRange;
-        AdminManager.Clock = AdminManager.Clock;
+        /// <summary>
+        /// Resets the database to its initial state.
+        /// </summary>
+        public void Reset() //stage 4
+    {
+        AdminManager.ThrowOnSimulatorIsRunning();
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
+        AdminManager.ResetDB(); //stage 7
     }
 
     /// <summary>
@@ -85,9 +82,18 @@ internal class AdminImplementation : IAdmin
     /// <param name="time">The new risk range time span.</param>
     public void SetRiskRange(TimeSpan time)
     {
-        AdminManager.RiskRange = time;
+        AdminManager.ThrowOnSimulatorIsRunning();
+        AdminManager.MaxRange = time;
     }
 
+    public void StartSimulator(int interval)  //stage 7
+    {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
+        AdminManager.Start(interval); //stage 7
+    }
+
+    public void StopSimulator()
+    => AdminManager.Stop(); //stage 7
     public void AddClockObserver(Action clockObserver) =>
 AdminManager.ClockUpdatedObservers += clockObserver;
     public void RemoveClockObserver(Action clockObserver) =>

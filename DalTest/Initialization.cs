@@ -93,7 +93,8 @@ public static class Initialization
     /// The createsAssignment method reads volunteers and calls, then allocates volunteers to 50 calls, calculates start and finish times, assigns random finish types, and creates new assignments. 🌟
     /// </summary>
     private static void createsAssignment()
-    { int count = 0;
+    { 
+        int count = 0;
         var volunteers = s_dal?.Volunteer.ReadAll();
         var calls = s_dal?.Call.ReadAll()?.Where(call => call != null).Take(50)?.ToList();
         int volunteerId;
@@ -212,7 +213,7 @@ public static class Initialization
             MyCallType callType =(MyCallType) s_rand.Next(0,4);
             double latitude = callLatitudes[i];
             double longitude = callLongitudes[i];
-                DateTime openTime = DateTime.Now.AddYears(-1).AddDays(s_rand.Next((DateTime.Now -DateTime.Now.AddYears(-1)).Days));
+            DateTime openTime = DateTime.Now.AddYears(-1).AddDays(s_rand.Next((DateTime.Now -DateTime.Now.AddYears(-1)).Days));
             DateTime maxFinishCall = openTime.AddDays(s_rand.Next(1, 50)); 
             string? description = $"call number: {idIndex} of type: {callType} at: {address}";
             if (5 < i &&i< 35)

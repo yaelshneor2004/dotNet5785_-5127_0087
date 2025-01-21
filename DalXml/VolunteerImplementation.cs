@@ -3,8 +3,11 @@ using DalApi;
 using DO;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+
 internal class VolunteerImplementation : IVolunteer
 {
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Create(Volunteer item)
     {
         List<Volunteer> Volunteers = XMLTools.LoadListFromXMLSerializer<Volunteer>(Config.s_volunteers_xml);
@@ -15,7 +18,7 @@ internal class VolunteerImplementation : IVolunteer
         Volunteers.Add(item);
         XMLTools.SaveListToXMLSerializer(Volunteers, Config.s_volunteers_xml);
     }
-
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Delete(int id)
     {
         List<Volunteer> Volunteers = XMLTools.LoadListFromXMLSerializer<Volunteer>(Config.s_volunteers_xml);
@@ -23,22 +26,22 @@ internal class VolunteerImplementation : IVolunteer
             throw new DalDoesNotExistException($"Volunteer with ID={id} does not exist");
         XMLTools.SaveListToXMLSerializer(Volunteers, Config.s_volunteers_xml);
     }
-
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void DeleteAll()
     {
         XMLTools.SaveListToXMLSerializer(new List<Volunteer>(), Config.s_volunteers_xml);
     }
-
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public Volunteer? Read(Func<Volunteer, bool> filter)
     {
         return XMLTools.LoadListFromXMLSerializer<Volunteer>(Config.s_volunteers_xml).FirstOrDefault(filter);
     }
-
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public Volunteer? Read(int id)
     {
         return XMLTools.LoadListFromXMLSerializer<Volunteer>(Config.s_volunteers_xml).FirstOrDefault(it => it.Id == id);
     }
-
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public IEnumerable<Volunteer> ReadAll(Func<Volunteer, bool>? filter = null)
     {
         List<Volunteer> Volunteers = XMLTools.LoadListFromXMLSerializer<Volunteer>(Config.s_volunteers_xml);
@@ -46,7 +49,7 @@ internal class VolunteerImplementation : IVolunteer
                   ? Volunteers
                   : Volunteers.Where(filter));
     }
-
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Update(Volunteer item)
     {
         List<Volunteer> Volunteers = XMLTools.LoadListFromXMLSerializer<Volunteer>(Config.s_volunteers_xml);

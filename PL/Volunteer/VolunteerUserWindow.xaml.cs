@@ -114,7 +114,7 @@ public partial class VolunteerUserWindow : Window
     private void btnSelectCall_Click(object sender, RoutedEventArgs e)
     {
         new SelectCallToTreatWindow(CurrentVolunteer.Id).Show();
-        Close();
+        //Close();
     }
 
     /// <summary>
@@ -131,7 +131,6 @@ public partial class VolunteerUserWindow : Window
         {
             s_bl.Call.UpdateCancelTreatment(CurrentVolunteer.Id, CurrentCall.Id);
             MessageBox.Show("Treatment cancellation successfully canceled", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-            Close();
         }
         catch (BO.BlInvalidOperationException ex)
         {
@@ -165,7 +164,6 @@ public partial class VolunteerUserWindow : Window
         {
             s_bl.Call.UpdateCompleteAssignment(CurrentVolunteer.Id, CurrentCall.Id);
             MessageBox.Show("Treatment completed successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-            Close();
         }
         catch (BO.BlInvalidOperationException ex)
         {

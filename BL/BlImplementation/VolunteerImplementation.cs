@@ -44,6 +44,7 @@ internal class VolunteerImplementation:IVolunteer
     {
         try
         {
+            AdminManager.ThrowOnSimulatorIsRunning();
             VolunteerManager.ValidateVolunteerDetails(myVolunteer);
             // Attempt to add the new volunteer to DAL
             myVolunteer.Password = myVolunteer.Password != null ? VolunteerManager.Encrypt(myVolunteer.Password) : null;
@@ -66,8 +67,9 @@ internal class VolunteerImplementation:IVolunteer
         {
             try
             {
-                // Retrieve the volunteer details from DAL
-                var volunteer = _dal.Volunteer.Read(volunteerId);
+            AdminManager.ThrowOnSimulatorIsRunning();
+            // Retrieve the volunteer details from DAL
+            var volunteer = _dal.Volunteer.Read(volunteerId);
                 // Check if the volunteer is currently handling any calls or has handled any calls in the past
                 var currentAssignments = _dal.Assignment.ReadAll(a => a.VolunteerId == volunteerId && a.FinishCall == null).Any();
                 var pastAssignments = _dal.Assignment.ReadAll(a => a.VolunteerId == volunteerId).Any();
@@ -138,6 +140,7 @@ internal class VolunteerImplementation:IVolunteer
     {
         try
         {
+            AdminManager.ThrowOnSimulatorIsRunning();
             // Retrieve requester details from DAL
             var volunteer = _dal.Volunteer.Read(id);
             // Check if the address has changed and update the coordinates

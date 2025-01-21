@@ -18,26 +18,27 @@ internal class CallImplementation : ICall
     /// <param name="call">The call details to add.</param>
     public void AddCall(BO.Call call)
     {
-        // Validate the format of the values
-        CallManager.ValidateCallFormat(call);
-        // Validate the logical correctness of the values
-        CallManager.ValidateCallLogic(call);
-        // Attempt to add the new call in the data layer
-        _dal.Call.Create(ConvertBOToDO(call));
-        CallManager.Observers.NotifyListUpdated();                                                   
-        var volunteers = Tools.GetVolunteersWithinDistance(call.Address ?? string.Empty);
-        foreach (var volunteer in volunteers)
-        {
-            var subject = $"New Call Opened for {call.Id}";
-            var body = $"Hello Volunteers,\n\n" +  // General greeting
-                   $"A new call has been opened. Here are the details:\n\n" +
-                   $"Description: {call.Description}\n" +
-                   $"Location: {call.Address}\n" +
-                   $"Open Time: {call.StartTime}\n" +
-                   $"Maximum Time: {call.MaxEndTime}\n" +
-                   $"Please log in to the system to accept the call."; // Body of the email;
-            CallManager.SendEmail(volunteer.Email, subject, body);
-        }
+        AdminManager.ThrowOnSimulatorIsRunning();
+            // Validate the format of the values
+            CallManager.ValidateCallFormat(call);
+            // Validate the logical correctness of the values
+            CallManager.ValidateCallLogic(call);
+            // Attempt to add the new call in the data layer
+            _dal.Call.Create(ConvertBOToDO(call));
+        CallManager.Observers.NotifyListUpdated();
+            var volunteers = Tools.GetVolunteersWithinDistance(call.Address ?? string.Empty);
+            foreach (var volunteer in volunteers)
+            {
+                var subject = $"New Call Opened for {call.Id}";
+                var body = $"Hello Volunteers,\n\n" +  // General greeting
+                       $"A new call has been opened. Here are the details:\n\n" +
+                       $"Description: {call.Description}\n" +
+                       $"Location: {call.Address}\n" +
+                       $"Open Time: {call.StartTime}\n" +
+                       $"Maximum Time: {call.MaxEndTime}\n" +
+                       $"Please log in to the system to accept the call."; // Body of the email;
+                CallManager.SendEmail(volunteer.Email, subject, body);
+            }
     }
 
     /// <summary>
@@ -46,21 +47,21 @@ internal class CallImplementation : ICall
     /// <returns>An array of call counts by status.</returns>
     public int[] CallAmount()
     {
-        var callStatuses = from call in _dal.Call.ReadAll()
-                           group call by (int)CallManager.GetCallStatus(call) into g
-                           orderby g.Key
-                           select new { Status = g.Key, Count = g.Count() };
+            var callStatuses = from call in _dal.Call.ReadAll()
+                               group call by (int)CallManager.GetCallStatus(call) into g
+                               orderby g.Key
+                               select new { Status = g.Key, Count = g.Count() };
 
-        // Prepare an array with six cells (or more if there are more statuses)
-        var callAmounts = new int[Enum.GetValues(typeof(BO.MyCallStatus)).Length-1];
+            // Prepare an array with six cells (or more if there are more statuses)
+            var callAmounts = new int[Enum.GetValues(typeof(BO.MyCallStatus)).Length - 1];
 
-        // Fill the array with values from the grouping, or zeros if there are no calls in the status
-        foreach (var status in callStatuses)
-        {
-            callAmounts[status.Status] = status.Count;
-        }
+            // Fill the array with values from the grouping, or zeros if there are no calls in the status
+            foreach (var status in callStatuses)
+            {
+                callAmounts[status.Status] = status.Count;
+            }
 
-        return callAmounts;
+            return callAmounts;
     }
 
 
@@ -74,17 +75,18 @@ internal class CallImplementation : ICall
     {
         try
         {
-            // Retrieve call details from the data layer
-            var callData = _dal.Call.Read(callId);
-            // Check if the call is open and has never been assigned
-            var assignments = _dal.Assignment.ReadAll(a => a.CallId == callId).ToList();
-            var callBo = CallManager.ConvertFromDoToBo(callData ?? throw new BO.BlNullPropertyException(nameof(callData)));
+                AdminManager.ThrowOnSimulatorIsRunning();
+                // Retrieve call details from the data layer
+                var callData = _dal.Call.Read(callId);
+                // Check if the call is open and has never been assigned
+                var assignments = _dal.Assignment.ReadAll(a => a.CallId == callId).ToList();
+                var callBo = CallManager.ConvertFromDoToBo(callData ?? throw new BO.BlNullPropertyException(nameof(callData)));
             if (callBo.Status != BO.MyCallStatus.Open || assignments.Any())
                 throw new BO.BlUnauthorizedAccessException("Only open calls that have never been assigned can be deleted.");
             // Attempt to delete the call in the data layer
-            _dal.Call.Delete(callId);
+                _dal.Call.Delete(callId);
             CallManager.Observers.NotifyListUpdated(); 	
-
+            VolunteerManager.Observers.NotifyListUpdated();
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -102,10 +104,15 @@ internal class CallImplementation : ICall
     {
         try
         {
-            // Retrieve call details from the data layer
-            var callData = _dal.Call.Read(callId) ?? throw new BO.BlDoesNotExistException($"Call with ID {callId} does not exist.");
-            // Convert DO.Call to BO.Call and return
-            return CallManager.ConvertFromDoToBo(callData);
+            DO.Call callData;
+                // Retrieve call details from the data layer
+              
+                 callData = _dal.Call.Read(callId) ?? throw new BO.BlDoesNotExistException($"Call with ID {callId} does not exist.");
+                // Convert DO.Call to BO.Call and return
+                return CallManager.ConvertFromDoToBo(callData);
+            CallManager.Observers.NotifyItemUpdated(callId);
+            CallManager.Observers.NotifyListUpdated();
+            VolunteerManager.Observers.NotifyListUpdated();
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -123,7 +130,7 @@ internal class CallImplementation : ICall
     /// 
     public IEnumerable<BO.CallInList> GetCallList(BO.MySortInCallInList? callFilter, object? filterValue, BO.MySortInCallInList? callSort)
     {
-        var calls = _dal.Call.ReadAll();
+            var calls = _dal.Call.ReadAll();
         var callsBo = calls.Select(callData => CallManager.ConvertToCallInList(callData)).Distinct().ToList();
 
         if (callFilter.HasValue && filterValue != null)
@@ -165,6 +172,7 @@ internal class CallImplementation : ICall
             }
         }
         return CallManager.SortCalls(callsBo, callSort ?? default).ToList();
+   
     }
 
     /// <summary>
@@ -194,6 +202,10 @@ internal class CallImplementation : ICall
                 throw new BO.BlInvalidOperationException("The call has expired.");
 
             _dal.Assignment.Create(new DO.Assignment(0, idC, idV, AdminManager.Now, null, null));
+            CallManager.Observers.NotifyItemUpdated(idC);
+            VolunteerManager.Observers.NotifyItemUpdated(idV);
+            CallManager.Observers.NotifyListUpdated();
+
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -214,7 +226,11 @@ internal class CallImplementation : ICall
         var closeListNew = closeList.Where(a => a.VolunteerId == idV &&a.FinishType!=null).Select(a => convertAssignmentToClosed(a)).ToList();
         closeListNew = callType.HasValue ? closeListNew.Where(call => call.Type == callType.Value).ToList() : closeListNew;
         return CallManager.SortClosedCallsByField(closeListNew, closeCall);
+        CallManager.Observers.NotifyListUpdated();
+        CallManager.Observers.NotifyListUpdated();
+        VolunteerManager.Observers.NotifyListUpdated();
     }
+
 
     /// <summary>
     /// Sorts opened calls based on specified criteria.
@@ -229,6 +245,9 @@ internal class CallImplementation : ICall
         var openCalls = _dal.Call.ReadAll().Where(c=>CallManager.OpenCondition(c)&&CallManager.VolunteerArea(volunteer, c)).Select(c => CallManager.convertCallToOpened(volunteer,c)).ToList();
         openCalls = callType.HasValue ? openCalls.Where(call => call.Type == callType.Value).ToList() : openCalls;
         return CallManager.SortOpenCallsByField(openCalls, openedCall);
+        CallManager.Observers.NotifyListUpdated();
+
+        VolunteerManager.Observers.NotifyListUpdated();
     }
 
     /// <summary>
@@ -240,6 +259,7 @@ internal class CallImplementation : ICall
     {
         try
         {
+            AdminManager.ThrowOnSimulatorIsRunning();
             // Validate the format of the values
             CallManager.ValidateCallFormat(myCall);
             // Validate the logical correctness of the values
@@ -296,6 +316,8 @@ internal class CallImplementation : ICall
                 var body = $"Your assignment for call {assignment.CallId} has been cancelled.";
                 SendEmail(volunteer?.Email ?? string.Empty, subject, body);
             }
+            CallManager.Observers.NotifyItemUpdated(idC);
+            VolunteerManager.Observers.NotifyItemUpdated(idV);
         }
         catch (DO.DalDoesNotExistException ex)
         {

@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Shapes;
-using System.Windows.Input;
 using System.Net.Http;
 using System.Text.Json;
 
@@ -44,6 +41,7 @@ namespace PL.Call
                 Loaded += CallWindow_Loaded;
                 Closed += CallWindow_Closed;
                 CurrentCall = s_bl.Call.GetCallDetails(id);
+                LoadMapAsync(callAddresses, volunteerAddress);
             }
             catch (BO.BlDoesNotExistException ex)
             {
@@ -54,7 +52,6 @@ namespace PL.Call
             {
                 MessageBox.Show($"An unknown error occurred: {ex.Message}.", "Unknown Error");
             }
-            //LoadMapAsync(callAddresses, volunteerAddress);
         }
 
         /// <summary>
@@ -96,83 +93,101 @@ namespace PL.Call
             }
         }
 
-        // /// <summary>
-        // /// Asynchronously loads the map with call addresses and volunteer address.
-        // /// </summary>
-        // private async void LoadMapAsync(List<string> callAddresses, string volunteerAddress)
-        // {
-        //     string html = await GenerateMapHtmlAsync(callAddresses, volunteerAddress);
-        //     Console.WriteLine(html);
-        //     webBrowser.NavigateToString(html);
-        // }
+        /// <summary>
+        /// Asynchronously loads the map with call addresses and volunteer address.
+        /// </summary>
+        private async void LoadMapAsync(List<string> callAddresses, string volunteerAddress)
+        {
+            string html = await GenerateMapHtmlAsync(callAddresses, volunteerAddress);
+            webBrowser.NavigateToString(html); // Use the WebBrowser control from XAML
+        }
 
-        // /// <summary>
-        // /// Generates HTML for the map with markers and lines.
-        // /// </summary>
-        // private async Task<string> GenerateMapHtmlAsync(List<string> callAddresses, string volunteerAddress)
-        // {
-        //     string markers = "";
-        //     string lines = "";
+        /// <summary>
+        /// Generates HTML for the map with markers using Google Maps API.
+        /// </summary>
+        private async Task<string> GenerateMapHtmlAsync(List<string> callAddresses, string volunteerAddress)
+        {
+            string markersHtml = "";
+            foreach (var address in callAddresses)
+            {
+                var location = await GetLatLngFromAddressAsync(address);
+                markersHtml += $"<gmp-advanced-marker position='{location}' title='Call Location'></gmp-advanced-marker>";
+            }
 
-        //     var volunteerLocation = await GetLatLngFromAddressAsync(volunteerAddress);
-        //     markers += $"new google.maps.Marker({{ position: {volunteerLocation}, map: map, title: 'Volunteer' }});";
+            var volunteerLocation = await GetLatLngFromAddressAsync(volunteerAddress);
 
-        //     foreach (var address in callAddresses)
-        //     {
-        //         var callLocation = await GetLatLngFromAddressAsync(address);
-        //         markers += $"new google.maps.Marker({{ position: {callLocation}, map: map, title: 'Call' }});";
-        //         lines += $"new google.maps.Polyline({{ path: [{volunteerLocation}, {callLocation}], geodesic: true, strokeColor: '#FF0000', strokeOpacity: 1.0, strokeWeight: 2 }}).setMap(map);";
-        //     }
+            string html = $@"
+            <html>
+              <head>
+                <title>Add a Map with Markers using HTML</title>
+                <link rel='stylesheet' type='text/css' href='./style.css' />
+                <script type='module' src='./index.js'></script>
+              </head>
+              <body>
+                <gmp-map
+                  center='{volunteerLocation}'
+                  zoom='10'
+                  map-id='DEMO_MAP_ID'
+                  style='height: 400px'
+                >
+                  {markersHtml}
+                </gmp-map>
 
-        //     string html = "<html><head><meta charset='UTF-8'><title>Map</title>"; html += $"<script src='https://maps.googleapis.com/maps/api/js?key={GoogleMapsApiKey}'></script>"; html += "<script>function initialize() {"; html += $"var mapOptions = {{ zoom: 12, center: {volunteerLocation} }};"; html += "var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);"; html += $"{markers} {lines} "; html += "} google.maps.event.addDomListener(window, 'load', initialize);</script>"; html += "</head><body><div id='map-canvas' style='width:100%; height:100%;'></div></body></html>"; return html;
-        // }
+                <script
+                  src='https://maps.googleapis.com/maps/api/js?key={GoogleMapsApiKey}&libraries=maps,marker&v=beta'
+                  defer
+                ></script>
+              </body>
+            </html>";
+            return html;
+        }
 
-        // /// <summary>
-        // /// Gets latitude and longitude from an address asynchronously.
-        // /// </summary>
-        // private async Task<string> GetLatLngFromAddressAsync(string address)
-        // {
-        //     var (latitude, longitude) = await Task.Run(() => GetCoordinates(address));
-        //     return $"{{ lat: {latitude}, lng: {longitude} }}";
-        // }
+        /// <summary>
+        /// Gets latitude and longitude from an address asynchronously.
+        /// </summary>
+        private async Task<string> GetLatLngFromAddressAsync(string address)
+        {
+            var (latitude, longitude) = await Task.Run(() => GetCoordinates(address));
+            return $"{latitude},{longitude}";
+        }
 
-        // /// <summary>
-        // /// Gets latitude and longitude coordinates from an address.
-        // /// </summary>
-        // public static (double Latitude, double Longitude) GetCoordinates(string address)
-        // {
-        //     if (string.IsNullOrWhiteSpace(address))
-        //     {
-        //         throw new ArgumentException("Address cannot be null or empty.");
-        //     }
+        /// <summary>
+        /// Gets latitude and longitude coordinates from an address.
+        /// </summary>
+        public static (double Latitude, double Longitude) GetCoordinates(string address)
+        {
+            if (string.IsNullOrWhiteSpace(address))
+            {
+                throw new ArgumentException("Address cannot be null or empty.");
+            }
 
-        //     var apiKey = "AIzaSyDp5JA_AxKyCcz9QK9q1btolMB6Y8jusc4";
-        //     var url = $"https://maps.googleapis.com/maps/api/geocode/json?address={Uri.EscapeDataString(address)}&key={apiKey}";
+            var apiKey = GoogleMapsApiKey;
+            var url = $"https://maps.googleapis.com/maps/api/geocode/json?address={Uri.EscapeDataString(address)}&key={apiKey}";
 
-        //     using (var client = new HttpClient())
-        //     {
-        //         var response = client.GetStringAsync(url).Result;
+            using (var client = new HttpClient())
+            {
+                var response = client.GetStringAsync(url).Result;
 
-        //         // Analyze the response in JSON format\
-        //         var jsonResponse = JsonDocument.Parse(response);
+                // Analyze the response in JSON format
+                var jsonResponse = JsonDocument.Parse(response);
 
-        //         if (jsonResponse.RootElement.TryGetProperty("results", out JsonElement results) && results.GetArrayLength() > 0)
-        //         {
-        //             // The reference to the first result
-        //             var firstResult = results[0];
+                if (jsonResponse.RootElement.TryGetProperty("results", out JsonElement results) && results.GetArrayLength() > 0)
+                {
+                    // The reference to the first result
+                    var firstResult = results[0];
 
-        //             // Extracting the coordinates
-        //             var location = firstResult.GetProperty("geometry").GetProperty("location");
-        //             var latitude = location.GetProperty("lat").GetDouble();
-        //             var longitude = location.GetProperty("lng").GetDouble();
+                    // Extracting the coordinates
+                    var location = firstResult.GetProperty("geometry").GetProperty("location");
+                    var latitude = location.GetProperty("lat").GetDouble();
+                    var longitude = location.GetProperty("lng").GetDouble();
 
-        //             return (latitude, longitude);
-        //         }
-        //         else
-        //         {
-        //             throw new Exception("No results found for the given address.");
-        //         }
-        //     }
-        // }
+                    return (latitude, longitude);
+                }
+                else
+                {
+                    throw new Exception("No results found for the given address.");
+                }
+            }
+        }
     }
 }

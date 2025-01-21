@@ -8,6 +8,10 @@
         Title="LoginWindow" Height="450" Width="800"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         >
+    <!--<Window.Background>
+        --><!--<ImageBrush ImageSource="https://i.ibb.co/5WLH69P/yourimage.jpg" />--><!--
+    </Window.Background>-->
+
     <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
         <Border BorderBrush="Black" BorderThickness="2" Padding="10" CornerRadius="10">
             <StackPanel>
@@ -15,7 +19,7 @@
                 <Label Content="WELCOME" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" FontFamily="Comic Sans MS" Foreground="Black" Margin="10" FontWeight="Bold"/>
 
                 <Label Content="Enter your id" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" FontSize="25" FontWeight="Bold"/>
-                <TextBox Text="{Binding TextBoxId}" HorizontalAlignment="Left" Height="30" Margin="5" TextWrapping="Wrap" Width="220" FontSize="15"/>
+                <TextBox Text="{Binding userNameText, Mode=TwoWay}" HorizontalAlignment="Left" Height="30" Margin="5" TextWrapping="Wrap" Width="220" FontSize="15"/>
 
                 
                 <Label Content="Enter your password" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" FontSize="25" FontWeight="Bold"/>
@@ -24,8 +28,8 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <PasswordBox x:Name="PasswordBox" Grid.Column="0" Height="30" VerticalAlignment="Center" PasswordChanged="PasswordBox_PasswordChanged" FontSize="15" Margin="0,0,10,0" />
-                    <TextBox x:Name="VisiblePassword" Grid.Column="0" Height="30" VerticalAlignment="Center" FontSize="15" Visibility="Collapsed"/>
+                    <PasswordBox  Grid.Column="0" Height="30" VerticalAlignment="Center" FontSize="15" Margin="0,0,10,0" Visibility="{Binding passwordVisibility,Mode=TwoWay}"/>
+                    <TextBox  Grid.Column="0" Height="30" VerticalAlignment="Center" FontSize="15" Visibility="{Binding TextVisibility,Mode=TwoWay}" IsReadOnly="True" Text="{Binding passwordText,Mode=TwoWay}" Margin="-3,0,10,0"/>
                     <Button Content="👁" Background="Transparent" BorderBrush="Transparent" Click="TogglePasswordVisibility" FontSize="20" Margin="186,0,2,0" />
                 </Grid>
 

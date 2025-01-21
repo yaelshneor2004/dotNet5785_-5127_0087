@@ -35,6 +35,11 @@ public class BlInvalidOperationException : Exception
     public BlInvalidOperationException(string? message) : base(message) { }
 }
 [Serializable]
+public class BlTemporaryNotAvailableException : Exception
+{
+    public BlTemporaryNotAvailableException(string? message) : base(message) { }
+}
+[Serializable]
 public class BlAlreadyExistsException : Exception
 {
     public BlAlreadyExistsException(string? message) : base(message) { }

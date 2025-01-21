@@ -29,6 +29,11 @@
         <local:ConvertCallComboboxToReadOnly x:Key="ConvertCallComboboxToReadOnlyKey"/>
         <local:ConvertIdCalltoVisibility x:Key="ConvertIdCalltoVisibilityKey"/>
         <local:ConvertCancalAssignmentToVisibility x:Key="ConvertCancalAssignmentToVisibilityKey"/>
+        <local:ShowPassword x:Key="ShowPasswordKey"/>
+        <local:HidePasswordDots x:Key="HidePasswordDotsKey"/>
+        <local:ConvertEyeColor x:Key="ConvertEyeColorKey"/>
+        <local:ConvertEyeWithLine x:Key="ConvertEyeWithLineKey"/>
+
         <!-- Triggers -->
         <Style TargetType="DataGridRow">
             <Setter Property="Background" Value="#E6E6FA"/>

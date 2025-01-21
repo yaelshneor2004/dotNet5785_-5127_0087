@@ -317,43 +317,43 @@ internal static class VolunteerManager
         return DO.MyCallType.None;
     }
 
-    /// <summary>
-    /// Periodically updates volunteers' status and roles based on their activities.
-    /// </summary>
-    /// <param name="oldClock">The previous clock time.</param>
-    /// <param name="newClock">The new clock time.</param>
-    public static void PeriodicVolunteersUpdates(DateTime oldClock, DateTime newClock)
-    {
-        var volunteers = s_dal.Volunteer.ReadAll().ToList();
-        var assignments = s_dal.Assignment.ReadAll().ToList();
+    ///// <summary>
+    ///// Periodically updates volunteers' status and roles based on their activities.
+    ///// </summary>
+    ///// <param name="oldClock">The previous clock time.</param>
+    ///// <param name="newClock">The new clock time.</param>
+    //public static void PeriodicVolunteersUpdates(DateTime oldClock, DateTime newClock)
+    //{
+    //    var volunteers = s_dal.Volunteer.ReadAll().ToList();
+    //    var assignments = s_dal.Assignment.ReadAll().ToList();
 
-        var volunteerUpdates = volunteers.Select(volunteer =>
-        {
-            var volunteerAssignments = assignments.Where(a => a.VolunteerId == volunteer.Id).ToList();
+    //    var volunteerUpdates = volunteers.Select(volunteer =>
+    //    {
+    //        var volunteerAssignments = assignments.Where(a => a.VolunteerId == volunteer.Id).ToList();
 
-            // If the volunteer has not handled calls for 2 years, they are marked as inactive
-            if (!volunteerAssignments.Any() || (newClock - volunteerAssignments.Max(a => a.FinishCall ?? DateTime.MinValue)).TotalDays > 2 * 365)
-            {
-                volunteer = volunteer with { IsActive = false };
-                Observers.NotifyItemUpdated(volunteer.Id); // Add call to NotifyItemUpdated
-            }
+    //        // If the volunteer has not handled calls for 2 years, they are marked as inactive
+    //        if (!volunteerAssignments.Any() || (newClock - volunteerAssignments.Max(a => a.FinishCall ?? DateTime.MinValue)).TotalDays > 2 * 365)
+    //        {
+    //            volunteer = volunteer with { IsActive = false };
+    //            Observers.NotifyItemUpdated(volunteer.Id); // Add call to NotifyItemUpdated
+    //        }
 
-            // Upgrade the volunteer's role if he has handled more than 100 calls and is not a manager
-            if (volunteerAssignments.Count(a => a.FinishType == DO.MyFinishType.Treated) >= 100 && volunteer.Role != DO.MyRole.Manager)
-            {
-                volunteer = volunteer with { Role = DO.MyRole.Manager };
-                Observers.NotifyItemUpdated(volunteer.Id); // Add call to NotifyItemUpdated
-            }
+    //        // Upgrade the volunteer's role if he has handled more than 100 calls and is not a manager
+    //        if (volunteerAssignments.Count(a => a.FinishType == DO.MyFinishType.Treated) >= 100 && volunteer.Role != DO.MyRole.Manager)
+    //        {
+    //            volunteer = volunteer with { Role = DO.MyRole.Manager };
+    //            Observers.NotifyItemUpdated(volunteer.Id); // Add call to NotifyItemUpdated
+    //        }
 
-            return volunteer;
-        }).ToList();
+    //        return volunteer;
+    //    }).ToList();
 
-        // Update volunteers in the database
-        volunteerUpdates.ForEach(volunteer => s_dal.Volunteer.Update(volunteer));
+    //    // Update volunteers in the database
+    //    volunteerUpdates.ForEach(volunteer => s_dal.Volunteer.Update(volunteer));
 
-        // Add call to NotifyListUpdated
-        Observers.NotifyListUpdated();
-    }
+    //    // Add call to NotifyListUpdated
+    //    Observers.NotifyListUpdated();
+    //}
 
 
 

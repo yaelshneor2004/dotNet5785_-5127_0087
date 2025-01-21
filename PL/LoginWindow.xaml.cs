@@ -1,6 +1,7 @@
 ﻿using PL.Volunteer;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace PL;
 
@@ -9,109 +10,127 @@ namespace PL;
 /// </summary>
 public partial class LoginWindow : Window
 {
-    private static bool isManagerLoggedIn = false;
+
+private static PasswordBox? FindPasswordBox(DependencyObject parent)
+{
+    for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+    {
+        var child = VisualTreeHelper.GetChild(parent, i);
+        if (child is PasswordBox passwordBox)
+            return passwordBox;
+        var result = FindPasswordBox(child);
+        if (result != null)
+            return result;
+    }
+    return null;
+}
+private static bool isManagerLoggedIn = false;
 
     static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
     public LoginWindow()
     {
         InitializeComponent();
     }
-
-    public string TextBoxId
+    public int userNameText {  get;  set; }
+    public Visibility passwordVisibility
     {
-        get { return (string)GetValue(TextBoxIdProperty); }
-        set { SetValue(TextBoxIdProperty, value); }
+        get { return (Visibility)GetValue(passwordVisibilityProperty); }
+        set { SetValue(passwordVisibilityProperty, value); }
     }
-    public static readonly DependencyProperty TextBoxIdProperty =
-        DependencyProperty.Register("TextBoxId", typeof(string), typeof(LoginWindow), new PropertyMetadata(string.Empty));
+
+    public static readonly DependencyProperty passwordVisibilityProperty =
+        DependencyProperty.Register("passwordVisibility", typeof(Visibility), typeof(LoginWindow), new PropertyMetadata(Visibility.Collapsed));
+    public Visibility TextVisibility
+    {
+        get { return (Visibility)GetValue(TextVisibilityProperty); }
+        set { SetValue(TextVisibilityProperty, value); }
+    }
+
+    public static readonly DependencyProperty TextVisibilityProperty =
+        DependencyProperty.Register("TextVisibility", typeof(Visibility), typeof(LoginWindow), new PropertyMetadata(Visibility.Collapsed));
+
+    public string passwordText
+    {
+        get { return (string)GetValue(passwordTextProperty); }
+        set { SetValue(passwordTextProperty, value); }
+    }
+    public static readonly DependencyProperty passwordTextProperty =
+        DependencyProperty.Register("passwordText", typeof(string), typeof(LoginWindow), new PropertyMetadata(string.Empty));
 
     private void Login_Click(object sender, RoutedEventArgs e)
     {
-        int id;
-        if (string.IsNullOrWhiteSpace(TextBoxId) || !int.TryParse(TextBoxId, out id))
+        try
         {
-            MessageBox.Show("Please enter a valid ID.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            return;
-        }
-
-        string password = PasswordBox.Password;
-        if (string.IsNullOrWhiteSpace(password))
-        {
-            MessageBox.Show("Please enter your password.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            return;
-        }
-
-        BO.Volunteer v = s_bl.Volunteer.GetVolunteerDetails(id);
-        if (v == null || v.Password != password)
-        {
-            MessageBox.Show("Invalid ID or password.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            return;
-        }
-
-        if (v.Role == BO.MyRole.Manager)
-        {
-            if (isManagerLoggedIn)
+            var userDetails = s_bl.Volunteer.GetVolunteerDetails(userNameText);
+            int id = userDetails.Id;
+            if (userDetails.Password != FindPasswordBox(this)!.Password)
             {
-                MessageBox.Show("Administrator is already logged in, please wait until the connection is complete");
+                MessageBox.Show("The password you entered does not match our records. Please try again.", "Password Mismatch", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
-            else
+
+
+            if (userDetails.Role == BO.MyRole.Manager)
             {
-                MessageBoxResult result = MessageBox.Show("Do you want to open the main screen?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                if (result == MessageBoxResult.Yes)
+                if (isManagerLoggedIn)
                 {
-                    var main = new MainWindow(id);
-                    main.Closed += (s, e) => isManagerLoggedIn = false;
-                    main.Show();
-                    isManagerLoggedIn = true;
+                    MessageBox.Show("Administrator is already logged in, please wait until the connection is complete");
                 }
-
                 else
-                    new VolunteerUserWindow(v.Id).Show();
+                {
+                    MessageBoxResult result = MessageBox.Show("Do you want to open the main screen?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        var main = new MainWindow(id);
+                        main.Closed += (s, e) => isManagerLoggedIn = false;
+                        main.Show();
+                        isManagerLoggedIn = true;
+                    }
+
+                    else
+                        new VolunteerUserWindow(id).Show();
+                }
+            }
+            else // this is volunteer
+            {
+                new VolunteerUserWindow(id).Show();
             }
         }
-        else // this is volunteer
+        catch (BO.BlDoesNotExistException ex)
         {
-            new VolunteerUserWindow(id).Show();
+            MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"An unknown error occurred: {ex.Message}.", "Unknown Error");
         }
     }
 
     private void TogglePasswordVisibility(object sender, RoutedEventArgs e)
     {
-        if (PasswordBox.Visibility == Visibility.Visible)
+
+        if (passwordVisibility == Visibility.Visible)
         {
-            PasswordBox.Visibility = Visibility.Collapsed;
-            VisiblePassword.Visibility = Visibility.Visible;
-            VisiblePassword.Text = PasswordBox.Password;
+            TextVisibility = Visibility.Visible;
+            passwordVisibility = Visibility.Collapsed;
+            passwordText=FindPasswordBox(this)!.Password;
+
         }
         else
         {
-            PasswordBox.Visibility = Visibility.Visible;
-            VisiblePassword.Visibility = Visibility.Collapsed;
-            PasswordBox.Password = VisiblePassword.Text;
+            passwordText = FindPasswordBox(this)!.Password;
+            passwordVisibility = Visibility.Visible;
+            TextVisibility = Visibility.Collapsed;
+
         }
     }
-
-    private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
-    {
-        VisiblePassword.Text = PasswordBox.Password;
-    }
-
-    private void VolunteerUserWindow_Click(object sender, RoutedEventArgs e)
-    {
-        int id = Convert.ToInt32(TextBoxId);
-
-        BO.Volunteer v = s_bl.Volunteer.GetVolunteerDetails(id);
-        if (v.Role == BO.MyRole.Manager)
-            new VolunteerUserWindow(id).Show();
-    }
-    private void CloseAllWindows()
-    {
-        foreach (Window window in Application.Current.Windows)
-        {
-            if (window != this)
-                window.Close();
-        }
-        isManagerLoggedIn = false;
-    }
+    //private void Window_closing()
+    //{
+    //    foreach (Window window in Application.Current.Windows)
+    //    {
+    //        if (window != this)
+    //            window.Close();
+    //    }
+    //    isManagerLoggedIn = false;
+    //}
 
 }
