@@ -15,11 +15,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\closeEye.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.Maps.MapControl.WPF" Version="1.0.0.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\BL\BL.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\closeEye.jpg" />
   </ItemGroup>
 
 </Project>

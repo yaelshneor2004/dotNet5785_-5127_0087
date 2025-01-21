@@ -5,7 +5,7 @@ namespace BlApi;
 public interface IVolunteer : IObservable
 {
     //Returns the user role
-    BO.MyRole Login(string username, string password);
+    (BO.MyRole,int ) Login(string username, string password);
 
     //Returns a sorted and filtered collection of a logical data entity
     IEnumerable< BO.VolunteerInList> GetVolunteerList(bool? IsActive, BO.MySortInVolunteerInList? mySortInVolunteerInList);

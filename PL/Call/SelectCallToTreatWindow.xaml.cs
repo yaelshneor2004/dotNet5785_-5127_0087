@@ -57,10 +57,8 @@ namespace PL.Call
             {
                 id = idV;
                 InitializeComponent();
-                Loaded += CallListWindow_Loaded;
-                Closed += CallListWindow_Closed;
                 CurrentVolunteer = (id != 0) ? s_bl.Volunteer.GetVolunteerDetails(id)! : new BO.Volunteer();
-
+                queryCallList(id );
             }
             catch (BO.BlDoesNotExistException ex)
             {
@@ -78,24 +76,46 @@ namespace PL.Call
         private void CallListWindow_Loaded(object sender, RoutedEventArgs e)
         {
             s_bl.Call.AddObserver(callListObserver);
+            CurrentVolunteer = (id != 0) ? s_bl.Volunteer.GetVolunteerDetails(id)! : new BO.Volunteer();
         }
 
         /// <summary>
         /// Queries the call list based on the filter by type.
         /// </summary>
-        private void queryCallList()
+        /// <summary>
+        /// מבצע שאילתה לרשימת הקריאות הפתוחות עבור הוולנטייר המצויין.
+        /// מביא את פרטי הוולנטייר וקורא לשירות לקבלת הקריאות הפתוחות, תוך החלת פילטר אם צוין.
+        /// </summary>
+        /// <param name="id">מספר הזיהוי של הוולנטייר שאת רשימת הקריאות יש לבצע לה שאילתה.</param>
+        private void queryCallList(int id)
         {
-            OpenCallList = (FilterByType == BO.MyCallType.None) ?
-                s_bl?.Call.SortOpenedCalls(id, null, null)! :
-                s_bl?.Call.SortOpenedCalls(id, FilterByType, null)!;
+            try
+            {
+                CurrentVolunteer = s_bl.Volunteer.GetVolunteerDetails(id);
+                if (CurrentVolunteer == null)
+                    throw new NullReferenceException("CurrentVolunteer is null.");
+
+                Console.WriteLine($"Querying call list for Volunteer ID: {CurrentVolunteer.Id}, Filter: {FilterByType}");
+
+                OpenCallList = FilterByType == BO.MyCallType.None
+                    ? s_bl.Call.SortOpenedCalls(CurrentVolunteer.Id, null, null)
+                    : s_bl.Call.SortOpenedCalls(CurrentVolunteer.Id, FilterByType, null);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to query call list: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Console.WriteLine($"Error in queryCallList: {ex}");
+            }
         }
+
 
         /// <summary>
         /// Observer method to update the call list.
         /// </summary>
         private void callListObserver()
         {
-            queryCallList();
+            if(CurrentVolunteer!=null)
+            queryCallList(id);
         }
 
         /// <summary>
@@ -111,7 +131,7 @@ namespace PL.Call
         /// </summary>
         private void cmbFiltedrChanges_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            queryCallList();
+            queryCallList(id);
         }
 
         /// <summary>
@@ -156,7 +176,7 @@ namespace PL.Call
             {
                 s_bl.Volunteer.UpdateVolunteer(id, CurrentVolunteer);
                 MessageBox.Show("The address has been updated successfully", "Message", MessageBoxButton.OK, MessageBoxImage.Information);
-                queryCallList();
+                queryCallList(id);
             }
             catch (BO.BlInvalidOperationException ex)
             {

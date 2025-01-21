@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="VolunteerWindow" Height="600" Width="450"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
-        Language="he-IL">
+        Language="he-IL" Loaded="VolunteerWindow_Loaded" Closed="VolunteerWindow_Closed">
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel>

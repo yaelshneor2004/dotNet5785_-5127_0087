@@ -50,8 +50,6 @@ namespace PL.Volunteer
         {
             id = idV;
             InitializeComponent();
-            Loaded += CallListWindow_Loaded;
-            Closed += CallListWindow_Closed;
         }
 
         /// <summary>

@@ -15,7 +15,7 @@ internal class VolunteerImplementation:IVolunteer
     /// <returns>The role of the volunteer.</returns>
     /// <exception cref="BO.BlUnauthorizedAccessException">Thrown when the username or password is incorrect.</exception>
     /// <exception cref="BO.BlDoesNotExistException">Thrown when the user does not exist in the system.</exception>
-    public BO.MyRole Login(string username, string password)
+    public (BO.MyRole,int ) Login(string username, string password)
     {
         try
         {
@@ -28,7 +28,7 @@ internal class VolunteerImplementation:IVolunteer
                 throw new BO.BlUnauthorizedAccessException($"Username {username} does not exist");
             if (user.Password != password)
                 throw new BO.BlUnauthorizedAccessException($"Password {password} is incorrect");
-            return (BO.MyRole)user.Role;
+            return ((BO.MyRole)user.Role,user.Id);
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -44,7 +44,7 @@ internal class VolunteerImplementation:IVolunteer
     {
         try
         {
-            AdminManager.ThrowOnSimulatorIsRunning();
+            //AdminManager.ThrowOnSimulatorIsRunning();
             VolunteerManager.ValidateVolunteerDetails(myVolunteer);
             // Attempt to add the new volunteer to DAL
             myVolunteer.Password = myVolunteer.Password != null ? VolunteerManager.Encrypt(myVolunteer.Password) : null;
@@ -67,7 +67,7 @@ internal class VolunteerImplementation:IVolunteer
         {
             try
             {
-            AdminManager.ThrowOnSimulatorIsRunning();
+            //AdminManager.ThrowOnSimulatorIsRunning();
             // Retrieve the volunteer details from DAL
             var volunteer = _dal.Volunteer.Read(volunteerId);
                 // Check if the volunteer is currently handling any calls or has handled any calls in the past
@@ -140,7 +140,7 @@ internal class VolunteerImplementation:IVolunteer
     {
         try
         {
-            AdminManager.ThrowOnSimulatorIsRunning();
+            //AdminManager.ThrowOnSimulatorIsRunning();
             // Retrieve requester details from DAL
             var volunteer = _dal.Volunteer.Read(id);
             // Check if the address has changed and update the coordinates

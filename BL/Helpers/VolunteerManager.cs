@@ -304,7 +304,7 @@ internal static class VolunteerManager
     private static DO.MyCallType GetCallType(int id)
     {
         var assignment = s_dal.Assignment.ReadAll();
-        DO.Assignment? ass = assignment.FirstOrDefault(a => a.VolunteerId == id);
+        DO.Assignment? ass = assignment.FirstOrDefault(a => a.VolunteerId == id&&a.FinishType==null);
         if (ass != null)
         {
             var call = s_dal.Call.Read(ass.CallId);

@@ -52,8 +52,6 @@ namespace PL.Volunteer
             id = idV;
             ButtonText = id == 0 ? "Add" : "Update";
             InitializeComponent();
-            Loaded += VolunteerWindow_Loaded;
-            Closed += VolunteerWindow_Closed;
                 CurrentVolunteer = (id != 0) ? s_bl.Volunteer.GetVolunteerDetails(id)! : new BO.Volunteer();
 
             }
@@ -104,9 +102,8 @@ namespace PL.Volunteer
             if (ButtonText == "Add")
             {
                     s_bl.Volunteer.AddVolunteer(CurrentVolunteer);
-                    MessageBox.Show("Volunteer added successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                    Close();
-                
+                    MessageBox.Show("Volunteer added successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);                
+                      Close();
             }
             else
             {
@@ -114,7 +111,7 @@ namespace PL.Volunteer
                 {
                     s_bl.Volunteer.UpdateVolunteer(id, CurrentVolunteer);
                     MessageBox.Show("Volunteer updated successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                    Close();
+                    Close() ;
                 }
                 catch (BO.BlInvalidOperationException ex)
                 {

@@ -42,18 +42,21 @@ namespace PL
         {
             idManager = id;
             InitializeComponent();
+            updateCallAmount();
             DataContext = this;
-            var callAmounts = s_bl.Call.CallAmount();
-            var statusList = callAmounts
-                .Select((count, index) => new helper
-                {
-                    index = count,
-                    value = (BO.MyCallStatus)index
-                })
-                .ToList();
-            StatusList = statusList;
-            Loaded += MainWindow_Loaded;
-            Closed += MainWindow_Closed;
+
+        }
+        private void updateCallAmount()
+        {
+                var callAmounts = s_bl.Call.CallAmount();
+                var statusListAmount = callAmounts
+                    .Select((count, index) => new helper
+                    {
+                        index = count,
+                        value = (BO.MyCallStatus)index
+                    })
+                    .ToList();
+                StatusList = statusListAmount;
         }
 
         /// <summary>
@@ -90,6 +93,7 @@ namespace PL
             MaxRiskRange = s_bl.Admin.GetRiskRange();
         }
 
+
         /// <summary>
         /// Gets or sets the current time.
         /// </summary>
@@ -122,6 +126,8 @@ namespace PL
             MaxRiskRange = s_bl.Admin.GetRiskRange();
             s_bl.Admin.AddClockObserver(clockObserver);
             s_bl.Admin.AddConfigObserver(configObserver);
+            s_bl.Call.AddObserver(updateCallAmount);
+
         }
 
         /// <summary>
@@ -131,6 +137,7 @@ namespace PL
         {
             s_bl.Admin.RemoveClockObserver(clockObserver);
             s_bl.Admin.RemoveConfigObserver(configObserver);
+            s_bl.Call.RemoveObserver(updateCallAmount);
         }
 
         /// <summary>
@@ -225,6 +232,7 @@ namespace PL
                 }
                 // Call the reset method
                 s_bl.Admin.Reset();
+                updateCallAmount();
                 // Change cursor to wait cursor
                 Mouse.OverrideCursor = null;
             }

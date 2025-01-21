@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="CallWindow" Height="600" Width="450"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
-        Language="he-IL">
+        Language="he-IL" Loaded="CallWindow_Loaded" Closed="CallWindow_Closed">
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Margin="10">
@@ -15,7 +15,7 @@
             <TextBox Text="{Binding CurrentCall.Id, Mode=TwoWay}" IsReadOnly="True" Style="{StaticResource {x:Type TextBox}}" Foreground="Black" Margin="0,5,0,5" Visibility="{Binding CurrentCall.Id,Converter={StaticResource ConvertIdCalltoVisibilityKey}}"/>
             <Label Content="Type:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Margin="0,5,0,5"/>
             <ComboBox ItemsSource="{Binding Source={StaticResource SortCollectionMyCallTypeKey}}" SelectedItem="{Binding CurrentCall.Type}" SelectedValue="{Binding CurrentCall.Type, Mode=TwoWay}" Style="{StaticResource {x:Type ComboBox}}" Foreground="Black" Margin="0,5,0,5"
-                  IsEnabled="{Binding CurrentCall,Converter={StaticResource ConvertCallComboboxToReadOnlyKey}}"/>
+                  IsEnabled="{Binding CurrentCall,Converter={StaticResource ConvertCallComboboxToReadOnlyKey}}" Background="White"/>
 
             <Label Content="Description:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Margin="0,5,0,5"/>
             <TextBox Text="{Binding CurrentCall.Description}" Style="{StaticResource {x:Type TextBox}}" IsReadOnly="{Binding CurrentCall,Converter={StaticResource ConvertCallToReadOnlyKey}}" Foreground="Black" Margin="0,5,0,5"/>

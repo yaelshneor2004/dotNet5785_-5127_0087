@@ -51,8 +51,6 @@ public partial class VolunteerUserWindow : Window
         try
         {
             InitializeComponent();
-            Loaded += VolunteerUserWindow_Loaded;
-            Closed += VolunteerUserWindow_Closed;
             CurrentVolunteer = (id != 0) ? s_bl.Volunteer.GetVolunteerDetails(id)! : new BO.Volunteer();
             CurrentCall = CurrentVolunteer.CurrentCall != null ? s_bl.Call.GetCallDetails(CurrentVolunteer.CurrentCall.CallId)! : new BO.Call();
         }
@@ -227,4 +225,6 @@ public partial class VolunteerUserWindow : Window
             MessageBox.Show($"An unknown error occurred: {ex.Message}.", "Unknown Error");
         }
     }
+
+
 }

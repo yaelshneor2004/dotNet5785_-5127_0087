@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="VolunteerUserWindow" Height="450" Width="800"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
-        Language="he-IL">
+        Language="he-IL" Loaded="VolunteerUserWindow_Loaded" Closed="VolunteerUserWindow_Closed">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel>
             <Label Content="ID:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
@@ -36,9 +36,8 @@
                    Foreground="Black"
                    IsEnabled="False"/>
 
-            <Label Content="Is Active:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
-            <CheckBox IsChecked="{Binding CurrentVolunteer.IsActive, Mode=TwoWay}" Style="{StaticResource {x:Type CheckBox}}" IsEnabled="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToReadOnlyKey}}"/>
-
+            <Label Content="Is Active:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Margin="0, 20, 0, 5"/>
+            <CheckBox IsChecked="{Binding CurrentVolunteer.IsActive, Mode=TwoWay}" Style="{StaticResource {x:Type CheckBox}}" HorizontalAlignment="Right" RenderTransformOrigin="-46.115,0.307"/>
             <Label Content="Max Distance:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
             <TextBox Text="{Binding CurrentVolunteer.MaxDistance}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>
 

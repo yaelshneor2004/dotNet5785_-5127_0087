@@ -73,8 +73,6 @@ namespace PL.Call
             {
                 ButtonText = id == 0 ? "Add" : "Update";
                 InitializeComponent();
-                Loaded += CallWindow_Loaded;
-                Closed += CallWindow_Closed;
                 CurrentCall = (id != 0) ? s_bl.Call.GetCallDetails(id)! : new BO.Call()
                 {
                     Id = 0,
@@ -92,7 +90,6 @@ namespace PL.Call
             catch (BO.BlDoesNotExistException ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                Close();
             }
             catch (Exception ex)
             {
@@ -172,7 +169,6 @@ namespace PL.Call
             catch (BO.BlDoesNotExistException ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                Close();
             }
             catch (Exception ex)
             {

@@ -35,8 +35,6 @@ namespace PL.Call
             idManager = id;
             SortInCallInList = status;
             InitializeComponent();
-            Loaded += CallListWindow_Loaded;
-            Closed += CallListWindow_Closed;
         }
 
         /// <summary>

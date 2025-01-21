@@ -28,8 +28,6 @@ namespace PL.Volunteer
         public VolunteerListWindow()
         {
             InitializeComponent();
-            Loaded += Window_Loaded;
-            Closed += Window_Closed;
         }
 
         public IEnumerable<BO.VolunteerInList> VolunteerInList

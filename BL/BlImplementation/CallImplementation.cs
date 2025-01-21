@@ -18,7 +18,7 @@ internal class CallImplementation : ICall
     /// <param name="call">The call details to add.</param>
     public void AddCall(BO.Call call)
     {
-        AdminManager.ThrowOnSimulatorIsRunning();
+        //AdminManager.ThrowOnSimulatorIsRunning();
             // Validate the format of the values
             CallManager.ValidateCallFormat(call);
             // Validate the logical correctness of the values
@@ -75,7 +75,7 @@ internal class CallImplementation : ICall
     {
         try
         {
-                AdminManager.ThrowOnSimulatorIsRunning();
+                //AdminManager.ThrowOnSimulatorIsRunning();
                 // Retrieve call details from the data layer
                 var callData = _dal.Call.Read(callId);
                 // Check if the call is open and has never been assigned
@@ -86,7 +86,6 @@ internal class CallImplementation : ICall
             // Attempt to delete the call in the data layer
                 _dal.Call.Delete(callId);
             CallManager.Observers.NotifyListUpdated(); 	
-            VolunteerManager.Observers.NotifyListUpdated();
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -110,9 +109,7 @@ internal class CallImplementation : ICall
                  callData = _dal.Call.Read(callId) ?? throw new BO.BlDoesNotExistException($"Call with ID {callId} does not exist.");
                 // Convert DO.Call to BO.Call and return
                 return CallManager.ConvertFromDoToBo(callData);
-            CallManager.Observers.NotifyItemUpdated(callId);
-            CallManager.Observers.NotifyListUpdated();
-            VolunteerManager.Observers.NotifyListUpdated();
+
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -202,9 +199,10 @@ internal class CallImplementation : ICall
                 throw new BO.BlInvalidOperationException("The call has expired.");
 
             _dal.Assignment.Create(new DO.Assignment(0, idC, idV, AdminManager.Now, null, null));
-            CallManager.Observers.NotifyItemUpdated(idC);
             VolunteerManager.Observers.NotifyItemUpdated(idV);
+            CallManager.Observers.NotifyItemUpdated(idC);
             CallManager.Observers.NotifyListUpdated();
+            VolunteerManager.Observers.NotifyListUpdated();
 
         }
         catch (DO.DalDoesNotExistException ex)
@@ -226,9 +224,6 @@ internal class CallImplementation : ICall
         var closeListNew = closeList.Where(a => a.VolunteerId == idV &&a.FinishType!=null).Select(a => convertAssignmentToClosed(a)).ToList();
         closeListNew = callType.HasValue ? closeListNew.Where(call => call.Type == callType.Value).ToList() : closeListNew;
         return CallManager.SortClosedCallsByField(closeListNew, closeCall);
-        CallManager.Observers.NotifyListUpdated();
-        CallManager.Observers.NotifyListUpdated();
-        VolunteerManager.Observers.NotifyListUpdated();
     }
 
 
@@ -245,9 +240,7 @@ internal class CallImplementation : ICall
         var openCalls = _dal.Call.ReadAll().Where(c=>CallManager.OpenCondition(c)&&CallManager.VolunteerArea(volunteer, c)).Select(c => CallManager.convertCallToOpened(volunteer,c)).ToList();
         openCalls = callType.HasValue ? openCalls.Where(call => call.Type == callType.Value).ToList() : openCalls;
         return CallManager.SortOpenCallsByField(openCalls, openedCall);
-        CallManager.Observers.NotifyListUpdated();
 
-        VolunteerManager.Observers.NotifyListUpdated();
     }
 
     /// <summary>
@@ -259,7 +252,7 @@ internal class CallImplementation : ICall
     {
         try
         {
-            AdminManager.ThrowOnSimulatorIsRunning();
+            //AdminManager.ThrowOnSimulatorIsRunning();
             // Validate the format of the values
             CallManager.ValidateCallFormat(myCall);
             // Validate the logical correctness of the values
@@ -318,6 +311,7 @@ internal class CallImplementation : ICall
             }
             CallManager.Observers.NotifyItemUpdated(idC);
             VolunteerManager.Observers.NotifyItemUpdated(idV);
+            CallManager.Observers.NotifyListUpdated();
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -356,6 +350,10 @@ internal class CallImplementation : ICall
 
             // Attempt to update the assignment entity in the data layer
             _dal.Assignment.Update(updatedAssignment);
+            CallManager.Observers.NotifyItemUpdated(idC);
+            VolunteerManager.Observers.NotifyItemUpdated(volunteerId);
+            CallManager.Observers.NotifyListUpdated();
+
         }
         catch (DO.DalDoesNotExistException ex)
         {

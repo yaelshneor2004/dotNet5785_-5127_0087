@@ -44,25 +44,31 @@
             </Style.Triggers>
         </Style>
 
-        <Style TargetType="ComboBox">
-            <Setter Property="Foreground" Value="#9370DB"/>
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="Margin" Value="10,0"/>
-            <Setter Property="BorderBrush" Value="#9370DB"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Background" Value="#E6E6FA"/>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#9370DB"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-        <Style TargetType="DataGridColumnHeader">
-            <Setter Property="Background" Value="#E6E6FA"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-        </Style>
+            <!-- Style for ComboBox -->
+            <Style TargetType="ComboBox">
+                <Setter Property="Foreground" Value="#9370DB"/>
+                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="Margin" Value="10,0"/>
+                <Setter Property="BorderBrush" Value="#9370DB"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="Background" Value="#E6E6FA"/>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="#9370DB"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <!-- Style for DataGridColumnHeader -->
+            <Style TargetType="DataGridColumnHeader">
+                <Setter Property="Background" Value="#E6E6FA"/>
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="FontWeight" Value="Bold"/>
+                <Setter Property="BorderBrush" Value="#9370DB"/>
+                <Setter Property="BorderThickness" Value="1"/>
+            </Style>
+
 
         <Style TargetType="Button">
             <Setter Property="Background" Value="#E6E6FA"/>
