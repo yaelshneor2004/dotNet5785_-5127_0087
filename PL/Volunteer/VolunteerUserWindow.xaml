@@ -10,40 +10,108 @@
         Language="he-IL" Loaded="VolunteerUserWindow_Loaded" Closed="VolunteerUserWindow_Closed">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel>
-            <Label Content="ID:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
-            <TextBox Text="{Binding CurrentVolunteer.Id,Mode=TwoWay}" IsReadOnly="{Binding CurrentVolunteer.Id, Converter={StaticResource ConvertObjIdToTFKey}}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>
+            <GroupBox Header="VOLUNTEER DETAILS" Style="{StaticResource {x:Type GroupBox}}" Foreground="Blue" Margin="10">
+                <StackPanel>
+                    <Label Content="ID:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
+                    <TextBox Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}" IsReadOnly="{Binding CurrentVolunteer.Id, Converter={StaticResource ConvertObjIdToTFKey}}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black">
+                        <TextBox.Text>
+                            <Binding Path="CurrentVolunteer.Id" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <StaticResource ResourceKey="idNumValidationKey"/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
 
-            <Label Content="Full Name:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
-            <TextBox Text="{Binding CurrentVolunteer.FullName}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>
+                    <Label Content="Full Name:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
+                    <TextBox Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}"  Style="{StaticResource {x:Type TextBox}}" Foreground="Black">
+                        <TextBox.Text>
+                            <Binding Path="CurrentVolunteer.FullName" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <StaticResource ResourceKey="nameValidationKey"/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
 
-            <Label Content="Phone:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
-            <TextBox Text="{Binding CurrentVolunteer.Phone}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>
+                    <Label Content="Phone:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
+                    <TextBox Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black">
+                        <TextBox.Text>
+                            <Binding Path="CurrentVolunteer.Phone" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <StaticResource ResourceKey="phoneValidationKey"/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
 
-            <Label Content="Email:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
-            <TextBox Text="{Binding CurrentVolunteer.Email}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>
+                    <Label Content="Email:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
+                    <TextBox Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black">
+                        <TextBox.Text>
+                            <Binding Path="CurrentVolunteer.Email" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <StaticResource ResourceKey="emailValidationKey"/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
 
-            <Label Content="Password:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
-            <TextBox Text="{Binding CurrentVolunteer.Password}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>
+                    <Label Content="Password:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
+                    <TextBox Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black">
+                        <TextBox.Text>
+                            <Binding Path="CurrentVolunteer.Password" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <StaticResource ResourceKey="passwordValidationKey"/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
 
-            <Label Content="Address:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
-            <TextBox Text="{Binding CurrentVolunteer.Address}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>
+                    <Label Content="Address:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
+                    <TextBox Text="{Binding CurrentVolunteer.Address}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>
 
-            <Label Content="Role:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
-            <ComboBox ItemsSource="{Binding Source={StaticResource SortCollectionRolesKey}}"
-                   SelectedItem="{Binding Role}"
-                   SelectedValue="{Binding CurrentVolunteer.Role, Mode=TwoWay}"
-                   Style="{StaticResource {x:Type ComboBox}}"
-                   Foreground="Black"
-                   IsEnabled="False"/>
+                    <Label Content="Role:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
+                    <ComboBox ItemsSource="{Binding Source={StaticResource SortCollectionRolesKey}}"
+                  SelectedItem="{Binding Role}"
+                  SelectedValue="{Binding CurrentVolunteer.Role, Mode=TwoWay}"
+                  Style="{StaticResource {x:Type ComboBox}}"
+                  Foreground="Black"
+                  IsEnabled="False"/>
 
-            <Label Content="Is Active:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Margin="0, 20, 0, 5"/>
-            <CheckBox IsChecked="{Binding CurrentVolunteer.IsActive, Mode=TwoWay}" Style="{StaticResource {x:Type CheckBox}}" HorizontalAlignment="Right" RenderTransformOrigin="-46.115,0.307"/>
-            <Label Content="Max Distance:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
-            <TextBox Text="{Binding CurrentVolunteer.MaxDistance}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>
+                    <Label Content="Is Active:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Margin="0, 20, 0, 5"/>
+                    <CheckBox IsChecked="{Binding CurrentVolunteer.IsActive, Mode=TwoWay}" Style="{StaticResource {x:Type CheckBox}}" HorizontalAlignment="Right" RenderTransformOrigin="-46.115,0.307"/>
 
-            <Label Content="Type Distance:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
-            <ComboBox ItemsSource="{Binding Source={StaticResource SortCollectionDistancesKey}}" SelectedItem="{Binding TypeDistance}" SelectedValue="{Binding CurrentVolunteer.TypeDistance, Mode=TwoWay}" Style="{StaticResource {x:Type ComboBox}}" Foreground="Black"/>
-            <Button Content="Update" Width="130" Click="btnUpdate_Click" HorizontalAlignment="Center" Margin="10,10,10,10"/>
+                    <Label Content="Max Distance:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
+                    <TextBox Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black">
+                        <TextBox.Text>
+                            <Binding Path="CurrentVolunteer.MaxDistance" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <StaticResource ResourceKey="maxDistanceValidationKey"/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+
+                    <Label Content="Type Distance:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
+                    <ComboBox ItemsSource="{Binding Source={StaticResource SortCollectionDistancesKey}}" 
+                  SelectedItem="{Binding TypeDistance}" 
+                  SelectedValue="{Binding CurrentVolunteer.TypeDistance, Mode=TwoWay}" 
+                  Style="{StaticResource {x:Type ComboBox}}" 
+                  Foreground="Black"/>
+
+                    <Label Content="Num Treated Calls" Style="{StaticResource {x:Type Label}}" Foreground="Blue" />
+                    <TextBox Text="{Binding CurrentVolunteer.TotalCallsHandled, Mode=TwoWay}" IsReadOnly="True" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>
+
+                    <Label Content="Num Cancel Calls" Style="{StaticResource {x:Type Label}}" Foreground="Blue" />
+                    <TextBox Text="{Binding CurrentVolunteer.TotalCallsCancelled, Mode=TwoWay}" IsReadOnly="True" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>
+
+                    <Label Content="Num Expired Calls" Style="{StaticResource {x:Type Label}}" Foreground="Blue" />
+                    <TextBox Text="{Binding CurrentVolunteer.TotalCallsExpired, Mode=TwoWay}" IsReadOnly="True" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>
+
+                    <Button Content="Update" Width="130" Click="btnUpdate_Click" HorizontalAlignment="Center" Margin="10,10,10,10"/>
+                </StackPanel>
+            </GroupBox>
+
 
             <!-- New Fields Panel call -->
             <StackPanel Margin="0,0,0,20">

@@ -34,7 +34,13 @@
                         <PasswordBox Height="30" VerticalAlignment="Center" FontSize="15" Margin="0,0,0,0" Visibility="{Binding passwordVisibility,Mode=TwoWay}"/>
                         <TextBox Height="30" VerticalAlignment="Center" FontSize="15" Visibility="{Binding TextVisibility,Mode=TwoWay}" Text="{Binding passwordText,Mode=TwoWay}" Margin="0,0,0,0"/>
                     </Grid>
-                    <Button Content="{Binding ButtonImageSource,Mode=TwoWay}" Background="Transparent" BorderBrush="Transparent" Click="TogglePasswordVisibility" FontSize="20" Margin="186,0,2,0" />
+                    <Button  Background="Transparent" BorderBrush="Transparent" Click="TogglePasswordVisibility" FontSize="20" Margin="186,0,2,0">
+                        <Button.Content>
+                            <Image Source="{Binding ButtonImageSource,Mode=TwoWay}" 
+                                   Height="20" Width="20"/>
+                        </Button.Content>
+                    </Button>
+                           
                 </Grid>
 
                 <Button Content="Login" Height="30" Width="80" Click="Login_Click" FontSize="25" RenderTransformOrigin="0.25,0.557"/>

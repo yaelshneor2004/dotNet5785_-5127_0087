@@ -111,39 +111,57 @@ internal static class CallManager
             throw new BO.BlInvalidOperationException("Invalid callId.");
     }
 
-    /// <summary>
-    /// Determines the status of a call based on the current time and the assignment status.
-    /// </summary>
-    /// <param name="call">The call object.</param>
-    /// <returns>The status of the call.</returns>
-    public static BO.MyCallStatus GetCallStatus(DO.Call call)
+    internal static BO.MyCallStatus GetCallStatus(DO.Call callD)
     {
-        var assignment = s_dal.Assignment.ReadAll(a => a.CallId == call.Id);
-        var now = AdminManager.Now;
+        var assignmentsList = s_dal.Assignment.ReadAll(a => a.CallId == callD.Id);
 
-        if (assignment != null)
-        {
-            var  AssiegnmentIsClosed = assignment.FirstOrDefault(a=>a.VolunteerId!= 0 && a.FinishCall.HasValue && a.FinishCall < call.MaxFinishCall&&a.FinishType==DO.MyFinishType.Treated);
-            if (AssiegnmentIsClosed!=null)
+        var call = s_dal.Call.Read(callD.Id);
+        bool isInRisk = call?.MaxFinishCall - AdminManager.Now < s_dal.Config.RiskRange;
+        if (assignmentsList.Any(a => a.FinishType == DO.MyFinishType.Treated))
             return BO.MyCallStatus.Closed;
-        }
-        //if (call.MaxFinishCall.HasValue && now > call.MaxFinishCall.Value)
-        //    return BO.MyCallStatus.Expired;
-        if (now > call.MaxFinishCall.Value)
-            //if (/*call.MaxFinishCall.HasValue &&*/ now > call.MaxFinishCall.Value /*&& (assignment == null || assignment.FinishCall == null*/)
+        if (call?.MaxFinishCall < AdminManager.Now)
             return BO.MyCallStatus.Expired;
-        var newAsiiegnment = assignment.FirstOrDefault(a => a.FinishCall == null && a.FinishType == null);
-        if (newAsiiegnment!=null)
-        {
-            if (call.MaxFinishCall.HasValue && call.MaxFinishCall - now <= s_dal.Config.RiskRange)
-                return BO.MyCallStatus.InProgressAtRisk;
-            return BO.MyCallStatus.InProgress;
-        }
-        if (call.MaxFinishCall.HasValue && call.MaxFinishCall - now <= s_dal.Config.RiskRange)
-            return BO.MyCallStatus.OpenAtRisk;
 
-        return BO.MyCallStatus.Open;
+        if (!assignmentsList.Any())
+            return isInRisk ? BO.MyCallStatus.OpenAtRisk : BO.MyCallStatus.Open;
+        if (assignmentsList.Any(a => a.FinishType == null && a.FinishType == null))
+            return isInRisk ? BO.MyCallStatus.InProgressAtRisk : BO.MyCallStatus.InProgress;
+
+        return isInRisk ? BO.MyCallStatus.OpenAtRisk : BO.MyCallStatus.Open;
     }
+    ///// <summary>
+    ///// Determines the status of a call based on the current time and the assignment status.
+    ///// </summary>
+    ///// <param name="call">The call object.</param>
+    ///// <returns>The status of the call.</returns>
+    //public static BO.MyCallStatus GetCallStatus(DO.Call call)
+    //{
+    //    var assignment = s_dal.Assignment.ReadAll(a => a.CallId == call.Id);
+    //    var now = AdminManager.Now;
+
+    //    if (assignment != null)
+    //    {
+    //        var  AssiegnmentIsClosed = assignment.FirstOrDefault(a=>a.VolunteerId!= 0 && a.FinishCall.HasValue && a.FinishCall < call.MaxFinishCall&&a.FinishType==DO.MyFinishType.Treated);
+    //        if (AssiegnmentIsClosed!=null)
+    //        return BO.MyCallStatus.Closed;
+    //    }
+    //    //if (call.MaxFinishCall.HasValue && now > call.MaxFinishCall.Value)
+    //    //    return BO.MyCallStatus.Expired;
+    //    if (now > call.MaxFinishCall.Value)
+    //        //if (/*call.MaxFinishCall.HasValue &&*/ now > call.MaxFinishCall.Value /*&& (assignment == null || assignment.FinishCall == null*/)
+    //        return BO.MyCallStatus.Expired;
+    //    var newAsiiegnment = assignment.FirstOrDefault(a => a.FinishCall == null && a.FinishType == null);
+    //    if (newAsiiegnment!=null)
+    //    {
+    //        if (call.MaxFinishCall.HasValue && call.MaxFinishCall - now <= s_dal.Config.RiskRange)
+    //            return BO.MyCallStatus.InProgressAtRisk;
+    //        return BO.MyCallStatus.InProgress;
+    //    }
+    //    if (call.MaxFinishCall.HasValue && call.MaxFinishCall - now <= s_dal.Config.RiskRange)
+    //        return BO.MyCallStatus.OpenAtRisk;
+
+    //    return BO.MyCallStatus.Open;
+    //}
 
     /// <summary>
     /// Sorts the list of calls based on the specified sorting criteria.

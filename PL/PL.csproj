@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <None Remove="Resources\closeEye.jpg" />
+    <None Remove="Resources\openEye.jpg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,6 +29,7 @@
 
   <ItemGroup>
     <Resource Include="Resources\closeEye.jpg" />
+    <Resource Include="Resources\openEye.jpg" />
   </ItemGroup>
 
 </Project>

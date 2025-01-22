@@ -43,7 +43,7 @@ namespace PL
             idManager = id;
             InitializeComponent();
             updateCallAmount();
-            DataContext = this;
+           
 
         }
         private void updateCallAmount()

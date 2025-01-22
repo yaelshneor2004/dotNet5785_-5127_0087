@@ -59,7 +59,7 @@ namespace PL.Call
         }
 
         /// <summary>
-        /// Queries the call list based on the current sorting status.
+        /// Queries the call list based on the current sorting status.נ
         /// </summary>
         private void queryCallList()
         {

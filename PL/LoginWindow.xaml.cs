@@ -33,14 +33,14 @@ namespace PL
         }
 
         public string userNameText { get; set; }
-        public ImageSource ButtonImageSource
+        public string ButtonImageSource
         {
-            get { return (ImageSource)GetValue(ButtonImageSourceProperty); }
+            get { return (string)GetValue(ButtonImageSourceProperty); }
             set { SetValue(ButtonImageSourceProperty, value); }
         }
 
         public static readonly DependencyProperty ButtonImageSourceProperty =
-            DependencyProperty.Register("ButtonImageSource", typeof(ImageSource), typeof(LoginWindow), new PropertyMetadata(default (ImageSource)));
+            DependencyProperty.Register("ButtonImageSource", typeof(string), typeof(LoginWindow), new PropertyMetadata("/Resources/closeEye.jpg"));
 
         public Visibility passwordVisibility
         {
@@ -123,14 +123,14 @@ namespace PL
                 TextVisibility = Visibility.Visible;
                 passwordVisibility = Visibility.Collapsed;
                 passwordText = FindPasswordBox(this)!.Password;
-//ButtonImageSource = new BitmapImage(new Uri("pack://"\\Users\\user\\OneDrive\\שולחן העבודה\\שנה ב\\מיני פרויקט\\dotNet5785_ - 5127_0087\\PL\\Call\\\""));
+                ButtonImageSource = "/Resources/closeEye.jpg";
             }
             else
             {
                 passwordText = FindPasswordBox(this)!.Password;
                 passwordVisibility = Visibility.Visible;
                 TextVisibility = Visibility.Collapsed;
-                //ButtonImageSource=
+                ButtonImageSource = "/Resources/openEye.jpg";
             }
         }
 
