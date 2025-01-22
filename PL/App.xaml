@@ -66,7 +66,9 @@
                 </Style.Triggers>
             </Style>
 
-            <!-- Style for DataGridColumnHeader -->
+       
+
+        <!-- Style for DataGridColumnHeader -->
         <Style TargetType="DataGridColumnHeader">
             <Setter Property="Background" Value="#E6E6FA"/>
             <Setter Property="Foreground" Value="White"/>
@@ -110,11 +112,13 @@
             </Style.Triggers>
         </Style>
         <Style TargetType="Label">
-            <Setter Property="Foreground" Value="#9370DB"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="BorderThickness" Value="2"/>
-            <Setter Property="Margin" Value="10,0"/>
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Foreground" Value="#9370DB" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="BorderThickness" Value="2" />
+            <Setter Property="Margin" Value="10,0" />
         </Style>
+
 
         <Style TargetType="TextBox">
             <Setter Property="Foreground" Value="#9370DB"/>

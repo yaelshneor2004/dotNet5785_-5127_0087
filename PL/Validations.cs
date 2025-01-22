@@ -8,7 +8,6 @@ using System.Windows.Controls;
 namespace PL;
 
 internal class idNumValidation : ValidationRule
-
 {
     public override ValidationResult Validate(object value, System.Globalization.CultureInfo cultureInfo)
     {
