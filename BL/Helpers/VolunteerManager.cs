@@ -47,11 +47,16 @@ internal static class VolunteerManager
             throw new BO.BlInvalidOperationException("Invalid email format.");
         if (!IsStrongPassword(volunteer.Password ?? string.Empty))
             throw new BO.BlInvalidOperationException("This password is not strong enough.");
-        var coordinates = Tools.GetCoordinates(volunteer.Address ?? string.Empty);
-        volunteer.Latitude = coordinates.Latitude;
-        volunteer.Longitude = coordinates.Longitude;
+        _ = ValidCoordinatesHelperAsync(volunteer);
     }
+    private static async Task ValidCoordinatesHelperAsync(BO.Volunteer volunteer)
+    {
+        var coordinates =await Tools.GetCoordinates(volunteer.Address ?? string.Empty);
+     var volunteerS = volunteer with { Latitude = coordinates.Latitude, Longitude = coordinates.Longitude };
 
+        //volunteer.Latitude = coordinates.Latitude;
+        //volunteer.Longitude = coordinates.Longitude;
+    }
     /// <summary>
     /// Checks if the given password is strong.
     /// </summary>
@@ -244,7 +249,6 @@ internal static class VolunteerManager
     {
         IEnumerable<DO.Assignment>? assignments;
         int totalCallsHandled, totalCallsCancelled, totalCallsExpired;
-        DO.Call? callData;
         lock (AdminManager.BlMutex)
         {
             assignments = s_dal.Assignment.ReadAll(a => a.VolunteerId == myVolunteer.Id).ToList();
@@ -273,7 +277,7 @@ internal static class VolunteerManager
     .Where(a => a.FinishType == null)
     .Select(a =>
     {
-        var callData = s_dal.Call.Read(a.CallId);
+        var callData = GetCall(a.CallId);
         return new BO.CallInProgress
         {
             Id = a.Id,
@@ -291,70 +295,11 @@ internal static class VolunteerManager
     .FirstOrDefault()
         };
     }
-    //    public static BO.Volunteer ConvertFromDoToBo(DO.Volunteer myVolunteer)
-    //    {
-    //        IEnumerable<DO.Assignment>? assignments;
-    //        int totalCallsHandled, totalCallsCancelled, totalCallsExpired;
-    //        DO.Call? callData;
-    //        BO.CallInProgress? currentCall;
-    //        currentCall = assignments.Where(a => a.FinishType == null).Select(a =>{ callData = s_dal.Call.Read(a.CallId);
-    //            return new BO.CallInProgress
-    //            {
-    //                Id = a.Id,
-    //                CallId = a.CallId,
-    //                CallType = (BO.MyCallType)callData.CallType,
-    //                Description = callData.Description,
-    //                Address = callData.Address,
-    //                StartTime = callData.OpenTime,
-    //                MaxEndTime = callData.MaxFinishCall,
-    //                StartTreatmentTime = a.StartCall,
-    //                DistanceFromVolunteer = Tools.GlobalDistance(myVolunteer.Address ?? string.Empty, callData.Address, myVolunteer.TypeDistance),
-    //                Status = VolunteerManager.DetermineCallStatus(callData.MaxFinishCall)
-    //            };
-    //        })
-    //    .FirstOrDefault()
-    //lock (AdminManager.BlMutex)
-    //        {
-    //            assignments = s_dal.Assignment.ReadAll(a => a.VolunteerId == myVolunteer.Id).ToList();
-    //            totalCallsHandled = s_dal.Assignment.ReadAll(a => a.VolunteerId == myVolunteer.Id && a.FinishType == DO.MyFinishType.Treated).Count();
-    //            totalCallsCancelled = s_dal.Assignment.ReadAll(a => a.VolunteerId == myVolunteer.Id && (a.FinishType == DO.MyFinishType.SelfCancel || a.FinishType == DO.MyFinishType.ManagerCancel)).Count();
-    //            totalCallsExpired = s_dal.Assignment.ReadAll(a => a.VolunteerId == myVolunteer.Id && a.FinishType == DO.MyFinishType.ExpiredCancel).Count();
-    //        }
-    //            return new BO.Volunteer {
-    //            Id=myVolunteer.Id,
-    //            FullName= myVolunteer.FullName,
-    //            Phone= myVolunteer.Phone,
-    //            Email= myVolunteer.Email,
-    //            Password= VolunteerManager.Decrypt(myVolunteer.Password ?? string.Empty),
-    //            Address= myVolunteer.Address,
-    //            Latitude= myVolunteer.Latitude,
-    //            Longitude= myVolunteer.Longitude,
-    //            Role= (BO.MyRole)myVolunteer.Role,
-    //            IsActive= myVolunteer.IsActive,
-    //            MaxDistance= myVolunteer.MaxDistance,
-    //            TypeDistance= (BO.MyTypeDistance)myVolunteer.TypeDistance,
-    //            TotalCallsHandled= totalCallsHandled,
-    //            TotalCallsCancelled = totalCallsCancelled,
-    //            TotalCallsExpired = totalCallsExpired,
-    //             CurrentCall = currentCall
-    //             return new BO.CallInProgress
-    //        {
-    //            Id = a.Id,
-    //            CallId = a.CallId,
-    //            CallType = (BO.MyCallType)callData.CallType,
-    //            Description = callData.Description,
-    //            Address = callData.Address,
-    //            StartTime = callData.OpenTime,
-    //            MaxEndTime = callData.MaxFinishCall,
-    //            StartTreatmentTime = a.StartCall,
-    //            DistanceFromVolunteer = Tools.GlobalDistance(myVolunteer.Address ?? string.Empty, callData.Address, myVolunteer.TypeDistance),
-    //            Status = VolunteerManager.DetermineCallStatus(callData.MaxFinishCall)
-    //        };
-    //    })
-    //    .FirstOrDefault()
-    //    };
-    //  }
-
+    private static DO.Call? GetCall(int id)
+    {
+        lock (AdminManager.BlMutex)
+            return s_dal.Call.Read(id);
+    }
 
     /// <summary>
     /// Converts a DO.Volunteer to a BO.VolunteerInList.

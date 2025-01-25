@@ -14,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace PL.Call
 {
@@ -158,13 +159,20 @@ namespace PL.Call
         /// <summary>
         /// Observer method to update the current call details.
         /// </summary>
+        private volatile DispatcherOperation? _observerOperation = null; //stage 7 
+
         private void CallObserver()
         {
             try
             {
-                int id = CurrentCall!.Id;
-                CurrentCall = null;
-                CurrentCall = s_bl.Call.GetCallDetails(id);
+                if (_observerOperation is null || _observerOperation.Status == DispatcherOperationStatus.Completed)
+                    _observerOperation = Dispatcher.BeginInvoke(() =>
+                    {
+
+                        int id = CurrentCall!.Id;
+                        CurrentCall = null;
+                        CurrentCall = s_bl.Call.GetCallDetails(id);
+                    });
             }
             catch (BO.BlDoesNotExistException ex)
             {

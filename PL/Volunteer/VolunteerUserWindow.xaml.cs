@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace PL.Volunteer;
 
@@ -205,16 +206,23 @@ public partial class VolunteerUserWindow : Window
     /// <summary>
     /// Observer method to update volunteer and call details.
     /// </summary>
+    private volatile DispatcherOperation? _observerOperation = null; //stage 7 
+
     private void VolunteerObserver()
     {
         try
         {
-            int id = CurrentVolunteer?.Id ?? 0;
-            int idC = CurrentCall?.Id ?? 0;
-            CurrentVolunteer = null;
-            CurrentCall = null;
-            CurrentVolunteer = s_bl.Volunteer.GetVolunteerDetails(id);
-            CurrentCall = CurrentVolunteer?.CurrentCall != null ? s_bl.Call.GetCallDetails(CurrentVolunteer.CurrentCall.CallId) : null;
+            if (_observerOperation is null || _observerOperation.Status == DispatcherOperationStatus.Completed)
+                _observerOperation = Dispatcher.BeginInvoke(() =>
+                {
+
+                    int id = CurrentVolunteer?.Id ?? 0;
+                    int idC = CurrentCall?.Id ?? 0;
+                    CurrentVolunteer = null;
+                    CurrentCall = null;
+                    CurrentVolunteer = s_bl.Volunteer.GetVolunteerDetails(id);
+                    CurrentCall = CurrentVolunteer?.CurrentCall != null ? s_bl.Call.GetCallDetails(CurrentVolunteer.CurrentCall.CallId) : null;
+                });
         }
         catch (BO.BlDoesNotExistException ex)
         {

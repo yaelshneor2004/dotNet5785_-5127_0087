@@ -1,6 +1,7 @@
 ﻿using BlApi;
 using BO;
 using Helpers;
+using System.Collections.Generic;
 using static Helpers.CallManager;
 
 namespace BlImplementation;
@@ -18,12 +19,13 @@ internal class CallImplementation : ICall
     /// <param name="call">The call details to add.</param>
     public void AddCall(BO.Call call)
     {
-        //AdminManager.ThrowOnSimulatorIsRunning();
-            // Validate the format of the values
-            CallManager.ValidateCallFormat(call);
+        AdminManager.ThrowOnSimulatorIsRunning();
+        // Validate the format of the values
+        CallManager.ValidateCallFormat(call);
             // Validate the logical correctness of the values
             CallManager.ValidateCallLogic(call);
-            // Attempt to add the new call in the data layer
+        // Attempt to add the new call in the data layer
+        lock (AdminManager.BlMutex) 
             _dal.Call.Create(ConvertBOToDO(call));
         CallManager.Observers.NotifyListUpdated();
             var volunteers = Tools.GetVolunteersWithinDistance(call.Address ?? string.Empty);
@@ -37,21 +39,30 @@ internal class CallImplementation : ICall
                        $"Open Time: {call.StartTime}\n" +
                        $"Maximum Time: {call.MaxEndTime}\n" +
                        $"Please log in to the system to accept the call."; // Body of the email;
-                CallManager.SendEmail(volunteer.Email, subject, body);
-            }
+            _ =CallManager.SendEmailHelperAsync(volunteer.Email, subject, body);
+        }
     }
 
     /// <summary>
     /// Retrieves the amount of calls grouped by their status.
     /// </summary>
     /// <returns>An array of call counts by status.</returns>
+   public class CallStatusInfo
+    {
+        public int Status { get; set; }
+        public int Count { get; set; }
+    }
     public int[] CallAmount()
     {
-            var callStatuses = from call in _dal.Call.ReadAll()
-                               group call by (int)CallManager.GetCallStatus(call) into g
-                               orderby g.Key
-                               select new { Status = g.Key, Count = g.Count() };
+        IEnumerable<CallStatusInfo> callStatuses;
 
+        lock (AdminManager.BlMutex)
+        {
+            callStatuses = from call in _dal.Call.ReadAll()
+                           group call by (int)CallManager.GetCallStatus(call) into g
+                           orderby g.Key
+                           select new CallStatusInfo { Status = g.Key, Count = g.Count() };
+        }
             // Prepare an array with six cells (or more if there are more statuses)
             var callAmounts = new int[Enum.GetValues(typeof(BO.MyCallStatus)).Length - 1];
 
@@ -75,23 +86,34 @@ internal class CallImplementation : ICall
     {
         try
         {
-                //AdminManager.ThrowOnSimulatorIsRunning();
-                // Retrieve call details from the data layer
-                var callData = _dal.Call.Read(callId);
+            AdminManager.ThrowOnSimulatorIsRunning();
+            // Retrieve call details from the data layer
+            DO.Call? callData;
+            IEnumerable<DO.Assignment> assignments;
+
+            lock (AdminManager.BlMutex)
+            {
+                callData = _dal.Call.Read(callId);
                 // Check if the call is open and has never been assigned
-                var assignments = _dal.Assignment.ReadAll(a => a.CallId == callId).ToList();
-                var callBo = CallManager.ConvertFromDoToBo(callData ?? throw new BO.BlNullPropertyException(nameof(callData)));
+                assignments = _dal.Assignment.ReadAll(a => a.CallId == callId).ToList();
+            }
+
+            var callBo = CallManager.ConvertFromDoToBo(callData ?? throw new BO.BlNullPropertyException(nameof(callData)));
             if (callBo.Status != BO.MyCallStatus.Open || assignments.Any())
                 throw new BO.BlUnauthorizedAccessException("Only open calls that have never been assigned can be deleted.");
+
             // Attempt to delete the call in the data layer
+            lock (AdminManager.BlMutex)
                 _dal.Call.Delete(callId);
-            CallManager.Observers.NotifyListUpdated(); 	
+
+            CallManager.Observers.NotifyListUpdated();
         }
         catch (DO.DalDoesNotExistException ex)
         {
             throw new BO.BlDoesNotExistException($"Call with ID {callId} does not exist.", ex);
         }
     }
+
 
     /// <summary>
     /// Retrieves the details of a specific call.
@@ -104,9 +126,9 @@ internal class CallImplementation : ICall
         try
         {
             DO.Call callData;
-                // Retrieve call details from the data layer
-              
-                 callData = _dal.Call.Read(callId) ?? throw new BO.BlDoesNotExistException($"Call with ID {callId} does not exist.");
+            // Retrieve call details from the data layer
+            lock (AdminManager.BlMutex)
+                callData = _dal.Call.Read(callId) ?? throw new BO.BlDoesNotExistException($"Call with ID {callId} does not exist.");
                 // Convert DO.Call to BO.Call and return
                 return CallManager.ConvertFromDoToBo(callData);
 
@@ -127,7 +149,9 @@ internal class CallImplementation : ICall
     /// 
     public IEnumerable<BO.CallInList> GetCallList(BO.MySortInCallInList? callFilter, object? filterValue, BO.MySortInCallInList? callSort)
     {
-            var calls = _dal.Call.ReadAll();
+        IEnumerable<DO.Call> calls;
+        lock (AdminManager.BlMutex)
+             calls = _dal.Call.ReadAll();
         var callsBo = calls.Select(callData => CallManager.ConvertToCallInList(callData)).Distinct().ToList();
 
         if (callFilter.HasValue && filterValue != null)
@@ -183,11 +207,15 @@ internal class CallImplementation : ICall
     {
         try
         {
+            DO.Call? call;
+            IEnumerable<DO.Assignment> assignments;
             // Retrieve call details from the data layer
-            var call = _dal.Call.Read(idC);
-
-            // Retrieve all assignments for the call
-            var assignments = _dal.Assignment.ReadAll();
+            lock (AdminManager.BlMutex)
+            {
+                call = _dal.Call.Read(idC);
+                // Retrieve all assignments for the call
+                 assignments = _dal.Assignment.ReadAll();
+            }
             assignments = assignments.Where(a => a.CallId == idC).ToList();
 
             // Check if there are any open assignments for the call
@@ -197,8 +225,8 @@ internal class CallImplementation : ICall
             // Check if the call has expired
             if (AdminManager.Now > call?.MaxFinishCall)
                 throw new BO.BlInvalidOperationException("The call has expired.");
-
-            _dal.Assignment.Create(new DO.Assignment(0, idC, idV, AdminManager.Now, null, null));
+            lock (AdminManager.BlMutex)
+                _dal.Assignment.Create(new DO.Assignment(0, idC, idV, AdminManager.Now, null, null));
             VolunteerManager.Observers.NotifyItemUpdated(idV);
             CallManager.Observers.NotifyItemUpdated(idC);
             CallManager.Observers.NotifyListUpdated();
@@ -220,7 +248,9 @@ internal class CallImplementation : ICall
     /// <returns>A list of closed calls.</returns>
     public IEnumerable<BO.ClosedCallInList> SortClosedCalls(int idV, BO.MyCallType? callType, BO.CloseCall? closeCall)
     {
-        var closeList = _dal.Assignment.ReadAll();
+        IEnumerable<DO.Assignment> closeList;
+        lock (AdminManager.BlMutex)
+             closeList = _dal.Assignment.ReadAll();
         var closeListNew = closeList.Where(a => a.VolunteerId == idV &&a.FinishType!=null).Select(a => convertAssignmentToClosed(a)).ToList();
         closeListNew = callType.HasValue ? closeListNew.Where(call => call.Type == callType.Value).ToList() : closeListNew;
         return CallManager.SortClosedCallsByField(closeListNew, closeCall);
@@ -236,10 +266,16 @@ internal class CallImplementation : ICall
     /// <returns>A list of opened calls.</returns>
     public IEnumerable<BO.OpenCallInList> SortOpenedCalls(int idV, BO.MyCallType? callType, BO.OpenedCall? openedCall)
     {
-        var volunteer=_dal.Volunteer.Read(idV);
-        var openCalls = _dal.Call.ReadAll().Where(c=>CallManager.OpenCondition(c)&&CallManager.VolunteerArea(volunteer, c)).Select(c => CallManager.convertCallToOpened(volunteer,c)).ToList();
-        openCalls = callType.HasValue ? openCalls.Where(call => call.Type == callType.Value).ToList() : openCalls;
-        return CallManager.SortOpenCallsByField(openCalls, openedCall);
+       DO.Volunteer? volunteer;
+        IEnumerable<DO.Call> openCalls;
+        lock (AdminManager.BlMutex)
+        {
+            volunteer = _dal.Volunteer.Read(idV);
+            openCalls = _dal.Call.ReadAll();
+        }
+       var calls= openCalls.Where(c=>CallManager.OpenCondition(c)&&CallManager.VolunteerArea(volunteer, c)).Select(c => CallManager.convertCallToOpened(volunteer,c)).ToList();
+        calls = callType.HasValue ? calls.Where(call => call.Type == callType.Value).ToList() : calls;
+        return CallManager.SortOpenCallsByField(calls, openedCall);
 
     }
 
@@ -252,7 +288,7 @@ internal class CallImplementation : ICall
     {
         try
         {
-            //AdminManager.ThrowOnSimulatorIsRunning();
+            AdminManager.ThrowOnSimulatorIsRunning();
             // Validate the format of the values
             CallManager.ValidateCallFormat(myCall);
             // Validate the logical correctness of the values
@@ -260,6 +296,7 @@ internal class CallImplementation : ICall
             if(myCall.Status == BO.MyCallStatus.Open||myCall.Status==BO.MyCallStatus.OpenAtRisk)
             {
                 // Attempt to update the call in the data layer
+                lock (AdminManager.BlMutex)
                 _dal.Call.Update(CallManager.ConvertBOToDO(myCall));
             }
             else
@@ -286,8 +323,10 @@ internal class CallImplementation : ICall
     {
         try
         {
+            DO.Assignment? assignment;
             // Retrieve assignment details from the data layer
-            var assignment = _dal.Assignment.Read(a => a.CallId == idC&&a.FinishType==null);
+            lock (AdminManager.BlMutex)
+                 assignment = _dal.Assignment.Read(a => a.CallId == idC&&a.FinishType==null);
             // Check authorization: the requester must be a manager or the volunteer assigned to the task
             if (assignment?.VolunteerId != idV || !CallManager.IsManager(idV))
                 throw new BO.BlUnauthorizedAccessException("The requester is not authorized to cancel this assignment.");
@@ -301,13 +340,14 @@ internal class CallImplementation : ICall
                 FinishType = assignment.VolunteerId == idV ? DO.MyFinishType.ManagerCancel: DO.MyFinishType.SelfCancel 
             };
             // Attempt to update the assignment entity in the data layer
-            _dal.Assignment.Update(updatedAssignment);
+            lock (AdminManager.BlMutex)
+                _dal.Assignment.Update(updatedAssignment);
             if (CallManager.IsManager(idV))
             {
                 var volunteer = _dal.Volunteer.Read(assignment.VolunteerId);
                 var subject = $"Assignment Cancelled";
                 var body = $"Your assignment for call {assignment.CallId} has been cancelled.";
-                SendEmail(volunteer?.Email ?? string.Empty, subject, body);
+              _= CallManager.SendEmailHelperAsync(volunteer?.Email ?? string.Empty, subject, body);
             }
             CallManager.Observers.NotifyItemUpdated(idC);
             VolunteerManager.Observers.NotifyItemUpdated(idV);
@@ -331,7 +371,9 @@ internal class CallImplementation : ICall
     {
         try
         {
-            var assignment = _dal.Assignment.Read(a => a.CallId == idC&&a.FinishType==null);
+            DO.Assignment? assignment;
+            lock (AdminManager.BlMutex)
+                 assignment = _dal.Assignment.Read(a => a.CallId == idC&&a.FinishType==null);
 
             // Check authorization: the volunteer must be the one assigned to the task
             if (assignment?.VolunteerId != volunteerId)
@@ -349,7 +391,8 @@ internal class CallImplementation : ICall
             };
 
             // Attempt to update the assignment entity in the data layer
-            _dal.Assignment.Update(updatedAssignment);
+            lock (AdminManager.BlMutex)
+                _dal.Assignment.Update(updatedAssignment);
             CallManager.Observers.NotifyItemUpdated(idC);
             VolunteerManager.Observers.NotifyItemUpdated(volunteerId);
             CallManager.Observers.NotifyListUpdated();
@@ -363,7 +406,9 @@ internal class CallImplementation : ICall
     }
     public IEnumerable<CallInList> GetFilterCallList(BO.MyCallStatus filter)
     {
-        IEnumerable<DO.Call> calls = _dal.Call.ReadAll();
+        IEnumerable<DO.Call> calls;
+        lock (AdminManager.BlMutex)
+            calls = _dal.Call.ReadAll();
         var callList = calls.Select(c => CallManager.ConvertToCallInList(c)).ToList();
         return filter != BO.MyCallStatus.None ? callList.Where(v => v.Status == filter).ToList() : callList;
     }

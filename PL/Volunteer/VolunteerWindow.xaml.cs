@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace PL.Volunteer
 {
@@ -136,13 +137,19 @@ namespace PL.Volunteer
         /// <summary>
         /// Observer method for the volunteer. Updates the current volunteer details.
         /// </summary>
+        private volatile DispatcherOperation? _observerOperation = null; //stage 7 
+
         private void VolunteerObserver()
         {
             try
             {
-                int id = CurrentVolunteer!.Id;
-                CurrentVolunteer = null;
-                CurrentVolunteer = s_bl.Volunteer.GetVolunteerDetails(id);
+                if (_observerOperation is null || _observerOperation.Status == DispatcherOperationStatus.Completed)
+                    _observerOperation = Dispatcher.BeginInvoke(() =>
+                    {
+                        int id = CurrentVolunteer!.Id;
+                        CurrentVolunteer = null;
+                        CurrentVolunteer = s_bl.Volunteer.GetVolunteerDetails(id);
+                    });
             }        
         catch (BO.BlDoesNotExistException ex)
         {

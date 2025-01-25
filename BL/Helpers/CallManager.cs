@@ -15,10 +15,16 @@ internal static class CallManager
     /// </summary>
     /// <param name="callData">The DO.Call instance to convert.</param>
     /// <returns>A new BO.Call instance with the converted data.</returns>
+    public static async Task SendEmailHelperAsync(string email, string subject,string body)
+    {
+       await SendEmailAsync(email, subject, body);
+    }
+
     public static BO.Call ConvertFromDoToBo(DO.Call callData)
     {
-        var assignmentsData = s_dal.Assignment.ReadAll(a => a.CallId == callData.Id).ToList();
-
+        IEnumerable<DO.Assignment> assignmentsData;
+        lock (AdminManager.BlMutex)
+        assignmentsData = s_dal.Assignment.ReadAll(a => a.CallId == callData.Id).ToList();
         return new BO.Call
         (
             id: callData.Id,
@@ -32,8 +38,9 @@ internal static class CallManager
             status: GetCallStatus(callData),
             assignments: assignmentsData.Select(a => new BO.CallAssignInList
             {
+
                 VolunteerId = a.VolunteerId != 0 ? a.VolunteerId : (int?)null,
-                VolunteerName = a.VolunteerId != 0 ? s_dal.Volunteer.Read(a.VolunteerId)?.FullName : null,
+                VolunteerName = a.VolunteerId != 0 ? GetVolunteerFullName(a.VolunteerId): null,
                 StartTreatmentTime = a.StartCall,
                 EndTreatmentTime = a.FinishCall,
                 EndType = a.FinishType != null ? (BO.MyFinishType)a.FinishType : (BO.MyFinishType?)null
@@ -41,7 +48,14 @@ internal static class CallManager
         );
     }
 
- 
+    private static string? GetVolunteerFullName(int volunteerId)
+    {
+        lock (AdminManager.BlMutex)
+        {
+            return s_dal.Volunteer.Read(volunteerId)?.FullName;
+        }
+    }
+
 
     /// <summary>
     /// Calculates the status of a call based on the latest assignment and the maximum end time.
@@ -113,20 +127,22 @@ internal static class CallManager
 
     internal static BO.MyCallStatus GetCallStatus(DO.Call callD)
     {
-        var assignmentsList = s_dal.Assignment.ReadAll(a => a.CallId == callD.Id);
-
-        var call = s_dal.Call.Read(callD.Id);
+        IEnumerable<DO.Assignment> assignmentsList;
+        DO.Call? call;
+        lock (AdminManager.BlMutex)
+        {
+            assignmentsList = s_dal.Assignment.ReadAll(a => a.CallId == callD.Id);
+            call = s_dal.Call.Read(callD.Id);
+        }
         bool isInRisk = call?.MaxFinishCall - AdminManager.Now < s_dal.Config.RiskRange;
         if (assignmentsList.Any(a => a.FinishType == DO.MyFinishType.Treated))
             return BO.MyCallStatus.Closed;
         if (call?.MaxFinishCall < AdminManager.Now)
             return BO.MyCallStatus.Expired;
-
         if (!assignmentsList.Any())
             return isInRisk ? BO.MyCallStatus.OpenAtRisk : BO.MyCallStatus.Open;
         if (assignmentsList.Any(a => a.FinishType == null && a.FinishType == null))
             return isInRisk ? BO.MyCallStatus.InProgressAtRisk : BO.MyCallStatus.InProgress;
-
         return isInRisk ? BO.MyCallStatus.OpenAtRisk : BO.MyCallStatus.Open;
     }
     ///// <summary>
@@ -209,9 +225,13 @@ internal static class CallManager
     /// <returns>A new BO.CallInList instance with the converted data.</returns>
     public static BO.CallInList ConvertToCallInList(DO.Call callData)
     {
-        var assignmentsData = s_dal.Assignment.ReadAll(a => a.CallId == callData.Id).ToList();
+        IEnumerable<DO.Assignment> assignmentsData;
+        string lastVolunteerName;
+        lock (AdminManager.BlMutex)
+            assignmentsData = s_dal.Assignment.ReadAll(a => a.CallId == callData.Id).ToList();
         var lastAssignment = assignmentsData.OrderByDescending(a => a.StartCall).FirstOrDefault();
-
+        lock (AdminManager.BlMutex)
+            lastVolunteerName = s_dal.Volunteer.Read(lastAssignment.VolunteerId)?.FullName;
         return new BO.CallInList
         {
             Id = lastAssignment?.Id ?? 0,
@@ -221,7 +241,7 @@ internal static class CallManager
             TimeRemaining = callData.MaxFinishCall.HasValue
                 ? (callData.MaxFinishCall.Value - AdminManager.Now < TimeSpan.Zero ? TimeSpan.Zero : callData.MaxFinishCall.Value - AdminManager.Now)
                 : (TimeSpan?)null,
-            LastVolunteerName = lastAssignment != null && lastAssignment.VolunteerId != 0 ? s_dal.Volunteer.Read(lastAssignment.VolunteerId)?.FullName : null,
+            LastVolunteerName = lastAssignment != null && lastAssignment.VolunteerId != 0 ?lastVolunteerName: null,
             CompletionTime = lastAssignment?.FinishCall.HasValue == true ? lastAssignment.FinishCall.Value - callData.OpenTime : (TimeSpan?)null,
             Status = GetCallStatus(callData),
             TotalAssignments = assignmentsData.Count()
@@ -235,7 +255,7 @@ internal static class CallManager
     /// <param name="toEmail">The recipient's email address.</param>
     /// <param name="subject">The subject of the email.</param>
     /// <param name="body">The body of the email.</param>
-    public static void SendEmail(string toEmail, string subject,string body)
+    public static async Task SendEmailAsync(string toEmail, string subject, string body)
     {
         var fromEmail = "y7697086@gmail.com";
         var smtpClient = new SmtpClient("smtp.gmail.com")
@@ -253,7 +273,7 @@ internal static class CallManager
             IsBodyHtml = false,
         };
         mailMessage.To.Add(toEmail);
-        smtpClient.Send(mailMessage);
+        await smtpClient.SendMailAsync(mailMessage);
     }
 
     /// <summary>
@@ -323,7 +343,9 @@ internal static class CallManager
     /// <returns>A new BO.ClosedCallInList instance with the converted data.</returns>
     public static BO.ClosedCallInList convertAssignmentToClosed(DO.Assignment assignment)
     {
-        var callDetails = s_dal.Call.Read(assignment.CallId);
+        DO.Call? callDetails; 
+        lock (AdminManager.BlMutex)
+            callDetails = s_dal.Call.Read(assignment.CallId);
 
         return new BO.ClosedCallInList
         {
@@ -406,42 +428,57 @@ internal static class CallManager
     /// </summary>
     internal static void PeriodicCallsUpdates()
     {
-        var callsList = s_dal.Call.ReadAll(call => call.MaxFinishCall < AdminManager.Now);
-
+        List<int> updatedCallIds = new List<int>(); 
+        IEnumerable<DO.Call> callsList;
+        IEnumerable<DO.Assignment> assignmentList;
+        lock (AdminManager.BlMutex)
+        callsList = s_dal.Call.ReadAll(call => call.MaxFinishCall < AdminManager.Now);
         foreach (var call in callsList)
         {
-            var assignmentList = s_dal.Assignment.ReadAll(a => a.CallId == call.Id);
+            lock (AdminManager.BlMutex)
+                assignmentList = s_dal.Assignment.ReadAll(a => a.CallId == call.Id);
 
             if (!assignmentList.Any())
             {
-                s_dal.Assignment.Create(new DO.Assignment
+                lock (AdminManager.BlMutex)
                 {
-                    CallId = call.Id,
-                    StartCall = AdminManager.Now,
-                    FinishCall = AdminManager.Now,
-                    FinishType = DO.MyFinishType.ExpiredCancel,
-                    VolunteerId = 0
-                });
-                Observers.NotifyItemUpdated(call.Id);  // Add call to NotifyItemUpdated
-        }
+                    s_dal.Assignment.Create(new DO.Assignment
+                    {
+                        CallId = call.Id,
+                        StartCall = AdminManager.Now,
+                        FinishCall = AdminManager.Now,
+                        FinishType = DO.MyFinishType.ExpiredCancel,
+                        VolunteerId = 0
+                    });
+                }
+                updatedCallIds.Add(call.Id);
+            }
 
             DO.Assignment? assignmentInProgress = assignmentList.FirstOrDefault(a => a.FinishCall == null && a.FinishType == null);
 
             if (assignmentInProgress != null)
             {
-                s_dal.Assignment.Update(new DO.Assignment
+                lock (AdminManager.BlMutex)
                 {
-                    Id = assignmentInProgress.Id,
-                    CallId = assignmentInProgress.CallId,
-                    VolunteerId = assignmentInProgress.VolunteerId,
-                    StartCall = assignmentInProgress.StartCall,
-                    FinishCall = AdminManager.Now,
-                    FinishType = DO.MyFinishType.ExpiredCancel
-                });
-                Observers.NotifyItemUpdated(assignmentInProgress.Id); // Add call to NotifyItemUpdated
+                    s_dal.Assignment.Update(new DO.Assignment
+                    {
+                        Id = assignmentInProgress.Id,
+                        CallId = assignmentInProgress.CallId,
+                        VolunteerId = assignmentInProgress.VolunteerId,
+                        StartCall = assignmentInProgress.StartCall,
+                        FinishCall = AdminManager.Now,
+                        FinishType = DO.MyFinishType.ExpiredCancel
+                    });
+                }
+                updatedCallIds.Add(assignmentInProgress.Id);
+
+            }
         }
-    }
-    Observers.NotifyListUpdated(); // Add call to NotifyListUpdated
+        foreach (var callId in updatedCallIds)
+        {
+            Observers.NotifyItemUpdated(callId);
+        }
+        Observers.NotifyListUpdated(); // Add call to NotifyListUpdated
 }
 
 }

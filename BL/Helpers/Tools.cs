@@ -34,10 +34,10 @@ internal static class Tools
     private static double CalculateAerialDistance(string volunteerAddress, string callAddress)
     {
         // Get coordinates of the volunteer's address
-        var (volunteerLat, volunteerLon) = GetCoordinates(volunteerAddress);
+        var (volunteerLat, volunteerLon) = CalculateAerialDistanceHelperAsync(volunteerAddress);
 
         // Get coordinates of the call's address
-        var (callLat, callLon) = GetCoordinates(callAddress);
+        var (callLat, callLon) = CalculateAerialDistanceHelperAsync(callAddress);
 
         // Calculate the aerial distance between two coordinates using the Haversine formula
         const double R = 6371; // Radius of the Earth in kilometers
@@ -49,7 +49,10 @@ internal static class Tools
         var c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
         return R * c;
     }
-
+    private static async Task CalculateAerialDistanceHelperAsync(string address)
+    {
+        await GetCoordinates(address);
+    }
     /// <summary>
     /// Converts an angle from degrees to radians.
     /// </summary>
@@ -139,7 +142,7 @@ internal static class Tools
     /// </summary>
     /// <param name="address">The address to geocode.</param>
     /// <returns>The coordinates (latitude and longitude) of the address.</returns>
-    public static (double Latitude, double Longitude) GetCoordinates(string address)
+    public static async Task<(double Latitude, double Longitude)> GetCoordinates(string address)
     {
         if (string.IsNullOrWhiteSpace(address))
         {
@@ -152,8 +155,7 @@ internal static class Tools
 
         using (var client = new HttpClient())
         {
-            var response = client.GetStringAsync(url).Result;
-
+            var response = await client.GetStringAsync(url);
             // Analyze the response in JSON format\
             var jsonResponse = JsonDocument.Parse(response);
 
