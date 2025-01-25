@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.Volunteer"
         mc:Ignorable="d"
-        Title="VolunteerUserWindow" Height="450" Width="800"
+        Title="VolunteerUserWindow" Height="1461" Width="800"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Language="he-IL" Loaded="VolunteerUserWindow_Loaded" Closed="VolunteerUserWindow_Closed">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
@@ -108,7 +108,7 @@
                     <Label Content="Num Expired Calls" Style="{StaticResource {x:Type Label}}" Foreground="Blue" />
                     <TextBox Text="{Binding CurrentVolunteer.TotalCallsExpired, Mode=TwoWay}" IsReadOnly="True" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>
 
-                    <Button Content="Update" Width="130" Click="btnUpdate_Click" HorizontalAlignment="Center" Margin="10,10,10,10"/>
+                    <Button Content="Update" Width="130" Click="btnUpdate_Click" HorizontalAlignment="Center" Margin="10,10,10,10" Height="46"/>
                 </StackPanel>
             </GroupBox>
 
@@ -147,14 +147,15 @@
                     </DataGrid>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10,10,10,10">
-                    <Button Content="Cancel Call" Width="130" Click="btnCancelCall_Click" Margin="10" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/>
-                    <Button Content="Finish Call" Width="130" Click="btnFinishCall_Click" Margin="10" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/>
+                    <Button Content="Cancel Call" Width="130" Click="btnCancelCall_Click" Margin="10" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}" Height="47"/>
+                    <Button Content="Finish Call" Width="130" Click="btnFinishCall_Click" Margin="10" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}" Height="47"/>
                 </StackPanel>
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10,10,10,10">
-                <Button Content="Select call to treat" Width="130" Click="btnSelectCall_Click" Margin="10">
+                <Button Content="Call History" Width="130" Click="btnCallHistory_Click" Height="47"/>
+                <Button Content="Select call to treat" Width="130" Click="btnSelectCall_Click" Margin="10" Height="47">
                     <Button.Style>
-                        <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
                             <Setter Property="Visibility" Value="Collapsed"/>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}" Value="Collapsed">
@@ -167,7 +168,6 @@
                         </Style>
                     </Button.Style>
                 </Button>
-                <Button Content="Call History" Width="130" Click="btnCallHistory_Click" Margin="10"/>
             </StackPanel>
         </StackPanel>
     </ScrollViewer>

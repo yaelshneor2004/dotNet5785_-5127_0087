@@ -143,6 +143,7 @@ namespace PL.Call
             {
                 s_bl.Call.SelectCallToTreat(id, SelectedOpenCall!.Id);
                 MessageBox.Show("A call has been selected for treatment", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
+                Close();
             }
             catch (BO.BlDoesNotExistException ex)
             {

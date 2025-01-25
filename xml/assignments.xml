@@ -225,14 +225,6 @@
     <FinishCall />
   </Assignment>
   <Assignment>
-    <Id>34</Id>
-    <CallId>34</CallId>
-    <VolunteerId>327770087</VolunteerId>
-    <StartCall>2025-01-17T00:08:21.6450954+02:00</StartCall>
-    <FinishType />
-    <FinishCall />
-  </Assignment>
-  <Assignment>
     <Id>35</Id>
     <CallId>35</CallId>
     <VolunteerId>627262876</VolunteerId>
