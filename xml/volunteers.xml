@@ -232,10 +232,10 @@
     <Role>Manager</Role>
     <TypeDistance>Traveling</TypeDistance>
     <Password>4Aa0guBmhrmrgF+t+EJTUw==</Password>
-    <Address>Derech Hevron 78, Jerusalem, Israel</Address>
+    <Address>Rothschild 10, Tel Aviv, Israel</Address>
     <Latitude>31.7525</Latitude>
     <Longitude>35.2121</Longitude>
-    <MaxDistance>20</MaxDistance>
+    <MaxDistance>50</MaxDistance>
     <IsActive>true</IsActive>
   </Volunteer>
 </ArrayOfVolunteer>

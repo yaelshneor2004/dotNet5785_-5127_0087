@@ -40,7 +40,7 @@
         <local:nameValidation x:Key="nameValidationKey" />
         <local:addressValidation x:Key="addressValidationKey" />
         <local:maxDistanceValidation x:Key="maxDistanceValidationKey" />
-
+        <local:ActiveCallToVisibleConverter x:Key="ActiveCallToVisibleConverterKey" />
         <!-- Triggers -->
         <Style TargetType="DataGridRow">
             <Setter Property="Background" Value="#E6E6FA"/>

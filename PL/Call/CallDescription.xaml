@@ -6,7 +6,8 @@
         mc:Ignorable="d"
         Title="CallDescription" Height="450" Width="800"
                 DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
-        Language="he-IL" Loaded="CallWindow_Loaded" Closed="CallWindow_Closed">
+         xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf" 
+        Language="he-IL" Loaded="VolunteerListWindow_Loaded">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -15,9 +16,15 @@
 
         <StackPanel Orientation="Horizontal" Margin="10">
             <Label Content="Call Description:" VerticalAlignment="Center"/>
-            <TextBox Text="{Binding CurrentCall.Description, Mode=TwoWay}" Width="636" Height="74"/>
+            <Label Content="{Binding Description, Mode=TwoWay}" Width="636" Height="74"/>
         </StackPanel>
-
-        <!--<WebBrowser x:Name="webBrowser" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10"/>-->
+        
+        <Grid Grid.Column="2" Grid.Row="1" MinWidth="400" Margin="20" Visibility="{Binding CurrentVolunteer.IsActive, Converter={StaticResource ActiveCallToVisibleConverterKey}}">
+            <wv2:WebView2 Name="MapWebView"
+          Source="{Binding MapSource}" 
+          HorizontalAlignment="Stretch" 
+          VerticalAlignment="Stretch"/>
+        </Grid>
     </Grid>
+
 </Window>

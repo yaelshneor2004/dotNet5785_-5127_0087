@@ -14,13 +14,29 @@
 	  <StartupObject>PL.App</StartupObject>
   </PropertyGroup>
 
-  <ItemGroup>
+	<ItemGroup>
+		<Content Include="$(UserProfile)\.nuget\packages\microsoft.web.webview2\1.0.2957.106\lib\net462\Microsoft.Web.WebView2.Wpf.dll">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="$(UserProfile)\.nuget\packages\microsoft.web.webview2\1.0.2957.106\lib\net462\Microsoft.Web.WebView2.Core.dll">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Resources\mapp.html">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+	<ItemGroup>
     <None Remove="Resources\closeEye.jpg" />
+    <None Remove="Resources\mapp.html" />
     <None Remove="Resources\openEye.jpg" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Maps.MapControl.WPF" Version="1.0.0.3" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2957.106" />
   </ItemGroup>
 
   <ItemGroup>

@@ -164,7 +164,7 @@ namespace PL.Call
         private void DataGrid_MouseLeftButtonUp(object sender, RoutedEventArgs e)
         {
             List<string> addresses = OpenCallList.Select(call => call.Address).ToList();
-            new CallDescription(addresses, CurrentVolunteer.Address, SelectedOpenCall.Id).Show();
+            new CallDescription(CurrentVolunteer.Id,SelectedOpenCall.Description).Show();
         }
 
         /// <summary>
