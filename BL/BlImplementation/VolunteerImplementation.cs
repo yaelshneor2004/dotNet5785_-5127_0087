@@ -2,7 +2,6 @@
 using BO;
 using Helpers;
 using System;
-using System.Data.Common;
 using System.Linq;
 namespace BlImplementation;
 internal class VolunteerImplementation:IVolunteer
@@ -47,7 +46,7 @@ internal class VolunteerImplementation:IVolunteer
     {
         try
         {
-            //AdminManager.ThrowOnSimulatorIsRunning();
+            AdminManager.ThrowOnSimulatorIsRunning();
             VolunteerManager.ValidateVolunteerDetails(myVolunteer);
             // Attempt to add the new volunteer to DAL
             myVolunteer.Password = myVolunteer.Password != null ? VolunteerManager.Encrypt(myVolunteer.Password) : null;
@@ -71,17 +70,22 @@ internal class VolunteerImplementation:IVolunteer
         {
             try
             {
-            //AdminManager.ThrowOnSimulatorIsRunning();
+            AdminManager.ThrowOnSimulatorIsRunning();
             // Retrieve the volunteer details from DAL
-            rocord 
+            DO.Volunteer volunteer;
+            bool currentAssignments;
+           bool pastAssignments;
             lock (AdminManager.BlMutex)
-                  volunteer = _dal.Volunteer.Read(volunteerId);
+            {
+                volunteer = _dal.Volunteer.Read(volunteerId);
                 // Check if the volunteer is currently handling any calls or has handled any calls in the past
-                var currentAssignments = _dal.Assignment.ReadAll(a => a.VolunteerId == volunteerId && a.FinishCall == null).Any();
-                var pastAssignments = _dal.Assignment.ReadAll(a => a.VolunteerId == volunteerId).Any();
+                currentAssignments = _dal.Assignment.ReadAll(a => a.VolunteerId == volunteerId && a.FinishCall == null).Any();
+                pastAssignments = _dal.Assignment.ReadAll(a => a.VolunteerId == volunteerId).Any();
                 if (currentAssignments || pastAssignments)
                     throw new BO.BlInvalidOperationException("Cannot delete volunteer who is currently handling or has handled calls.");
-                // Attempt to delete the volunteer from DAL
+            }
+            // Attempt to delete the volunteer from DAL
+            lock (AdminManager.BlMutex)
                 _dal.Volunteer.Delete(volunteerId);
             VolunteerManager.Observers.NotifyListUpdated();  	
 
@@ -99,9 +103,11 @@ internal class VolunteerImplementation:IVolunteer
     /// <exception cref="BO.BlDoesNotExistException">Thrown when the volunteer does not exist.</exception>
     public BO.Volunteer GetVolunteerDetails(int id)
     {
+        DO.Volunteer volunteerData;
         try
         {
-           var volunteerData = _dal.Volunteer.Read(id) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID {id} does not exist.");
+            lock (AdminManager.BlMutex)
+                 volunteerData = _dal.Volunteer.Read(id) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID {id} does not exist.");
             return VolunteerManager.ConvertFromDoToBo(volunteerData);
         }
         catch (DO.DalDoesNotExistException ex)
@@ -117,7 +123,9 @@ internal class VolunteerImplementation:IVolunteer
     /// <exception cref="BO.BlDoesNotExistException">Thrown when the volunteer does not exist.</exception>
     public IEnumerable<BO.VolunteerInList> GetVolunteerList(bool? isActive, BO.MySortInVolunteerInList? mySortInVolunteerInList)
     {
-        var volunteers = _dal.Volunteer.ReadAll();
+        IEnumerable<DO.Volunteer>? volunteers;
+        lock (AdminManager.BlMutex)
+            volunteers = _dal.Volunteer.ReadAll();
 
         // Filter by the IsActive status value
         if (isActive.HasValue)
@@ -130,7 +138,9 @@ internal class VolunteerImplementation:IVolunteer
 
     public IEnumerable<VolunteerInList> GetFilterVolunteerList(BO.MyCallType filter)
     {
-        IEnumerable<DO.Volunteer> volunteers = _dal.Volunteer.ReadAll();
+        IEnumerable<DO.Volunteer> volunteers;
+        lock (AdminManager.BlMutex)
+            volunteers = _dal.Volunteer.ReadAll();
         var volunteerList = volunteers.Select(v => VolunteerManager.ConvertToVolunteerInList(v)).ToList();
         return filter != BO.MyCallType.None ? volunteerList.Where(v => v.CurrentCallType == filter).ToList() : volunteerList;
     }
@@ -146,9 +156,11 @@ internal class VolunteerImplementation:IVolunteer
     {
         try
         {
-            //AdminManager.ThrowOnSimulatorIsRunning();
+            AdminManager.ThrowOnSimulatorIsRunning();
             // Retrieve requester details from DAL
-            var volunteer = _dal.Volunteer.Read(id);
+            DO.Volunteer? volunteer;
+            lock (AdminManager.BlMutex)
+                volunteer = _dal.Volunteer.Read(id);
             // Check if the address has changed and update the coordinates
             if (volunteer.Address != myVolunteer.Address)
             {
@@ -159,7 +171,9 @@ internal class VolunteerImplementation:IVolunteer
             }
             if (volunteer.Role!= (DO.MyRole)myVolunteer.Role)
             {
-                int count = _dal.Volunteer.ReadAll().Where(v => v.Role ==DO.MyRole.Manager).Count();
+                int count;
+                lock (AdminManager.BlMutex)
+                     count = _dal.Volunteer.ReadAll().Where(v => v.Role ==DO.MyRole.Manager).Count();
                 if (volunteer.Role == DO.MyRole.Manager)
                 {
                     if (count == 1)
@@ -178,7 +192,8 @@ internal class VolunteerImplementation:IVolunteer
             myVolunteer.Password = myVolunteer.Password != null ? VolunteerManager.Encrypt(myVolunteer.Password) : null;
             var updatedVolunteer = VolunteerManager.ConvertFromBoToDo(myVolunteer);
             // Attempt to update the volunteer in DAL
-            _dal.Volunteer.Update(updatedVolunteer);
+            lock (AdminManager.BlMutex)
+                _dal.Volunteer.Update(updatedVolunteer);
             VolunteerManager.Observers.NotifyItemUpdated(updatedVolunteer.Id);  
             VolunteerManager.Observers.NotifyListUpdated();  
 

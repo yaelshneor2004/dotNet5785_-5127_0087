@@ -232,6 +232,9 @@ internal static class VolunteerManager
             return false;
         }
     }
+
+
+
     // / <summary>
     /// Converts a DO.Volunteer to a BO.Volunteer.
     /// </summary>
@@ -239,24 +242,34 @@ internal static class VolunteerManager
     /// <returns>Returns the converted BO.Volunteer object.</returns>
     public static BO.Volunteer ConvertFromDoToBo(DO.Volunteer myVolunteer)
     {
-        var assignments = s_dal.Assignment.ReadAll(a => a.VolunteerId == myVolunteer.Id).ToList();
-        return new BO.Volunteer {
-            Id=myVolunteer.Id,
-            FullName= myVolunteer.FullName,
-            Phone= myVolunteer.Phone,
-            Email= myVolunteer.Email,
-            Password= VolunteerManager.Decrypt(myVolunteer.Password ?? string.Empty),
-            Address= myVolunteer.Address,
-            Latitude= myVolunteer.Latitude,
-            Longitude= myVolunteer.Longitude,
-            Role= (BO.MyRole)myVolunteer.Role,
-            IsActive= myVolunteer.IsActive,
-            MaxDistance= myVolunteer.MaxDistance,
-            TypeDistance= (BO.MyTypeDistance)myVolunteer.TypeDistance,
-            TotalCallsHandled= s_dal.Assignment.ReadAll(a => a.VolunteerId == myVolunteer.Id && a.FinishType == DO.MyFinishType.Treated).Count(),
-            TotalCallsCancelled= s_dal.Assignment.ReadAll(a => a.VolunteerId == myVolunteer.Id && (a.FinishType == DO.MyFinishType.SelfCancel || a.FinishType == DO.MyFinishType.ManagerCancel)).Count(),
-            TotalCallsExpired= s_dal.Assignment.ReadAll(a => a.VolunteerId == myVolunteer.Id && a.FinishType == DO.MyFinishType.ExpiredCancel).Count(),
-             CurrentCall = assignments
+        IEnumerable<DO.Assignment>? assignments;
+        int totalCallsHandled, totalCallsCancelled, totalCallsExpired;
+        DO.Call? callData;
+        lock (AdminManager.BlMutex)
+        {
+            assignments = s_dal.Assignment.ReadAll(a => a.VolunteerId == myVolunteer.Id).ToList();
+            totalCallsHandled = s_dal.Assignment.ReadAll(a => a.VolunteerId == myVolunteer.Id && a.FinishType == DO.MyFinishType.Treated).Count();
+            totalCallsCancelled = s_dal.Assignment.ReadAll(a => a.VolunteerId == myVolunteer.Id && (a.FinishType == DO.MyFinishType.SelfCancel || a.FinishType == DO.MyFinishType.ManagerCancel)).Count();
+            totalCallsExpired = s_dal.Assignment.ReadAll(a => a.VolunteerId == myVolunteer.Id && a.FinishType == DO.MyFinishType.ExpiredCancel).Count();
+        }
+        return new BO.Volunteer
+        {
+            Id = myVolunteer.Id,
+            FullName = myVolunteer.FullName,
+            Phone = myVolunteer.Phone,
+            Email = myVolunteer.Email,
+            Password = VolunteerManager.Decrypt(myVolunteer.Password ?? string.Empty),
+            Address = myVolunteer.Address,
+            Latitude = myVolunteer.Latitude,
+            Longitude = myVolunteer.Longitude,
+            Role = (BO.MyRole)myVolunteer.Role,
+            IsActive = myVolunteer.IsActive,
+            MaxDistance = myVolunteer.MaxDistance,
+            TypeDistance = (BO.MyTypeDistance)myVolunteer.TypeDistance,
+            TotalCallsHandled = totalCallsHandled,
+            TotalCallsCancelled = totalCallsCancelled,
+            TotalCallsExpired = totalCallsExpired,
+            CurrentCall = assignments
     .Where(a => a.FinishType == null)
     .Select(a =>
     {
@@ -276,8 +289,71 @@ internal static class VolunteerManager
         };
     })
     .FirstOrDefault()
-    };
-  }
+        };
+    }
+    //    public static BO.Volunteer ConvertFromDoToBo(DO.Volunteer myVolunteer)
+    //    {
+    //        IEnumerable<DO.Assignment>? assignments;
+    //        int totalCallsHandled, totalCallsCancelled, totalCallsExpired;
+    //        DO.Call? callData;
+    //        BO.CallInProgress? currentCall;
+    //        currentCall = assignments.Where(a => a.FinishType == null).Select(a =>{ callData = s_dal.Call.Read(a.CallId);
+    //            return new BO.CallInProgress
+    //            {
+    //                Id = a.Id,
+    //                CallId = a.CallId,
+    //                CallType = (BO.MyCallType)callData.CallType,
+    //                Description = callData.Description,
+    //                Address = callData.Address,
+    //                StartTime = callData.OpenTime,
+    //                MaxEndTime = callData.MaxFinishCall,
+    //                StartTreatmentTime = a.StartCall,
+    //                DistanceFromVolunteer = Tools.GlobalDistance(myVolunteer.Address ?? string.Empty, callData.Address, myVolunteer.TypeDistance),
+    //                Status = VolunteerManager.DetermineCallStatus(callData.MaxFinishCall)
+    //            };
+    //        })
+    //    .FirstOrDefault()
+    //lock (AdminManager.BlMutex)
+    //        {
+    //            assignments = s_dal.Assignment.ReadAll(a => a.VolunteerId == myVolunteer.Id).ToList();
+    //            totalCallsHandled = s_dal.Assignment.ReadAll(a => a.VolunteerId == myVolunteer.Id && a.FinishType == DO.MyFinishType.Treated).Count();
+    //            totalCallsCancelled = s_dal.Assignment.ReadAll(a => a.VolunteerId == myVolunteer.Id && (a.FinishType == DO.MyFinishType.SelfCancel || a.FinishType == DO.MyFinishType.ManagerCancel)).Count();
+    //            totalCallsExpired = s_dal.Assignment.ReadAll(a => a.VolunteerId == myVolunteer.Id && a.FinishType == DO.MyFinishType.ExpiredCancel).Count();
+    //        }
+    //            return new BO.Volunteer {
+    //            Id=myVolunteer.Id,
+    //            FullName= myVolunteer.FullName,
+    //            Phone= myVolunteer.Phone,
+    //            Email= myVolunteer.Email,
+    //            Password= VolunteerManager.Decrypt(myVolunteer.Password ?? string.Empty),
+    //            Address= myVolunteer.Address,
+    //            Latitude= myVolunteer.Latitude,
+    //            Longitude= myVolunteer.Longitude,
+    //            Role= (BO.MyRole)myVolunteer.Role,
+    //            IsActive= myVolunteer.IsActive,
+    //            MaxDistance= myVolunteer.MaxDistance,
+    //            TypeDistance= (BO.MyTypeDistance)myVolunteer.TypeDistance,
+    //            TotalCallsHandled= totalCallsHandled,
+    //            TotalCallsCancelled = totalCallsCancelled,
+    //            TotalCallsExpired = totalCallsExpired,
+    //             CurrentCall = currentCall
+    //             return new BO.CallInProgress
+    //        {
+    //            Id = a.Id,
+    //            CallId = a.CallId,
+    //            CallType = (BO.MyCallType)callData.CallType,
+    //            Description = callData.Description,
+    //            Address = callData.Address,
+    //            StartTime = callData.OpenTime,
+    //            MaxEndTime = callData.MaxFinishCall,
+    //            StartTreatmentTime = a.StartCall,
+    //            DistanceFromVolunteer = Tools.GlobalDistance(myVolunteer.Address ?? string.Empty, callData.Address, myVolunteer.TypeDistance),
+    //            Status = VolunteerManager.DetermineCallStatus(callData.MaxFinishCall)
+    //        };
+    //    })
+    //    .FirstOrDefault()
+    //    };
+    //  }
 
 
     /// <summary>
@@ -287,15 +363,24 @@ internal static class VolunteerManager
     /// <returns>Returns the converted BO.VolunteerInList object.</returns>
     public static BO.VolunteerInList ConvertToVolunteerInList(DO.Volunteer VolunteerData)
     {
+         int totalCallsHandled, totalCallsCancelled, totalCallsExpired;
+       int? currentCallId;
+        lock (AdminManager.BlMutex)
+        {
+            totalCallsHandled = s_dal.Assignment.ReadAll(a => a.VolunteerId == VolunteerData.Id && a.FinishType == DO.MyFinishType.Treated).Count();
+            totalCallsCancelled = s_dal.Assignment.ReadAll(a => a.VolunteerId == VolunteerData.Id && (a.FinishType == DO.MyFinishType.SelfCancel || a.FinishType == DO.MyFinishType.ManagerCancel)).Count();
+            totalCallsExpired = s_dal.Assignment.ReadAll(a => a.VolunteerId == VolunteerData.Id && a.FinishType == DO.MyFinishType.ExpiredCancel).Count();
+            currentCallId = s_dal.Assignment.ReadAll(a => a.VolunteerId == VolunteerData.Id && a.FinishCall == null).Select(a => (int?)a.CallId).FirstOrDefault();
+        }
         return new BO.VolunteerInList
         {
             Id = VolunteerData.Id,
             FullName = VolunteerData.FullName,
             IsActive = VolunteerData.IsActive,
-            TotalCallsHandled = s_dal.Assignment.ReadAll(a => a.VolunteerId == VolunteerData.Id && a.FinishType == DO.MyFinishType.Treated).Count(),
-            TotalCallsCancelled = s_dal.Assignment.ReadAll(a => a.VolunteerId == VolunteerData.Id && (a.FinishType == DO.MyFinishType.SelfCancel || a.FinishType == DO.MyFinishType.ManagerCancel)).Count(),
-            TotalCallsExpired = s_dal.Assignment.ReadAll(a => a.VolunteerId == VolunteerData.Id && a.FinishType == DO.MyFinishType.ExpiredCancel).Count(),
-            CurrentCallId = s_dal.Assignment.ReadAll(a => a.VolunteerId == VolunteerData.Id && a.FinishCall == null).Select(a => (int?)a.CallId).FirstOrDefault(),
+            TotalCallsHandled = totalCallsHandled,
+            TotalCallsCancelled = totalCallsCancelled,
+            TotalCallsExpired = totalCallsExpired,
+            CurrentCallId = currentCallId,
             CurrentCallType =(BO.MyCallType) GetCallType(VolunteerData.Id)
         };
     }
@@ -303,11 +388,15 @@ internal static class VolunteerManager
 
     private static DO.MyCallType GetCallType(int id)
     {
-        var assignment = s_dal.Assignment.ReadAll();
+        IEnumerable<DO.Assignment> assignment;
+        DO.Call? call;
+        lock (AdminManager.BlMutex)
+            assignment = s_dal.Assignment.ReadAll();
         DO.Assignment? ass = assignment.FirstOrDefault(a => a.VolunteerId == id&&a.FinishType==null);
         if (ass != null)
         {
-            var call = s_dal.Call.Read(ass.CallId);
+            lock (AdminManager.BlMutex)
+                call = s_dal.Call.Read(ass.CallId);
             if (call != null)
             {
                 return call.CallType;
@@ -316,44 +405,6 @@ internal static class VolunteerManager
         // If no assignment is found for the given volunteer ID, return MyCallType.None.
         return DO.MyCallType.None;
     }
-
-    ///// <summary>
-    ///// Periodically updates volunteers' status and roles based on their activities.
-    ///// </summary>
-    ///// <param name="oldClock">The previous clock time.</param>
-    ///// <param name="newClock">The new clock time.</param>
-    //public static void PeriodicVolunteersUpdates(DateTime oldClock, DateTime newClock)
-    //{
-    //    var volunteers = s_dal.Volunteer.ReadAll().ToList();
-    //    var assignments = s_dal.Assignment.ReadAll().ToList();
-
-    //    var volunteerUpdates = volunteers.Select(volunteer =>
-    //    {
-    //        var volunteerAssignments = assignments.Where(a => a.VolunteerId == volunteer.Id).ToList();
-
-    //        // If the volunteer has not handled calls for 2 years, they are marked as inactive
-    //        if (!volunteerAssignments.Any() || (newClock - volunteerAssignments.Max(a => a.FinishCall ?? DateTime.MinValue)).TotalDays > 2 * 365)
-    //        {
-    //            volunteer = volunteer with { IsActive = false };
-    //            Observers.NotifyItemUpdated(volunteer.Id); // Add call to NotifyItemUpdated
-    //        }
-
-    //        // Upgrade the volunteer's role if he has handled more than 100 calls and is not a manager
-    //        if (volunteerAssignments.Count(a => a.FinishType == DO.MyFinishType.Treated) >= 100 && volunteer.Role != DO.MyRole.Manager)
-    //        {
-    //            volunteer = volunteer with { Role = DO.MyRole.Manager };
-    //            Observers.NotifyItemUpdated(volunteer.Id); // Add call to NotifyItemUpdated
-    //        }
-
-    //        return volunteer;
-    //    }).ToList();
-
-    //    // Update volunteers in the database
-    //    volunteerUpdates.ForEach(volunteer => s_dal.Volunteer.Update(volunteer));
-
-    //    // Add call to NotifyListUpdated
-    //    Observers.NotifyListUpdated();
-    //}
 
 
 

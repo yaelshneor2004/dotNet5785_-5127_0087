@@ -1,4 +1,5 @@
 ﻿using DalApi;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using System.Text.Json;
@@ -182,7 +183,9 @@ internal static class Tools
     /// <returns>A list of volunteers within the specified distance.</returns>
     public static IEnumerable<BO.Volunteer> GetVolunteersWithinDistance(string callAddress)
     {
-        var volunteers = s_dal.Volunteer.ReadAll();
+       IEnumerable<DO.Volunteer>? volunteers;
+        lock (AdminManager.BlMutex)
+            volunteers = s_dal.Volunteer.ReadAll();
 
         var newVolunteers = volunteers.Where(volunteer =>
         {
