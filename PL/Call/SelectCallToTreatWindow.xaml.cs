@@ -83,10 +83,10 @@ namespace PL.Call
         /// Queries the call list based on the filter by type.
         /// </summary>
         /// <summary>
-        /// מבצע שאילתה לרשימת הקריאות הפתוחות עבור הוולנטייר המצויין.
-        /// מביא את פרטי הוולנטייר וקורא לשירות לקבלת הקריאות הפתוחות, תוך החלת פילטר אם צוין.
+        /// Queries the list of open calls for the specified volunteer.
+        /// Retrieves the details of the volunteer and calls the service to get the open calls, applying a filter if specified.
         /// </summary>
-        /// <param name="id">מספר הזיהוי של הוולנטייר שאת רשימת הקריאות יש לבצע לה שאילתה.</param>
+        /// <param name="id">The ID of the volunteer for whom the call list query should be performed.</param>
         private void queryCallList(int id)
         {
             try

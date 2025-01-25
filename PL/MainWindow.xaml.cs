@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace PL
 {
@@ -80,17 +81,25 @@ namespace PL
         /// <summary>
         /// Observer method to update the current time.
         /// </summary>
+        private volatile DispatcherOperation? _observerOperation = null; //stage 7
+
         private void clockObserver()
         {
-            CurrentTime = s_bl.Admin.GetClock();
+            if (_observerOperation is null || _observerOperation.Status == DispatcherOperationStatus.Completed)
+
+                _observerOperation = Dispatcher.BeginInvoke(() =>
+                { CurrentTime = s_bl.Admin.GetClock(); });
+             
         }
 
         /// <summary>
         /// Observer method to update the maximum risk range.
         /// </summary>
+        private volatile DispatcherOperation? _observerOperation2 = null; //stage 7
         private void configObserver()
         {
-            MaxRiskRange = s_bl.Admin.GetRiskRange();
+            if (_observerOperation2 is null || _observerOperation2.Status == DispatcherOperationStatus.Completed)
+                _observerOperation2 = Dispatcher.BeginInvoke(() =>{ MaxRiskRange = s_bl.Admin.GetRiskRange(); });
         }
 
 
