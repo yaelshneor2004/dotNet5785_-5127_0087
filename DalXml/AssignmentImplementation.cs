@@ -25,19 +25,7 @@ internal class AssignmentImplementation : IAssignment
         };
     }
 
-    //static Assignment getAssignment(XElement a)
-    //{
-    //    return new DO.Assignment()
-    //    {
-    //        Id = a.ToIntNullable("Id") ?? throw new FormatException("can't convert id")
-    //    ,
-    //        CallId = a?.ToIntNullable("CallId") ?? throw new FormatException("can't convert callId"),
-    //        VolunteerId = a?.ToIntNullable("VolunteerId") ?? throw new FormatException("can't convert volunteerId"),
-    //        StartCall = a?.ToDateTimeNullable("StartCall") ?? throw new FormatException("can't convert startCall"),
-    //        FinishCall = a?.ToDateTimeNullable("FinishCall") ?? throw new FormatException(" can't convert FinishCall"),
-    //        FinishType = a?.ToEnumNullable<MyFinishType>("FinishType") ?? throw new FormatException(" can't convert startCall")
-    //    };
-    //}
+   
     [MethodImpl(MethodImplOptions.Synchronized)]
     private IEnumerable<XElement>GetAssignmentElement(Assignment assignment)
     {

@@ -2,6 +2,7 @@
 using BO;
 using Helpers;
 using System;
+using System.Data.Common;
 using System.Linq;
 namespace BlImplementation;
 internal class VolunteerImplementation:IVolunteer
@@ -20,7 +21,9 @@ internal class VolunteerImplementation:IVolunteer
         try
         {
             // Retrieve the list of volunteers from the DAL
-            var volunteers = _dal.Volunteer.ReadAll();
+            IEnumerable<DO.Volunteer> volunteers;
+            lock(AdminManager.BlMutex)
+             volunteers = _dal.Volunteer.ReadAll();
             // Search for the user by username
             var user = volunteers.FirstOrDefault(v => v.FullName == username);
             password = VolunteerManager.Encrypt(password);
@@ -48,7 +51,8 @@ internal class VolunteerImplementation:IVolunteer
             VolunteerManager.ValidateVolunteerDetails(myVolunteer);
             // Attempt to add the new volunteer to DAL
             myVolunteer.Password = myVolunteer.Password != null ? VolunteerManager.Encrypt(myVolunteer.Password) : null;
-            _dal.Volunteer.Create(VolunteerManager.ConvertFromBoToDo(myVolunteer));
+            lock (AdminManager.BlMutex)
+                _dal.Volunteer.Create(VolunteerManager.ConvertFromBoToDo(myVolunteer));
             VolunteerManager.Observers.NotifyListUpdated();                                                  
 
         }
@@ -69,7 +73,9 @@ internal class VolunteerImplementation:IVolunteer
             {
             //AdminManager.ThrowOnSimulatorIsRunning();
             // Retrieve the volunteer details from DAL
-            var volunteer = _dal.Volunteer.Read(volunteerId);
+            rocord 
+            lock (AdminManager.BlMutex)
+                  volunteer = _dal.Volunteer.Read(volunteerId);
                 // Check if the volunteer is currently handling any calls or has handled any calls in the past
                 var currentAssignments = _dal.Assignment.ReadAll(a => a.VolunteerId == volunteerId && a.FinishCall == null).Any();
                 var pastAssignments = _dal.Assignment.ReadAll(a => a.VolunteerId == volunteerId).Any();
