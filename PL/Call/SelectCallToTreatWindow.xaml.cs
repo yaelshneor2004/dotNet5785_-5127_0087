@@ -151,6 +151,10 @@ namespace PL.Call
                 MessageBox.Show("A call has been selected for treatment", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
                 Close();
             }
+            catch (BO.BlTemporaryNotAvailableException ex)
+            {
+                MessageBox.Show($"{ex.Message}\nPlease stop the Simulator and try again.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
             catch (BO.BlDoesNotExistException ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);

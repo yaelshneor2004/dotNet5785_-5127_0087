@@ -142,6 +142,11 @@ namespace PL.Volunteer
                 {
                     MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
+
+                catch (BO.BlTemporaryNotAvailableException ex)
+                {
+                    MessageBox.Show($"{ex.Message}\nPlease stop the Simulator and try again.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
                 catch (Exception ex)
                 {
                     MessageBox.Show($"An unknown error occurred: {ex.Message}.", "Unknown Error");

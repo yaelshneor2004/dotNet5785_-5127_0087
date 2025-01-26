@@ -114,13 +114,11 @@ namespace PL.Volunteer
                     MessageBox.Show("Volunteer updated successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                     Close();
                 }
-
             }
             catch (BO.BlInvalidOperationException ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-
             catch (BO.BlDoesNotExistException ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -138,8 +136,7 @@ namespace PL.Volunteer
             {
                 MessageBox.Show($"An unknown error occurred: {ex.Message}.", "Unknown Error");
             }
-        
-    }
+       
         }
 
 

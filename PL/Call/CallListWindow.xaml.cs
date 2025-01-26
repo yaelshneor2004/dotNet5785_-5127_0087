@@ -126,13 +126,28 @@ namespace PL.Call
                 MessageBox.Show("No call selected.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
+            if (s_bl == null)
+            {
+                MessageBox.Show("s_bl is null.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            if (s_bl.Call == null)
+            {
+                MessageBox.Show("s_bl.Call is null.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
             MessageBoxResult result = MessageBox.Show("Are you sure you want to delete this call?", "Confirm Delete", MessageBoxButton.YesNo, MessageBoxImage.Warning);
             if (result == MessageBoxResult.Yes)
             {
                 try
-                {
+                { 
                     s_bl.Call.DeleteCall(SelectedCall.CallId);
                     MessageBox.Show("Call deleted successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                catch (BO.BlTemporaryNotAvailableException ex)
+                {
+                    MessageBox.Show($"{ex.Message}\nPlease stop the Simulator and try again.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 catch (BO.BlDoesNotExistException ex)
                 {

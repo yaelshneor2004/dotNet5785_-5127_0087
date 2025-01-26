@@ -81,6 +81,10 @@ public partial class VolunteerUserWindow : Window
             MessageBox.Show("Volunteer updated successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             Close();
         }
+        catch (BO.BlTemporaryNotAvailableException ex)
+        {
+            MessageBox.Show($"{ex.Message}\nPlease stop the Simulator and try again.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
         catch (BO.BlInvalidOperationException ex)
         {
             MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -131,6 +135,10 @@ public partial class VolunteerUserWindow : Window
             s_bl.Call.UpdateCancelTreatment(CurrentVolunteer.Id, CurrentCall.Id);
             MessageBox.Show("Treatment cancellation successfully canceled", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
         }
+        catch (BO.BlTemporaryNotAvailableException ex)
+        {
+            MessageBox.Show($"{ex.Message}\nPlease stop the Simulator and try again.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
         catch (BO.BlInvalidOperationException ex)
         {
             MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -163,6 +171,10 @@ public partial class VolunteerUserWindow : Window
         {
             s_bl.Call.UpdateCompleteAssignment(CurrentVolunteer.Id, CurrentCall.Id);
             MessageBox.Show("Treatment completed successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+        catch (BO.BlTemporaryNotAvailableException ex)
+        {
+            MessageBox.Show($"{ex.Message}\nPlease stop the Simulator and try again.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
         catch (BO.BlInvalidOperationException ex)
         {
