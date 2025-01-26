@@ -33,8 +33,8 @@ namespace PL.Volunteer
         public BO.MyCallType CallType { get; set; } = BO.MyCallType.None;
         public BO.MyTypeDistance TypeDistance { get; set; } = BO.MyTypeDistance.None;
         public BO.MyRole Role { get; set; } = BO.MyRole.None;
-        public BO.MyCallStatusByVolunteer CallStatus{ get; set; } = BO.MyCallStatusByVolunteer.None;
-         private int id = 0;
+        public BO.MyCallStatusByVolunteer CallStatus { get; set; } = BO.MyCallStatusByVolunteer.None;
+        private int id = 0;
         public string ButtonText
         {
             get { return (string)GetValue(ButtonTextProperty); }
@@ -49,10 +49,10 @@ namespace PL.Volunteer
         /// <param name="id">The ID of the volunteer. If 0, a new volunteer is being added.</param>
         public VolunteerWindow(int idV = 0)
         {
-            try { 
-            id = idV;
-            ButtonText = id == 0 ? "Add" : "Update";
-            InitializeComponent();
+            try {
+                id = idV;
+                ButtonText = id == 0 ? "Add" : "Update";
+                InitializeComponent();
                 CurrentVolunteer = (id != 0) ? s_bl.Volunteer.GetVolunteerDetails(id)! : new BO.Volunteer();
 
             }

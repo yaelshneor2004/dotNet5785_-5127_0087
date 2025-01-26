@@ -23,6 +23,7 @@ namespace PL
     {
         private static bool isHandleCalls = false;
         private static bool isHandleVolunteer = false;
+
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
 
         /// <summary>

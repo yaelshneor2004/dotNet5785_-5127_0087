@@ -53,7 +53,20 @@
             </Style.Triggers>
         </Style>
 
-            <!-- Style for ComboBox -->
+        <Style TargetType="Button" x:Key="SimulatorButtonStyle">
+            <Setter Property="Content" Value="Start Simulator"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsSimulatorRunning}" Value="True">
+                    <Setter Property="Content" Value="Stop Simulator"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsSimulatorRunning}" Value="False">
+                    <Setter Property="Content" Value="Start Simulator"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+
+        <!-- Style for ComboBox -->
             <Style TargetType="ComboBox">
                 <Setter Property="Foreground" Value="#9370DB"/>
                 <Setter Property="FontSize" Value="12"/>
