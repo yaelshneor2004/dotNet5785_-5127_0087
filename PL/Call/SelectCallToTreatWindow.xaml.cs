@@ -37,7 +37,14 @@ namespace PL.Call
         // Using a DependencyProperty as the backing store for CallList.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty OpenCallListProperty =
             DependencyProperty.Register("OpenCallList", typeof(IEnumerable<BO.OpenCallInList>), typeof(SelectCallToTreatWindow), new PropertyMetadata(null));
-        public string Description { get; set; }
+        public String Description
+        {
+            get { return (String)GetValue(DescriptionProperty); }
+            set { SetValue(DescriptionProperty, value); }
+        }
+        public static readonly DependencyProperty DescriptionProperty =
+        DependencyProperty.Register("Description", typeof(String), typeof(SelectCallToTreatWindow), new PropertyMetadata(string.Empty));
+
 
         public BO.Call? Call
         {
@@ -73,14 +80,13 @@ namespace PL.Call
         {
             try
             {
-
                 id = idV;
                 InitializeComponent();
                 CurrentVolunteer = (id != 0) ? s_bl.Volunteer.GetVolunteerDetails(id)! : new BO.Volunteer();
                 queryCallList(id );
                 MapSource = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "mapp.html");
-              if(Call!=null)
-                Description=Call.Description;
+              if(SelectedOpenCall!=null)
+                Description=SelectedOpenCall.Description;
             }
             catch (BO.BlDoesNotExistException ex)
             {
@@ -199,11 +205,7 @@ namespace PL.Call
         /// <summary>
         /// Event handler for mouse left button up event on the data grid. Opens the call description window.
         /// </summary>
-        private void DataGrid_MouseLeftButtonUp(object sender, RoutedEventArgs e)
-        {
-            //List<string> addresses = OpenCallList.Select(call => call.Address).ToList();
-            //new CallDescription(CurrentVolunteer.Id,SelectedOpenCall.Description).Show();
-        }
+
         private async void CenterMapOnVolunteer()
         {
             if (Call is not null)
@@ -219,12 +221,15 @@ namespace PL.Call
                 $"{CurrentVolunteer.Longitude});");
             }
         }
-        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             var dataGrid = sender as DataGrid;
             if (dataGrid == null)
                 return;
-
+            if (SelectedOpenCall != null)
+            {
+                Description = SelectedOpenCall.Description ?? string.Empty;
+            }
             if (dataGrid.SelectedItem is BO.OpenCallInList openCall)
             {
                 Call = s_bl.Call.GetCallDetails(openCall.Id);
