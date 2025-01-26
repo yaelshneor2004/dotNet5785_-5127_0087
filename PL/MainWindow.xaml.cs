@@ -1,6 +1,7 @@
 ﻿using PL.Call;
 using PL.Volunteer;
 using System;
+using System.ComponentModel;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -49,16 +50,21 @@ namespace PL
         }
         private void updateCallAmount()
         {
-                var callAmounts = s_bl.Call.CallAmount();
-                var statusListAmount = callAmounts
-                    .Select((count, index) => new helper
-                    {
-                        index = count,
-                        value = (BO.MyCallStatus)index
-                    })
-                    .ToList();
+            var callAmounts = s_bl.Call.CallAmount();
+            var statusListAmount = callAmounts
+                .Select((count, index) => new helper
+                {
+                    index = count,
+                    value = (BO.MyCallStatus)index
+                })
+                .ToList();
+
+            Dispatcher.Invoke(() =>
+            {
                 StatusList = statusListAmount;
+            });
         }
+
 
         /// <summary>
         /// Gets or sets the selected value.
@@ -77,6 +83,55 @@ namespace PL
         // Using a DependencyProperty as the backing store for StatusList. This enables animation, styling, binding, etc...
         public static readonly DependencyProperty StatusListProperty =
             DependencyProperty.Register("StatusList", typeof(IEnumerable<helper>), typeof(MainWindow), new PropertyMetadata(null));
+
+        public int Interval
+        {
+            get { return (int)GetValue(IntervalProperty); }
+            set { SetValue(IntervalProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for StatusList. This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty IntervalProperty =
+            DependencyProperty.Register("Interval", typeof(int), typeof(MainWindow), new PropertyMetadata(0));
+        public static readonly DependencyProperty IsSimulatorRunningProperty =
+            DependencyProperty.Register("IsSimulatorRunning", typeof(bool), typeof(MainWindow), new PropertyMetadata(false));
+
+        public bool IsSimulatorRunning
+        {
+            get { return (bool)GetValue(IsSimulatorRunningProperty); }
+            set
+            {
+                SetValue(IsSimulatorRunningProperty, value);
+                OnPropertyChanged(nameof(IsSimulatorRunning));
+                OnPropertyChanged(nameof(ButtonContent)); 
+            }
+        }
+
+        public string ButtonContent
+        {
+            get { return IsSimulatorRunning ? "Stop Simulator" : "Start Simulator"; }
+            set { }
+        }
+
+        private void ToggleSimulator_Click(object sender, RoutedEventArgs e)
+        {
+            if (IsSimulatorRunning)
+            {
+                s_bl.Admin.StopSimulator();
+                IsSimulatorRunning = false;
+            }
+            else
+            {
+                s_bl.Admin.StartSimulator(Interval);
+                IsSimulatorRunning = true;
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
         /// <summary>
         /// Observer method to update the current time.
@@ -144,6 +199,8 @@ namespace PL
         /// </summary>
         private void MainWindow_Closed(object? sender, EventArgs e)
         {
+            s_bl.Admin.StopSimulator();
+            IsSimulatorRunning = false;
             s_bl.Admin.RemoveClockObserver(clockObserver);
             s_bl.Admin.RemoveConfigObserver(configObserver);
             s_bl.Call.RemoveObserver(updateCallAmount);

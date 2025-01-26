@@ -1,5 +1,6 @@
 ﻿using BlApi;
 using BO;
+using DO;
 using Helpers;
 using System;
 using System.Linq;
@@ -25,10 +26,10 @@ internal class VolunteerImplementation:IVolunteer
              volunteers = _dal.Volunteer.ReadAll();
             // Search for the user by username
             var user = volunteers.FirstOrDefault(v => v.FullName == username);
-            password = VolunteerManager.Encrypt(password);
+           var Encryptpassword = VolunteerManager.Encrypt(password);
             if (user == null)
                 throw new BO.BlUnauthorizedAccessException($"Username {username} does not exist");
-            if (user.Password != password)
+            if (user.Password != Encryptpassword)
                 throw new BO.BlUnauthorizedAccessException($"Password {password} is incorrect");
             return ((BO.MyRole)user.Role,user.Id);
         }
@@ -52,13 +53,19 @@ internal class VolunteerImplementation:IVolunteer
             myVolunteer.Password = myVolunteer.Password != null ? VolunteerManager.Encrypt(myVolunteer.Password) : null;
             lock (AdminManager.BlMutex)
                 _dal.Volunteer.Create(VolunteerManager.ConvertFromBoToDo(myVolunteer));
-            VolunteerManager.Observers.NotifyListUpdated();                                                  
-
+            VolunteerManager.Observers.NotifyListUpdated();   
+            _= VolunteerManager.AddVolunteerCoordinatesAsync(myVolunteer);
         }
+
         catch (DO.DalAlreadyExistsException ex)
         {
             throw new BO.BlAlreadyExistsException($"Volunteer with ID {myVolunteer.Id} already exists.", ex);
         }
+        catch (BO.BlTemporaryNotAvailableException ex)
+        {
+            throw new BO.BlTemporaryNotAvailableException(ex.Message);
+        }
+
     }
     /// <summary>
     /// Deletes a volunteer from the system.
@@ -94,7 +101,11 @@ internal class VolunteerImplementation:IVolunteer
             {
                 throw new BO.BlDoesNotExistException($"Volunteer with ID {volunteerId} does not exist.", ex);
             }
-       }
+        catch (BO.BlTemporaryNotAvailableException ex)
+        {
+            throw new BO.BlTemporaryNotAvailableException(ex.Message);
+        }
+    }
     /// <summary>
     /// Retrieves the details of a specific volunteer.
     /// </summary>
@@ -161,14 +172,6 @@ internal class VolunteerImplementation:IVolunteer
             DO.Volunteer? volunteer;
             lock (AdminManager.BlMutex)
                 volunteer = _dal.Volunteer.Read(id);
-            // Check if the address has changed and update the coordinates
-            if (volunteer.Address != myVolunteer.Address)
-            {
-                // Update the coordinates based on the new address
-                var (newLatitude, newLongitude) = Tools.GetCoordinates(myVolunteer.Address);
-                myVolunteer.Latitude = newLatitude;
-                myVolunteer.Longitude = newLongitude;
-            }
             if (volunteer.Role!= (DO.MyRole)myVolunteer.Role)
             {
                 int count;
@@ -194,6 +197,7 @@ internal class VolunteerImplementation:IVolunteer
             // Attempt to update the volunteer in DAL
             lock (AdminManager.BlMutex)
                 _dal.Volunteer.Update(updatedVolunteer);
+            _ = VolunteerManager.updateCoordinatesForVolunteerAddressAsync(updatedVolunteer);
             VolunteerManager.Observers.NotifyItemUpdated(updatedVolunteer.Id);  
             VolunteerManager.Observers.NotifyListUpdated();  
 
@@ -202,8 +206,12 @@ internal class VolunteerImplementation:IVolunteer
         {
             throw new BO.BlDoesNotExistException($"Volunteer with ID {myVolunteer.Id} does not exist.", ex);
         }
-    }
+        catch (BO.BlTemporaryNotAvailableException ex)
+        {
+            throw new BO.BlTemporaryNotAvailableException(ex.Message);
+        }
 
+    }
     public void AddObserver(Action listObserver) =>
 VolunteerManager.Observers.AddListObserver(listObserver); //stage 5
     public void AddObserver(int id, Action observer) =>

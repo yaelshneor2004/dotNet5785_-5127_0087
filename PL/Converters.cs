@@ -338,6 +338,39 @@ public class HidePasswordDots : IValueConverter
         throw new NotImplementedException();
     }
 }
+public class BooleanToReadOnlyConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+    {
+        if (value is bool booleanValue)
+        {
+            return booleanValue ? true : false;
+        }
+        return false;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}
+public class BooleanToIsEnabeldyConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+    {
+        if (value is bool booleanValue)
+        {
+            return booleanValue ? false : true;
+        }
+        return true;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}
+
 
 
 

@@ -1,4 +1,6 @@
-﻿using DalApi;
+﻿using BlApi;
+using BO;
+using DalApi;
 using DO;
 using System.Net;
 using System.Net.Mail;
@@ -8,17 +10,13 @@ internal static class CallManager
 {
     internal static ObserverManager Observers = new(); 
 
-    private static IDal s_dal = Factory.Get;
+    private static IDal s_dal = DalApi.Factory.Get;
     /// <summary>
     /// Converts an instance of DO.Call to an instance of BO.Call.
     /// This includes converting the related assignments to BO.CallAssignInList objects.
     /// </summary>
     /// <param name="callData">The DO.Call instance to convert.</param>
     /// <returns>A new BO.Call instance with the converted data.</returns>
-    public static async Task SendEmailHelperAsync(string email, string subject,string body)
-    {
-       await SendEmailAsync(email, subject, body);
-    }
 
     public static BO.Call ConvertFromDoToBo(DO.Call callData)
     {
@@ -116,11 +114,6 @@ internal static class CallManager
     {
         if (call.MaxEndTime.HasValue && call.MaxEndTime <= call.StartTime)
             throw new BO.BlInvalidOperationException("Max end time must be later than start time.");
-
-        var coordinates = Tools.GetCoordinates(call.Address ??string.Empty);
-        call.Latitude = coordinates.Latitude;
-        call.Longitude = coordinates.Longitude;
-
         if (call.Id < 0)
             throw new BO.BlInvalidOperationException("Invalid callId.");
     }
@@ -226,12 +219,15 @@ internal static class CallManager
     public static BO.CallInList ConvertToCallInList(DO.Call callData)
     {
         IEnumerable<DO.Assignment> assignmentsData;
-        string lastVolunteerName;
+        string lastVolunteerName = null;
         lock (AdminManager.BlMutex)
             assignmentsData = s_dal.Assignment.ReadAll(a => a.CallId == callData.Id).ToList();
         var lastAssignment = assignmentsData.OrderByDescending(a => a.StartCall).FirstOrDefault();
-        lock (AdminManager.BlMutex)
-            lastVolunteerName = s_dal.Volunteer.Read(lastAssignment.VolunteerId)?.FullName;
+        if (lastAssignment != null)
+        {
+            lock (AdminManager.BlMutex)
+                lastVolunteerName = s_dal.Volunteer.Read(lastAssignment.VolunteerId)?.FullName;
+        }
         return new BO.CallInList
         {
             Id = lastAssignment?.Id ?? 0,
@@ -241,12 +237,13 @@ internal static class CallManager
             TimeRemaining = callData.MaxFinishCall.HasValue
                 ? (callData.MaxFinishCall.Value - AdminManager.Now < TimeSpan.Zero ? TimeSpan.Zero : callData.MaxFinishCall.Value - AdminManager.Now)
                 : (TimeSpan?)null,
-            LastVolunteerName = lastAssignment != null && lastAssignment.VolunteerId != 0 ?lastVolunteerName: null,
+            LastVolunteerName = lastAssignment != null && lastAssignment.VolunteerId != 0 ? lastVolunteerName : null,
             CompletionTime = lastAssignment?.FinishCall.HasValue == true ? lastAssignment.FinishCall.Value - callData.OpenTime : (TimeSpan?)null,
             Status = GetCallStatus(callData),
             TotalAssignments = assignmentsData.Count()
         };
     }
+
 
 
     /// <summary>
@@ -379,8 +376,7 @@ internal static class CallManager
     public static bool VolunteerArea(DO.Volunteer volunteer, DO.Call call)
     {
         // Calculate the distance between the volunteer's address and the call's address
-        double distance = Tools.GlobalDistance(volunteer.Address, call.Address, volunteer.TypeDistance);
-        // Check if the distance is within the volunteer's max distance
+        double distance = Tools.GlobalDistance(volunteer.Address, call.Address, volunteer.TypeDistance);        // Check if the distance is within the volunteer's max distance
         return distance <= volunteer.MaxDistance;
     }
 
@@ -399,7 +395,7 @@ internal static class CallManager
             Address = callDetails.Address,
             StartTime = callDetails.OpenTime,
             MaxEndTime = callDetails.MaxFinishCall,
-            DistanceFromVolunteer = volunteer != null ? Tools.GlobalDistance(volunteer.Address ?? string.Empty, callDetails.Address, volunteer.TypeDistance) : 0,
+            DistanceFromVolunteer = volunteer != null ? Tools.GlobalDistance(volunteer.Address,callDetails.Address, volunteer.TypeDistance) : 0,
         };
     }
 
@@ -422,7 +418,57 @@ internal static class CallManager
     {
         return assignments.Any(a => !a.FinishCall.HasValue && !a.FinishType.HasValue);
     }
+    public static async Task updateCoordinatesForCallAddressAsync(DO.Call call)
+    {
+        if (call.Address is not null)
+        {
+            (double latitude, double longitude) = await Tools.GetCoordinates(call.Address);
+            call = call with { Latitude = latitude, Longitude = longitude };
+            lock (AdminManager.BlMutex)
+                s_dal.Call.Update(call);
+            Observers.NotifyListUpdated();
+            Observers.NotifyItemUpdated(call.Id);
+        }
+    }
+    public static async Task AddCallSendEmailAsync(BO.Call call)
+    { 
+    var volunteers = Tools.GetVolunteersWithinDistance(call.Address);
+        foreach (var volunteer in volunteers)
+        {
+            var subject = $"New Call Opened for {call.Id}";
+            var body = $"Hello Volunteers,\n\n" +  // General greeting
+                   $"A new call has been opened. Here are the details:\n\n" +
+                   $"Description: {call.Description}\n" +
+                   $"Location: {call.Address}\n" +
+                   $"Open Time: {call.StartTime}\n" +
+                   $"Maximum Time: {call.MaxEndTime}\n" +
+                   $"Please log in to the system to accept the call."; // Body of the email;
+          await CallManager.SendEmailAsync(volunteer.Email, subject, body);
+        }
+    }
+    public static async Task UpdateCancelTreatmentSendEmailAsync(int idV,DO.Assignment assignment)
+    {
+        DO.Volunteer? volunteer;
+        lock (AdminManager.BlMutex)
+        volunteer = s_dal.Volunteer.Read(assignment.VolunteerId);
 
+        if (CallManager.IsManager(idV))
+        {
+            var subject = $"Assignment Cancelled";
+            var body = $"Your assignment for call {assignment.CallId} has been cancelled.";
+           await CallManager.SendEmailAsync(volunteer?.Email ?? string.Empty, subject, body);
+        }
+    }
+    public static async Task AddCallCoordinatesAsync(BO.Call call)
+    {
+        var coordinates = await Tools.GetCoordinates(call.Address ?? string.Empty);
+        call.Latitude = coordinates.Latitude;
+        call.Longitude = coordinates.Longitude;
+        lock (AdminManager.BlMutex)
+            s_dal.Call.Update(ConvertBOToDO(call));
+        Observers.NotifyListUpdated();
+        Observers.NotifyItemUpdated(call.Id);
+    }
     /// <summary>
     /// Periodically updates the status of calls that have exceeded their maximum finish time.
     /// </summary>
@@ -480,5 +526,6 @@ internal static class CallManager
         }
         Observers.NotifyListUpdated(); // Add call to NotifyListUpdated
 }
+
 
 }

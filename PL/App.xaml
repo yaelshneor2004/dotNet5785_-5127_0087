@@ -41,6 +41,8 @@
         <local:addressValidation x:Key="addressValidationKey" />
         <local:maxDistanceValidation x:Key="maxDistanceValidationKey" />
         <local:ActiveCallToVisibleConverter x:Key="ActiveCallToVisibleConverterKey" />
+        <local:BooleanToReadOnlyConverter x:Key="BooleanToReadOnlyConverterKey" />
+        <local:BooleanToIsEnabeldyConverter x:Key="BooleanToIsEnabeldyConverterKey" />
         <!-- Triggers -->
         <Style TargetType="DataGridRow">
             <Setter Property="Background" Value="#E6E6FA"/>

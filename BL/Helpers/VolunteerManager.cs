@@ -2,11 +2,13 @@
 using System.Text;
 using System.Text.RegularExpressions;
 using DalApi;
+using DO;
 namespace Helpers;
 internal static class VolunteerManager
 {
-    internal static ObserverManager Observers = new(); 
+    internal static ObserverManager Observers = new();
 
+    private static readonly Random s_rand = new(); // Random number generator
     private static IDal s_dal = DalApi.Factory.Get;
     private static readonly byte[] Key = Encoding.UTF8.GetBytes("0123456789ABCDEF"); // 16-byte key
     private static readonly byte[] IV = Encoding.UTF8.GetBytes("ABCDEF9876543210");  // 16-byte initialization vector
@@ -47,15 +49,16 @@ internal static class VolunteerManager
             throw new BO.BlInvalidOperationException("Invalid email format.");
         if (!IsStrongPassword(volunteer.Password ?? string.Empty))
             throw new BO.BlInvalidOperationException("This password is not strong enough.");
-        _ = ValidCoordinatesHelperAsync(volunteer);
     }
-    private static async Task ValidCoordinatesHelperAsync(BO.Volunteer volunteer)
+    public static async Task AddVolunteerCoordinatesAsync(BO.Volunteer volunteer)
     {
-        var coordinates =await Tools.GetCoordinates(volunteer.Address ?? string.Empty);
-     var volunteerS = volunteer with { Latitude = coordinates.Latitude, Longitude = coordinates.Longitude };
-
-        //volunteer.Latitude = coordinates.Latitude;
-        //volunteer.Longitude = coordinates.Longitude;
+        var coordinates = await Tools.GetCoordinates(volunteer.Address ?? string.Empty);
+        volunteer.Latitude = coordinates.Latitude;
+        volunteer.Longitude = coordinates.Longitude;
+        lock (AdminManager.BlMutex)
+            s_dal.Volunteer.Update(ConvertFromBoToDo(volunteer));
+        Observers.NotifyListUpdated();
+        Observers.NotifyItemUpdated(volunteer.Id);
     }
     /// <summary>
     /// Checks if the given password is strong.
@@ -215,7 +218,7 @@ internal static class VolunteerManager
             FullName = myVolunteer.FullName,
             Phone = myVolunteer.Phone,
             Email = myVolunteer.Email,
-            Password =myVolunteer.Password,
+            Password = myVolunteer.Password,
             Address = myVolunteer.Address,
             Latitude = myVolunteer.Latitude,
             Longitude = myVolunteer.Longitude,
@@ -287,7 +290,7 @@ internal static class VolunteerManager
             Address = callData.Address,
             StartTime = callData.OpenTime,
             MaxEndTime = callData.MaxFinishCall,
-            StartTreatmentTime = a.StartCall,
+            StartTreatmentTime = callData.OpenTime,
             DistanceFromVolunteer = Tools.GlobalDistance(myVolunteer.Address ?? string.Empty, callData.Address, myVolunteer.TypeDistance),
             Status = VolunteerManager.DetermineCallStatus(callData.MaxFinishCall)
         };
@@ -308,8 +311,8 @@ internal static class VolunteerManager
     /// <returns>Returns the converted BO.VolunteerInList object.</returns>
     public static BO.VolunteerInList ConvertToVolunteerInList(DO.Volunteer VolunteerData)
     {
-         int totalCallsHandled, totalCallsCancelled, totalCallsExpired;
-       int? currentCallId;
+        int totalCallsHandled, totalCallsCancelled, totalCallsExpired;
+        int? currentCallId;
         lock (AdminManager.BlMutex)
         {
             totalCallsHandled = s_dal.Assignment.ReadAll(a => a.VolunteerId == VolunteerData.Id && a.FinishType == DO.MyFinishType.Treated).Count();
@@ -326,7 +329,7 @@ internal static class VolunteerManager
             TotalCallsCancelled = totalCallsCancelled,
             TotalCallsExpired = totalCallsExpired,
             CurrentCallId = currentCallId,
-            CurrentCallType =(BO.MyCallType) GetCallType(VolunteerData.Id)
+            CurrentCallType = (BO.MyCallType)GetCallType(VolunteerData.Id)
         };
     }
 
@@ -337,7 +340,7 @@ internal static class VolunteerManager
         DO.Call? call;
         lock (AdminManager.BlMutex)
             assignment = s_dal.Assignment.ReadAll();
-        DO.Assignment? ass = assignment.FirstOrDefault(a => a.VolunteerId == id&&a.FinishType==null);
+        DO.Assignment? ass = assignment.FirstOrDefault(a => a.VolunteerId == id && a.FinishType == null);
         if (ass != null)
         {
             lock (AdminManager.BlMutex)
@@ -394,4 +397,205 @@ internal static class VolunteerManager
             return Encoding.UTF8.GetString(plainBytes);
         }
     }
+    public static async Task updateCoordinatesForVolunteerAddressAsync(DO.Volunteer volunteer)
+    {
+        if (volunteer.Address is not null)
+        {
+            (double latitude,double longitude)= await Tools.GetCoordinates(volunteer.Address);
+            volunteer = volunteer with { Latitude = latitude, Longitude = longitude };
+                lock (AdminManager.BlMutex)
+                    s_dal.Volunteer.Update(volunteer);
+                Observers.NotifyListUpdated();
+                Observers.NotifyItemUpdated(volunteer.Id);
+        }
+    }
+    /// <summary>
+    /// A synchronous "volunteer activity" simulation method that operates asynchronously
+    /// </summary>
+    /// <exception cref="BO.BLDoesNotExistException"></exception>
+    internal static void SimulateVolunteer()
+    {
+        List<DO.Volunteer> activeVolunteersList;
+        lock (AdminManager.BlMutex)
+            activeVolunteersList = s_dal.Volunteer.ReadAll(v => v.IsActive).ToList(); // List of active volunteers
+
+        foreach (var vol in activeVolunteersList)
+        {
+            Assignment? assignmentInProgressData;
+            lock (AdminManager.BlMutex)
+                assignmentInProgressData = s_dal.Assignment.Read(a => a.VolunteerId == vol.Id && a.FinishType == null);
+
+            if (assignmentInProgressData == null)
+            {
+                int percent = s_rand.Next(1, 6); // 20% chance to choose a call
+                if (percent == 1)
+                {
+                    DO.Call? openCall;
+                    lock (AdminManager.BlMutex)
+                    {
+                        openCall = (
+                            from call in s_dal.Call.ReadAll()
+                            where CallManager.GetCallStatus(call) == BO.MyCallStatus.Open || CallManager.GetCallStatus(call) == BO.MyCallStatus.OpenAtRisk
+                            let distance = vol.Latitude != null && vol.Longitude != null
+                                ? Tools.GlobalDistance(vol.Address,call.Address, vol.TypeDistance)
+                                : double.MaxValue
+                            where distance <= vol.MaxDistance
+                            select call
+                        ).FirstOrDefault();
+                    }
+
+                    if (openCall != null)
+                    {
+                        var newAssignment = new DO.Assignment
+                        {
+                            VolunteerId = vol.Id,
+                            CallId = openCall.Id,
+                            StartCall = AdminManager.Now
+                        };
+
+                        lock (AdminManager.BlMutex)
+                            s_dal.Assignment.Create(newAssignment);
+
+                        CallManager.Observers.NotifyItemUpdated(newAssignment.Id);
+                        CallManager.Observers.NotifyListUpdated();
+                    }
+                }
+            }
+            else
+            {
+                double enoughTime;
+                lock (AdminManager.BlMutex)
+                {
+                    var call = s_dal.Call.Read(assignmentInProgressData.CallId);
+                    enoughTime = Tools.GlobalDistance(vol.Address, call.Address, vol.TypeDistance) * 2 + 10;
+                }
+
+                if (AdminManager.Now >= assignmentInProgressData.StartCall.AddMinutes(enoughTime))
+                {
+                    var updatedAssignment = assignmentInProgressData with
+                    {
+                        FinishType = DO.MyFinishType.Treated,
+                        FinishCall = AdminManager.Now
+                    };
+
+                    lock (AdminManager.BlMutex)
+                        s_dal.Assignment.Update(updatedAssignment);
+
+                    CallManager.Observers.NotifyItemUpdated(updatedAssignment.Id);
+                    CallManager.Observers.NotifyListUpdated();
+                }
+                else
+                {
+                    int percent = s_rand.Next(1, 11); // 10% chance to cancel the assignment
+                    if (percent == 1)
+                    {
+                        var updatedAssignment = assignmentInProgressData with
+                        {
+                            FinishType = DO.MyFinishType.SelfCancel,
+                            FinishCall = AdminManager.Now
+                        };
+
+                        lock (AdminManager.BlMutex)
+                            s_dal.Assignment.Update(updatedAssignment);
+
+                        CallManager.Observers.NotifyItemUpdated(updatedAssignment.Id);
+                        CallManager.Observers.NotifyListUpdated();
+                    }
+                }
+            }
+        }
+    }
+
+
+    //internal static void SimulateVolunteer()
+    //{
+    //    List<DO.Volunteer> activeVolunteersList;
+    //    lock (AdminManager.BlMutex)
+    //        activeVolunteersList = s_dal.Volunteer.ReadAll(v => v.IsActive == true).ToList(); // List of active volunteers
+    //    foreach (var vol in activeVolunteersList)
+    //    {
+    //        Assignment? assignmentInProgressData;
+    //        lock (AdminManager.BlMutex)
+    //            assignmentInProgressData = s_dal.Assignment.Read(a => a.VolunteerId == vol.Id && a.FinishType == null);
+    //        if (assignmentInProgressData == null)
+    //        {
+    //            int percent = s_rand.Next(1, 2);
+    //            if (percent == 1) // the probability of 20 percent to choose call
+    //            {
+    //                DO.Call? openCall;
+    //                lock (AdminManager.BlMutex)
+    //                {
+    //                    openCall = (
+    //                        from assignment in s_dal.Assignment.ReadAll() // Get all assignments
+    //                        let call = s_dal.Call.Read(assignment.CallId) // Retrieve the call associated with the assignment
+    //                        ?? throw new BO.BlDoesNotExistException($"Call with ID={assignment.CallId} does not exist") // Throw an exception if the call does not exist
+    //                        where CallManager.GetCallStatus(call) == BO.MyCallStatus.Open || CallManager.GetCallStatus(call) == BO.MyCallStatus.OpenAtRisk // Check if the call is open or at risk
+    //                        let distance = vol.Latitude != null && vol.Longitude != null // Calculate the distance between the volunteer and the call address
+    //                            ? Tools.GlobalDistance(
+    //                                vol.Address,
+    //                                call.Address,
+    //                                (DO.MyTypeDistance)vol.TypeDistance
+    //                            )
+    //                            : double.MaxValue
+    //                        where distance <= vol.MaxDistance // Check if the volunteer is within the maximum distance
+    //                        select call
+    //                    ).ToList().FirstOrDefault();
+    //                }
+    //            }
+    //        }
+    //        else
+    //        {
+    //            double enoughTime;
+    //            lock (AdminManager.BlMutex) 
+    //            {
+    //                enoughTime = Tools.GlobalDistance(
+    //               vol.Address,
+    //                    s_dal.Call.Read(assignmentInProgressData.CallId).Address,
+    //                    (DO.MyTypeDistance)vol.TypeDistance);
+    //                enoughTime = enoughTime * 2 + 10; // our decision is two minutes per kilometer and ten minutes for treatment
+    //            }
+    //            if (AdminManager.Now >= assignmentInProgressData.StartCall.AddMinutes(enoughTime)) // checking if enough time over from the beginning of the call treatment
+    //            {
+    //                // Create an updated assignment with the end of treatment details
+    //                DO.Assignment updatedAssignment = assignmentInProgressData with
+    //                {
+    //                    FinishType = DO.MyFinishType.Treated, // Mark the assignment as treated.
+    //                    FinishCall = AdminManager.Now // Set the end time to the current system time.
+    //                };
+
+    //                lock (AdminManager.BlMutex)
+    //                {
+    //                    // Update the assignment in the data layer.
+    //                    s_dal.Assignment.Update(updatedAssignment);
+    //                }
+    //                // Report to the screen about a change in the BL Layer
+    //                CallManager.Observers.NotifyItemUpdated(updatedAssignment.Id);
+    //                CallManager.Observers.NotifyListUpdated();
+    //            }
+    //            else
+    //            {
+    //                int percent = s_rand.Next(1, 10);
+    //                if (percent == 1) // the probability of 10 percent to cancel an assignment
+    //                {
+    //                    // Create a new assignment entity with updated cancellation details
+    //                    DO.Assignment updatedAssignment = assignmentInProgressData with
+    //                    {
+    //                        FinishType = DO.MyFinishType.SelfCancel,
+    //                        FinishCall = AdminManager.Now // End time set to the current system time.
+    //                    };
+
+    //                    lock (AdminManager.BlMutex) // stage 7
+    //                    {
+    //                        // Update the assignment in the data layer.
+    //                        s_dal.Assignment.Update(updatedAssignment);
+    //                    }
+    //                    // Report to the screen about a change in the BL Layer
+    //                    CallManager.Observers.NotifyItemUpdated(updatedAssignment.Id);
+    //                    CallManager.Observers.NotifyListUpdated();
+    //                }
+    //            }
+    //        }
+
+    //    }
+    //}
 }

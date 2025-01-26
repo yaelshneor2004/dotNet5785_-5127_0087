@@ -1,5 +1,6 @@
 ﻿using BlApi;
 using BO;
+using DO;
 using Helpers;
 using System.Collections.Generic;
 using static Helpers.CallManager;
@@ -19,28 +20,34 @@ internal class CallImplementation : ICall
     /// <param name="call">The call details to add.</param>
     public void AddCall(BO.Call call)
     {
-        AdminManager.ThrowOnSimulatorIsRunning();
-        // Validate the format of the values
-        CallManager.ValidateCallFormat(call);
+        try
+        {
+
+            AdminManager.ThrowOnSimulatorIsRunning();
+            // Validate the format of the values
+            CallManager.ValidateCallFormat(call);
             // Validate the logical correctness of the values
             CallManager.ValidateCallLogic(call);
-        // Attempt to add the new call in the data layer
-        lock (AdminManager.BlMutex) 
-            _dal.Call.Create(ConvertBOToDO(call));
-        CallManager.Observers.NotifyListUpdated();
-            var volunteers = Tools.GetVolunteersWithinDistance(call.Address ?? string.Empty);
-            foreach (var volunteer in volunteers)
-            {
-                var subject = $"New Call Opened for {call.Id}";
-                var body = $"Hello Volunteers,\n\n" +  // General greeting
-                       $"A new call has been opened. Here are the details:\n\n" +
-                       $"Description: {call.Description}\n" +
-                       $"Location: {call.Address}\n" +
-                       $"Open Time: {call.StartTime}\n" +
-                       $"Maximum Time: {call.MaxEndTime}\n" +
-                       $"Please log in to the system to accept the call."; // Body of the email;
-            _ =CallManager.SendEmailHelperAsync(volunteer.Email, subject, body);
+            // Attempt to add the new call in the data layer
+            lock (AdminManager.BlMutex)
+                _dal.Call.Create(ConvertBOToDO(call));
+            CallManager.Observers.NotifyListUpdated();
+            _ = CallManager.AddCallCoordinatesAsync(call);
+            _ = CallManager.AddCallSendEmailAsync(call);
         }
+        catch (BO.BlNullPropertyException ex)
+        {
+            throw new BO.BlNullPropertyException(ex.Message);
+        }
+        catch (BO.BlInvalidOperationException ex)
+        {
+            throw new BO.BlInvalidOperationException(ex.Message);
+        }
+        catch (BO.BlTemporaryNotAvailableException ex)
+        {
+            throw new BO.BlTemporaryNotAvailableException(ex.Message);
+        }
+
     }
 
     /// <summary>
@@ -111,6 +118,10 @@ internal class CallImplementation : ICall
         catch (DO.DalDoesNotExistException ex)
         {
             throw new BO.BlDoesNotExistException($"Call with ID {callId} does not exist.", ex);
+        }
+        catch (BO.BlTemporaryNotAvailableException ex)
+        {
+            throw new BO.BlTemporaryNotAvailableException(ex.Message);
         }
     }
 
@@ -293,22 +304,29 @@ internal class CallImplementation : ICall
             CallManager.ValidateCallFormat(myCall);
             // Validate the logical correctness of the values
             CallManager.ValidateCallLogic(myCall);
-            if(myCall.Status == BO.MyCallStatus.Open||myCall.Status==BO.MyCallStatus.OpenAtRisk)
+            var call = CallManager.ConvertBOToDO(myCall);
+
+            if (myCall.Status == BO.MyCallStatus.Open||myCall.Status==BO.MyCallStatus.OpenAtRisk)
             {
                 // Attempt to update the call in the data layer
                 lock (AdminManager.BlMutex)
-                _dal.Call.Update(CallManager.ConvertBOToDO(myCall));
+                _dal.Call.Update(call);
             }
             else
             {
                 throw new BO.BlInvalidOperationException("You cannot update a call that has ended or is in progress.");
             }
+            _=CallManager.updateCoordinatesForCallAddressAsync(call);
             CallManager.Observers.NotifyItemUpdated(myCall.Id); 
             CallManager.Observers.NotifyListUpdated();  
         }
         catch (DO.DalDoesNotExistException ex)
         {
             throw new BO.BlDoesNotExistException($"Call with ID {myCall.Id} does not exist.", ex);
+        }
+        catch (BO.BlTemporaryNotAvailableException ex)
+        {
+            throw new BO.BlTemporaryNotAvailableException(ex.Message);
         }
     }
 
@@ -342,16 +360,10 @@ internal class CallImplementation : ICall
             // Attempt to update the assignment entity in the data layer
             lock (AdminManager.BlMutex)
                 _dal.Assignment.Update(updatedAssignment);
-            if (CallManager.IsManager(idV))
-            {
-                var volunteer = _dal.Volunteer.Read(assignment.VolunteerId);
-                var subject = $"Assignment Cancelled";
-                var body = $"Your assignment for call {assignment.CallId} has been cancelled.";
-              _= CallManager.SendEmailHelperAsync(volunteer?.Email ?? string.Empty, subject, body);
-            }
             CallManager.Observers.NotifyItemUpdated(idC);
             VolunteerManager.Observers.NotifyItemUpdated(idV);
             CallManager.Observers.NotifyListUpdated();
+            _ = CallManager.UpdateCancelTreatmentSendEmailAsync(idV, assignment);
         }
         catch (DO.DalDoesNotExistException ex)
         {

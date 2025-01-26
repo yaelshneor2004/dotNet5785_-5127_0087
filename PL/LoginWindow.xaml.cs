@@ -1,4 +1,5 @@
-﻿using PL.Volunteer;
+﻿using BO;
+using PL.Volunteer;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -106,6 +107,10 @@ namespace PL
                 //new MainWindow(326615127).Show();
             }
             catch (BO.BlDoesNotExistException ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+                    catch (BO.BlUnauthorizedAccessException ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }

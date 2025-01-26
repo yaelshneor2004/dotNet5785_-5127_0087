@@ -6,6 +6,8 @@ using System.Text.Json;
 namespace Helpers;
 internal static class Tools
 {
+    private const string apiKey = "AIzaSyDp5JA_AxKyCcz9QK9q1btolMB6Y8jusc4";
+
     private static IDal s_dal = Factory.Get;
     /// <summary>
     /// Calculates the global distance between two addresses based on the specified distance type.
@@ -24,6 +26,136 @@ internal static class Tools
             _ => throw new BO.BlInvalidOperationException("Invalid distance type")
         };
     }
+    // Method to calculate distance using Google Maps API
+    //public static double DegreesToRadians(double degrees)
+    //{
+    //    return degrees * (Math.PI / 180);
+    //}
+    //public static double GlobalDistance(double? lat1, double? lng1, double? lat2, double? lng2, DO.MyTypeDistance type)
+    //{
+    //    switch (type)
+    //    {
+    //        case DO.MyTypeDistance.Aerial:
+    //            {
+    //                const double R = 6371; // Earth's radius in kilometers
+
+    //                double latDistance = DegreesToRadians(lat2.Value - lat1.Value);
+    //                double lonDistance = DegreesToRadians(lng2.Value - lng1.Value);
+
+    //                double a = Math.Sin(latDistance / 2) * Math.Sin(latDistance / 2) +
+    //                           Math.Cos(DegreesToRadians(lat1.Value)) * Math.Cos(DegreesToRadians(lat2.Value)) *
+    //                           Math.Sin(lonDistance / 2) * Math.Sin(lonDistance / 2);
+    //                double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+
+    //                return R * c;
+    //            }
+    //        case DO.MyTypeDistance.Traveling:
+    //            {
+    //                var url = $"https://maps.googleapis.com/maps/api/distancematrix/json?origins={lat1},{lng1}&destinations={lat2},{lng2}&key={ApiKey}";
+
+    //                using (var client = new HttpClient())
+    //                {
+    //                    try
+    //                    {
+    //                        var response = client.GetStringAsync(url).Result;
+
+    //                        // Print the full response for debugging
+    //                        Console.WriteLine("API Response: " + response);
+
+    //                        var jsonResponse = JsonDocument.Parse(response);
+
+    //                        if (jsonResponse.RootElement.GetProperty("status").GetString() == "OK")
+    //                        {
+    //                            var element = jsonResponse.RootElement
+    //                                .GetProperty("rows")[0]
+    //                                .GetProperty("elements")[0];
+
+    //                            if (element.TryGetProperty("distance", out JsonElement distanceElement) &&
+    //                                distanceElement.TryGetProperty("value", out JsonElement valueElement))
+    //                            {
+    //                                var distance = valueElement.GetInt32();
+    //                                var duration = element.GetProperty("duration").GetProperty("value").GetInt32();
+
+    //                                Console.WriteLine($"Distance: {distance} meters");
+    //                                Console.WriteLine($"Duration: {duration} seconds");
+
+    //                                return distance / 1000.0; // Distance in kilometers
+    //                            }
+    //                            else
+    //                            {
+    //                                Console.WriteLine("Error: Distance information is missing in the API response.");
+    //                                return 0;
+    //                            }
+    //                        }
+    //                        else
+    //                        {
+    //                            Console.WriteLine("Error in API response: " + jsonResponse.RootElement.GetProperty("status").GetString());
+    //                            return 0;
+    //                        }
+    //                    }
+    //                    catch (Exception ex)
+    //                    {
+    //                        Console.WriteLine("Exception occurred: " + ex.Message);
+    //                        return 0;
+    //                    }
+    //                }
+    //            }
+    //        case DO.MyTypeDistance.Walking:
+    //            {
+    //                var url = $"https://maps.googleapis.com/maps/api/distancematrix/json?origins={lat1},{lng1}&destinations={lat2},{lng2}&mode=walking&key={ApiKey}";
+
+    //                using (var client = new HttpClient())
+    //                {
+    //                    try
+    //                    {
+    //                        var response = client.GetStringAsync(url).Result;
+
+    //                        // Print the full response for debugging
+    //                        Console.WriteLine("API Response: " + response);
+
+    //                        var jsonResponse = JsonDocument.Parse(response);
+
+    //                        if (jsonResponse.RootElement.GetProperty("status").GetString() == "OK")
+    //                        {
+    //                            var element = jsonResponse.RootElement
+    //                                .GetProperty("rows")[0]
+    //                                .GetProperty("elements")[0];
+
+    //                            if (element.TryGetProperty("distance", out JsonElement distanceElement) &&
+    //                                distanceElement.TryGetProperty("value", out JsonElement valueElement))
+    //                            {
+    //                                var distance = valueElement.GetInt32();
+    //                                var duration = element.GetProperty("duration").GetProperty("value").GetInt32();
+
+    //                                Console.WriteLine($"Walking Distance: {distance} meters");
+    //                                Console.WriteLine($"Walking Duration: {duration} seconds");
+
+    //                                return distance / 1000.0; // Distance in kilometers
+    //                            }
+    //                            else
+    //                            {
+    //                                Console.WriteLine("Error: Distance information is missing in the API response.");
+    //                                return 0;
+    //                            }
+    //                        }
+    //                        else
+    //                        {
+    //                            Console.WriteLine("Error in API response: " + jsonResponse.RootElement.GetProperty("status").GetString());
+    //                            return 0;
+    //                        }
+    //                    }
+    //                    catch (Exception ex)
+    //                    {
+    //                        Console.WriteLine("Exception occurred: " + ex.Message);
+    //                        return 0;
+    //                    }
+    //                }
+    //            }
+    //        default:
+    //            return 0;
+    //    }
+    //}
+
 
     /// <summary>
     /// Calculates the aerial distance between two addresses using the Haversine formula.
@@ -34,10 +166,10 @@ internal static class Tools
     private static double CalculateAerialDistance(string volunteerAddress, string callAddress)
     {
         // Get coordinates of the volunteer's address
-        var (volunteerLat, volunteerLon) = CalculateAerialDistanceHelperAsync(volunteerAddress);
+        var (volunteerLat, volunteerLon) = GetCoordinates(volunteerAddress).Result;
 
         // Get coordinates of the call's address
-        var (callLat, callLon) = CalculateAerialDistanceHelperAsync(callAddress);
+        var (callLat, callLon) = GetCoordinates(callAddress).Result;
 
         // Calculate the aerial distance between two coordinates using the Haversine formula
         const double R = 6371; // Radius of the Earth in kilometers
@@ -49,26 +181,22 @@ internal static class Tools
         var c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
         return R * c;
     }
-    private static async Task CalculateAerialDistanceHelperAsync(string address)
-    {
-        await GetCoordinates(address);
-    }
-    /// <summary>
-    /// Converts an angle from degrees to radians.
-    /// </summary>
-    /// <param name="angle">The angle in degrees.</param>
-    /// <returns>The angle in radians.</returns>
+    ///// <summary>
+    ///// Converts an angle from degrees to radians.
+    ///// </summary>
+    ///// <param name="angle">The angle in degrees.</param>
+    ///// <returns>The angle in radians.</returns>
     private static double ToRadians(double angle)
     {
         return angle * (Math.PI / 180);
     }
 
-    /// <summary>
-    /// Calculates the walking distance between two addresses using Google Distance Matrix API.
-    /// </summary>
-    /// <param name="callAddress">The address of the call.</param>
-    /// <param name="volunteerAddress">The address of the volunteer.</param>
-    /// <returns>The walking distance in kilometers.</returns>
+    ///// <summary>
+    ///// Calculates the walking distance between two addresses using Google Distance Matrix API.
+    ///// </summary>
+    ///// <param name="callAddress">The address of the call.</param>
+    ///// <param name="volunteerAddress">The address of the volunteer.</param>
+    ///// <returns>The walking distance in kilometers.</returns>
     private static double CalcWalkingDistance(string callAddress, string volunteerAddress)
     {
         using (var client = new HttpClient())
@@ -100,12 +228,12 @@ internal static class Tools
         }
     }
 
-    /// <summary>
-    /// Calculates the driving distance between two addresses using Google Distance Matrix API.
-    /// </summary>
-    /// <param name="callAddress">The address of the call.</param>
-    /// <param name="volunteerAddress">The address of the volunteer.</param>
-    /// <returns>The driving distance in kilometers.</returns>
+    ///// <summary>
+    ///// Calculates the driving distance between two addresses using Google Distance Matrix API.
+    ///// </summary>
+    ///// <param name="callAddress">The address of the call.</param>
+    ///// <param name="volunteerAddress">The address of the volunteer.</param>
+    ///// <returns>The driving distance in kilometers.</returns>
     internal static double CalcDrivingDistance(string callAddress, string volunteerAddress)
     {
         using (var client = new HttpClient())
@@ -136,7 +264,6 @@ internal static class Tools
             }
         }
     }
-
     /// <summary>
     /// Retrieves the coordinates (latitude and longitude) of a given address using Google Geocoding API.
     /// </summary>
@@ -185,7 +312,7 @@ internal static class Tools
     /// <returns>A list of volunteers within the specified distance.</returns>
     public static IEnumerable<BO.Volunteer> GetVolunteersWithinDistance(string callAddress)
     {
-       IEnumerable<DO.Volunteer>? volunteers;
+        IEnumerable<DO.Volunteer>? volunteers;
         lock (AdminManager.BlMutex)
             volunteers = s_dal.Volunteer.ReadAll();
 
@@ -200,4 +327,5 @@ internal static class Tools
         });
         return newVolunteers.Select(v => VolunteerManager.ConvertFromDoToBo(v)).ToList();
     }
+
 }

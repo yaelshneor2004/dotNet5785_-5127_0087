@@ -104,39 +104,47 @@ namespace PL.Call
         /// </summary>
         private void btnAddUpdate_Click(object sender, RoutedEventArgs e)
         {
-            if (CurrentCall == null)
+            try
             {
-                MessageBox.Show("Call details are missing.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-            if (ButtonText == "Add")
-            {
-                s_bl.Call.AddCall(CurrentCall);
-                MessageBox.Show("Call added successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                Close();
-            }
-            else
-            {
-                try
+                if (CurrentCall == null)
                 {
+                    MessageBox.Show("Call details are missing.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+                if (ButtonText == "Add")
+                {
+
+                    s_bl.Call.AddCall(CurrentCall);
+                    MessageBox.Show("Call added successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    Close();
+                }
+                else
+                {
+
                     s_bl.Call.UpdateCall(CurrentCall);
                     MessageBox.Show("Call updated successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                     Close();
                 }
-                catch (BO.BlInvalidOperationException ex)
-                {
-                    MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-                catch (BO.BlDoesNotExistException ex)
-                {
-                    MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"An unknown error occurred: {ex.Message}.", "Unknown Error");
-                }
             }
-        }
+            catch (BO.BlInvalidOperationException ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (BO.BlDoesNotExistException ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (BO.BlTemporaryNotAvailableException ex)
+            {
+                MessageBox.Show($"{ex.Message}\nPlease stop the Simulator and try again.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An unknown error occurred: {ex.Message}.", "Unknown Error");
+            }
+
+            }
+        
 
         /// <summary>
         /// Event handler for window loaded event. Adds observer for the current call.

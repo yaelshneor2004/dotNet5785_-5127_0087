@@ -37,11 +37,11 @@
                 <Label Content="{Binding CurrentTime, StringFormat=MM/dd/yyyy}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="100" Margin="0" FontWeight="Bold" RenderTransformOrigin="1.214,0.574"/>
             </Border>
 
-            <Button Content="Add One Minute" HorizontalAlignment="Left" Height="41" Margin="110,0,0,0" VerticalAlignment="Center" Width="150" Click="btnAddOneMinute_Click" Grid.Row="1"/>
-            <Button Content="Add One Hour" HorizontalAlignment="Left" Height="41" Margin="110,0,0,0" VerticalAlignment="Center" Width="150" Click="btnAddOneHour_Click" Grid.Row="2"/>
-            <Button Content="Add One Day" HorizontalAlignment="Left" Height="40" Margin="110,0,0,0" VerticalAlignment="Center" Width="150" Click="btnAddOneDay_Click" Grid.Row="3"/>
-            <Button Content="Add One Month" HorizontalAlignment="Left" Height="41" Margin="110,0,0,0" VerticalAlignment="Center" Width="150" Click="btnAddOneMonth_Click" Grid.Row="4"/>
-            <Button Content="Add One Year" HorizontalAlignment="Left" Height="41" Margin="110,0,0,0" VerticalAlignment="Center" Width="150" Click="btnAddOneYear_Click" Grid.Row="5"/>
+            <Button Content="Add One Minute" HorizontalAlignment="Left" Height="41" Margin="110,0,0,0" VerticalAlignment="Center" Width="150" Click="btnAddOneMinute_Click" Grid.Row="1" IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource BooleanToIsEnabeldyConverterKey}}"/>
+            <Button Content="Add One Hour" HorizontalAlignment="Left" Height="41" Margin="110,0,0,0" VerticalAlignment="Center" Width="150" Click="btnAddOneHour_Click" Grid.Row="2" IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource BooleanToIsEnabeldyConverterKey}}"/>
+            <Button Content="Add One Day" HorizontalAlignment="Left" Height="40" Margin="110,0,0,0" VerticalAlignment="Center" Width="150" Click="btnAddOneDay_Click" Grid.Row="3" IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource BooleanToIsEnabeldyConverterKey}}"/>
+            <Button Content="Add One Month" HorizontalAlignment="Left" Height="41" Margin="110,0,0,0" VerticalAlignment="Center" Width="150" Click="btnAddOneMonth_Click" Grid.Row="4" IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource BooleanToIsEnabeldyConverterKey}}"/>
+            <Button Content="Add One Year" HorizontalAlignment="Left" Height="41" Margin="110,0,0,0" VerticalAlignment="Center" Width="150" Click="btnAddOneYear_Click" Grid.Row="5" IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource BooleanToIsEnabeldyConverterKey}}"/>
         </Grid>
         <!-- Updated Grid for DataGrid display on the top right -->
         <Grid Grid.Row="0" Grid.Column="1" Margin="10">
@@ -49,13 +49,18 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Label Content="Status Quantities" HorizontalAlignment="Left" FontSize="15" Margin="130,13,0,7" Grid.Row="0" FontWeight="Bold"/>
-            <DataGrid  AutoGenerateColumns="False" IsReadOnly="True" ItemsSource="{Binding StatusList, Mode=TwoWay}"  Background="Transparent" MouseLeftButtonUp="DataGrid_MouseLeftButtonUp" Margin="130,43,9,145" Grid.RowSpan="2" SelectedItem="{Binding selectedValue,Mode=TwoWay}">
+            <Label Content="Status Quantities" HorizontalAlignment="Left" FontSize="15" Margin="140,126,0,105" Grid.Row="1" FontWeight="Bold"/>
+            <DataGrid  AutoGenerateColumns="False" IsReadOnly="True" ItemsSource="{Binding StatusList, Mode=TwoWay}"  Background="Transparent" MouseLeftButtonUp="DataGrid_MouseLeftButtonUp" Margin="140,156,0,-21" SelectedItem="{Binding selectedValue,Mode=TwoWay}" Grid.Row="1">
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding value}" Header="Status" Width="*"/>
                     <DataGridTextColumn Binding="{Binding index}" Header="Quantity" Width="*"/>
                 </DataGrid.Columns>
             </DataGrid>
+            <Grid HorizontalAlignment="Left" Height="137" Margin="90,-11,0,0" Grid.RowSpan="2" VerticalAlignment="Top" Width="300">
+                <Button Content="{Binding ButtonContent,Mode=TwoWay}" HorizontalAlignment="Center" Height="40" Margin="0,80,0,0" VerticalAlignment="Top" Width="174" Click="ToggleSimulator_Click"/>
+                <TextBox HorizontalAlignment="Center" Height="30" Margin="0,37,0,0" TextWrapping="Wrap" Text="{Binding Interval, Mode=TwoWay}" VerticalAlignment="Top" Width="190" IsReadOnly="{Binding IsSimulatorRunning, Converter={StaticResource BooleanToReadOnlyConverterKey}}"/>
+                <Label Content="Enter the time in mili seconds" HorizontalAlignment="Center" Height="15" Margin="0,15,0,0" VerticalAlignment="Top" Width="190"/>
+            </Grid>
         </Grid>
 
 
@@ -66,10 +71,11 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Button Content="Init DB" HorizontalAlignment="Center" Height="50" Width="150" Click="btnInitDB_Click" Grid.Row="0"/>
-            <Button Content="Reset DB" HorizontalAlignment="Center" Height="50" Width="150" Click="btnResetDB_Click" Grid.Row="1"/>
+            <Button Content="Init DB" HorizontalAlignment="Center" Height="50" Width="150" Click="btnInitDB_Click" Grid.Row="0" IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource BooleanToIsEnabeldyConverterKey}}"/>
+            <Button Content="Reset DB" HorizontalAlignment="Center" Height="50" Width="150" Click="btnResetDB_Click" Grid.Row="1" IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource BooleanToIsEnabeldyConverterKey}}"/>
             <Button Content="Handle Volunteers" HorizontalAlignment="Center" Height="50" Width="150" Click="btnHandleVolunteers_Click" Grid.Row="2"/>
             <Button Content="Handle Calls" HorizontalAlignment="Center" Height="50" Width="150" Click="btnHandleCalls_Click" Grid.Row="3"/>
+            <Button Content="Button" HorizontalAlignment="Left" Height="45" Margin="390,64,0,0" Grid.RowSpan="2" VerticalAlignment="Top" Width="170"/>
         </Grid>
 
         <Grid Grid.Row="1" Grid.ColumnSpan="2" Margin="20">

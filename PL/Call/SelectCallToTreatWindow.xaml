@@ -35,14 +35,22 @@
             </StackPanel>
         </Grid>
         <!-- DataGrid for displaying the list of open calls -->
-        <DataGrid Margin="5,9,5,6" Grid.Row="1" 
+        <DataGrid Margin="-3,9,344,163" Grid.Row="1" 
                   ItemsSource="{Binding Path=OpenCallList}" 
                   AutoGenerateColumns="False" 
                   IsReadOnly="True" 
                   EnableRowVirtualization="True" 
                   RowDetailsVisibilityMode="VisibleWhenSelected" 
                   SelectedItem="{Binding SelectedOpenCall}"
-                  MouseLeftButtonUp="DataGrid_MouseLeftButtonUp">
+                  MouseLeftButtonUp="DataGrid_MouseLeftButtonUp" RenderTransformOrigin="0.5,0.5">
+            <DataGrid.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform AngleY="-0.148"/>
+                    <RotateTransform/>
+                    <TranslateTransform Y="-0.664"/>
+                </TransformGroup>
+            </DataGrid.RenderTransform>
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Id}" Header="Call Id" Width="Auto"/>
                 <DataGridTextColumn Binding="{Binding Type}" Header="Type" Width="Auto"/>
@@ -65,5 +73,10 @@
             <TextBox Text="{Binding CurrentVolunteer.Address, Mode=TwoWay}" Width="221" Margin="0,0,8,0" />
             <Button Content="Update Address" Click="UpdateAddress_Click" Height="30"/>
         </StackPanel>
+        <StackPanel HorizontalAlignment="Left" Height="125" Margin="0,406,0,0" Grid.Row="1" VerticalAlignment="Top" Width="455">
+            <!--<Label Content="Call Description:" Height="30" Width="182" RenderTransformOrigin="0.122,0.493"/>
+            <Label Content="{Binding Description, Mode=TwoWay}" Height="80" Width="335"/>-->
+        </StackPanel>
+        
     </Grid>
 </Window>
