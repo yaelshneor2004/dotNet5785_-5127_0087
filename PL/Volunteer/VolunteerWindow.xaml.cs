@@ -95,47 +95,48 @@ namespace PL.Volunteer
         /// <param name="e">Event data.</param>
         private void btnAddUpdate_Click(object sender, RoutedEventArgs e)
         {
-            if (CurrentVolunteer == null)
+            try
             {
-                MessageBox.Show("Volunteer details are missing.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-            if (ButtonText == "Add")
-            {
+                if (CurrentVolunteer == null)
+                {
+                    MessageBox.Show("Volunteer details are missing.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+                if (ButtonText == "Add")
+                {
                     s_bl.Volunteer.AddVolunteer(CurrentVolunteer);
-                    MessageBox.Show("Volunteer added successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);                
-                      Close();
-            }
-            else
-            {
-                try
+                    MessageBox.Show("Volunteer added successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    Close();
+                }
+                else
                 {
                     s_bl.Volunteer.UpdateVolunteer(id, CurrentVolunteer);
                     MessageBox.Show("Volunteer updated successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                    Close() ;
-                }
-                catch (BO.BlInvalidOperationException ex)
-                {
-                    MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-                catch (BO.BlDoesNotExistException ex)
-                {
-                    MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-                catch (BO.BlUnauthorizedAccessException ex)
-                {
-                    MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-                catch (BO.BlTemporaryNotAvailableException ex)
-                {
-                    MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"An unknown error occurred: {ex.Message}.", "Unknown Error");
+                    Close();
                 }
             }
+            catch (BO.BlInvalidOperationException ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (BO.BlDoesNotExistException ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (BO.BlUnauthorizedAccessException ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (BO.BlTemporaryNotAvailableException ex)
+            {
+                MessageBox.Show($"{ex.Message}\nPlease stop the Simulator and try again.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An unknown error occurred: {ex.Message}.", "Unknown Error");
+            }
+       
         }
 
 
