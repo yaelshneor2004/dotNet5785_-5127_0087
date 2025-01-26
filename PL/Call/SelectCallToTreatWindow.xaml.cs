@@ -22,6 +22,7 @@ namespace PL.Call
     /// </summary>
     public partial class SelectCallToTreatWindow : Window
     {
+        private const string GoogleMapsApiKey = "AIzaSyDp5JA_AxKyCcz9QK9q1btolMB6Y8jusc4";
         public BO.OpenCallInList? SelectedOpenCall { get; set; }
 
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
@@ -36,6 +37,15 @@ namespace PL.Call
         // Using a DependencyProperty as the backing store for CallList.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty OpenCallListProperty =
             DependencyProperty.Register("OpenCallList", typeof(IEnumerable<BO.OpenCallInList>), typeof(SelectCallToTreatWindow), new PropertyMetadata(null));
+        public string Description { get; set; }
+
+        public BO.Call? Call
+        {
+            get { return (BO.Call?)GetValue(CallProperty); }
+            set { SetValue(CallProperty, value); }
+        }
+        public static readonly DependencyProperty CallProperty =
+        DependencyProperty.Register("Call", typeof(BO.Call), typeof(SelectCallToTreatWindow), new PropertyMetadata(null));
 
         public BO.Volunteer? CurrentVolunteer
         {
@@ -45,6 +55,13 @@ namespace PL.Call
 
         public static readonly DependencyProperty CurrentVolunteerProperty =
             DependencyProperty.Register("CurrentVolunteer", typeof(BO.Volunteer), typeof(SelectCallToTreatWindow), new PropertyMetadata(null));
+        public string MapSource
+        {
+            get { return (string)GetValue(MapSourceProperty); }
+            set { SetValue(MapSourceProperty, value); }
+        }
+        public static readonly DependencyProperty MapSourceProperty =
+        DependencyProperty.Register("MapSource", typeof(string), typeof(SelectCallToTreatWindow), new PropertyMetadata(null));
 
         private int id;
 
@@ -56,10 +73,14 @@ namespace PL.Call
         {
             try
             {
+
                 id = idV;
                 InitializeComponent();
                 CurrentVolunteer = (id != 0) ? s_bl.Volunteer.GetVolunteerDetails(id)! : new BO.Volunteer();
                 queryCallList(id );
+                MapSource = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "mapp.html");
+              if(Call!=null)
+                Description=Call.Description;
             }
             catch (BO.BlDoesNotExistException ex)
             {
@@ -76,6 +97,12 @@ namespace PL.Call
         /// </summary>
         private void CallListWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            s_bl.Volunteer.AddObserver(CurrentVolunteer!.Id, callListObserver);
+            MapWebView.NavigationCompleted += async (s, args) =>
+            {
+                CenterMapOnVolunteer();
+            };
+
             s_bl.Call.AddObserver(callListObserver);
             CurrentVolunteer = (id != 0) ? s_bl.Volunteer.GetVolunteerDetails(id)! : new BO.Volunteer();
         }
@@ -170,8 +197,35 @@ namespace PL.Call
         /// </summary>
         private void DataGrid_MouseLeftButtonUp(object sender, RoutedEventArgs e)
         {
-            List<string> addresses = OpenCallList.Select(call => call.Address).ToList();
-            new CallDescription(CurrentVolunteer.Id,SelectedOpenCall.Description).Show();
+            //List<string> addresses = OpenCallList.Select(call => call.Address).ToList();
+            //new CallDescription(CurrentVolunteer.Id,SelectedOpenCall.Description).Show();
+        }
+        private async void CenterMapOnVolunteer()
+        {
+            if (Call is not null)
+            {
+                await MapWebView.ExecuteScriptAsync($"initialize({CurrentVolunteer.Latitude}, " +
+                $"{CurrentVolunteer.Longitude}, {Call.Latitude}, " +
+                $"{Call.Longitude});");
+            }
+            else
+            {
+                await MapWebView.ExecuteScriptAsync($"initialize({CurrentVolunteer.Latitude}, " +
+                $"{CurrentVolunteer.Longitude}, {CurrentVolunteer.Latitude}, " +
+                $"{CurrentVolunteer.Longitude});");
+            }
+        }
+        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var dataGrid = sender as DataGrid;
+            if (dataGrid == null)
+                return;
+
+            if (dataGrid.SelectedItem is BO.OpenCallInList openCall)
+            {
+                Call = s_bl.Call.GetCallDetails(openCall.Id);
+                CenterMapOnVolunteer();
+            }
         }
 
         /// <summary>

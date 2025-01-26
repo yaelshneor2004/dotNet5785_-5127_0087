@@ -7,35 +7,36 @@
         mc:Ignorable="d"
         Title="SelectCallToTreatWindow" Height="640" Width="800"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
+        xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf" 
         Language="he-IL" Loaded="CallListWindow_Loaded" Closed="CallListWindow_Closed">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="40*"/>
             <RowDefinition Height="500*"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <!-- New row for the TextBox -->
         </Grid.RowDefinitions>
 
         <!-- Internal, Upper Grid for Filters and Sorting -->
-        <Grid HorizontalAlignment="Stretch" Grid.Row="0" VerticalAlignment="Stretch">
+        <Grid HorizontalAlignment="Stretch" Grid.Row="0" VerticalAlignment="Stretch" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Grid.Row="0" VerticalAlignment="Center" Margin="8,0,8,0">
-                <!-- ComboBox for filtering calls by type -->
                 <ComboBox SelectedValue="{Binding FilterByType, Mode=TwoWay}" 
-              ItemsSource="{Binding Source={StaticResource SortCollectionMyCallTypeKey}}" 
-              SelectionChanged="cmbFiltedrChanges_SelectionChanged" 
-              Height="43" Width="785"/>
-                <!-- ComboBox for filtering calls by type -->
-                <!-- ComboBox for filtering calls by type -->
-                <!-- ComboBox for filtering calls by type -->
+                          ItemsSource="{Binding Source={StaticResource SortCollectionMyCallTypeKey}}" 
+                          SelectionChanged="cmbFiltedrChanges_SelectionChanged" 
+                          Height="43" Width="785"/>
             </StackPanel>
         </Grid>
+
         <!-- DataGrid for displaying the list of open calls -->
-        <DataGrid Margin="-3,9,344,163" Grid.Row="1" 
+        <DataGrid Margin="-3,9,344,163" Grid.Row="1" Grid.Column="0"
                   ItemsSource="{Binding Path=OpenCallList}" 
                   AutoGenerateColumns="False" 
                   IsReadOnly="True" 
@@ -68,15 +69,22 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
+
         <!-- TextBox and Button for changing volunteer address -->
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center" Margin="8,0,8,0">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="3" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="8,0,8,0">
             <TextBox Text="{Binding CurrentVolunteer.Address, Mode=TwoWay}" Width="221" Margin="0,0,8,0" />
             <Button Content="Update Address" Click="UpdateAddress_Click" Height="30"/>
         </StackPanel>
-        <StackPanel HorizontalAlignment="Left" Height="125" Margin="0,406,0,0" Grid.Row="1" VerticalAlignment="Top" Width="455">
-            <!--<Label Content="Call Description:" Height="30" Width="182" RenderTransformOrigin="0.122,0.493"/>
-            <Label Content="{Binding Description, Mode=TwoWay}" Height="80" Width="335"/>-->
+
+        <StackPanel HorizontalAlignment="Left" Height="125" Margin="0,406,0,0" Grid.Row="1" Grid.Column="0" VerticalAlignment="Top" Width="455">
+            <Label Content="Call Description:" Height="30" Width="182" RenderTransformOrigin="0.122,0.493"/>
+            <Label Content="{Binding Description, Mode=TwoWay}" Height="80" Width="335"/>
         </StackPanel>
-        
+
+        <!-- Map WebView2 -->
+        <Grid Grid.Column="1" Grid.Row="1" MinWidth="400" Margin="133,20,20,20" Visibility="{Binding CurrentVolunteer.IsActive, Converter={StaticResource ActiveCallToVisibleConverterKey}}">
+            <wv2:WebView2 Name="MapWebView"
+                          Source="{Binding MapSource}"/>
+        </Grid>
     </Grid>
 </Window>
