@@ -43,6 +43,7 @@
         <local:ActiveCallToVisibleConverter x:Key="ActiveCallToVisibleConverterKey" />
         <local:BooleanToReadOnlyConverter x:Key="BooleanToReadOnlyConverterKey" />
         <local:BooleanToIsEnabeldyConverter x:Key="BooleanToIsEnabeldyConverterKey" />
+        
         <!-- Triggers -->
         <Style TargetType="DataGridRow">
             <Setter Property="Background" Value="#E6E6FA"/>
@@ -53,18 +54,7 @@
             </Style.Triggers>
         </Style>
 
-        <Style TargetType="Button" x:Key="SimulatorButtonStyle">
-            <Setter Property="Content" Value="Start Simulator"/>
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding IsSimulatorRunning}" Value="True">
-                    <Setter Property="Content" Value="Stop Simulator"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding IsSimulatorRunning}" Value="False">
-                    <Setter Property="Content" Value="Start Simulator"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-
+      
 
         <!-- Style for ComboBox -->
             <Style TargetType="ComboBox">
@@ -134,7 +124,40 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>-->
+       
+            <Style x:Key="SimulatorButtonStyle" TargetType="Button" >
+                <Setter Property="Content" Value="Start Simulator"/>
+            <Setter Property="Background" Value="#E6E6FA"/>
+            <Setter Property="BorderBrush" Value="#9370DB"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Foreground" Value="#9370DB"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Margin" Value="5"/>
 
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                   BorderBrush="{TemplateBinding BorderBrush}" 
+                   BorderThickness="{TemplateBinding BorderThickness}" 
+                   CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsSimulatorRunning}" Value="True">
+                        <Setter Property="Content" Value="Stop Simulator"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding IsSimulatorRunning}" Value="False">
+                        <Setter Property="Content" Value="Start Simulator"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        
 
         <Style TargetType="Button">
             <Setter Property="Background" Value="#E6E6FA"/>
