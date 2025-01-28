@@ -72,7 +72,7 @@ namespace PL.Call
         /// <summary>
         /// Observer method to update the call list when changes occur.
         /// </summary>
-        private volatile DispatcherOperation? _observerOperation = null; 
+        private volatile DispatcherOperation? _observerOperation = null;
 
         private void callListObserver()
         {
@@ -141,9 +141,12 @@ namespace PL.Call
             if (result == MessageBoxResult.Yes)
             {
                 try
-                { 
-                    s_bl.Call.DeleteCall(SelectedCall.CallId);
-                    MessageBox.Show("Call deleted successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                {
+                    if (SelectedCall != null)
+                    {
+                        s_bl.Call.DeleteCall(SelectedCall.CallId);
+                        MessageBox.Show("Call deleted successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
                 }
                 catch (BO.BlTemporaryNotAvailableException ex)
                 {
