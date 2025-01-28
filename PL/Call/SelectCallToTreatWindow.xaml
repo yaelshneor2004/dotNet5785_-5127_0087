@@ -35,7 +35,7 @@
         </Grid>
 
         <!-- DataGrid for displaying the list of open calls -->
-        <DataGrid Margin="8" Grid.Row="1" Grid.Column="0"
+        <DataGrid Margin="8,8,147,8" Grid.Row="1" Grid.Column="0"
                   ItemsSource="{Binding Path=OpenCallList}" 
                   AutoGenerateColumns="False" 
                   IsReadOnly="True" 
@@ -78,7 +78,7 @@
         <!-- Map WebView2 -->
         <Grid Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" MinWidth="400" Margin="8" Visibility="{Binding CurrentVolunteer.IsActive, Converter={StaticResource ActiveCallToVisibleConverterKey}}">
             <wv2:WebView2 Name="MapWebView"
-                          Source="{Binding MapSource}"/>
+                          Source="{Binding MapSource}" Margin="-158,0,158,0"/>
         </Grid>
 
         <!-- TextBox and Button for changing volunteer address -->

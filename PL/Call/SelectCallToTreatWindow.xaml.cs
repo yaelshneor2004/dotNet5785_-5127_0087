@@ -233,6 +233,7 @@ namespace PL.Call
             if (dataGrid.SelectedItem is BO.OpenCallInList openCall)
             {
                 Call = s_bl.Call.GetCallDetails(openCall.Id);
+                Call.Latitude= 31.7683;
                 CenterMapOnVolunteer();
             }
         }
@@ -247,6 +248,8 @@ namespace PL.Call
                 s_bl.Volunteer.UpdateVolunteer(id, CurrentVolunteer);
                 MessageBox.Show("The address has been updated successfully", "Message", MessageBoxButton.OK, MessageBoxImage.Information);
                 queryCallList(id);
+                CenterMapOnVolunteer();
+
             }
             catch (BO.BlInvalidOperationException ex)
             {
