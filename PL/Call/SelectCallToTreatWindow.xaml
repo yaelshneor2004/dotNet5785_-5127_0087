@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.Call"
         mc:Ignorable="d"
+       xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf" 
         Title="SelectCallToTreatWindow" Height="640" Width="800"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
-        xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf" 
         Language="he-IL" Loaded="CallListWindow_Loaded" Closed="CallListWindow_Closed">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -80,6 +80,7 @@
             <wv2:WebView2 Name="MapWebView"
                           Source="{Binding MapSource}" Margin="-158,0,158,0"/>
         </Grid>
+        
 
         <!-- TextBox and Button for changing volunteer address -->
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="2" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="8,0,8,0">
