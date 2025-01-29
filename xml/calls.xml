@@ -573,6 +573,7 @@
   <Call>
     <Id>58</Id>
     <CallType>Math</CallType>
+    <CallType>English</CallType>
     <Address>15 Rothschild St, Netanya</Address>
     <Latitude>31.9674</Latitude>
     <Longitude>34.7996</Longitude>
