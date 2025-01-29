@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:PL.Volunteer"
         mc:Ignorable="d"
         Title="VolunteerUserWindow" Height="1461" Width="800"
+               xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf" 
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Language="he-IL" Loaded="VolunteerUserWindow_Loaded" Closed="VolunteerUserWindow_Closed">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
@@ -114,7 +115,7 @@
 
 
             <!-- New Fields Panel call -->
-            <StackPanel Margin="0,0,0,20">
+            <StackPanel Margin="0,0,0,20" Height="442">
                 <Label Content="ID:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/>
                 <TextBox Text="{Binding CurrentCall.Id, Mode=TwoWay}" IsReadOnly="True" Style="{StaticResource {x:Type TextBox}}" Foreground="Black" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/>
 
@@ -169,6 +170,21 @@
                     </Button.Style>
                 </Button>
             </StackPanel>
+
+            <!-- Map WebView2 -->
+            <Grid Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" MinWidth="200" MinHeight="200" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="8" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}">
+                <wv2:WebView2 Name="MapWebView" 
+                              Source="{Binding MapSource}" Margin="10,-72,10,-123" RenderTransformOrigin="0.5,0.5">
+                    <wv2:WebView2.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform ScaleY="1"/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </wv2:WebView2.RenderTransform>
+                </wv2:WebView2>
+            </Grid>
         </StackPanel>
     </ScrollViewer>
 </Window>

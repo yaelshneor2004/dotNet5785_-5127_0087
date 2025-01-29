@@ -22,6 +22,15 @@ namespace PL.Volunteer;
 public partial class VolunteerUserWindow : Window
 {
     static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
+    private const string GoogleMapsApiKey = "AIzaSyDp5JA_AxKyCcz9QK9q1btolMB6Y8jusc4";
+
+    public string MapSource
+    {
+        get { return (string)GetValue(MapSourceProperty); }
+        set { SetValue(MapSourceProperty, value); }
+    }
+    public static readonly DependencyProperty MapSourceProperty =
+    DependencyProperty.Register("MapSource", typeof(string), typeof(VolunteerUserWindow), new PropertyMetadata(null));
 
     public BO.Volunteer? CurrentVolunteer
     {
@@ -54,6 +63,8 @@ public partial class VolunteerUserWindow : Window
             InitializeComponent();
             CurrentVolunteer = (id != 0) ? s_bl.Volunteer.GetVolunteerDetails(id)! : new BO.Volunteer();
             CurrentCall = CurrentVolunteer.CurrentCall != null ? s_bl.Call.GetCallDetails(CurrentVolunteer.CurrentCall.CallId)! : new BO.Call();
+            MapSource = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "mapp.html");
+
         }
         catch (BO.BlDoesNotExistException ex)
         {
@@ -201,8 +212,28 @@ public partial class VolunteerUserWindow : Window
     {
         if (CurrentVolunteer!.Id != 0)
         {
+            if(CurrentCall!=null)
+            MapWebView.NavigationCompleted += async (s, args) =>
+            {
+                CenterMapOnVolunteer();
+            };
             s_bl.Volunteer.AddObserver(CurrentVolunteer.Id, VolunteerObserver);
             VolunteerObserver();
+        }
+    }
+    private async void CenterMapOnVolunteer()
+    {
+        if (CurrentCall is not null)
+        {
+            await MapWebView.ExecuteScriptAsync($"initialize({CurrentVolunteer.Latitude}, " +
+                $"{CurrentVolunteer.Longitude}, {CurrentCall.Latitude}, " +
+                $"{CurrentCall.Longitude}, '{CurrentVolunteer.TypeDistance}');");
+        }
+        else
+        {
+            await MapWebView.ExecuteScriptAsync($"initialize({CurrentVolunteer.Latitude}, " +
+                $"{CurrentVolunteer.Longitude}, {CurrentVolunteer.Latitude}, " +
+                $"{CurrentVolunteer.Longitude}, '{CurrentVolunteer.TypeDistance}');");
         }
     }
 

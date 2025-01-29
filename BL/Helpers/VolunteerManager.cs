@@ -1,6 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using BO;
 using DalApi;
 using DO;
 namespace Helpers;
@@ -475,34 +476,21 @@ internal static class VolunteerManager
             else
             {
                 double enoughTime;
+                DO.Call? call;
+                DO.Assignment assignment;
                 lock (AdminManager.BlMutex)
                 {
-                    var call = s_dal.Call.Read(assignmentInProgressData.CallId);
+                     call = s_dal.Call.Read(assignmentInProgressData.CallId);
+                    assignment=s_dal.Assignment.ReadAll(a=>a.CallId==call.Id&&a.FinishType==null).Last();
                     enoughTime = Tools.GlobalDistance(vol.Address, call.Address, vol.TypeDistance) * 4 + 30;
                 }
-
-                if (AdminManager.Now >= assignmentInProgressData.StartCall.AddMinutes(enoughTime))
+                if (assignment != null)
                 {
-                    var updatedAssignment = assignmentInProgressData with
-                    {
-                        FinishType = DO.MyFinishType.Treated,
-                        FinishCall = AdminManager.Now
-                    };
-
-                    lock (AdminManager.BlMutex)
-                        s_dal.Assignment.Update(updatedAssignment);
-
-                    CallManager.Observers.NotifyItemUpdated(updatedAssignment.Id);
-                    CallManager.Observers.NotifyListUpdated();
-                }
-                else
-                {
-                    int percent = s_rand.Next(1, 1); // 10% chance to cancel the assignment
-                    if (percent == 1)
+                    if (AdminManager.Now >= assignmentInProgressData.StartCall.AddMinutes(enoughTime))
                     {
                         var updatedAssignment = assignmentInProgressData with
                         {
-                            FinishType = DO.MyFinishType.SelfCancel,
+                            FinishType = DO.MyFinishType.Treated,
                             FinishCall = AdminManager.Now
                         };
 
@@ -511,6 +499,24 @@ internal static class VolunteerManager
 
                         CallManager.Observers.NotifyItemUpdated(updatedAssignment.Id);
                         CallManager.Observers.NotifyListUpdated();
+                    }
+                    else
+                    {
+                        int percent = s_rand.Next(1, 1); // 10% chance to cancel the assignment
+                        if (percent == 1)
+                        {
+                            var updatedAssignment = assignmentInProgressData with
+                            {
+                                FinishType = DO.MyFinishType.SelfCancel,
+                                FinishCall = AdminManager.Now
+                            };
+
+                            lock (AdminManager.BlMutex)
+                                s_dal.Assignment.Update(updatedAssignment);
+
+                            CallManager.Observers.NotifyItemUpdated(updatedAssignment.Id);
+                            CallManager.Observers.NotifyListUpdated();
+                        }
                     }
                 }
             }

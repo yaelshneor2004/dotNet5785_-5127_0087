@@ -1,213 +1,213 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ArrayOfVolunteer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Volunteer>
-    <Id>747695906</Id>
+    <Id>781021860</Id>
     <FullName>Dani Levy</FullName>
-    <Phone>05647858029</Phone>
+    <Phone>05468959990</Phone>
     <Email>danilevy@gmail.com</Email>
     <Role>Volunteer</Role>
-    <TypeDistance>Traveling</TypeDistance>
-    <Password>HReqhxQsmEalQCuGBg5+Pg==</Password>
+    <TypeDistance>Walking</TypeDistance>
+    <Password>SUHpBMVd2LbPc/OjSxbd3Q==</Password>
     <Address>Rothschild 10, Tel Aviv, Israel</Address>
     <Latitude>32.06366</Latitude>
     <Longitude>34.77697</Longitude>
-    <MaxDistance>88.01360373987686</MaxDistance>
+    <MaxDistance>70.78778619580665</MaxDistance>
     <IsActive>true</IsActive>
   </Volunteer>
   <Volunteer>
     <Id>975363193</Id>
     <FullName>Eli Amar</FullName>
-    <Phone>05295465038</Phone>
+    <Phone>05928957446</Phone>
     <Email>eliamar@gmail.com</Email>
     <Role>Volunteer</Role>
     <TypeDistance>Traveling</TypeDistance>
-    <Password>WomUBG3Jvq19e6e1Rq6RmA==</Password>
+    <Password>DdL4HogPHp1bhUqAgjh2oA==</Password>
     <Address>Yigal Alon 120, Tel Aviv, Israel</Address>
     <Latitude>32.0618</Latitude>
     <Longitude>34.79152</Longitude>
-    <MaxDistance>76.48869625586377</MaxDistance>
+    <MaxDistance>57.74691102486481</MaxDistance>
     <IsActive>true</IsActive>
   </Volunteer>
   <Volunteer>
-    <Id>721016087</Id>
+    <Id>824564579</Id>
     <FullName>Yair Cohen</FullName>
-    <Phone>05868150235</Phone>
+    <Phone>05215495117</Phone>
     <Email>yaircohen@gmail.com</Email>
     <Role>Volunteer</Role>
-    <TypeDistance>Aerial</TypeDistance>
-    <Password>iCmpjG6PVaRR4jIjJOVKHA==</Password>
+    <TypeDistance>Walking</TypeDistance>
+    <Password>0UXJHHsP1XqWITWZ/2H5vw==</Password>
     <Address>Ibn Gvirol 30, Tel Aviv, Israel</Address>
     <Latitude>32.08404</Latitude>
     <Longitude>34.78139</Longitude>
-    <MaxDistance>23.465531378983197</MaxDistance>
-    <IsActive>true</IsActive>
-  </Volunteer>
-  <Volunteer>
-    <Id>484501226</Id>
-    <FullName>Ariela Levin</FullName>
-    <Phone>05497912889</Phone>
-    <Email>arielalevin@gmail.com</Email>
-    <Role>Volunteer</Role>
-    <TypeDistance>Traveling</TypeDistance>
-    <Password>kEwvBhnlAebXgkWGOlV+kQ==</Password>
-    <Address>Derech Hevron 78, Jerusalem, Israel</Address>
-    <Latitude>31.74851</Latitude>
-    <Longitude>35.21289</Longitude>
-    <MaxDistance>76.53650314099069</MaxDistance>
-    <IsActive>true</IsActive>
-  </Volunteer>
-  <Volunteer>
-    <Id>967530684</Id>
-    <FullName>Dina Klein</FullName>
-    <Phone>05954299740</Phone>
-    <Email>dinaklein@gmail.com</Email>
-    <Role>Volunteer</Role>
-    <TypeDistance>Traveling</TypeDistance>
-    <Password>5MHPS6uEM1YX+W6cjA93iA==</Password>
-    <Address>Herzl Blvd 103, Jerusalem, Israel</Address>
-    <Latitude>31.76832</Latitude>
-    <Longitude>35.18331</Longitude>
-    <MaxDistance>92.93053649177027</MaxDistance>
-    <IsActive>true</IsActive>
-  </Volunteer>
-  <Volunteer>
-    <Id>700156714</Id>
-    <FullName>Shira Israelof</FullName>
-    <Phone>05094256507</Phone>
-    <Email>shiraisraelof@gmail.com</Email>
-    <Role>Volunteer</Role>
-    <TypeDistance>Traveling</TypeDistance>
-    <Password>ARGQauPdlJmkI914pP02bg==</Password>
-    <Address>Jaffa St 45, Jerusalem, Israel</Address>
-    <Latitude>31.78571</Latitude>
-    <Longitude>35.22323</Longitude>
-    <MaxDistance>50.147896763945575</MaxDistance>
-    <IsActive>true</IsActive>
-  </Volunteer>
-  <Volunteer>
-    <Id>421137647</Id>
-    <FullName>David BenGurion</FullName>
-    <Phone>05563265727</Phone>
-    <Email>davidbengurion@gmail.com</Email>
-    <Role>Volunteer</Role>
-    <TypeDistance>Aerial</TypeDistance>
-    <Password>1+jZ7AzAuQqnGWZtr5BySQ==</Password>
-    <Address>Herzl 9, Haifa, Israel</Address>
-    <Latitude>32.79916</Latitude>
-    <Longitude>34.99115</Longitude>
-    <MaxDistance>73.637554040577</MaxDistance>
-    <IsActive>true</IsActive>
-  </Volunteer>
-  <Volunteer>
-    <Id>190313205</Id>
-    <FullName>Golda Meir</FullName>
-    <Phone>05746337194</Phone>
-    <Email>goldameir@gmail.com</Email>
-    <Role>Volunteer</Role>
-    <TypeDistance>Traveling</TypeDistance>
-    <Password>RMoOpe9pA/oBntj/Llj9LQ==</Password>
-    <Address>Moriah Blvd 70, Haifa, Israel</Address>
-    <Latitude>32.79406</Latitude>
-    <Longitude>34.98264</Longitude>
-    <MaxDistance>61.07741939257956</MaxDistance>
-    <IsActive>true</IsActive>
-  </Volunteer>
-  <Volunteer>
-    <Id>975856709</Id>
-    <FullName>Yitzhak Rabin</FullName>
-    <Phone>05778522481</Phone>
-    <Email>yitzhakrabin@gmail.com</Email>
-    <Role>Volunteer</Role>
-    <TypeDistance>Aerial</TypeDistance>
-    <Password>L9RxS3sfUKegicl4r1rLJg==</Password>
-    <Address>The Prophets 11, Haifa, Israel</Address>
-    <Latitude>32.81912</Latitude>
-    <Longitude>34.98865</Longitude>
-    <MaxDistance>98.65007707789344</MaxDistance>
+    <MaxDistance>10.864670796924502</MaxDistance>
     <IsActive>true</IsActive>
   </Volunteer>
   <Volunteer>
     <Id>142161512</Id>
-    <FullName>Chaim Weizmann</FullName>
-    <Phone>05346351139</Phone>
-    <Email>chaimweizmann@gmail.com</Email>
+    <FullName>Ariela Levin</FullName>
+    <Phone>05552380755</Phone>
+    <Email>arielalevin@gmail.com</Email>
     <Role>Volunteer</Role>
-    <TypeDistance>Walking</TypeDistance>
-    <Password>NTAG/QSb7MgV96+ltpKprg==</Password>
-    <Address>Rav Shauli 5, Be'er Sheva, Israel</Address>
-    <Latitude>31.25297</Latitude>
-    <Longitude>34.79223</Longitude>
-    <MaxDistance>96.35207964484574</MaxDistance>
+    <TypeDistance>Traveling</TypeDistance>
+    <Password>haFEFlSqqKljdv7TEnFQRw==</Password>
+    <Address>Derech Hevron 78, Jerusalem, Israel</Address>
+    <Latitude>31.74851</Latitude>
+    <Longitude>35.21289</Longitude>
+    <MaxDistance>49.66813974525143</MaxDistance>
     <IsActive>true</IsActive>
   </Volunteer>
   <Volunteer>
     <Id>469333751</Id>
-    <FullName>Menachem Begin</FullName>
-    <Phone>05328558279</Phone>
-    <Email>menachembegin@gmail.com</Email>
+    <FullName>Dina Klein</FullName>
+    <Phone>05748723949</Phone>
+    <Email>dinaklein@gmail.com</Email>
+    <Role>Volunteer</Role>
+    <TypeDistance>Walking</TypeDistance>
+    <Password>Y+k+NSSix1xH5RNd6iSsNQ==</Password>
+    <Address>Herzl Blvd 103, Jerusalem, Israel</Address>
+    <Latitude>31.76832</Latitude>
+    <Longitude>35.18331</Longitude>
+    <MaxDistance>58.39554516650599</MaxDistance>
+    <IsActive>true</IsActive>
+  </Volunteer>
+  <Volunteer>
+    <Id>721016087</Id>
+    <FullName>Shira Israelof</FullName>
+    <Phone>05016004439</Phone>
+    <Email>shiraisraelof@gmail.com</Email>
     <Role>Volunteer</Role>
     <TypeDistance>Aerial</TypeDistance>
-    <Password>hsE1JRkXlZBsAg772RagOw==</Password>
-    <Address>Reger Blvd 55, Be'er Sheva, Israel</Address>
-    <Latitude>31.24642</Latitude>
-    <Longitude>34.77952</Longitude>
-    <MaxDistance>36.06295491733836</MaxDistance>
+    <Password>bufjvBygEUgJF7LfomERpw==</Password>
+    <Address>Jaffa St 45, Jerusalem, Israel</Address>
+    <Latitude>31.78571</Latitude>
+    <Longitude>35.22323</Longitude>
+    <MaxDistance>42.09040606578671</MaxDistance>
+    <IsActive>true</IsActive>
+  </Volunteer>
+  <Volunteer>
+    <Id>190313205</Id>
+    <FullName>David BenGurion</FullName>
+    <Phone>05369499497</Phone>
+    <Email>davidbengurion@gmail.com</Email>
+    <Role>Volunteer</Role>
+    <TypeDistance>Walking</TypeDistance>
+    <Password>vvEXBS9yQ38/saWq+dxHtQ==</Password>
+    <Address>Herzl 9, Haifa, Israel</Address>
+    <Latitude>32.79916</Latitude>
+    <Longitude>34.99115</Longitude>
+    <MaxDistance>58.656029022501045</MaxDistance>
+    <IsActive>true</IsActive>
+  </Volunteer>
+  <Volunteer>
+    <Id>967530684</Id>
+    <FullName>Golda Meir</FullName>
+    <Phone>05464447095</Phone>
+    <Email>goldameir@gmail.com</Email>
+    <Role>Volunteer</Role>
+    <TypeDistance>Walking</TypeDistance>
+    <Password>j0i7zDreJBitIUFDGpY7pQ==</Password>
+    <Address>Moriah Blvd 70, Haifa, Israel</Address>
+    <Latitude>32.79406</Latitude>
+    <Longitude>34.98264</Longitude>
+    <MaxDistance>17.959522617456823</MaxDistance>
     <IsActive>true</IsActive>
   </Volunteer>
   <Volunteer>
     <Id>698811734</Id>
-    <FullName>Ariel Sharon</FullName>
-    <Phone>05531970779</Phone>
-    <Email>arielsharon@gmail.com</Email>
+    <FullName>Yitzhak Rabin</FullName>
+    <Phone>05655068507</Phone>
+    <Email>yitzhakrabin@gmail.com</Email>
     <Role>Volunteer</Role>
     <TypeDistance>Traveling</TypeDistance>
-    <Password>m6lxhEvFyPqWbn0Kfb8f5Q==</Password>
-    <Address>Johanna Jabotinsky 15, Be'er Sheva, Israel</Address>
-    <Latitude>31.2536</Latitude>
-    <Longitude>34.78251</Longitude>
-    <MaxDistance>44.15120749175094</MaxDistance>
+    <Password>c4JSa2yhn+ELLoyX3FdYRA==</Password>
+    <Address>The Prophets 11, Haifa, Israel</Address>
+    <Latitude>32.81912</Latitude>
+    <Longitude>34.98865</Longitude>
+    <MaxDistance>45.82366027297338</MaxDistance>
+    <IsActive>true</IsActive>
+  </Volunteer>
+  <Volunteer>
+    <Id>747695906</Id>
+    <FullName>Chaim Weizmann</FullName>
+    <Phone>05169758927</Phone>
+    <Email>chaimweizmann@gmail.com</Email>
+    <Role>Volunteer</Role>
+    <TypeDistance>Aerial</TypeDistance>
+    <Password>jhhXZucKYlJtsQ36xOt4ug==</Password>
+    <Address>Rav Shauli 5, Be'er Sheva, Israel</Address>
+    <Latitude>31.25297</Latitude>
+    <Longitude>34.79223</Longitude>
+    <MaxDistance>37.56323879548232</MaxDistance>
+    <IsActive>true</IsActive>
+  </Volunteer>
+  <Volunteer>
+    <Id>421137647</Id>
+    <FullName>Menachem Begin</FullName>
+    <Phone>05527497229</Phone>
+    <Email>menachembegin@gmail.com</Email>
+    <Role>Volunteer</Role>
+    <TypeDistance>Aerial</TypeDistance>
+    <Password>Oh+/G8YA/h/wu/kE/Z8dEQ==</Password>
+    <Address>Reger Blvd 55, Be'er Sheva, Israel</Address>
+    <Latitude>31.24642</Latitude>
+    <Longitude>34.77952</Longitude>
+    <MaxDistance>38.653797781295076</MaxDistance>
     <IsActive>true</IsActive>
   </Volunteer>
   <Volunteer>
     <Id>128044765</Id>
-    <FullName>Moshe Dayan</FullName>
-    <Phone>05292434945</Phone>
-    <Email>moshedayan@gmail.com</Email>
+    <FullName>Ariel Sharon</FullName>
+    <Phone>05768205270</Phone>
+    <Email>arielsharon@gmail.com</Email>
     <Role>Volunteer</Role>
     <TypeDistance>Walking</TypeDistance>
-    <Password>endH81LJOsQMBOCNwAADiQ==</Password>
-    <Address>Begin Way 234, Petah Tikva, Israel</Address>
-    <Latitude>32.09077</Latitude>
-    <Longitude>34.88718</Longitude>
-    <MaxDistance>21.04510016450319</MaxDistance>
+    <Password>xZLxppOQ4ps09I20869/BA==</Password>
+    <Address>Johanna Jabotinsky 15, Be'er Sheva, Israel</Address>
+    <Latitude>31.2536</Latitude>
+    <Longitude>34.78251</Longitude>
+    <MaxDistance>95.05418764029086</MaxDistance>
     <IsActive>true</IsActive>
   </Volunteer>
   <Volunteer>
     <Id>301150447</Id>
-    <FullName>Shimon Peres</FullName>
-    <Phone>05178128994</Phone>
-    <Email>shimonperes@gmail.com</Email>
+    <FullName>Moshe Dayan</FullName>
+    <Phone>05680439406</Phone>
+    <Email>moshedayan@gmail.com</Email>
     <Role>Volunteer</Role>
-    <TypeDistance>Aerial</TypeDistance>
-    <Password>iMfz788ff6S6VAWgYHu/EQ==</Password>
-    <Address>Weizmann 22, Petah Tikva, Israel</Address>
-    <Latitude>32.08862</Latitude>
-    <Longitude>34.88532</Longitude>
-    <MaxDistance>94.78356786027379</MaxDistance>
+    <TypeDistance>Walking</TypeDistance>
+    <Password>SFfT6I6D3VMbOkaUhvJS1g==</Password>
+    <Address>Begin Way 234, Petah Tikva, Israel</Address>
+    <Latitude>32.09077</Latitude>
+    <Longitude>34.88718</Longitude>
+    <MaxDistance>23.96604519487292</MaxDistance>
     <IsActive>true</IsActive>
   </Volunteer>
   <Volunteer>
-    <Id>680710332</Id>
+    <Id>627262876</Id>
+    <FullName>Shimon Peres</FullName>
+    <Phone>05957921312</Phone>
+    <Email>shimonperes@gmail.com</Email>
+    <Role>Volunteer</Role>
+    <TypeDistance>Traveling</TypeDistance>
+    <Password>+VtoTKQ8EStSB0aLVslRjw==</Password>
+    <Address>Weizmann 22, Petah Tikva, Israel</Address>
+    <Latitude>32.08862</Latitude>
+    <Longitude>34.88532</Longitude>
+    <MaxDistance>11.686016318455202</MaxDistance>
+    <IsActive>true</IsActive>
+  </Volunteer>
+  <Volunteer>
+    <Id>603051947</Id>
     <FullName>Yigal Alon</FullName>
-    <Phone>05659835437</Phone>
+    <Phone>05261325439</Phone>
     <Email>yigalalon@gmail.com</Email>
     <Role>Volunteer</Role>
-    <TypeDistance>Walking</TypeDistance>
-    <Password>xZZaGMvzCnCQXDOAqVauqQ==</Password>
+    <TypeDistance>Aerial</TypeDistance>
+    <Password>tU34meS5sXUn14zT5a/V6w==</Password>
     <Address>Eli Cohen 1, Ramat Gan, Israel</Address>
     <Latitude>32.08333</Latitude>
     <Longitude>34.82732</Longitude>
-    <MaxDistance>10.623068470223625</MaxDistance>
+    <MaxDistance>10.510931731635498</MaxDistance>
     <IsActive>true</IsActive>
   </Volunteer>
   <Volunteer>

@@ -121,27 +121,14 @@ namespace PL.Call
         /// </summary>
         private void DeleteCall_Click(object sender, RoutedEventArgs e)
         {
-            if (SelectedCall == null)
-            {
-                MessageBox.Show("No call selected.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-            if (s_bl == null)
-            {
-                MessageBox.Show("s_bl is null.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-
-            if (s_bl.Call == null)
-            {
-                MessageBox.Show("s_bl.Call is null.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
             MessageBoxResult result = MessageBox.Show("Are you sure you want to delete this call?", "Confirm Delete", MessageBoxButton.YesNo, MessageBoxImage.Warning);
             if (result == MessageBoxResult.Yes)
             {
                 try
                 {
+                  if(SelectedCall==null)
+                        throw new BO.BlTemporaryNotAvailableException("Cannot perform the operation since Simulator is running");
+
                     if (SelectedCall != null)
                     {
                         s_bl.Call.DeleteCall(SelectedCall.CallId);
