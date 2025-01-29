@@ -1,4 +1,5 @@
-﻿using DalApi;
+﻿using BO;
+using DalApi;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
@@ -264,68 +265,89 @@ internal static class Tools
             }
         }
     }
-    /// <summary>
-    /// Retrieves the coordinates (latitude and longitude) of a given address using Google Geocoding API.
-    /// </summary>
-    /// <param name="address">The address to geocode.</param>
-    /// <returns>The coordinates (latitude and longitude) of the address.</returns>
-    public static async Task<(double Latitude, double Longitude)> GetCoordinates(string address)
+
+
+    internal static async Task<(double Latitude, double Longitude)> GetCoordinates(string address)
     {
-        if (string.IsNullOrWhiteSpace(address))
+        try
         {
-            throw new ArgumentException("Address cannot be null or empty.");
+            using (var client = new HttpClient())
+            {
+                string apiKey = "AIzaSyDp5JA_AxKyCcz9QK9q1btolMB6Y8jusc4";
+                ;
+                string requestUri = $"https://maps.googleapis.com/maps/api/geocode/xml?address={Uri.EscapeDataString(address)}&key={apiKey}";
+                var response = await client.GetAsync(requestUri).ConfigureAwait(false);
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                    var xmlDoc = new System.Xml.XmlDocument();
+                    xmlDoc.LoadXml(content);
+                    var locationNode = xmlDoc.SelectSingleNode("//GeocodeResponse/result/geometry/location");
+                    if (locationNode != null)
+                    {
+                        var latNode = locationNode.SelectSingleNode("lat");
+                        var lngNode = locationNode.SelectSingleNode("lng");
+                        if (latNode != null && lngNode != null)
+                        {
+                            double latitude = double.Parse(latNode.InnerText);
+                            double longitude = double.Parse(lngNode.InnerText);
+                            return (latitude, longitude);
+                        }
+                        else
+                        {
+                            throw new BlInvalidOperationException("Unable to get coordinates from Google Maps API.");
+                        }
+                    }
+                    else
+                    {
+                        throw new BlInvalidOperationException("Unable to get coordinates from Google Maps API.");
+                    }
+                }
+                else
+                {
+                    throw new BlInvalidOperationException("Unable to get coordinates from Google Maps API.");
+                }
+            }
         }
-
-
-        var apiKey = "AIzaSyDp5JA_AxKyCcz9QK9q1btolMB6Y8jusc4";
-        var url = $"https://maps.googleapis.com/maps/api/geocode/json?address={Uri.EscapeDataString(address)}&key={apiKey}";
-
+        catch (HttpRequestException)
+        {
+            throw new BlInvalidOperationException("HTTP request failed.");
+        }
+        catch (System.Xml.XmlException)
+        {
+            throw new BlInvalidOperationException("XML parsing failed.");
+        }
+        catch (Exception ex)
+        {
+            throw new BlInvalidOperationException("An unexpected error occurred: " + ex.Message);
+        }
+    }
+    internal static bool IsValidAddress(string? address)
+    {
+        if (string.IsNullOrWhiteSpace(address)) return true;
         using (var client = new HttpClient())
         {
-            var response = await client.GetStringAsync(url);
-            // Analyze the response in JSON format\
-            var jsonResponse = JsonDocument.Parse(response);
+            string apiKey = "AIzaSyDp5JA_AxKyCcz9QK9q1btolMB6Y8jusc4";
+            string requestUri = $"https://maps.googleapis.com/maps/api/geocode/xml?address={Uri.EscapeDataString(address)}&key={apiKey}";
 
-            if (jsonResponse.RootElement.TryGetProperty("results", out JsonElement results) && results.GetArrayLength() > 0)
+            var response = client.GetAsync(requestUri).Result;
+
+            if (response.IsSuccessStatusCode)
             {
-                // The reference to the first result
-                var firstResult = results[0];
-
-                // Extracting the coordinates
-                var location = firstResult.GetProperty("geometry").GetProperty("location");
-                var latitude = location.GetProperty("lat").GetDouble();
-                var longitude = location.GetProperty("lng").GetDouble();
-
-                return (latitude, longitude);
+                var responseContent = response.Content.ReadAsStringAsync().Result;
+                var xmlDoc = new System.Xml.XmlDocument();
+                xmlDoc.LoadXml(responseContent);
+                var statusNode = xmlDoc.SelectSingleNode("//GeocodeResponse/status");
+                if (statusNode != null && statusNode.InnerText == "OK")
+                {
+                    return true;
+                }
+                throw new BlInvalidOperationException("Invalid address.");
             }
             else
             {
-                throw new Exception("No results found for the given address.");
+                throw new BlInvalidOperationException("Unable to validate address using Google Maps API.");
             }
         }
     }
-
-    /// <summary>
-    /// Retrieves a list of volunteers within a certain distance from a given call address.
-    /// </summary>
-    /// <param name="callAddress">The address of the call.</param>
-    /// <returns>A list of volunteers within the specified distance.</returns>
-    public static IEnumerable<BO.Volunteer> GetVolunteersWithinDistance(string callAddress)
-    {
-        IEnumerable<DO.Volunteer>? volunteers;
-        lock (AdminManager.BlMutex)
-            volunteers = s_dal.Volunteer.ReadAll();
-
-        var newVolunteers = volunteers.Where(volunteer =>
-        {
-            if (volunteer.Latitude == null || volunteer.Longitude == null)
-            {
-                return false;
-            }
-            var distance = CalculateAerialDistance(volunteer.Address ?? string.Empty, callAddress);
-            return distance <= volunteer.MaxDistance;
-        });
-        return newVolunteers.Select(v => VolunteerManager.ConvertFromDoToBo(v)).ToList();
-    }
-
 }

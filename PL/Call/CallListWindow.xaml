@@ -38,7 +38,7 @@
                 <DataGridTemplateColumn Header="Delete" Width="Auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Content="Delete"  Click="DeleteCall_Click"/>
+                            <Button Content="Delete" Click="DeleteCall_Click" Visibility="{Binding ., Converter={StaticResource ConvertDeleteAssignmentToVisibilityKey}}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

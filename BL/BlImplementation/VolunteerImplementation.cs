@@ -56,7 +56,10 @@ internal class VolunteerImplementation:IVolunteer
             VolunteerManager.Observers.NotifyListUpdated();   
             _= VolunteerManager.AddVolunteerCoordinatesAsync(myVolunteer);
         }
-
+        catch (BO.BlInvalidOperationException ex)
+        {
+            throw new BO.BlInvalidOperationException( ex.Message);
+        }
         catch (DO.DalAlreadyExistsException ex)
         {
             throw new BO.BlAlreadyExistsException($"Volunteer with ID {myVolunteer.Id} already exists.", ex);

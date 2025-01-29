@@ -62,7 +62,7 @@
                 <DataGridTemplateColumn Header="Select" Width="Auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Content="Select" Command="{Binding DataContext.SelectCallCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding}" Click="SelectCall_Click"/>
+                            <Button Content="Select" Click="SelectCall_Click"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -76,7 +76,7 @@
         </StackPanel>
 
         <!-- Map WebView2 -->
-        <Grid Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" MinWidth="400" Margin="8" Visibility="{Binding CurrentVolunteer.IsActive, Converter={StaticResource ActiveCallToVisibleConverterKey}}">
+        <Grid Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" MinWidth="400" Margin="8" >
             <wv2:WebView2 Name="MapWebView"
                           Source="{Binding MapSource}" Margin="-158,0,158,0"/>
         </Grid>

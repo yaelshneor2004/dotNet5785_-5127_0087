@@ -45,7 +45,7 @@
                 <DataGridTemplateColumn Header="Actions" Width="Auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Content="Delete" Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding}" Click="DeleteVolunteer_Click"/>
+                            <Button Content="Delete" Click="DeleteVolunteer_Click" Visibility="{Binding ., Converter={StaticResource ConvertVisibilityDeleteVolKey}}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

@@ -43,7 +43,8 @@
         <local:ActiveCallToVisibleConverter x:Key="ActiveCallToVisibleConverterKey" />
         <local:BooleanToReadOnlyConverter x:Key="BooleanToReadOnlyConverterKey" />
         <local:BooleanToIsEnabeldyConverter x:Key="BooleanToIsEnabeldyConverterKey" />
-        
+        <local:ConvertDeleteAssignmentToVisibility x:Key="ConvertDeleteAssignmentToVisibilityKey"/>
+        <local:ConvertVisibilityDeleteVol x:Key="ConvertVisibilityDeleteVolKey"/>
         <!-- Triggers -->
         <Style TargetType="DataGridRow">
             <Setter Property="Background" Value="#E6E6FA"/>
