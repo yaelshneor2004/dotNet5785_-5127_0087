@@ -53,7 +53,6 @@ namespace PL.Call
         }
         public static readonly DependencyProperty CallProperty =
         DependencyProperty.Register("Call", typeof(BO.Call), typeof(SelectCallToTreatWindow), new PropertyMetadata(null));
-
         public BO.Volunteer? CurrentVolunteer
         {
             get { return (BO.Volunteer?)GetValue(CurrentVolunteerProperty); }
@@ -230,10 +229,9 @@ namespace PL.Call
             {
                 Description = SelectedOpenCall.Description ?? string.Empty;
             }
-            if (dataGrid.SelectedItem is BO.OpenCallInList openCall)
+            if (SelectedOpenCall is BO.OpenCallInList openCall)
             {
                 Call = s_bl.Call.GetCallDetails(openCall.Id);
-                Call.Latitude= 31.7683;
                 CenterMapOnVolunteer();
             }
         }
