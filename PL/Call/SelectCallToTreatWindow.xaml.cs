@@ -210,14 +210,14 @@ namespace PL.Call
             if (Call is not null)
             {
                 await MapWebView.ExecuteScriptAsync($"initialize({CurrentVolunteer.Latitude}, " +
-                $"{CurrentVolunteer.Longitude}, {Call.Latitude}, " +
-                $"{Call.Longitude});");
+                    $"{CurrentVolunteer.Longitude}, {Call.Latitude}, " +
+                    $"{Call.Longitude}, '{CurrentVolunteer.TypeDistance}');");
             }
             else
             {
                 await MapWebView.ExecuteScriptAsync($"initialize({CurrentVolunteer.Latitude}, " +
-                $"{CurrentVolunteer.Longitude}, {CurrentVolunteer.Latitude}, " +
-                $"{CurrentVolunteer.Longitude});");
+                    $"{CurrentVolunteer.Longitude}, {CurrentVolunteer.Latitude}, " +
+                    $"{CurrentVolunteer.Longitude}, '{CurrentVolunteer.TypeDistance}');");
             }
         }
         private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)

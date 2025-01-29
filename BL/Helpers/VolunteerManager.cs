@@ -49,6 +49,9 @@ internal static class VolunteerManager
             throw new BO.BlInvalidOperationException("Invalid email format.");
         if (!IsStrongPassword(volunteer.Password ?? string.Empty))
             throw new BO.BlInvalidOperationException("This password is not strong enough.");
+        if (!Tools.IsValidAddress(volunteer.Address))
+            throw new BO.BlInvalidOperationException("invalid Address");
+
     }
     public static async Task AddVolunteerCoordinatesAsync(BO.Volunteer volunteer)
     {
@@ -60,6 +63,12 @@ internal static class VolunteerManager
         Observers.NotifyListUpdated();
         Observers.NotifyItemUpdated(volunteer.Id);
     }
+
+
+
+
+
+
     /// <summary>
     /// Checks if the given password is strong.
     /// </summary>
@@ -140,7 +149,9 @@ internal static class VolunteerManager
     /// <param name="id"></param>
     /// <returns></returns>
     private static bool IsValidID(int id)
-    {
+    {if (id == 0)
+
+            throw new BO.BlNullPropertyException("Null property");
         string idStr = id.ToString("D9"); //// pad with zeros if needed to make it 9 digits
         int sum = 0;
 
@@ -427,7 +438,7 @@ internal static class VolunteerManager
 
             if (assignmentInProgressData == null)
             {
-                int percent = s_rand.Next(1, 6); // 20% chance to choose a call
+                int percent = s_rand.Next(1, 1); // 20% chance to choose a call
                 if (percent == 1)
                 {
                     DO.Call? openCall;
@@ -467,7 +478,7 @@ internal static class VolunteerManager
                 lock (AdminManager.BlMutex)
                 {
                     var call = s_dal.Call.Read(assignmentInProgressData.CallId);
-                    enoughTime = Tools.GlobalDistance(vol.Address, call.Address, vol.TypeDistance) * 2 + 10;
+                    enoughTime = Tools.GlobalDistance(vol.Address, call.Address, vol.TypeDistance) * 4 + 30;
                 }
 
                 if (AdminManager.Now >= assignmentInProgressData.StartCall.AddMinutes(enoughTime))
@@ -486,7 +497,7 @@ internal static class VolunteerManager
                 }
                 else
                 {
-                    int percent = s_rand.Next(1, 11); // 10% chance to cancel the assignment
+                    int percent = s_rand.Next(1, 1); // 10% chance to cancel the assignment
                     if (percent == 1)
                     {
                         var updatedAssignment = assignmentInProgressData with

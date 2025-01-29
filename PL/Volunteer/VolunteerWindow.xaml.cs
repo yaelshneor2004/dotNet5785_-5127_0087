@@ -115,6 +115,10 @@ namespace PL.Volunteer
                     Close();
                 }
             }
+            catch (BO.BlNullPropertyException ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
             catch (BO.BlInvalidOperationException ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);

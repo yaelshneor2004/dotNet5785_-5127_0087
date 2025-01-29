@@ -22,22 +22,19 @@ namespace PL.Volunteer
     /// </summary>
     public partial class VolunteerCallHistoryWindow : Window
     {
-        public BO.ClosedCallInList? SelectedClosedCall { get; set; }
 
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
         public BO.MyCallType FilterByType { get; set; } = BO.MyCallType.None;
-        public BO.CloseCall SortByClosedCall { get; set; } = BO.CloseCall.None;
 
         /// <summary>
         /// Gets or sets the list of closed calls.
         /// </summary>
-        public IEnumerable<BO.ClosedCallInList> CloseCallList
+        public IEnumerable<BO.ClosedCallInList>CloseCallList 
         {
             get { return (IEnumerable<BO.ClosedCallInList>)GetValue(CloseCallListProperty); }
             set { SetValue(CloseCallListProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for CallList. This enables animation, styling, binding, etc...
         public static readonly DependencyProperty CloseCallListProperty =
             DependencyProperty.Register("CloseCallList", typeof(IEnumerable<BO.ClosedCallInList>), typeof(VolunteerCallHistoryWindow), new PropertyMetadata(null));
 
@@ -80,10 +77,8 @@ namespace PL.Volunteer
         {
             if (_observerOperation is null || _observerOperation.Status == DispatcherOperationStatus.Completed)
                 _observerOperation = Dispatcher.BeginInvoke(() =>
-                {
-
-                    queryCallList();
-                });
+                    queryCallList()
+                );
         }
 
         /// <summary>

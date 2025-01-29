@@ -116,6 +116,8 @@ internal static class CallManager
             throw new BO.BlInvalidOperationException("Max end time must be later than start time.");
         if (call.Id < 0)
             throw new BO.BlInvalidOperationException("Invalid callId.");
+        if (!Tools.IsValidAddress(call.Address))
+            throw new BO.BlInvalidOperationException("Invalid Address.");
     }
 
     internal static BO.MyCallStatus GetCallStatus(DO.Call callD)
@@ -430,9 +432,10 @@ internal static class CallManager
             Observers.NotifyItemUpdated(call.Id);
         }
     }
-    public static async Task AddCallSendEmailAsync(BO.Call call)
-    { 
-    var volunteers = Tools.GetVolunteersWithinDistance(call.Address);
+    public static async Task AddCallSendEmailAsync(DO.Call call)
+    {
+        var volunteers = s_dal.Volunteer.ReadAll(volunteer => volunteer.MaxDistance >=
+Tools.GlobalDistance(volunteer.Address,call.Address,volunteer.TypeDistance));
         foreach (var volunteer in volunteers)
         {
             var subject = $"New Call Opened for {call.Id}";
@@ -440,8 +443,6 @@ internal static class CallManager
                    $"A new call has been opened. Here are the details:\n\n" +
                    $"Description: {call.Description}\n" +
                    $"Location: {call.Address}\n" +
-                   $"Open Time: {call.StartTime}\n" +
-                   $"Maximum Time: {call.MaxEndTime}\n" +
                    $"Please log in to the system to accept the call."; // Body of the email;
           await CallManager.SendEmailAsync(volunteer.Email, subject, body);
         }
@@ -459,15 +460,17 @@ internal static class CallManager
            await CallManager.SendEmailAsync(volunteer?.Email ?? string.Empty, subject, body);
         }
     }
-    public static async Task AddCallCoordinatesAsync(BO.Call call)
+    public static async Task AddCallCoordinatesAsync(DO.Call call)
     {
-        var coordinates = await Tools.GetCoordinates(call.Address ?? string.Empty);
-        call.Latitude = coordinates.Latitude;
-        call.Longitude = coordinates.Longitude;
-        lock (AdminManager.BlMutex)
-            s_dal.Call.Update(ConvertBOToDO(call));
-        Observers.NotifyListUpdated();
-        Observers.NotifyItemUpdated(call.Id);
+        if (call.Address is not null)
+        {
+            var coordinates = await Tools.GetCoordinates(call.Address ?? string.Empty);
+            call = call with { Latitude = coordinates.Latitude, Longitude = coordinates.Longitude };
+            lock (AdminManager.BlMutex)
+                s_dal.Call.Update(call);
+            Observers.NotifyListUpdated();
+            Observers.NotifyItemUpdated(call.Id);
+        }
     }
     /// <summary>
     /// Periodically updates the status of calls that have exceeded their maximum finish time.

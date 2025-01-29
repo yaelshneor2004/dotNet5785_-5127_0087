@@ -260,13 +260,34 @@ public class ConvertCancalAssignmentToVisibility : IValueConverter
         }
         return Visibility.Visible;
     }
+  
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}
+
+
+
+public class ConvertDeleteAssignmentToVisibility : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        if (value == null)
+        {
+            return Visibility.Hidden; // or any default value
+        }
+
+        BO.CallInList currentCall = (BO.CallInList)value;
+        return (currentCall.Status == BO.MyCallStatus.Open || currentCall.Status == BO.MyCallStatus.OpenAtRisk) && currentCall.TotalAssignments == 0 ? Visibility.Visible : Visibility.Hidden;
+    }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
     {
         throw new NotImplementedException();
     }
 }
-public class ConvertEyeWithLine : IValueConverter
+    public class ConvertEyeWithLine : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
@@ -370,10 +391,46 @@ public class BooleanToIsEnabeldyConverter : IValueConverter
         throw new NotImplementedException();
     }
 }
+class ConvertVisibilityDeleteVol : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        if (value == null)
+        {
+            return Visibility.Hidden; // or some default value
+        }
 
+        BO.VolunteerInList currentVol = (BO.VolunteerInList)value;
+        return currentVol.CurrentCallId == null && currentVol.TotalCallsHandled == 0 ? Visibility.Visible : Visibility.Hidden;
+    }
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}
 
+//public class ConvertDeleteAssignmentToVisibility : IValueConverter
+//{
+//    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+//    {
+//        if (value is BO.MyCallStatus call)
+//        {
+//            if ((call== BO.MyCallStatus.Open || call== BO.MyCallStatus.OpenAtRisk))/* &&call.TotalAssignments==0)*/
+//            {
 
+//                return Visibility.Visible;
+//            }
 
+//            return Visibility.Collapsed;
+//        }
+//        return Visibility.Visible;
+//    }
+
+//    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+//    {
+//        throw new NotImplementedException();
+//    }
+//}
 
 
 

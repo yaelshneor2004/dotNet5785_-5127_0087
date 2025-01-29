@@ -1,6 +1,6 @@
 ﻿using BlApi;
 using BO;
-using DO;
+using DalApi;
 using Helpers;
 using System.Collections.Generic;
 using static Helpers.CallManager;
@@ -10,7 +10,7 @@ namespace BlImplementation;
 /// <summary>
 /// Implementation of call-related operations.
 /// </summary>
-internal class CallImplementation : ICall
+internal class CallImplementation : BlApi.ICall
 {
     private readonly DalApi.IDal _dal = DalApi.Factory.Get;
 
@@ -29,11 +29,17 @@ internal class CallImplementation : ICall
             // Validate the logical correctness of the values
             CallManager.ValidateCallLogic(call);
             // Attempt to add the new call in the data layer
+            DO.Call callDo = ConvertBOToDO(call);
+            DO.Call newCall;
             lock (AdminManager.BlMutex)
-                _dal.Call.Create(ConvertBOToDO(call));
+            {
+                _dal.Call.Create(callDo);
+                newCall = _dal.Call.ReadAll().Last();
+                _ = CallManager.AddCallCoordinatesAsync(newCall);
+              _=CallManager.AddCallSendEmailAsync(newCall);
+            }
             CallManager.Observers.NotifyListUpdated();
-            _ = CallManager.AddCallCoordinatesAsync(call);
-            _ = CallManager.AddCallSendEmailAsync(call);
+
         }
         catch (BO.BlNullPropertyException ex)
         {
@@ -96,23 +102,18 @@ internal class CallImplementation : ICall
             AdminManager.ThrowOnSimulatorIsRunning();
             // Retrieve call details from the data layer
             DO.Call? callData;
-            IEnumerable<DO.Assignment> assignments;
-
+           int assignments;
             lock (AdminManager.BlMutex)
             {
-                callData = _dal.Call.Read(callId);
-                // Check if the call is open and has never been assigned
-                assignments = _dal.Assignment.ReadAll(a => a.CallId == callId).ToList();
+                callData = _dal.Call.Read(callId); 
+                assignments = _dal.Assignment.ReadAll(a => a.CallId == callId).Count();
             }
-
             var callBo = CallManager.ConvertFromDoToBo(callData ?? throw new BO.BlNullPropertyException(nameof(callData)));
-            if (callBo.Status != BO.MyCallStatus.Open || assignments.Any())
+            if (callBo.Status != BO.MyCallStatus.Open && callBo.Status != BO.MyCallStatus.OpenAtRisk &&assignments!=0)
                 throw new BO.BlUnauthorizedAccessException("Only open calls that have never been assigned can be deleted.");
-
             // Attempt to delete the call in the data layer
             lock (AdminManager.BlMutex)
                 _dal.Call.Delete(callId);
-
             CallManager.Observers.NotifyListUpdated();
         }
         catch (DO.DalDoesNotExistException ex)
@@ -124,6 +125,7 @@ internal class CallImplementation : ICall
             throw new BO.BlTemporaryNotAvailableException(ex.Message);
         }
     }
+
 
 
     /// <summary>
@@ -261,10 +263,10 @@ internal class CallImplementation : ICall
     {
         IEnumerable<DO.Assignment> closeList;
         lock (AdminManager.BlMutex)
-             closeList = _dal.Assignment.ReadAll();
+             closeList = _dal.Assignment.ReadAll(a => a.VolunteerId == idV && a.FinishType != null);
         var closeListNew = closeList.Where(a => a.VolunteerId == idV &&a.FinishType!=null).Select(a => convertAssignmentToClosed(a)).ToList();
         closeListNew = callType.HasValue ? closeListNew.Where(call => call.Type == callType.Value).ToList() : closeListNew;
-        return CallManager.SortClosedCallsByField(closeListNew, closeCall);
+        return closeListNew;
     }
 
 
@@ -304,19 +306,23 @@ internal class CallImplementation : ICall
             CallManager.ValidateCallFormat(myCall);
             // Validate the logical correctness of the values
             CallManager.ValidateCallLogic(myCall);
-            var call = CallManager.ConvertBOToDO(myCall);
-
+            var callDo = CallManager.ConvertBOToDO(myCall);
+            DO.Call newCall;
             if (myCall.Status == BO.MyCallStatus.Open||myCall.Status==BO.MyCallStatus.OpenAtRisk)
             {
                 // Attempt to update the call in the data layer
                 lock (AdminManager.BlMutex)
-                _dal.Call.Update(call);
+                {
+                    _dal.Call.Update(callDo);
+                    newCall = _dal.Call.ReadAll().Last();
+                    _ = CallManager.updateCoordinatesForCallAddressAsync(newCall);
+                }
+
             }
             else
             {
                 throw new BO.BlInvalidOperationException("You cannot update a call that has ended or is in progress.");
             }
-            _=CallManager.updateCoordinatesForCallAddressAsync(call);
             CallManager.Observers.NotifyItemUpdated(myCall.Id); 
             CallManager.Observers.NotifyListUpdated();  
         }
@@ -346,24 +352,24 @@ internal class CallImplementation : ICall
             lock (AdminManager.BlMutex)
                  assignment = _dal.Assignment.Read(a => a.CallId == idC&&a.FinishType==null);
             // Check authorization: the requester must be a manager or the volunteer assigned to the task
-            if (assignment?.VolunteerId != idV || !CallManager.IsManager(idV))
-                throw new BO.BlUnauthorizedAccessException("The requester is not authorized to cancel this assignment.");
-            // Check that the assignment is still open and not already completed or canceled
-            if (assignment.FinishCall.HasValue || assignment.FinishType.HasValue)
-                throw new BO.BlInvalidOperationException("The assignment has already been completed or canceled.");
-            // Create a new assignment object with the updated finish time and finish type
-            var updatedAssignment = assignment with
-            {
-                FinishCall = AdminManager.Now,
-                FinishType = assignment.VolunteerId == idV ? DO.MyFinishType.ManagerCancel: DO.MyFinishType.SelfCancel 
-            };
-            // Attempt to update the assignment entity in the data layer
-            lock (AdminManager.BlMutex)
-                _dal.Assignment.Update(updatedAssignment);
-            CallManager.Observers.NotifyItemUpdated(idC);
-            VolunteerManager.Observers.NotifyItemUpdated(idV);
-            CallManager.Observers.NotifyListUpdated();
-            _ = CallManager.UpdateCancelTreatmentSendEmailAsync(idV, assignment);
+            if (assignment?.VolunteerId != idV&& (!CallManager.IsManager(idV)))
+                    throw new BO.BlUnauthorizedAccessException("The requester is not authorized to cancel this assignment.");
+                    // Check that the assignment is still open and not already completed or canceled
+                    if (assignment.FinishCall.HasValue || assignment.FinishType.HasValue)
+                        throw new BO.BlInvalidOperationException("The assignment has already been completed or canceled.");
+                    // Create a new assignment object with the updated finish time and finish type
+                    var updatedAssignment = assignment with
+                    {
+                        FinishCall = AdminManager.Now,
+                        FinishType = assignment.VolunteerId == idV ? DO.MyFinishType.SelfCancel : DO.MyFinishType.ManagerCancel
+                    };
+                    // Attempt to update the assignment entity in the data layer
+                    lock (AdminManager.BlMutex)
+                        _dal.Assignment.Update(updatedAssignment);
+                    CallManager.Observers.NotifyItemUpdated(idC);
+                    VolunteerManager.Observers.NotifyItemUpdated(idV);
+                    CallManager.Observers.NotifyListUpdated();
+                    _ = CallManager.UpdateCancelTreatmentSendEmailAsync(idV, assignment);
         }
         catch (DO.DalDoesNotExistException ex)
         {

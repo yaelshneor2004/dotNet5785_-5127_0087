@@ -22,17 +22,13 @@
                       SelectionChanged="cmbFiltedrChanges_SelectionChanged" 
                       Height="43" 
                       Width="778"/>
-            <!-- ComboBox for filtering calls by type -->
-            <!-- ComboBox for filtering calls by type -->
-            <!-- ComboBox for filtering calls by type -->
-            <!-- ComboBox for filtering calls by type -->
         </StackPanel>
 
         <!-- DataGrid for displaying calls -->
         <DataGrid Grid.Row="1"
                   AutoGenerateColumns="False"
-                  ItemsSource="{Binding Path=CloseCallList}" SelectedItem="{Binding SelectedClosedCall}"
-                IsReadOnly="True" RowDetailsVisibilityMode="VisibleWhenSelected" EnableRowVirtualization="True">
+                  ItemsSource="{Binding CloseCallList, Mode=TwoWay}" 
+                  IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding Id}"/>
                 <DataGridTextColumn Header="Type" Binding="{Binding Type}"/>
