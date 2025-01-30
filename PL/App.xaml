@@ -5,10 +5,6 @@
              StartupUri="LoginWindow.xaml">
     <Application.Resources>
 
-        <Style TargetType="Control">
-            <Setter Property="FontFamily" Value="Comic Sans MS"/>
-        </Style>
-
         <local:ConvertCallInProgressToVisibility x:Key="ConvertCallInProgressToVisibilityKey"/>
         <local:SortCollectionCallStatus x:Key="SortCollectionCallStatusKey"/>
         <local:SortCollectionMyCallType x:Key="SortCollectionMyCallTypeKey"/>
@@ -45,6 +41,8 @@
         <local:BooleanToIsEnabeldyConverter x:Key="BooleanToIsEnabeldyConverterKey" />
         <local:ConvertDeleteAssignmentToVisibility x:Key="ConvertDeleteAssignmentToVisibilityKey"/>
         <local:ConvertVisibilityDeleteVol x:Key="ConvertVisibilityDeleteVolKey"/>
+        <!--<local:ConvertLabelDescriptionToVisibility x:Key="ConvertLabelDescriptionToVisibilityKey"/>-->
+
         <!-- Triggers -->
         <Style TargetType="DataGridRow">
             <Setter Property="Background" Value="#E6E6FA"/>
@@ -55,7 +53,36 @@
             </Style.Triggers>
         </Style>
 
-      
+
+        <Style TargetType="Control">
+            <Setter Property="FontFamily" Value="Comic Sans MS"/>
+        </Style>
+
+        <!-- סגנון עבור חלון עם קצוות מעוגלים -->
+        <Style TargetType="Window">
+            <Setter Property="WindowStyle" Value="None"/>
+            <Setter Property="AllowsTransparency" Value="True"/>
+            <Setter Property="Background" Value="#E6E6FA"/>
+        </Style>
+
+        <!-- סגנון עבור Border עם קצוות מעוגלים וצל -->
+        <Style x:Key="RoundedWindowBorder" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="BorderBrush" Value="#9370DB"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Margin" Value="20"/>
+            <!-- הוספת מרווח מסביב כדי לראות את הרקע מאחורי ה-Border -->
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#9370DB" Opacity="0.5" BlurRadius="10" ShadowDepth="5"/>
+                </Setter.Value>
+            </Setter>
+
+        </Style>
+
+
 
         <!-- Style for ComboBox -->
             <Style TargetType="ComboBox">
