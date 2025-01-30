@@ -1,69 +1,64 @@
 ﻿<Window x:Class="PL.Call.SelectCallToTreatWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:PL.Call" mc:Ignorable="d" xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf" Title="SelectCallToTreatWindow" Height="640" Width="800" DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}" Language="he-IL" Loaded="CallListWindow_Loaded" Closed="CallListWindow_Closed">
-    <Border Style="{StaticResource RoundedWindowBorder}">
-        <Grid>
-
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <!-- Internal, Upper Grid for Filters and Sorting -->
-                <Grid Grid.Row="0" Grid.Column="0" Margin="0,0,10,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Grid.Row="0" VerticalAlignment="Center" Margin="8,0,8,0">
-                        <ComboBox SelectedValue="{Binding FilterByType, Mode=TwoWay}" ItemsSource="{Binding Source={StaticResource SortCollectionMyCallTypeKey}}" SelectionChanged="cmbFiltedrChanges_SelectionChanged" Height="43" Width="348"/>
-                    </StackPanel>
-                </Grid>
-                <!-- DataGrid for displaying the list of open calls -->
-                <DataGrid Margin="8,8,147,108" Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Path=OpenCallList}" AutoGenerateColumns="False" IsReadOnly="True" EnableRowVirtualization="True" RowDetailsVisibilityMode="VisibleWhenSelected" SelectedItem="{Binding SelectedOpenCall}" MouseDoubleClick="DataGrid_MouseDoubleClick" RenderTransformOrigin="0.5,0.5">
-                    <DataGrid.RenderTransform>
-                        <TransformGroup>
-                            <ScaleTransform/>
-                            <SkewTransform AngleY="-0.148"/>
-                            <RotateTransform/>
-                            <TranslateTransform Y="-0.664"/>
-                        </TransformGroup>
-                    </DataGrid.RenderTransform>
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Binding="{Binding Id}" Header="Call Id" Width="Auto"/>
-                        <DataGridTextColumn Binding="{Binding Type}" Header="Type" Width="Auto"/>
-                        <DataGridTextColumn Binding="{Binding Description}" Header="Description" Width="Auto"/>
-                        <DataGridTextColumn Binding="{Binding Address}" Header="Address" Width="Auto"/>
-                        <DataGridTextColumn Binding="{Binding StartTime}" Header="Start Time" Width="Auto"/>
-                        <DataGridTextColumn Binding="{Binding MaxEndTime}" Header="Max End Time" Width="Auto"/>
-                        <DataGridTextColumn Binding="{Binding DistanceFromVolunteer}" Header="Distance" Width="Auto"/>
-                        <DataGridTemplateColumn Header="Select" Width="Auto">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Button Content="Select" Click="SelectCall_Click"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
-                <!-- StackPanel for displaying the selected call description -->
-                <StackPanel HorizontalAlignment="Left" Height="100" Margin="0,442,0,0" Grid.Row="1" Grid.Column="0" VerticalAlignment="Top" Width="340" Grid.RowSpan="2">
-                    <Label Content="Call Description:" Height="30" Width="318" RenderTransformOrigin="0.122,0.493"/>
-                    <Label Content="{Binding Description, Mode=TwoWay}" Height="70" Width="316"/>
-                </StackPanel>
-                <!-- Map WebView2 -->
-                <Grid Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" MinWidth="400" Margin="45,-9,-200,25" >
-                    <wv2:WebView2 Name="MapWebView" Source="{Binding MapSource}" Margin="-163,61,200,-16"/>
-                </Grid>
-                <!-- TextBox and Button for changing volunteer address -->
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="2" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="8,0,8,0">
-                    <TextBox Text="{Binding CurrentVolunteer.Address, Mode=TwoWay}" Width="221" Margin="0,0,8,0" Height="24" />
-                    <Button Content="Update Address" Click="UpdateAddress_Click" Height="30"/>
-                </StackPanel>
-            </Grid>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <!-- Internal, Upper Grid for Filters and Sorting -->
+        <Grid HorizontalAlignment="Stretch" Grid.Row="0" VerticalAlignment="Stretch" Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Grid.Row="0" VerticalAlignment="Center" Margin="8,0,8,0">
+                <ComboBox SelectedValue="{Binding FilterByType, Mode=TwoWay}" ItemsSource="{Binding Source={StaticResource SortCollectionMyCallTypeKey}}" SelectionChanged="cmbFiltedrChanges_SelectionChanged" Height="43" Width="785"/>
+            </StackPanel>
         </Grid>
-    </Border>
+        <!-- DataGrid for displaying the list of open calls -->
+        <DataGrid Margin="8,8,147,8" Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Path=OpenCallList}" AutoGenerateColumns="False" IsReadOnly="True" EnableRowVirtualization="True" RowDetailsVisibilityMode="VisibleWhenSelected" SelectedItem="{Binding SelectedOpenCall}" MouseDoubleClick="DataGrid_MouseDoubleClick" RenderTransformOrigin="0.5,0.5">
+            <DataGrid.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform AngleY="-0.148"/>
+                    <RotateTransform/>
+                    <TranslateTransform Y="-0.664"/>
+                </TransformGroup>
+            </DataGrid.RenderTransform>
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Id}" Header="Call Id" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding Type}" Header="Type" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding Description}" Header="Description" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding Address}" Header="Address" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding StartTime}" Header="Start Time" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding MaxEndTime}" Header="Max End Time" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding DistanceFromVolunteer}" Header="Distance" Width="Auto"/>
+                <DataGridTemplateColumn Header="Select" Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Select" Click="SelectCall_Click"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <!-- StackPanel for displaying the selected call description -->
+        <StackPanel HorizontalAlignment="Left" Height="100" Margin="0,431,0,0" Grid.Row="1" Grid.Column="0" VerticalAlignment="Top" Width="340">
+            <Label Content="Call Description:" Height="30" Width="318" RenderTransformOrigin="0.122,0.493"/>
+            <Label Content="{Binding Description, Mode=TwoWay}" Height="70" Width="316"/>
+        </StackPanel>
+        <!-- Map WebView2 -->
+        <Grid Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" MinWidth="400" Margin="8" >
+            <wv2:WebView2 Name="MapWebView" Source="{Binding MapSource}" Margin="-158,0,158,0"/>
+        </Grid>
+        <!-- TextBox and Button for changing volunteer address -->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="2" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="8,0,8,0">
+            <TextBox Text="{Binding CurrentVolunteer.Address, Mode=TwoWay}" Width="221" Margin="0,0,8,0" />
+            <Button Content="Update Address" Click="UpdateAddress_Click" Height="30"/>
+        </StackPanel>
+    </Grid>
 </Window>
