@@ -82,10 +82,10 @@ namespace PL.Call
                 id = idV;
                 InitializeComponent();
                 CurrentVolunteer = (id != 0) ? s_bl.Volunteer.GetVolunteerDetails(id)! : new BO.Volunteer();
-                queryCallList(id );
+                queryCallList(id);
                 MapSource = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "mapp.html");
-              if(SelectedOpenCall!=null)
-                Description=SelectedOpenCall.Description;
+                if (SelectedOpenCall != null)
+                    Description = SelectedOpenCall.Description;
             }
             catch (BO.BlDoesNotExistException ex)
             {
@@ -145,7 +145,7 @@ namespace PL.Call
         /// <summary>
         /// Observer method to update the call list.
         /// </summary>
-        private volatile DispatcherOperation? _observerOperation = null; 
+        private volatile DispatcherOperation? _observerOperation = null;
         private void callListObserver()
         {
             if (_observerOperation is null || _observerOperation.Status == DispatcherOperationStatus.Completed)
@@ -153,7 +153,7 @@ namespace PL.Call
                 {
                     if (CurrentVolunteer != null)
                         queryCallList(id);
-                } );
+                });
         }
 
         /// <summary>
