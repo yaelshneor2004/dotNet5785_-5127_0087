@@ -90,7 +90,6 @@ public partial class VolunteerUserWindow : Window
         {
             s_bl.Volunteer.UpdateVolunteer(CurrentVolunteer.Id, CurrentVolunteer);
             MessageBox.Show("Volunteer updated successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-            Close();
         }
         catch (BO.BlTemporaryNotAvailableException ex)
         {

@@ -38,12 +38,12 @@ public static class Initialization
         "Begin Way 234, Petah Tikva, Israel", "Weizmann 22, Petah Tikva, Israel", "Eli Cohen 1, Ramat Gan, Israel"
     };
 
-        double[] callLongitudes = new double[]
+        double[] Longitudes = new double[]
         {
         34.77697, 34.79152, 34.78139, 35.21289, 35.18331, 35.22323, 34.99115, 34.98264, 34.98865, 34.79223, 34.77952,
         34.78251, 34.88718, 34.88532, 34.82732
         };
-        double[] callLatitudes = new double[]
+        double[] Latitudes = new double[]
         {
         32.06366, 32.06180, 32.08404, 31.74851, 31.76832, 31.78571, 32.79916, 32.79406, 32.81912, 31.25297, 31.24642,
         31.25360, 32.09077, 32.08862, 32.08333
@@ -52,8 +52,8 @@ public static class Initialization
         for (int i = 0; i < 15; i++)
         {
             int id=0;
-            double? latitude = callLatitudes[i]; // Latitude of the call at index i
-            double? longitude = callLongitudes[i]; // Longitude of the call at index i
+            double? latitude = Latitudes[i]; // Latitude of the call at index i
+            double? longitude = Longitudes[i]; // Longitude of the call at index i
             string password = $"{new Random().Next(100000, 999999)}{(char)new Random().Next('A', 'Z' + 1)}{(char)new Random().Next('a', 'z' + 1)}"; // Generate random password with numbers and letters
             password += "!";
             password = Encrypt(password);
