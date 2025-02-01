@@ -60,9 +60,22 @@ namespace PL
 
         private void Login_Click(object sender, RoutedEventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(userNameText))
+            {
+                MessageBox.Show("Please enter a username.", "Input Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            var passwordBox = FindPasswordBox(this);
+            if (passwordBox == null || string.IsNullOrWhiteSpace(passwordBox.Password))
+            {
+                MessageBox.Show("Please enter a password.", "Input Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
             try
             {
-                var userDetails = s_bl.Volunteer.Login(userNameText, FindPasswordBox(this)!.Password);
+                var userDetails = s_bl.Volunteer.Login(userNameText, passwordBox.Password);
                 // Show message to ask if the user wants to enter as a manager or volunteer
                 MessageBoxResult result = MessageBox.Show("Do you want to open the main screen?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
@@ -72,7 +85,7 @@ namespace PL
                     {
                         if (isManagerLoggedIn)
                         {
-                            MessageBox.Show("Administrator is already logged in, please wait until the connection is complete");
+                            MessageBox.Show("Administrator is already logged in, please wait until the connection is complete", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                         }
                         else
                         {
@@ -90,15 +103,13 @@ namespace PL
                 else // User chooses to enter as volunteer
                 {
                     new VolunteerUserWindow(userDetails.Item2).Show();
-
                 }
-                //new MainWindow(326615127).Show();
             }
             catch (BO.BlDoesNotExistException ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-                    catch (BO.BlUnauthorizedAccessException ex)
+            catch (BO.BlUnauthorizedAccessException ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
@@ -152,6 +163,13 @@ namespace PL
                     return result;
             }
             return null;
+        }
+        private void LoginWindow_Closed(object? sender, EventArgs e)
+        {
+            foreach (Window window in Application.Current.Windows)
+            {
+                window.Close();
+            }
         }
     }
 }

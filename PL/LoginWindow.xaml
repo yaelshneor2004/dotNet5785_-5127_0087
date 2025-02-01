@@ -7,15 +7,10 @@
         mc:Ignorable="d"
         Title="LoginWindow" Height="450" Width="800"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
-        >
+            Closed="LoginWindow_Closed"
+        WindowState="Maximized">
     <Border Style="{StaticResource RoundedWindowBorder}">
         <Grid>
-            <!--<Window.Background>
-        -->
-            <!--<ImageBrush ImageSource="https://i.ibb.co/5WLH69P/yourimage.jpg" />-->
-            <!--
-    </Window.Background>-->
-
             <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
                 <Border BorderBrush="Black" BorderThickness="2" Padding="10" CornerRadius="10" Margin="0,0,0,-16">
                     <StackPanel>

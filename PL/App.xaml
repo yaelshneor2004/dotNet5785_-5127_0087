@@ -42,6 +42,8 @@
         <local:ConvertDeleteAssignmentToVisibility x:Key="ConvertDeleteAssignmentToVisibilityKey"/>
         <local:ConvertVisibilityDeleteVol x:Key="ConvertVisibilityDeleteVolKey"/>
         <local:ConvertLabelDescriptionToVisibility x:Key="ConvertLabelDescriptionToVisibilityKey"/>
+        <local:ConvertObjIdTovisNotVis x:Key="ConvertObjIdTovisNotVisKey"/>
+
         <!-- Triggers -->
         <Style TargetType="DataGridRow">
             <Setter Property="Background" Value="#E6E6FA"/>
