@@ -348,5 +348,10 @@ namespace PL
         {
             new CallListWindow(idManager, selectedValue.value).Show();
         }
+
+        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }
