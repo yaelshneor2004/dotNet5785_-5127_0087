@@ -12,19 +12,7 @@ namespace PL
     /// </summary>
     public partial class LoginWindow : Window
     {
-        private static PasswordBox? FindPasswordBox(DependencyObject parent)
-        {
-            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
-            {
-                var child = VisualTreeHelper.GetChild(parent, i);
-                if (child is PasswordBox passwordBox)
-                    return passwordBox;
-                var result = FindPasswordBox(child);
-                if (result != null)
-                    return result;
-            }
-            return null;
-        }
+       
         private static bool isManagerLoggedIn = false;
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
 
@@ -147,6 +135,19 @@ namespace PL
                 if (child is TextBox textBox && textBox.Visibility == Visibility.Collapsed)
                     return textBox;
                 var result = FindPasswordTextBox(child);
+                if (result != null)
+                    return result;
+            }
+            return null;
+        }
+        private static PasswordBox? FindPasswordBox(DependencyObject parent)
+        {
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+            {
+                var child = VisualTreeHelper.GetChild(parent, i);
+                if (child is PasswordBox passwordBox)
+                    return passwordBox;
+                var result = FindPasswordBox(child);
                 if (result != null)
                     return result;
             }
