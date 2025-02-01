@@ -6,185 +6,219 @@
         xmlns:local="clr-namespace:PL.Volunteer"
         mc:Ignorable="d"
         Title="VolunteerUserWindow" Height="1461" Width="800"
-               xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf" 
+        xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf" 
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
-        Language="he-IL" Loaded="VolunteerUserWindow_Loaded" Closed="VolunteerUserWindow_Closed">
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <StackPanel>
-            <GroupBox Header="VOLUNTEER DETAILS" Style="{StaticResource {x:Type GroupBox}}" Foreground="Blue" Margin="10">
-                <StackPanel>
-                    <Label Content="ID:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
-                    <TextBox Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}" IsReadOnly="{Binding CurrentVolunteer.Id, Converter={StaticResource ConvertObjIdToTFKey}}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black">
-                        <TextBox.Text>
-                            <Binding Path="CurrentVolunteer.Id" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
-                                <Binding.ValidationRules>
-                                    <StaticResource ResourceKey="idNumValidationKey"/>
-                                </Binding.ValidationRules>
-                            </Binding>
-                        </TextBox.Text>
-                    </TextBox>
+        Language="he-IL" Loaded="VolunteerUserWindow_Loaded" Closed="VolunteerUserWindow_Closed"
+       WindowState="Maximized">
+    <!--<Viewbox Stretch="Uniform">-->
+    <Grid>
+        <Viewbox Stretch="Uniform">
+            <Grid>
+                <!-- Define the rows for the layout -->
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
 
-                    <Label Content="Full Name:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
-                    <TextBox Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}"  Style="{StaticResource {x:Type TextBox}}" Foreground="Black">
-                        <TextBox.Text>
-                            <Binding Path="CurrentVolunteer.FullName" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
-                                <Binding.ValidationRules>
-                                    <StaticResource ResourceKey="nameValidationKey"/>
-                                </Binding.ValidationRules>
-                            </Binding>
-                        </TextBox.Text>
-                    </TextBox>
+                <!-- Define the columns for the layout -->
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
 
-                    <Label Content="Phone:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
-                    <TextBox Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black">
-                        <TextBox.Text>
-                            <Binding Path="CurrentVolunteer.Phone" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
-                                <Binding.ValidationRules>
-                                    <StaticResource ResourceKey="phoneValidationKey"/>
-                                </Binding.ValidationRules>
-                            </Binding>
-                        </TextBox.Text>
-                    </TextBox>
+                <!-- GroupBox for volunteer details on the left -->
+                <GroupBox Margin="20,0,0,0" HorizontalAlignment="Left" Grid.Row="0" Grid.Column="0" BorderThickness="2" BorderBrush="Blue" VerticalAlignment="Top" Height="Auto">
+                    <GroupBox.Header>
+                        <TextBlock Text="Volunteer Details" Foreground="Blue" FontSize="16"/>
+                    </GroupBox.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel Orientation="Vertical" Margin="20,10,0,0" VerticalAlignment="Top">
+                            <Label Content="ID:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
+                            <TextBox Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}" IsReadOnly="{Binding CurrentVolunteer.Id, Converter={StaticResource ConvertObjIdToTFKey}}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black">
+                                <TextBox.Text>
+                                    <Binding Path="CurrentVolunteer.Id" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <StaticResource ResourceKey="idNumValidationKey"/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
 
-                    <Label Content="Email:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
-                    <TextBox Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black">
-                        <TextBox.Text>
-                            <Binding Path="CurrentVolunteer.Email" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
-                                <Binding.ValidationRules>
-                                    <StaticResource ResourceKey="emailValidationKey"/>
-                                </Binding.ValidationRules>
-                            </Binding>
-                        </TextBox.Text>
-                    </TextBox>
+                            <Label Content="Full Name:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
+                            <TextBox Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}"  Style="{StaticResource {x:Type TextBox}}" Foreground="Black">
+                                <TextBox.Text>
+                                    <Binding Path="CurrentVolunteer.FullName" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <StaticResource ResourceKey="nameValidationKey"/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
 
-                    <Label Content="Password:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
-                    <TextBox Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black">
-                        <TextBox.Text>
-                            <Binding Path="CurrentVolunteer.Password" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
-                                <Binding.ValidationRules>
-                                    <StaticResource ResourceKey="passwordValidationKey"/>
-                                </Binding.ValidationRules>
-                            </Binding>
-                        </TextBox.Text>
-                    </TextBox>
+                            <Label Content="Phone:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
+                            <TextBox Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black">
+                                <TextBox.Text>
+                                    <Binding Path="CurrentVolunteer.Phone" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <StaticResource ResourceKey="phoneValidationKey"/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
 
-                    <Label Content="Address:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
-                    <TextBox Text="{Binding CurrentVolunteer.Address}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>
+                            <Label Content="Email:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
+                            <TextBox Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black">
+                                <TextBox.Text>
+                                    <Binding Path="CurrentVolunteer.Email" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <StaticResource ResourceKey="emailValidationKey"/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
 
-                    <Label Content="Role:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
-                    <ComboBox ItemsSource="{Binding Source={StaticResource SortCollectionRolesKey}}"
-                  SelectedItem="{Binding Role}"
-                  SelectedValue="{Binding CurrentVolunteer.Role, Mode=TwoWay}"
-                  Style="{StaticResource {x:Type ComboBox}}"
-                  Foreground="Black"
-                  IsEnabled="False"/>
+                            <Label Content="Password:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
+                            <TextBox Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black">
+                                <TextBox.Text>
+                                    <Binding Path="CurrentVolunteer.Password" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <StaticResource ResourceKey="passwordValidationKey"/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
 
-                    <Label Content="Is Active:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Margin="0, 20, 0, 5"/>
-                    <CheckBox IsChecked="{Binding CurrentVolunteer.IsActive, Mode=TwoWay}" Style="{StaticResource {x:Type CheckBox}}" HorizontalAlignment="Right" RenderTransformOrigin="-46.115,0.307"/>
+                            <Label Content="Address:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
+                            <TextBox Text="{Binding CurrentVolunteer.Address}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>
 
-                    <Label Content="Max Distance:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
-                    <TextBox Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black">
-                        <TextBox.Text>
-                            <Binding Path="CurrentVolunteer.MaxDistance" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
-                                <Binding.ValidationRules>
-                                    <StaticResource ResourceKey="maxDistanceValidationKey"/>
-                                </Binding.ValidationRules>
-                            </Binding>
-                        </TextBox.Text>
-                    </TextBox>
+                            <Label Content="Role:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
+                            <ComboBox ItemsSource="{Binding Source={StaticResource SortCollectionRolesKey}}"
+                                  SelectedItem="{Binding Role}"
+                                  SelectedValue="{Binding CurrentVolunteer.Role, Mode=TwoWay}"
+                                  Style="{StaticResource {x:Type ComboBox}}"
+                                  Foreground="Black"
+                                  Background="White"
+                                  IsEnabled="False"/>
 
-                    <Label Content="Type Distance:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
-                    <ComboBox ItemsSource="{Binding Source={StaticResource SortCollectionDistancesKey}}" 
-                  SelectedItem="{Binding TypeDistance}" 
-                  SelectedValue="{Binding CurrentVolunteer.TypeDistance, Mode=TwoWay}" 
-                  Style="{StaticResource {x:Type ComboBox}}" 
-                  Foreground="Black"/>
+                            <Label Content="Is Active:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Margin="0, 20, 0, 5"/>
+                            <CheckBox IsChecked="{Binding CurrentVolunteer.IsActive, Mode=TwoWay}" Style="{StaticResource {x:Type CheckBox}}" RenderTransformOrigin="-46.115,0.307"/>
 
-                    <Label Content="Num Treated Calls" Style="{StaticResource {x:Type Label}}" Foreground="Blue" />
-                    <TextBox Text="{Binding CurrentVolunteer.TotalCallsHandled, Mode=TwoWay}" IsReadOnly="True" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>
+                            <Label Content="Max Distance:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
+                            <TextBox Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black">
+                                <TextBox.Text>
+                                    <Binding Path="CurrentVolunteer.MaxDistance" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <StaticResource ResourceKey="maxDistanceValidationKey"/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
 
-                    <Label Content="Num Cancel Calls" Style="{StaticResource {x:Type Label}}" Foreground="Blue" />
-                    <TextBox Text="{Binding CurrentVolunteer.TotalCallsCancelled, Mode=TwoWay}" IsReadOnly="True" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>
+                            <Label Content="Type Distance:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
+                            <ComboBox ItemsSource="{Binding Source={StaticResource SortCollectionDistancesKey}}" 
+                                  SelectedItem="{Binding TypeDistance}" 
+                                  SelectedValue="{Binding CurrentVolunteer.TypeDistance, Mode=TwoWay}" 
+                                  Style="{StaticResource {x:Type ComboBox}}" 
+                                  Foreground="Black"
+                                  Background="White"/>
 
-                    <Label Content="Num Expired Calls" Style="{StaticResource {x:Type Label}}" Foreground="Blue" />
-                    <TextBox Text="{Binding CurrentVolunteer.TotalCallsExpired, Mode=TwoWay}" IsReadOnly="True" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>
+                            <Label Content="Num Treated Calls" Style="{StaticResource {x:Type Label}}" Foreground="Blue" />
+                            <TextBox Text="{Binding CurrentVolunteer.TotalCallsHandled, Mode=TwoWay}" IsReadOnly="True" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>
 
-                    <Button Content="Update" Width="130" Click="btnUpdate_Click" HorizontalAlignment="Center" Margin="10,10,10,10" Height="46"/>
-                </StackPanel>
-            </GroupBox>
+                            <Label Content="Num Cancel Calls" Style="{StaticResource {x:Type Label}}" Foreground="Blue" />
+                            <TextBox Text="{Binding CurrentVolunteer.TotalCallsCancelled, Mode=TwoWay}" IsReadOnly="True" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>
 
+                            <Label Content="Num Expired Calls" Style="{StaticResource {x:Type Label}}" Foreground="Blue" />
+                            <TextBox Text="{Binding CurrentVolunteer.TotalCallsExpired, Mode=TwoWay}" IsReadOnly="True" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>
 
-            <!-- New Fields Panel call -->
-            <StackPanel Margin="0,0,0,20" Height="442">
-                <Label Content="ID:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/>
-                <TextBox Text="{Binding CurrentCall.Id, Mode=TwoWay}" IsReadOnly="True" Style="{StaticResource {x:Type TextBox}}" Foreground="Black" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10,10,10,10">
+                                <Button Content="Update" Width="130" Click="btnUpdate_Click" Height="46"/>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10,10,10,10">
+                                    <Button Content="Call History" Width="130" Click="btnCallHistory_Click" Height="47"/>
+                                    <Button Content="Select call to treat" Width="130" Click="btnSelectCall_Click" Margin="10" Height="47">
+                                        <Button.Style>
+                                            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}" Value="Collapsed">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}" Value="Visible">
+                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+                <!-- GroupBox for assignment details on the right -->
+                <GroupBox Margin="20,0,0,0" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="1" BorderThickness="2" BorderBrush="Blue" VerticalAlignment="Top" Height="Auto" Visibility="{Binding CurrentVolunteer.CurrentCall, Converter={StaticResource ConvertObjIdTovisNotVisKey}}">
+                    <GroupBox.Header>
+                        <TextBlock Text="Call details" Foreground="Blue" FontSize="16"/>
+                    </GroupBox.Header>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Grid.Row="0">
+                            <StackPanel Orientation="Vertical" VerticalAlignment="Top">
+                                <Label Content="ID:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/>
+                                <TextBox Text="{Binding CurrentCall.Id, Mode=TwoWay}" IsReadOnly="True" Style="{StaticResource {x:Type TextBox}}" Foreground="Black" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/>
 
-                <Label Content="Type:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/>
-                <ComboBox ItemsSource="{Binding Source={StaticResource SortCollectionMyCallTypeKey}}" SelectedItem="{Binding CurrentCall.Type}" SelectedValue="{Binding CurrentCall.Type, Mode=TwoWay}" Style="{StaticResource {x:Type ComboBox}}" Foreground="Black" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}" IsEnabled="False"/>
+                                <Label Content="Type:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/>
+                                <ComboBox ItemsSource="{Binding Source={StaticResource SortCollectionMyCallTypeKey}}" SelectedItem="{Binding CurrentCall.Type}" SelectedValue="{Binding CurrentCall.Type, Mode=TwoWay}" Style="{StaticResource {x:Type ComboBox}}" Foreground="Black" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}" IsEnabled="False"/>
 
-                <Label Content="Description:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/>
-                <TextBox Text="{Binding CurrentCall.Description}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}" IsReadOnly="True"/>
+                                <Label Content="Description:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/>
+                                <TextBox Text="{Binding CurrentCall.Description}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}" IsReadOnly="True"/>
 
-                <Label Content="Address:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/>
-                <TextBox Text="{Binding CurrentCall.Address}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}" IsReadOnly="True"/>
+                                <Label Content="Address:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/>
+                                <TextBox Text="{Binding CurrentCall.Address}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}" IsReadOnly="True"/>
 
-                <Label Content="Start Time:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/>
-                <TextBox Text="{Binding CurrentCall.StartTime}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}" IsReadOnly="True"/>
+                                <Label Content="Start Time:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/>
+                                <TextBox Text="{Binding CurrentCall.StartTime}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}" IsReadOnly="True"/>
 
-                <Label Content="Max End Time:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/>
-                <TextBox Text="{Binding CurrentCall.MaxEndTime}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}" IsReadOnly="True"/>
+                                <Label Content="Max End Time:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/>
+                                <TextBox Text="{Binding CurrentCall.MaxEndTime}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}" IsReadOnly="True"/>
 
-                <Label Content="Status:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/>
-                <StackPanel Margin="0,20,0,10">
-                    <DataGrid ItemsSource="{Binding CurrentCall.Assignments}" AutoGenerateColumns="False" CanUserAddRows="False" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}" IsReadOnly="True">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Volunteer ID" Binding="{Binding VolunteerId}" IsReadOnly="True"/>
-                            <DataGridTextColumn Header="Volunteer Name" Binding="{Binding VolunteerName}"/>
-                            <DataGridTextColumn Header="Start Treatment Time" Binding="{Binding StartTreatmentTime}"/>
-                            <DataGridTextColumn Header="End Treatment Time" Binding="{Binding EndTreatmentTime}"/>
-                            <DataGridComboBoxColumn Header="End Type" SelectedItemBinding="{Binding EndType}" 
-                                     ItemsSource="{Binding Source={StaticResource SortCollectionMyFinishTypeKey}}"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10,10,10,10">
-                    <Button Content="Cancel Call" Width="130" Click="btnCancelCall_Click" Margin="10" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}" Height="47"/>
-                    <Button Content="Finish Call" Width="130" Click="btnFinishCall_Click" Margin="10" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}" Height="47"/>
-                </StackPanel>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10,10,10,10">
-                <Button Content="Call History" Width="130" Click="btnCallHistory_Click" Height="47"/>
-                <Button Content="Select call to treat" Width="130" Click="btnSelectCall_Click" Margin="10" Height="47">
-                    <Button.Style>
-                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
-                            <Setter Property="Visibility" Value="Collapsed"/>
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}" Value="Collapsed">
-                                    <Setter Property="Visibility" Value="Visible"/>
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}" Value="Visible">
-                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>
-                </Button>
-            </StackPanel>
-
-            <!-- Map WebView2 -->
-            <Grid Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" MinWidth="200" MinHeight="200" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="8" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}">
-                <wv2:WebView2 Name="MapWebView" 
-                              Source="{Binding MapSource}" Margin="10,-72,10,-123" RenderTransformOrigin="0.5,0.5">
-                    <wv2:WebView2.RenderTransform>
-                        <TransformGroup>
-                            <ScaleTransform ScaleY="1"/>
-                            <SkewTransform/>
-                            <RotateTransform/>
-                            <TranslateTransform/>
-                        </TransformGroup>
-                    </wv2:WebView2.RenderTransform>
-                </wv2:WebView2>
+                                <Label Content="Status:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}"/>
+                                <StackPanel Margin="0,20,0,10">
+                                    <DataGrid ItemsSource="{Binding CurrentCall.Assignments}" AutoGenerateColumns="False" CanUserAddRows="False" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}" IsReadOnly="True">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="Volunteer ID" Binding="{Binding VolunteerId}" IsReadOnly="True"/>
+                                            <DataGridTextColumn Header="Volunteer Name" Binding="{Binding VolunteerName}"/>
+                                            <DataGridTextColumn Header="Start Treatment Time" Binding="{Binding StartTreatmentTime}"/>
+                                            <DataGridTextColumn Header="End Treatment Time" Binding="{Binding EndTreatmentTime}"/>
+                                            <DataGridComboBoxColumn Header="End Type" SelectedItemBinding="{Binding EndType}" 
+                                                         ItemsSource="{Binding Source={StaticResource SortCollectionMyFinishTypeKey}}"/>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10,10,10,10">
+                                    <Button Content="Cancel Call" Width="130" Click="btnCancelCall_Click" Margin="10" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}" Height="47"/>
+                                    <Button Content="Finish Call" Width="130" Click="btnFinishCall_Click" Margin="10" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}" Height="47"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                        <wv2:WebView2 x:Name="MapWebView" 
+               Source="{Binding MapSource}" Width="470" Height="225" Grid.Row="1" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}">
+                            <wv2:WebView2.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform ScaleY="1"/>
+                                    <SkewTransform/>
+                                    <RotateTransform/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </wv2:WebView2.RenderTransform>
+                        </wv2:WebView2>
+                    </Grid>
+                </GroupBox>
             </Grid>
-        </StackPanel>
-    </ScrollViewer>
+        </Viewbox>
+    </Grid>
+    <!--</Viewbox>-->
 </Window>
