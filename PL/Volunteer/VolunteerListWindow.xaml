@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="VolunteerListWindow" Height="640" Width="800"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
-        Language="he-IL" Loaded="Window_Loaded" Closed="Window_Closed">
+        Language="he-IL" Loaded="Window_Loaded" Closed="Window_Closed" WindowState="Maximized">
     <!--External Grid-->
     <Grid>
         <Grid.RowDefinitions>
@@ -23,9 +23,8 @@
             </Grid.ColumnDefinitions>
         </Grid>
         <Label Content="Label" Grid.Column="0" HorizontalAlignment="Left" Margin="90,10,0,0" VerticalAlignment="Top"/>
-        <ComboBox SelectedValue="{Binding SortInVolunteerInList, Mode=TwoWay}" ItemsSource="{Binding Source={StaticResource SortCollectionMyCallTypeKey}}"
-                  Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SelectionChanged="cmbVolunteerInList_SelectionChanged"/>
-        <DataGrid Grid.Row="1" Margin="5" ItemsSource="{Binding Path=VolunteerInList}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedVolunteer}" MouseDoubleClick="UpdateVolunteerList_MouseDoubleClick" SelectionUnit="FullRow"
+        <ComboBox SelectedValue="{Binding SortInVolunteerInList, Mode=TwoWay}" ItemsSource="{Binding Source={StaticResource SortCollectionMyCallTypeKey}}" SelectionChanged="cmbVolunteerInList_SelectionChanged" Margin="5,0,6,540" Grid.RowSpan="2"/>
+        <DataGrid Background="White" Grid.Row="1" Margin="5" ItemsSource="{Binding Path=VolunteerInList}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedVolunteer}" MouseDoubleClick="UpdateVolunteerList_MouseDoubleClick" SelectionUnit="FullRow"
                   IsReadOnly="True" RowDetailsVisibilityMode="VisibleWhenSelected" EnableRowVirtualization="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Id}" Header="Id" Width="Auto"/>
@@ -51,6 +50,6 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <Button Content="Add" Grid.Row="2" HorizontalAlignment="Center" Height="50" Width="231" Click="AddVolunteerList_Click" Margin="0,5,0,5"/>
+        <Button Content="Add" Grid.Row="2" HorizontalAlignment="Center" Height="50" Width="232" Click="AddVolunteerList_Click" Margin="0,5,0,5"/>
     </Grid>
 </Window>

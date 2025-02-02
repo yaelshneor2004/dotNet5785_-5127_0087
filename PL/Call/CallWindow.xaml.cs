@@ -62,7 +62,7 @@ namespace PL.Call
         }
 
         public static readonly DependencyProperty ButtonTextProperty =
-            DependencyProperty.Register("ButtonText", typeof(string), typeof(VolunteerWindow), new PropertyMetadata(string.Empty));
+            DependencyProperty.Register("ButtonText", typeof(string), typeof(CallWindow), new PropertyMetadata(string.Empty));
 
         /// <summary>
         /// Constructor for CallWindow. Initializes components and loads call details if ID is provided.

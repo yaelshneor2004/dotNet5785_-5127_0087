@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.Call"
         mc:Ignorable="d"
-        Title="CallWindow" Height="600" Width="450"
-        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
+        Title="CallWindow" Height="700" Width="500"
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}" WindowStartupLocation="Manual"
+        Left="0" Top="0"
         Language="he-IL" Loaded="CallWindow_Loaded" Closed="CallWindow_Closed">
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
