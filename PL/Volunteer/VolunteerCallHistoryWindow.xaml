@@ -10,7 +10,11 @@
         Language="he-IL" Loaded="CallListWindow_Loaded" Closed="CallListWindow_Closed"
                 WindowStartupLocation="CenterScreen">
     <Grid>
-        <!-- Internal, Upper Grid for Filters and Sorting -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
             <!-- ComboBox for filtering calls by type -->
             <ComboBox SelectedValue="{Binding FilterByType, Mode=TwoWay}" 
@@ -24,8 +28,9 @@
             <!-- ComboBox for filtering calls by type -->
         </StackPanel>
 
+
         <!-- DataGrid for displaying calls -->
-        <DataGrid Background="White"
+        <DataGrid Grid.Row="1" Background="White"
                   AutoGenerateColumns="False"
                   ItemsSource="{Binding CloseCallList, Mode=TwoWay}" 
                   IsReadOnly="True" Margin="0,8,0,-8">
@@ -39,5 +44,6 @@
                 <DataGridTextColumn Header="End Type" Binding="{Binding EndType}"/>
             </DataGrid.Columns>
         </DataGrid>
+
     </Grid>
 </Window>

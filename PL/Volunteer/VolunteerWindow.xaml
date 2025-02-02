@@ -5,13 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.Volunteer"
         mc:Ignorable="d"
-        Title="VolunteerWindow" Height="600" Width="450"
+        Title="VolunteerWindow" Height="900" Width="500" WindowStartupLocation="Manual"
+        Left="0" Top="0"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Language="he-IL" Loaded="VolunteerWindow_Loaded" Closed="VolunteerWindow_Closed">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
-     
+
         <StackPanel>
-           
+
             <Label Content="ID:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
             <TextBox  Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}" IsReadOnly="{Binding CurrentVolunteer.Id, Converter={StaticResource ConvertObjIdToTFKey}}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black" >
                 <TextBox.Text >
@@ -22,8 +23,8 @@
                     </Binding>
                 </TextBox.Text >
             </TextBox>
-             
-            
+
+
 
             <Label Content="Full Name:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
             <TextBox  Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black">
@@ -58,15 +59,15 @@
             </TextBox>
             <Label Content="Password:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
             <TextBox Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black">
-                    <TextBox.Text >
-                        <Binding Path="CurrentVolunteer.Password" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
-                            <Binding.ValidationRules>
-                                <StaticResource ResourceKey="passwordValidationKey"/>
-                            </Binding.ValidationRules>
-                        </Binding>
-                    </TextBox.Text >
-                </TextBox>
-                <Label Content="Address:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
+                <TextBox.Text >
+                    <Binding Path="CurrentVolunteer.Password" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <StaticResource ResourceKey="passwordValidationKey"/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text >
+            </TextBox>
+            <Label Content="Address:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
             <TextBox Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}"  Style="{StaticResource {x:Type TextBox}}" Foreground="Black">
                 <TextBox.Text >
                     <Binding Path="CurrentVolunteer.Address" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
@@ -85,7 +86,7 @@
             />
 
             <Label Content="Is Active:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
-            <CheckBox IsChecked="{Binding CurrentVolunteer.IsActive, Mode=TwoWay}" Style="{StaticResource {x:Type CheckBox}}" IsEnabled="{Binding CurrentVolunteer, Converter={StaticResource ConvertVolunteerToReadOnlyKey}}"/>
+            <CheckBox IsChecked="{Binding CurrentVolunteer.IsActive, Mode=TwoWay}" Style="{StaticResource {x:Type CheckBox}}" IsEnabled="{Binding CurrentVolunteer, Converter={StaticResource ConvertVolunteerToReadOnlyKey}}" Width="409"/>
 
             <Label Content="Max Distance:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
             <TextBox Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}"  Style="{StaticResource {x:Type TextBox}}" Foreground="Black">

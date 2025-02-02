@@ -22,9 +22,9 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <ComboBox SelectedValue="{Binding SortInCallInList, Mode=TwoWay}"
-              ItemsSource="{Binding Source={StaticResource SortCollectionCallStatusKey}}" SelectionChanged="cmbSelectChanges_SelectionChanged" Height="33" Margin="33,8,31,0" Grid.ColumnSpan="2" RenderTransformOrigin="0.5,0.5" VerticalAlignment="Top"/>
+              ItemsSource="{Binding Source={StaticResource SortCollectionCallStatusKey}}" SelectionChanged="cmbSelectChanges_SelectionChanged" Margin="-3,7,6,-12" Grid.ColumnSpan="2" RenderTransformOrigin="0.5,0.5"/>
         </Grid>
-        <DataGrid Margin="5,9,5,10" Grid.Row="1" ItemsSource="{Binding CallList}" AutoGenerateColumns="False" IsReadOnly="True" EnableRowVirtualization="True" RowDetailsVisibilityMode="VisibleWhenSelected" MouseDoubleClick="UpdateCallList_MouseDoubleClick" SelectedItem="{Binding SelectedCall}">
+        <DataGrid Background="White" Margin="1,0,5,12" Grid.Row="1" ItemsSource="{Binding CallList}" AutoGenerateColumns="False" IsReadOnly="True" EnableRowVirtualization="True" RowDetailsVisibilityMode="VisibleWhenSelected" MouseDoubleClick="UpdateCallList_MouseDoubleClick" SelectedItem="{Binding SelectedCall}" Height="514" VerticalAlignment="Bottom">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Id}" Header="Assignment Id" Width="Auto"/>
                 <DataGridTextColumn Binding="{Binding CallId}" Header="Call Id" Width="Auto"/>
@@ -43,13 +43,13 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-            <DataGridTemplateColumn Header="Cancal Assignment" Width="Auto">
-                <DataGridTemplateColumn.CellTemplate>
-                    <DataTemplate>
-                        <Button Content="Cancal Assignment" Click="CancalAssignment_Click" Visibility="{Binding  Status,Converter={StaticResource ConvertCancalAssignmentToVisibilityKey}}" />
-                    </DataTemplate>
-                </DataGridTemplateColumn.CellTemplate>
-            </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Cancal Assignment" Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Cancal Assignment" Click="CancalAssignment_Click" Visibility="{Binding  Status,Converter={StaticResource ConvertCancalAssignmentToVisibilityKey}}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
         <Button Content="Add" Grid.Row="2" HorizontalAlignment="Center" Height="50" Width="257" Click="Button_Click" Margin="0,5,0,5"/>

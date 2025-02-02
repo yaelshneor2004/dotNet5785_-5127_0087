@@ -29,7 +29,11 @@
 		</Content>
 	</ItemGroup>
 	<ItemGroup>
+    <None Remove="Resources\Business Video Presentation in Elegant Style in Black Brown and Khaki %282%29.jpg" />
+    <None Remove="Resources\Business Video Presentation in Elegant Style in Black Brown and Khaki.jpg" />
     <None Remove="Resources\closeEye.jpg" />
+    <None Remove="Resources\LOGIN.jpg" />
+    <None Remove="Resources\loginwindoww.jpg" />
     <None Remove="Resources\mapp.html" />
     <None Remove="Resources\openEye.jpg" />
   </ItemGroup>
@@ -45,6 +49,9 @@
 
   <ItemGroup>
     <Resource Include="Resources\closeEye.jpg" />
+    <Resource Include="Resources\loginwindoww.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\openEye.jpg" />
   </ItemGroup>
 

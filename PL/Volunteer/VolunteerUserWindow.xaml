@@ -101,7 +101,7 @@
                                   IsEnabled="False"/>
 
                             <Label Content="Is Active:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Margin="0, 20, 0, 5"/>
-                            <CheckBox IsChecked="{Binding CurrentVolunteer.IsActive, Mode=TwoWay}" Style="{StaticResource {x:Type CheckBox}}" RenderTransformOrigin="-46.115,0.307"/>
+                            <CheckBox IsChecked="{Binding CurrentVolunteer.IsActive, Mode=TwoWay}" Style="{StaticResource {x:Type CheckBox}}"  Width="307"/>
 
                             <Label Content="Max Distance:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
                             <TextBox Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black">
