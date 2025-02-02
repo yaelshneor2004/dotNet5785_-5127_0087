@@ -71,21 +71,26 @@ namespace PL.Call
 
         private int id;
 
-        /// <summary>
-        /// Constructor for SelectCallToTreatWindow. Initializes components and loads volunteer details if ID is provided.
-        /// </summary>
-        /// <param name="idV">ID of the volunteer.</param>
+        /// <summary>  
+        /// Constructor for SelectCallToTreatWindow. Initializes components and loads volunteer details if ID is provided.  
+        /// </summary>  
+        /// <param name="idV">ID of the volunteer.</param>  
         public SelectCallToTreatWindow(int idV)
         {
             try
             {
                 id = idV;
                 InitializeComponent();
-                CurrentVolunteer = (id != 0) ? s_bl.Volunteer.GetVolunteerDetails(id)! : new BO.Volunteer();
+                CurrentVolunteer = (id != 0) ? s_bl.Volunteer.GetVolunteerDetails(id)! : new BO.Volunteer
+                {
+                    FullName = string.Empty,
+                    Phone = string.Empty,
+                    Email = string.Empty
+                };
                 queryCallList(id);
                 MapSource = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "mapp.html");
                 if (SelectedOpenCall != null)
-                    Description = SelectedOpenCall.Description;
+                    Description = SelectedOpenCall.Description ?? string.Empty;
             }
             catch (BO.BlDoesNotExistException ex)
             {
@@ -109,7 +114,12 @@ namespace PL.Call
             };
 
             s_bl.Call.AddObserver(callListObserver);
-            CurrentVolunteer = (id != 0) ? s_bl.Volunteer.GetVolunteerDetails(id)! : new BO.Volunteer();
+            CurrentVolunteer = (id != 0) ? s_bl.Volunteer.GetVolunteerDetails(id)! : new BO.Volunteer
+            {
+                FullName = string.Empty,
+                Phone = string.Empty,
+                Email = string.Empty
+            };
         }
 
         /// <summary>

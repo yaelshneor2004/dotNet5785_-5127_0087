@@ -14,7 +14,7 @@
     /// <param name="TotalAssignments">Total number of assignments for the call</param>
     public class CallInList
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public int CallId { get; set; }
         public MyCallType Type { get; set; }
         public DateTime StartTime { get; set; }

@@ -34,6 +34,7 @@
     <None Remove="Resources\closeEye.jpg" />
     <None Remove="Resources\LOGIN.jpg" />
     <None Remove="Resources\loginwindoww.jpg" />
+    <None Remove="Resources\loginwindowwNew.jpg" />
     <None Remove="Resources\mapp.html" />
     <None Remove="Resources\openEye.jpg" />
   </ItemGroup>

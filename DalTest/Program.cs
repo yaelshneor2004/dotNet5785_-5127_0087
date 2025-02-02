@@ -1,14 +1,15 @@
 ﻿using Dal;
 using DalApi;
 using DO;
+using System.Diagnostics;
 
 namespace DalTest;
 
 internal class Program
 {
     static readonly IDal s_dal = Factory.Get;
-    // static readonly IDal s_dal = new Dal.DalXml();
-
+    //static readonly IDal s_dal = new Dal.DalXml();
+    //static readonly IDal s_dal = new DalList();
     public static void Main(string[] args)
     {
         try

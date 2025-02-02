@@ -4,9 +4,6 @@ namespace Dal;
 //The ConfigImplementation class manages configuration settings, including getting and setting the clock and risk range, and resetting the configuration. 🌟
 internal class ConfigImplementation : IConfig
 {
-
-
-
     public DateTime Clock
     {
         get => Config.Clock;

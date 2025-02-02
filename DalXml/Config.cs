@@ -1,7 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
-
 namespace Dal;
-
 internal class Config
 {
     internal const string s_data_config_xml = "data-config.xml";

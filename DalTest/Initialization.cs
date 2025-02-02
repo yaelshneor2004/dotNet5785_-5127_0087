@@ -1,6 +1,4 @@
-﻿
-
-namespace DalTest;
+﻿namespace DalTest;
 using DalApi;
 using DO;
 using Microsoft.VisualBasic;
@@ -12,8 +10,6 @@ public static class Initialization
 {
     private static IDal? s_dal; 
     private static readonly Random s_rand = new(); // Random number generator
-    private const int MIN_ID = 200000000;
-    private const int MAX_ID = 400000000;
     private static readonly byte[] Key = Encoding.UTF8.GetBytes("0123456789ABCDEF"); // 16-byte key
     private static readonly byte[] IV = Encoding.UTF8.GetBytes("ABCDEF9876543210");  // 16-byte initialization vector
 
@@ -48,10 +44,14 @@ public static class Initialization
         32.06366, 32.06180, 32.08404, 31.74851, 31.76832, 31.78571, 32.79916, 32.79406, 32.81912, 31.25297, 31.24642,
         31.25360, 32.09077, 32.08862, 32.08333
         };
-
+        int[] validIds = new int[] {
+    967530684, 469333751, 128044765, 484501226, 975856709, 747695906,
+ 975363193, 674550785, 824564579, 680710332, 301150447, 190313205,
+ 781021860, 700156714, 721016087, 142161512, 698811734, 627262876,
+ 603051947, 421137647
+ };
         for (int i = 0; i < 15; i++)
         {
-            int id=0;
             double? latitude = Latitudes[i]; // Latitude of the call at index i
             double? longitude = Longitudes[i]; // Longitude of the call at index i
             string password = $"{new Random().Next(100000, 999999)}{(char)new Random().Next('A', 'Z' + 1)}{(char)new Random().Next('a', 'z' + 1)}"; // Generate random password with numbers and letters
@@ -63,28 +63,11 @@ public static class Initialization
             string email = $"{name.Replace(" ", "").ToLower()}@gmail.com"; // Construct email using name, removing spaces and converting to lowercase
            int typeD = s_rand.Next(0, 3);
             double? maxDistance = s_rand.NextDouble() * 90 + 10;  // Generate max distance or set to null
-            int[] validIds = new int[] {
-    967530684, 469333751, 128044765, 484501226, 975856709, 747695906,
- 975363193, 674550785, 824564579, 680710332, 301150447, 190313205,
- 781021860, 700156714, 721016087, 142161512, 698811734, 627262876,
- 603051947, 421137647
- };
-            // Iterate over volunteer names
-            foreach (var name1 in volunteerNames)
-            {
-                do
-                {
-                    // Generate a random volunteer ID
-                    id = validIds[s_rand.Next(validIds.Length)];
-
-                }
-                while (s_dal.Volunteer != null && s_dal.Volunteer.Read(id) != null);
-                // Create 15 Volunteer
-            }
-            s_dal?.Volunteer.Create(new(id, name, phone, email, MyRole.Volunteer,(DO.MyTypeDistance)typeD, password, address, latitude, longitude, maxDistance, true));
+            int idV=validIds[i];
+            s_dal?.Volunteer.Create(new(idV, name, phone, email, MyRole.Volunteer,(DO.MyTypeDistance)typeD, password, address, latitude, longitude, maxDistance, true));
         }
         string ayalaPassword = Encrypt("ayala19!");
-            string yaelPassword = Encrypt("yaelS2208!");
+          string yaelPassword = Encrypt("yaelS2208!");
             // Create 2 managers
             s_dal?.Volunteer.Create(new(327770087, "Ayala Ozeri", "0533328200", "ayala.ozeri@gmail.com", MyRole.Manager, MyTypeDistance.Aerial, ayalaPassword, "Rothschild 10, Tel Aviv, Israel", 32.0625, 34.7721, 10.0, true));
             s_dal?.Volunteer.Create(new(326615127, "Yael Shneor", "0533859299", "y7697086@gmail.com", MyRole.Manager, MyTypeDistance.Traveling, yaelPassword, "Derech Hevron 78, Jerusalem, Israel", 31.7525, 35.2121, 20.0, true));
@@ -108,7 +91,7 @@ public static class Initialization
                 volunteerId = volunteerList != null && volunteerList.Count > 0
                ? volunteerList[s_rand.Next(volunteerList.Count)].Id : 0;
             }
-            while (!volunteers.Any(v => v.Id == volunteerId));
+            while (volunteers != null && !volunteers.Any(v => v.Id == volunteerId)) ;
             DateTime startCall = call.OpenTime.AddHours(s_rand.Next(0, (int)(call.OpenTime.AddDays(21) - call.OpenTime).TotalHours) + 1);
             DateTime? finishCall;
             MyFinishType? finishType;
@@ -206,7 +189,7 @@ public static class Initialization
 
         double[] callLongitudes = new double[] { 35.22119546257982, 35.22123577032626,  35.215657362641764,  35.224665335668945, 35.221665622205705, 35.21205714918638, 35.19764122028971, 35.18968763754008, 35.21774235102746, 35.21658163568471, 35.21638617800225, 35.209312878017535, 35.2159379, 35.2092867, 35.224894, 35.202146, 35.201317, 35.215236, 35.216455, 35.218053, 35.213336, 35.212081, 35.221056, 35.219964, 35.190149, 35.222337, 35.222155, 35.217356, 35.189180, 35.216914, 35.214816, 35.226296, 35.192176, 35.218002, 35.191500, 35.160694, 35.214955, 35.183917, 35.200909, 35.218213, 35.217068, 35.214544, 35.195686, 35.215021, 35.208627, 35.221349, 35.211373, 35.211675, 35.218078, 35.224944, 35.198722, 35.214792, 35.220409, 34.7818, 34.7748, 34.8101, 34.8670, 34.7996, 34.8532, 34.7915, 34.9896, 34.9076, 34.8352, 34.8114, 34.7722, 34.6553, 34.9519, 34.8392 };
 
-        int idIndex = 1;//Not really consumed, getting booted from CallImplementation
+        int idIndex = 1;//just for sending
         for (int i = 0; i < callAddresses.Length; i++)
         {
             string address = callAddresses[i];
@@ -228,7 +211,15 @@ public static class Initialization
             }
             if (i < 5)
             {
-                maxFinishCall = s_dal.Config.Clock.AddDays(-s_rand.Next(1, 30)); // 30 days before
+                if (s_dal?.Config != null)
+                {
+                    maxFinishCall = s_dal.Config.Clock.AddDays(-s_rand.Next(1, 30));
+                }
+                else
+                {
+                    throw new InvalidOperationException("Configuration is not initialized.");
+                }
+                   maxFinishCall = s_dal.Config.Clock.AddDays(-s_rand.Next(1, 30)); // 30 days before
                 description = $"Call number: {i + 1} of type: {callType} at: {callAddresses[i]}";
             }
 
@@ -252,12 +243,9 @@ public static class Initialization
         {
             aes.Key = Key;
             aes.IV = IV;
-
             ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
-
             byte[] plainBytes = Encoding.UTF8.GetBytes(plainText);
             byte[] encryptedBytes = encryptor.TransformFinalBlock(plainBytes, 0, plainBytes.Length);
-
             return Convert.ToBase64String(encryptedBytes);
         }
     }

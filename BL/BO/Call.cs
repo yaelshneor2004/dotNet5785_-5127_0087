@@ -18,16 +18,16 @@
         public int Id { get; init; }
         public MyCallType Type { get; set; }
         public string? Description { get; set; }
-        public string? Address { get; set; }
-        public double? Latitude { get; set; }
-        public double? Longitude { get; set; }
+        public string Address { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime? MaxEndTime { get; set; }
         public MyCallStatus Status { get; set; }
         public List<BO.CallAssignInList>? Assignments { get; set; }
 
 
-                public Call(int id, MyCallType type, string? address, double? latitude, double? longitude, DateTime startTime, DateTime? maxEndTime, string? description, MyCallStatus status, List<BO.CallAssignInList>? assignments = null)
+                public Call(int id, MyCallType type, string address, double latitude, double longitude, DateTime startTime, DateTime? maxEndTime, string? description, MyCallStatus status, List<BO.CallAssignInList>? assignments = null)
                 {
                     Id = id;
                     Type = type;
@@ -43,6 +43,13 @@
 
         public Call()
         {
+            Address = string.Empty;
+            Latitude = 0.0;
+            Longitude = 0.0;
+            StartTime = DateTime.MinValue;
+            Status = MyCallStatus.None;
+            Type = MyCallType.None;
+            Assignments = new List<BO.CallAssignInList>();
         }
 
         public override string ToString()

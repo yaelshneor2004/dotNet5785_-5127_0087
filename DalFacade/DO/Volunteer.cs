@@ -30,8 +30,8 @@ double? MaxDistance = null,
 bool IsActive = false
 )
 {
-    
-/// Default constructor for stage 3
-public Volunteer():this(0,"","","",0,0) { }
+
+    /// Default constructor for XmlSerializer  
+    public Volunteer():this(0,"","","",0,0) { }
 }
 

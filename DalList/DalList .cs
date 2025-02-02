@@ -1,10 +1,11 @@
 ﻿namespace Dal;
     using DalApi;
 using DO;
-
 sealed internal class DalList : IDal
 {
+    //full lazy Singleton
     private DalList() { }
+    //thread safe and single instance
     public static IDal Instance => Nested.instance;
     private static class Nested
     {

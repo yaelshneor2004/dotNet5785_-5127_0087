@@ -1,7 +1,4 @@
-﻿
-namespace Dal;
-
-
+﻿namespace Dal;
 using DalApi;
 using DO;
 using System;
@@ -49,13 +46,6 @@ internal class AssignmentImplementation : IAssignment
         XElement? AssignmenttElem = XMLTools.LoadListFromXMLElement(Config.s_assignments_xml).Elements().FirstOrDefault(st => (int?)st.Element("Id") == id);
         return AssignmenttElem is null ? null : getAssignment(AssignmenttElem);
     }
-
-    //public Assignment? Read(int id)
-    //{
-    //    XElement? assignmentElem =
-    //XMLTools.LoadListFromXMLElement(Config.s_assignments_xml).Elements().FirstOrDefault(st => (int?)st.Element("Id") == id);
-    //    return assignmentElem is null ? null : getAssignment(assignmentElem);
-    //}
     [MethodImpl(MethodImplOptions.Synchronized)]
     public Assignment? Read(Func<Assignment, bool> filter)
     {

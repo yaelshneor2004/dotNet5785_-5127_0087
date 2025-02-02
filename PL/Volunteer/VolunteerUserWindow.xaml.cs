@@ -61,10 +61,21 @@ public partial class VolunteerUserWindow : Window
         try
         {
             InitializeComponent();
-            CurrentVolunteer = (id != 0) ? s_bl.Volunteer.GetVolunteerDetails(id)! : new BO.Volunteer();
+            if (id != 0)
+            {
+                CurrentVolunteer = s_bl.Volunteer.GetVolunteerDetails(id)!;
+            }
+            else
+            {
+                CurrentVolunteer = new BO.Volunteer
+                {
+                    FullName = string.Empty,
+                    Phone = string.Empty,
+                    Email = string.Empty
+                };
+            }
             CurrentCall = CurrentVolunteer.CurrentCall != null ? s_bl.Call.GetCallDetails(CurrentVolunteer.CurrentCall.CallId)! : new BO.Call();
             MapSource = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "mapp.html");
-
         }
         catch (BO.BlDoesNotExistException ex)
         {

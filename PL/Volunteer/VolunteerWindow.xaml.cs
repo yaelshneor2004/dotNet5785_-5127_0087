@@ -49,12 +49,24 @@ namespace PL.Volunteer
         /// <param name="id">The ID of the volunteer. If 0, a new volunteer is being added.</param>
         public VolunteerWindow(int idV = 0)
         {
-            try {
+            try
+            {
                 id = idV;
                 ButtonText = id == 0 ? "Add" : "Update";
                 InitializeComponent();
-                CurrentVolunteer = (id != 0) ? s_bl.Volunteer.GetVolunteerDetails(id)! : new BO.Volunteer();
-
+                if (id != 0)
+                {
+                    CurrentVolunteer = s_bl.Volunteer.GetVolunteerDetails(id);
+                }
+                else
+                {
+                    CurrentVolunteer = new BO.Volunteer
+                    {
+                        FullName = string.Empty,
+                        Phone = string.Empty,
+                        Email = string.Empty
+                    };
+                }
             }
             catch (BO.BlDoesNotExistException ex)
             {

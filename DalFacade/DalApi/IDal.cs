@@ -1,6 +1,4 @@
-﻿
-namespace DalApi;
-
+﻿namespace DalApi;
 public interface IDal
 {
     IAssignment Assignment { get; }

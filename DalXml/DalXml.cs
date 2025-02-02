@@ -4,9 +4,10 @@ using DalApi;
 namespace Dal;
 
 sealed internal class DalXml : IDal
-{
-        private DalXml() { }
-        public static IDal Instance => Nested.instance;
+{    //full lazy Singleton
+    private DalXml() { }
+    //thread safe and single instance   
+    public static IDal Instance => Nested.instance;
         private static class Nested
         {
             internal static readonly DalXml instance = new DalXml();

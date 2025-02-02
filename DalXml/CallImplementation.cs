@@ -8,7 +8,6 @@ using System.Runtime.CompilerServices;
 
 internal class CallImplementation : ICall
 {
-
     [MethodImpl(MethodImplOptions.Synchronized)]
     public void Update(Call item)
     {
