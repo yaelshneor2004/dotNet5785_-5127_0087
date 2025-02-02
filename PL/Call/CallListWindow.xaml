@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="CallListWindow" Height="640" Width="800"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
-        Language="he-IL" Loaded="CallListWindow_Loaded" Closed="CallListWindow_Closed" >
+        Language="he-IL" Loaded="CallListWindow_Loaded" Closed="CallListWindow_Closed" WindowState="Maximized" >
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40*"/>

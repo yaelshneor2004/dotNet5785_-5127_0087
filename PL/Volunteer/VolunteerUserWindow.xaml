@@ -27,7 +27,7 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- GroupBox for volunteer details on the left -->
-                <GroupBox Margin="20,0,0,0" HorizontalAlignment="Left" Grid.Row="0" Grid.Column="0" BorderThickness="2" BorderBrush="Blue" VerticalAlignment="Top" Height="Auto">
+                <GroupBox Margin="20,0,0,0" HorizontalAlignment="Left" Grid.Row="0" Grid.Column="0" BorderThickness="1" BorderBrush="Blue" VerticalAlignment="Top" Height="Auto">
                     <GroupBox.Header>
                         <TextBlock Text="Volunteer Details" Foreground="Blue" FontSize="16"/>
                     </GroupBox.Header>
@@ -156,7 +156,7 @@
                     </StackPanel>
                 </GroupBox>
                 <!-- GroupBox for assignment details on the right -->
-                <GroupBox Margin="20,0,0,0" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="1" BorderThickness="2" BorderBrush="Blue" VerticalAlignment="Top" Height="Auto" Visibility="{Binding CurrentVolunteer.CurrentCall, Converter={StaticResource ConvertObjIdTovisNotVisKey}}">
+                <GroupBox Margin="20,0,0,0" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="1" BorderThickness="1" BorderBrush="Blue" VerticalAlignment="Top" Height="Auto" Visibility="{Binding CurrentVolunteer.CurrentCall, Converter={StaticResource ConvertObjIdTovisNotVisKey}}">
                     <GroupBox.Header>
                         <TextBlock Text="Call details" Foreground="Blue" FontSize="16"/>
                     </GroupBox.Header>
@@ -205,7 +205,7 @@
                             </StackPanel>
                         </StackPanel>
                         <wv2:WebView2 x:Name="MapWebView" 
-               Source="{Binding MapSource}" Width="470" Height="225" Grid.Row="1" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}">
+               Source="{Binding MapSource}" Width="470" Height="200" Grid.Row="1" Visibility="{Binding CurrentCall, Converter={StaticResource ConvertCallInProgressToVisibilityKey}}">
                             <wv2:WebView2.RenderTransform>
                                 <TransformGroup>
                                     <ScaleTransform ScaleY="1"/>

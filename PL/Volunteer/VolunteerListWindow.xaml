@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="VolunteerListWindow" Height="640" Width="800"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
-        Language="he-IL" Loaded="Window_Loaded" Closed="Window_Closed">
+        Language="he-IL" Loaded="Window_Loaded" Closed="Window_Closed" WindowState="Maximized">
     <!--External Grid-->
     <Grid>
         <Grid.RowDefinitions>

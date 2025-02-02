@@ -5,30 +5,27 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.Volunteer"
         mc:Ignorable="d"
-        Title="VolunteerCallHistoryWindow" Height="450" Width="800"
+        Title="VolunteerCallHistoryWindow" Height="350" Width="800"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
-        Language="he-IL" Loaded="CallListWindow_Loaded" Closed="CallListWindow_Closed">
+        Language="he-IL" Loaded="CallListWindow_Loaded" Closed="CallListWindow_Closed"
+                WindowStartupLocation="CenterScreen">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-
         <!-- Internal, Upper Grid for Filters and Sorting -->
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Grid.Row="0" VerticalAlignment="Center" Margin="8,0,8,0">
-            <!-- ComboBox for filtering calls by type -->
-            <ComboBox SelectedValue="{Binding FilterByType, Mode=TwoWay}" 
+        <!--<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Grid.Row="0" VerticalAlignment="Center" Margin="8,0,8,0">-->
+        <!-- ComboBox for filtering calls by type -->
+        <ComboBox SelectedValue="{Binding FilterByType, Mode=TwoWay}" 
                       ItemsSource="{Binding Source={StaticResource SortCollectionMyCallTypeKey}}" 
                       SelectionChanged="cmbFiltedrChanges_SelectionChanged" 
                       Height="43" 
-                      Width="778"/>
-        </StackPanel>
+                      Width="798"
+                      HorizontalAlignment="Center" Margin="0,2,0,304"/>
+        <!--</StackPanel>-->
 
         <!-- DataGrid for displaying calls -->
-        <DataGrid Grid.Row="1"
+        <DataGrid Background="White"
                   AutoGenerateColumns="False"
                   ItemsSource="{Binding CloseCallList, Mode=TwoWay}" 
-                  IsReadOnly="True">
+                  IsReadOnly="True" Margin="-1,43,1,-43" >
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding Id}"/>
                 <DataGridTextColumn Header="Type" Binding="{Binding Type}"/>
