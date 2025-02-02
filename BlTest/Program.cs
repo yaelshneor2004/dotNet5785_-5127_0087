@@ -661,7 +661,12 @@ internal class Program
         int TreatedCalls = GetTreatedCalls(id);
         int DeletedCalls = GetDeletedCalls(id);
         int ExpiredCalls = GetExpiredCalls(id);
-        BO.Volunteer volunteer = new BO.Volunteer(id, fullName, phoneNumber, email, strongPassword, address, 0, 0, userRole, true, maxCallDistance, selectedDistanceType, TreatedCalls, DeletedCalls, ExpiredCalls, null);
+        BO.Volunteer volunteer = new BO.Volunteer(id, fullName, phoneNumber, email, strongPassword, address, 0, 0, userRole, true, maxCallDistance, selectedDistanceType, TreatedCalls, DeletedCalls, ExpiredCalls, null)
+        {
+            FullName = fullName,
+            Phone = phoneNumber,
+            Email = email
+        };
 
         return volunteer; // Returns the newly created Volunteer object
     }

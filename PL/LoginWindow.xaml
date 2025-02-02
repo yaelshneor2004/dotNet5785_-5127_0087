@@ -14,16 +14,14 @@
             <ImageBrush ImageSource="Resources/loginwindoww.jpg"/>
         </Grid.Background>
         <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
-            <Border BorderBrush="Black" BorderThickness="2" Padding="10" CornerRadius="10" Margin="66,-190,-236,-155">
-                <StackPanel>
+            <Border BorderBrush="Black" BorderThickness="2" Padding="10" CornerRadius="10" Margin="90,-174,-260,-171">
+                <StackPanel Margin="0">
                     <!-- Welcome Label with no border or background -->
-                    <Label Content="WELCOME" HorizontalAlignment="Center" FontSize="50" FontFamily="Comic Sans MS" Foreground="Black" Margin="10" FontWeight="Bold" Width="230"/>
-
+                    <Label Content="WELCOME" HorizontalAlignment="Center" FontSize="100" FontFamily="Comic Sans MS" Foreground="Black" Margin="10" FontWeight="ExtraBold" Width="100" Height="47"/>
                     <Label Content="Enter your name" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" FontSize="25" FontWeight="Bold"/>
                     <TextBox Text="{Binding userNameText, Mode=TwoWay}" HorizontalAlignment="Left" Height="30" Margin="5" TextWrapping="Wrap" Width="230" FontSize="15"/>
-
-                    <Label Content="Enter your password" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" FontSize="25" FontWeight="Bold"/>
-                    <Grid HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" Width="230" Height="30">
+                    <Label Content="Enter your password" HorizontalAlignment="Left" Margin="5" FontSize="25" FontWeight="Bold"/>
+                    <Grid HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" Width="230" Height="50">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
@@ -32,14 +30,13 @@
                             <PasswordBox Height="30" VerticalAlignment="Center" FontSize="15" Margin="0,0,0,0" Visibility="{Binding passwordVisibility,Mode=TwoWay}"/>
                             <TextBox Height="30" VerticalAlignment="Center" FontSize="15" Visibility="{Binding TextVisibility,Mode=TwoWay}" Text="{Binding passwordText,Mode=TwoWay}" Margin="0,0,0,0"/>
                         </Grid>
-                        <Button  Background="Transparent" BorderBrush="Transparent" Click="TogglePasswordVisibility" FontSize="20" Margin="186,0,2,0">
+                        <Button Background="Transparent" BorderBrush="Transparent" Click="TogglePasswordVisibility" FontSize="20" Margin="186,0,2,0">
                             <Button.Content>
-                                <Image Source="{Binding ButtonImageSource,Mode=TwoWay}" 
-                               Height="20" Width="20"/>
+                                <Image Source="{Binding ButtonImageSource,Mode=TwoWay}" Height="20" Width="20"/>
                             </Button.Content>
                         </Button>
                     </Grid>
-                    <Button Content="Login" Height="40" Width="80" Click="Login_Click" FontSize="25" RenderTransformOrigin="0.25,0.557"/>
+                    <Button Content="Login" Height="34" Width="100" Click="Login_Click" FontSize="25" RenderTransformOrigin="0.45,0.557"/>
                 </StackPanel>
             </Border>
         </Grid>

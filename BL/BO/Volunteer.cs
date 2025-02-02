@@ -23,9 +23,9 @@ namespace BO
     public class Volunteer
     {
         public int Id { get; init; }
-        public string FullName { get; set; }
-        public string Phone { get; set; }
-        public string Email { get; set; }
+        public required string FullName { get; set; }
+        public required string Phone { get; set; }
+        public required string Email { get; set; }
         public string? Password { get; set; }
         public string? Address { get; set; }
         public double? Latitude { get; set; }
@@ -40,22 +40,22 @@ namespace BO
         public BO.CallInProgress? CurrentCall { get; set; }
         public Volunteer() { }
         public Volunteer(
-    int id,
-    string fullName,
-    string phone,
-    string email,
-    string? password,
-    string? address,
-    double? latitude,
-    double? longitude,
-    MyRole role,
-    bool isActive,
-    double? maxDistance,
-    MyTypeDistance typeDistance,
-    int totalCallsHandled,
-    int totalCallsCancelled,
-    int totalCallsExpired,
-    BO.CallInProgress? currentCall = null)
+            int id,
+            string fullName,
+            string phone,
+            string email,
+            string? password,
+            string? address,
+            double? latitude,
+            double? longitude,
+            MyRole role,
+            bool isActive,
+            double? maxDistance,
+            MyTypeDistance typeDistance,
+            int totalCallsHandled,
+            int totalCallsCancelled,
+            int totalCallsExpired,
+            BO.CallInProgress? currentCall = null)
         {
             Id = id;
             FullName = fullName;
@@ -77,7 +77,11 @@ namespace BO
 
         public override string ToString()
         {
-            return $"Volunteer ID: {Id}, FullName: {FullName}, Phone: {Phone}, Email: {Email}, " + $"Address: {Address}, Latitude: {Latitude}, Longitude: {Longitude}, Role: {Role}, " + $"Active: {IsActive}, Max Distance: {MaxDistance}, Type Distance: {TypeDistance}, " + $"Total Calls Handled: {TotalCallsHandled}, Total Calls Cancelled: {TotalCallsCancelled}, " + $"Total Calls Expired: {TotalCallsExpired}, Current Call: {CurrentCall}";
+            return $"Volunteer ID: {Id}, FullName: {FullName}, Phone: {Phone}, Email: {Email}, " +
+                   $"Address: {Address}, Latitude: {Latitude}, Longitude: {Longitude}, Role: {Role}, " +
+                   $"Active: {IsActive}, Max Distance: {MaxDistance}, Type Distance: {TypeDistance}, " +
+                   $"Total Calls Handled: {TotalCallsHandled}, Total Calls Cancelled: {TotalCallsCancelled}, " +
+                   $"Total Calls Expired: {TotalCallsExpired}, Current Call: {CurrentCall}";
         }
     }
 

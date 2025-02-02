@@ -355,7 +355,7 @@ internal class CallImplementation : BlApi.ICall
             if (assignment?.VolunteerId != idV&& (!CallManager.IsManager(idV)))
                     throw new BO.BlUnauthorizedAccessException("The requester is not authorized to cancel this assignment.");
                     // Check that the assignment is still open and not already completed or canceled
-                    if (assignment.FinishCall.HasValue || assignment.FinishType.HasValue)
+                    if (assignment!=null&&assignment.FinishCall.HasValue ||assignment!=null&& assignment.FinishType.HasValue)
                         throw new BO.BlInvalidOperationException("The assignment has already been completed or canceled.");
                     // Create a new assignment object with the updated finish time and finish type
                     var updatedAssignment = assignment with

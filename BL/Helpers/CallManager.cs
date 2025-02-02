@@ -221,7 +221,7 @@ internal static class CallManager
     public static BO.CallInList ConvertToCallInList(DO.Call callData)
     {
         IEnumerable<DO.Assignment> assignmentsData;
-        string lastVolunteerName = null;
+        string? lastVolunteerName = null;
         lock (AdminManager.BlMutex)
             assignmentsData = s_dal.Assignment.ReadAll(a => a.CallId == callData.Id).ToList();
         var lastAssignment = assignmentsData.OrderByDescending(a => a.StartCall).FirstOrDefault();
@@ -287,8 +287,8 @@ internal static class CallManager
             Id = myCall.Id,
             CallType = (DO.MyCallType)myCall.Type,
             Address = myCall.Address ?? "",
-            Latitude = myCall.Latitude ?? 0,
-            Longitude = myCall.Longitude ?? 0,
+            Latitude = myCall.Latitude,
+            Longitude = myCall.Longitude,
             OpenTime = myCall.StartTime,
             Description = myCall.Description,
             MaxFinishCall = myCall.MaxEndTime
@@ -342,10 +342,11 @@ internal static class CallManager
     /// <returns>A new BO.ClosedCallInList instance with the converted data.</returns>
     public static BO.ClosedCallInList convertAssignmentToClosed(DO.Assignment assignment)
     {
-        DO.Call? callDetails; 
+        DO.Call? callDetails;
         lock (AdminManager.BlMutex)
             callDetails = s_dal.Call.Read(assignment.CallId);
-
+        if (callDetails == null)
+            throw new BO.BlNullPropertyException("Call details cannot be null.");
         return new BO.ClosedCallInList
         {
             Id = assignment.CallId,
@@ -354,7 +355,8 @@ internal static class CallManager
             StartTime = callDetails.OpenTime,
             StartTreatmentTime = assignment.StartCall,
             EndTime = assignment.FinishCall,
-           EndType = assignment?.FinishType is null ? (BO.MyFinishType?)null : (BO.MyFinishType)assignment.FinishType     };
+            EndType = assignment?.FinishType is null ? (BO.MyFinishType?)null : (BO.MyFinishType)assignment.FinishType
+        };
     }
 
     /// <summary>
@@ -378,16 +380,17 @@ internal static class CallManager
     public static bool VolunteerArea(DO.Volunteer volunteer, DO.Call call)
     {
         // Calculate the distance between the volunteer's address and the call's address
-        double distance = Tools.GlobalDistance(volunteer.Address, call.Address, volunteer.TypeDistance);        // Check if the distance is within the volunteer's max distance
+        if (volunteer.Address == null || call.Address == null)
+        {
+            return false;
+        }
+        double distance = Tools.GlobalDistance(volunteer.Address, call.Address, volunteer.TypeDistance);
+        // Check if the distance is within the volunteer's max distance
         return distance <= volunteer.MaxDistance;
     }
 
-    /// <summary>
-    /// Converts an instance of DO.Assignment to an instance of BO.OpenCallInList.
-    /// </summary>
-    /// <param name="assignment">The DO.Assignment instance to convert.</param>
     /// <returns>A new BO.OpenCallInList instance with the converted data.</returns>
-    public static BO.OpenCallInList convertCallToOpened(DO.Volunteer volunteer,DO.Call callDetails)
+    public static BO.OpenCallInList convertCallToOpened(DO.Volunteer volunteer, DO.Call callDetails)
     {
         return new BO.OpenCallInList
         {
@@ -397,7 +400,9 @@ internal static class CallManager
             Address = callDetails.Address,
             StartTime = callDetails.OpenTime,
             MaxEndTime = callDetails.MaxFinishCall,
-            DistanceFromVolunteer = volunteer != null ? Tools.GlobalDistance(volunteer.Address,callDetails.Address, volunteer.TypeDistance) : 0,
+            DistanceFromVolunteer = volunteer.Address != null && callDetails.Address != null
+                ? Tools.GlobalDistance(volunteer.Address, callDetails.Address, volunteer.TypeDistance)
+                : 0,
         };
     }
 
@@ -434,17 +439,18 @@ internal static class CallManager
     }
     public static async Task AddCallSendEmailAsync(DO.Call call)
     {
-        var volunteers = s_dal.Volunteer.ReadAll(volunteer => volunteer.MaxDistance >=
-Tools.GlobalDistance(volunteer.Address,call.Address,volunteer.TypeDistance));
+        var volunteers = s_dal.Volunteer.ReadAll(volunteer =>
+            volunteer.Address != null &&
+            volunteer.MaxDistance >= Tools.GlobalDistance(volunteer.Address, call.Address, volunteer.TypeDistance));
         foreach (var volunteer in volunteers)
         {
             var subject = $"New Call Opened for {call.Id}";
             var body = $"Hello Volunteers,\n\n" +  // General greeting
-                   $"A new call has been opened. Here are the details:\n\n" +
-                   $"Description: {call.Description}\n" +
-                   $"Location: {call.Address}\n" +
-                   $"Please log in to the system to accept the call."; // Body of the email;
-          await CallManager.SendEmailAsync(volunteer.Email, subject, body);
+                       $"A new call has been opened. Here are the details:\n\n" +
+                       $"Description: {call.Description}\n" +
+                       $"Location: {call.Address}\n" +
+                       $"Please log in to the system to accept the call."; // Body of the email;
+            await CallManager.SendEmailAsync(volunteer.Email, subject, body);
         }
     }
     public static async Task UpdateCancelTreatmentSendEmailAsync(int idV,DO.Assignment assignment)

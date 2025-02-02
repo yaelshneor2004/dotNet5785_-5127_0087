@@ -289,25 +289,27 @@ internal static class VolunteerManager
             TotalCallsCancelled = totalCallsCancelled,
             TotalCallsExpired = totalCallsExpired,
             CurrentCall = assignments
-    .Where(a => a.FinishType == null)
-    .Select(a =>
-    {
-        var callData = GetCall(a.CallId);
-        return new BO.CallInProgress
-        {
-            Id = a.Id,
-            CallId = a.CallId,
-            CallType = (BO.MyCallType)callData.CallType,
-            Description = callData.Description,
-            Address = callData.Address,
-            StartTime = callData.OpenTime,
-            MaxEndTime = callData.MaxFinishCall,
-            StartTreatmentTime = callData.OpenTime,
-            DistanceFromVolunteer = Tools.GlobalDistance(myVolunteer.Address ?? string.Empty, callData.Address, myVolunteer.TypeDistance),
-            Status = VolunteerManager.DetermineCallStatus(callData.MaxFinishCall)
-        };
-    })
-    .FirstOrDefault()
+                .Where(a => a.FinishType == null)
+                .Select(a =>
+                {
+                    var callData = GetCall(a.CallId);
+                    if (callData == null)
+                        return null;
+                    return new BO.CallInProgress
+                    {
+                        Id = a.Id,
+                        CallId = a.CallId,
+                        CallType = (BO.MyCallType)callData.CallType,
+                        Description = callData.Description,
+                        Address = callData.Address,
+                        StartTime = callData.OpenTime,
+                        MaxEndTime = callData.MaxFinishCall,
+                        StartTreatmentTime = callData.OpenTime,
+                        DistanceFromVolunteer = Tools.GlobalDistance(myVolunteer.Address ?? string.Empty, callData.Address, myVolunteer.TypeDistance),
+                        Status = VolunteerManager.DetermineCallStatus(callData.MaxFinishCall)
+                    };
+                })
+                .FirstOrDefault()
         };
     }
     private static DO.Call? GetCall(int id)
@@ -448,8 +450,8 @@ internal static class VolunteerManager
                         openCall = (
                             from call in s_dal.Call.ReadAll()
                             where CallManager.GetCallStatus(call) == BO.MyCallStatus.Open || CallManager.GetCallStatus(call) == BO.MyCallStatus.OpenAtRisk
-                            let distance = vol.Latitude != null && vol.Longitude != null
-                                ? Tools.GlobalDistance(vol.Address,call.Address, vol.TypeDistance)
+                            let distance = vol.Latitude != null && vol.Longitude != null && vol.Address != null
+                                ? Tools.GlobalDistance(vol.Address, call.Address, vol.TypeDistance)
                                 : double.MaxValue
                             where distance <= vol.MaxDistance
                             select call
@@ -480,34 +482,25 @@ internal static class VolunteerManager
                 DO.Assignment assignment;
                 lock (AdminManager.BlMutex)
                 {
-                     call = s_dal.Call.Read(assignmentInProgressData.CallId);
-                    assignment=s_dal.Assignment.ReadAll(a=>a.CallId==call.Id&&a.FinishType==null).Last();
-                    enoughTime = Tools.GlobalDistance(vol.Address, call.Address, vol.TypeDistance) * 4 + 30;
+                    call = s_dal.Call.Read(assignmentInProgressData.CallId);
+                    if (call == null)
+                        continue;
+                    assignment = s_dal.Assignment.ReadAll(a => a.CallId == call.Id && a.FinishType == null).LastOrDefault();
+                    if (assignment == null)
+                        continue;
+                    enoughTime = Tools.GlobalDistance(vol.Address ?? string.Empty, call.Address, vol.TypeDistance) * 4 + 30;
                 }
                 if (assignment != null)
                 {
                     if (AdminManager.Now >= assignmentInProgressData.StartCall.AddMinutes(enoughTime))
                     {
-                        var updatedAssignment = assignmentInProgressData with
-                        {
-                            FinishType = DO.MyFinishType.Treated,
-                            FinishCall = AdminManager.Now
-                        };
-
-                        lock (AdminManager.BlMutex)
-                            s_dal.Assignment.Update(updatedAssignment);
-
-                        CallManager.Observers.NotifyItemUpdated(updatedAssignment.Id);
-                        CallManager.Observers.NotifyListUpdated();
-                    }
-                    else
-                    {
-                        int percent = s_rand.Next(1, 1); // 10% chance to cancel the assignment
-                        if (percent == 1)
+                        // הוסף בדיקה האם הקריאה הוקצתה למתנדב לפני סיום הקריאה
+                        bool isAssigned = s_dal.Assignment.ReadAll(a => a.CallId == assignmentInProgressData.CallId && a.FinishType == null).Any();
+                        if (isAssigned)
                         {
                             var updatedAssignment = assignmentInProgressData with
                             {
-                                FinishType = DO.MyFinishType.SelfCancel,
+                                FinishType = DO.MyFinishType.Treated,
                                 FinishCall = AdminManager.Now
                             };
 
@@ -518,101 +511,35 @@ internal static class VolunteerManager
                             CallManager.Observers.NotifyListUpdated();
                         }
                     }
+                    else
+                    {
+                        int percent = s_rand.Next(1, 1); // 10% chance to cancel the assignment
+                        if (percent == 1)
+                        {
+                            // הוסף בדיקה האם הקריאה הוקצתה למתנדב לפני ביטול הקריאה
+                            bool isAssigned = s_dal.Assignment.ReadAll(a => a.CallId == assignmentInProgressData.CallId && a.FinishType == null).Any();
+                            if (isAssigned)
+                            {
+                                var updatedAssignment = assignmentInProgressData with
+                                {
+                                    FinishType = DO.MyFinishType.SelfCancel,
+                                    FinishCall = AdminManager.Now
+                                };
+
+                                lock (AdminManager.BlMutex)
+                                    s_dal.Assignment.Update(updatedAssignment);
+
+                                CallManager.Observers.NotifyItemUpdated(updatedAssignment.Id);
+                                CallManager.Observers.NotifyListUpdated();
+                            }
+                        }
+                    }
                 }
             }
         }
     }
 
 
-    //internal static void SimulateVolunteer()
-    //{
-    //    List<DO.Volunteer> activeVolunteersList;
-    //    lock (AdminManager.BlMutex)
-    //        activeVolunteersList = s_dal.Volunteer.ReadAll(v => v.IsActive == true).ToList(); // List of active volunteers
-    //    foreach (var vol in activeVolunteersList)
-    //    {
-    //        Assignment? assignmentInProgressData;
-    //        lock (AdminManager.BlMutex)
-    //            assignmentInProgressData = s_dal.Assignment.Read(a => a.VolunteerId == vol.Id && a.FinishType == null);
-    //        if (assignmentInProgressData == null)
-    //        {
-    //            int percent = s_rand.Next(1, 2);
-    //            if (percent == 1) // the probability of 20 percent to choose call
-    //            {
-    //                DO.Call? openCall;
-    //                lock (AdminManager.BlMutex)
-    //                {
-    //                    openCall = (
-    //                        from assignment in s_dal.Assignment.ReadAll() // Get all assignments
-    //                        let call = s_dal.Call.Read(assignment.CallId) // Retrieve the call associated with the assignment
-    //                        ?? throw new BO.BlDoesNotExistException($"Call with ID={assignment.CallId} does not exist") // Throw an exception if the call does not exist
-    //                        where CallManager.GetCallStatus(call) == BO.MyCallStatus.Open || CallManager.GetCallStatus(call) == BO.MyCallStatus.OpenAtRisk // Check if the call is open or at risk
-    //                        let distance = vol.Latitude != null && vol.Longitude != null // Calculate the distance between the volunteer and the call address
-    //                            ? Tools.GlobalDistance(
-    //                                vol.Address,
-    //                                call.Address,
-    //                                (DO.MyTypeDistance)vol.TypeDistance
-    //                            )
-    //                            : double.MaxValue
-    //                        where distance <= vol.MaxDistance // Check if the volunteer is within the maximum distance
-    //                        select call
-    //                    ).ToList().FirstOrDefault();
-    //                }
-    //            }
-    //        }
-    //        else
-    //        {
-    //            double enoughTime;
-    //            lock (AdminManager.BlMutex) 
-    //            {
-    //                enoughTime = Tools.GlobalDistance(
-    //               vol.Address,
-    //                    s_dal.Call.Read(assignmentInProgressData.CallId).Address,
-    //                    (DO.MyTypeDistance)vol.TypeDistance);
-    //                enoughTime = enoughTime * 2 + 10; // our decision is two minutes per kilometer and ten minutes for treatment
-    //            }
-    //            if (AdminManager.Now >= assignmentInProgressData.StartCall.AddMinutes(enoughTime)) // checking if enough time over from the beginning of the call treatment
-    //            {
-    //                // Create an updated assignment with the end of treatment details
-    //                DO.Assignment updatedAssignment = assignmentInProgressData with
-    //                {
-    //                    FinishType = DO.MyFinishType.Treated, // Mark the assignment as treated.
-    //                    FinishCall = AdminManager.Now // Set the end time to the current system time.
-    //                };
 
-    //                lock (AdminManager.BlMutex)
-    //                {
-    //                    // Update the assignment in the data layer.
-    //                    s_dal.Assignment.Update(updatedAssignment);
-    //                }
-    //                // Report to the screen about a change in the BL Layer
-    //                CallManager.Observers.NotifyItemUpdated(updatedAssignment.Id);
-    //                CallManager.Observers.NotifyListUpdated();
-    //            }
-    //            else
-    //            {
-    //                int percent = s_rand.Next(1, 10);
-    //                if (percent == 1) // the probability of 10 percent to cancel an assignment
-    //                {
-    //                    // Create a new assignment entity with updated cancellation details
-    //                    DO.Assignment updatedAssignment = assignmentInProgressData with
-    //                    {
-    //                        FinishType = DO.MyFinishType.SelfCancel,
-    //                        FinishCall = AdminManager.Now // End time set to the current system time.
-    //                    };
 
-    //                    lock (AdminManager.BlMutex) // stage 7
-    //                    {
-    //                        // Update the assignment in the data layer.
-    //                        s_dal.Assignment.Update(updatedAssignment);
-    //                    }
-    //                    // Report to the screen about a change in the BL Layer
-    //                    CallManager.Observers.NotifyItemUpdated(updatedAssignment.Id);
-    //                    CallManager.Observers.NotifyListUpdated();
-    //                }
-    //            }
-    //        }
-
-    //    }
-    //}
 }
