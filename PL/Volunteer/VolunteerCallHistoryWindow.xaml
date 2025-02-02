@@ -11,21 +11,24 @@
                 WindowStartupLocation="CenterScreen">
     <Grid>
         <!-- Internal, Upper Grid for Filters and Sorting -->
-        <!--<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Grid.Row="0" VerticalAlignment="Center" Margin="8,0,8,0">-->
-        <!-- ComboBox for filtering calls by type -->
-        <ComboBox SelectedValue="{Binding FilterByType, Mode=TwoWay}" 
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+            <!-- ComboBox for filtering calls by type -->
+            <ComboBox SelectedValue="{Binding FilterByType, Mode=TwoWay}" 
                       ItemsSource="{Binding Source={StaticResource SortCollectionMyCallTypeKey}}" 
                       SelectionChanged="cmbFiltedrChanges_SelectionChanged" 
                       Height="43" 
-                      Width="798"
-                      HorizontalAlignment="Center" Margin="0,2,0,304"/>
-        <!--</StackPanel>-->
+                      Width="789"/>
+            <!-- ComboBox for filtering calls by type -->
+            <!-- ComboBox for filtering calls by type -->
+            <!-- ComboBox for filtering calls by type -->
+            <!-- ComboBox for filtering calls by type -->
+        </StackPanel>
 
         <!-- DataGrid for displaying calls -->
         <DataGrid Background="White"
                   AutoGenerateColumns="False"
                   ItemsSource="{Binding CloseCallList, Mode=TwoWay}" 
-                  IsReadOnly="True" Margin="-1,43,1,-43" >
+                  IsReadOnly="True" Margin="0,8,0,-8">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding Id}"/>
                 <DataGridTextColumn Header="Type" Binding="{Binding Type}"/>
