@@ -66,12 +66,14 @@ public static class Initialization
             int idV=validIds[i];
             s_dal?.Volunteer.Create(new(idV, name, phone, email, MyRole.Volunteer,(DO.MyTypeDistance)typeD, password, address, latitude, longitude, maxDistance, true));
         }
-        string ayalaPassword = Encrypt("ayala19!");
+        string ayalaPassword = Encrypt("Ayala19!");
           string yaelPassword = Encrypt("yaelS2208!");
-            // Create 2 managers
-            s_dal?.Volunteer.Create(new(327770087, "Ayala Ozeri", "0533328200", "ayala.ozeri@gmail.com", MyRole.Manager, MyTypeDistance.Aerial, ayalaPassword, "Rothschild 10, Tel Aviv, Israel", 32.0625, 34.7721, 10.0, true));
+        string yosefPassword = Encrypt("yosefL106!");
+        // Create 2 managers
+        s_dal?.Volunteer.Create(new(327770087, "Ayala Ozeri", "0533328200", "ayala.ozeri@gmail.com", MyRole.Manager, MyTypeDistance.Aerial, ayalaPassword, "Rothschild 10, Tel Aviv, Israel", 32.0625, 34.7721, 10.0, true));
             s_dal?.Volunteer.Create(new(326615127, "Yael Shneor", "0533859299", "y7697086@gmail.com", MyRole.Manager, MyTypeDistance.Traveling, yaelPassword, "Derech Hevron 78, Jerusalem, Israel", 31.7525, 35.2121, 20.0, true));
-        }
+        s_dal?.Volunteer.Create(new(208799387, "Yosef Levi", "0527170106", "106mimi@gmail.com", MyRole.Volunteer, MyTypeDistance.Traveling, yosefPassword, "10 Jaffa Street, Jerusalem", 31.78130811991647, 35.22119546257982, 30.0, true));
+    }
     /// <summary>
     /// The createsAssignment method reads volunteers and calls, then allocates volunteers to 50 calls, calculates start and finish times, assigns random finish types, and creates new assignments. 🌟
     /// </summary>

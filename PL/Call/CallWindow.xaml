@@ -12,6 +12,7 @@
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Margin="10">
+            <Label Content="Call Details" Style="{StaticResource {x:Type Label}}" Foreground="Blue" FontWeight="Bold" FontSize="20" Margin="0,0,0,10" />
             <Label Content="ID:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Margin="0,5,0,5" Visibility="{Binding CurrentCall.Id,Converter={StaticResource ConvertIdCalltoVisibilityKey}}"/>
             <TextBox Text="{Binding CurrentCall.Id, Mode=TwoWay}" IsReadOnly="True" Style="{StaticResource {x:Type TextBox}}" Foreground="Black" Margin="0,5,0,5" Visibility="{Binding CurrentCall.Id,Converter={StaticResource ConvertIdCalltoVisibilityKey}}"/>
             <Label Content="Type:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Margin="0,5,0,5"/>

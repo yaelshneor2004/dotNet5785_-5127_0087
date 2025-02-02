@@ -27,9 +27,9 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- GroupBox for volunteer details on the left -->
-                <GroupBox Margin="20,0,0,0" HorizontalAlignment="Left" Grid.Row="0" Grid.Column="0" BorderThickness="1" BorderBrush="Blue" VerticalAlignment="Top" Height="Auto">
+                <GroupBox Margin="20,0,0,0" HorizontalAlignment="Left" Grid.Row="0" Grid.Column="0" BorderThickness="2" BorderBrush="#9370DB" VerticalAlignment="Top" Height="Auto">
                     <GroupBox.Header>
-                        <TextBlock Text="Volunteer Details" Foreground="Blue" FontSize="16"/>
+                        <TextBlock Text="Volunteer Details" Foreground="#9370DB" FontSize="16"/>
                     </GroupBox.Header>
                     <StackPanel Orientation="Horizontal">
                         <StackPanel Orientation="Vertical" Margin="20,10,0,0" VerticalAlignment="Top">
@@ -156,9 +156,9 @@
                     </StackPanel>
                 </GroupBox>
                 <!-- GroupBox for assignment details on the right -->
-                <GroupBox Margin="20,0,0,0" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="1" BorderThickness="1" BorderBrush="Blue" VerticalAlignment="Top" Height="Auto" Visibility="{Binding CurrentVolunteer.CurrentCall, Converter={StaticResource ConvertObjIdTovisNotVisKey}}">
+                <GroupBox Margin="20,0,0,0" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="1" BorderThickness="2" BorderBrush="#9370DB" VerticalAlignment="Top" Height="Auto" Visibility="{Binding CurrentVolunteer.CurrentCall, Converter={StaticResource ConvertObjIdTovisNotVisKey}}">
                     <GroupBox.Header>
-                        <TextBlock Text="Call details" Foreground="Blue" FontSize="16"/>
+                        <TextBlock Text="Call details"  Foreground="#9370DB" FontSize="16"/>
                     </GroupBox.Header>
                     <Grid>
                         <Grid.RowDefinitions>

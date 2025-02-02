@@ -22,7 +22,6 @@ internal class CallImplementation : BlApi.ICall
     {
         try
         {
-
             AdminManager.ThrowOnSimulatorIsRunning();
             // Validate the format of the values
             CallManager.ValidateCallFormat(call);

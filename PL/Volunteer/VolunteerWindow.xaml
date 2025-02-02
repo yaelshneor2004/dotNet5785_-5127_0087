@@ -12,7 +12,7 @@
     <ScrollViewer VerticalScrollBarVisibility="Auto">
 
         <StackPanel>
-
+            <Label Content="Volunteer Details" Style="{StaticResource {x:Type Label}}" Foreground="Blue" FontWeight="Bold" FontSize="16" Margin="0,0,0,10"/>
             <Label Content="ID:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
             <TextBox  Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}" IsReadOnly="{Binding CurrentVolunteer.Id, Converter={StaticResource ConvertObjIdToTFKey}}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black" >
                 <TextBox.Text >
@@ -23,9 +23,6 @@
                     </Binding>
                 </TextBox.Text >
             </TextBox>
-
-
-
             <Label Content="Full Name:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
             <TextBox  Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black">
                 <TextBox.Text >
@@ -46,7 +43,6 @@
                     </Binding>
                 </TextBox.Text >
             </TextBox>
-
             <Label Content="Email:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
             <TextBox  Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black">
                 <TextBox.Text >
@@ -84,10 +80,8 @@
                       Style="{StaticResource {x:Type ComboBox}}"
                       Foreground="Black"
             />
-
             <Label Content="Is Active:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
             <CheckBox IsChecked="{Binding CurrentVolunteer.IsActive, Mode=TwoWay}" Style="{StaticResource {x:Type CheckBox}}" IsEnabled="{Binding CurrentVolunteer, Converter={StaticResource ConvertVolunteerToReadOnlyKey}}" Width="409"/>
-
             <Label Content="Max Distance:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
             <TextBox Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}"  Style="{StaticResource {x:Type TextBox}}" Foreground="Black">
                 <TextBox.Text >
@@ -100,32 +94,24 @@
             </TextBox>
             <Label Content="Type Distance:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
             <ComboBox ItemsSource="{Binding Source={StaticResource SortCollectionDistancesKey}}" SelectedItem="{Binding TypeDistance}" SelectedValue="{Binding CurrentVolunteer.TypeDistance, Mode=TwoWay}" Style="{StaticResource {x:Type ComboBox}}" Foreground="Black"/>
-
             <!-- New Fields Panel -->
             <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Height="Auto" Margin="13,0,0,0" Width="320" Visibility="{Binding CurrentVolunteer.Id, Converter={StaticResource ConvertObjIdToVisibilityKey}}">
                 <Label Content="Details of Current Call" Style="{StaticResource {x:Type Label}}" Foreground="Blue" FontWeight="Bold" FontSize="14" Margin="0,0,0,10"  Visibility="{Binding CurrentVolunteer, Converter={StaticResource ConvertVolunteerToVisibilityKey}}"/>
                 <Label Content="Call Type:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Visibility="{Binding CurrentVolunteer, Converter={StaticResource ConvertVolunteerToVisibilityKey}}" />
                 <ComboBox ItemsSource="{Binding Source={StaticResource SortCollectionMyCallTypeKey}}" SelectedItem="{Binding CallType}" SelectedValue="{Binding CurrentVolunteer.CurrentCall.CallType, Mode=TwoWay}" IsEnabled="False" Style="{StaticResource {x:Type ComboBox}}" Foreground="Black" Visibility="{Binding CurrentVolunteer, Converter={StaticResource ConvertVolunteerToVisibilityKey}}"/>
-
                 <Label Content="Description:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Visibility="{Binding CurrentVolunteer, Converter={StaticResource ConvertVolunteerToVisibilityKey}}"/>
                 <TextBox Text="{Binding CurrentVolunteer.CurrentCall.Description}" IsReadOnly="True" Style="{StaticResource {x:Type TextBox}}" Foreground="Black" Visibility="{Binding CurrentVolunteer, Converter={StaticResource ConvertVolunteerToVisibilityKey}}"/>
-
                 <Label Content="Max End Time:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Visibility="{Binding CurrentVolunteer, Converter={StaticResource ConvertVolunteerToVisibilityKey}}"/>
                 <TextBox Text="{Binding CurrentVolunteer.CurrentCall.MaxEndTime}" IsReadOnly="True" Style="{StaticResource {x:Type TextBox}}" Foreground="Black" Visibility="{Binding CurrentVolunteer, Converter={StaticResource ConvertVolunteerToVisibilityKey}}"/>
-
                 <Label Content="Call Address:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Visibility="{Binding CurrentVolunteer, Converter={StaticResource ConvertVolunteerToVisibilityKey}}"/>
                 <TextBox Text="{Binding CurrentVolunteer.CurrentCall.Address}" IsReadOnly="True" Style="{StaticResource {x:Type TextBox}}" Foreground="Black" Visibility="{Binding CurrentVolunteer, Converter={StaticResource ConvertVolunteerToVisibilityKey}}"/>
-
                 <Label Content="Status:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Visibility="{Binding CurrentVolunteer, Converter={StaticResource ConvertVolunteerToVisibilityKey}}"/>
                 <ComboBox ItemsSource="{Binding Source={StaticResource SortCollectionCallStatusByVolunteerKey}}" SelectedItem="{Binding Status}" SelectedValue="{Binding CurrentVolunteer.CurrentCall.Status, Mode=TwoWay}" IsEnabled="False" Style="{StaticResource {x:Type ComboBox}}" Foreground="Black" Visibility="{Binding CurrentVolunteer, Converter={StaticResource ConvertVolunteerToVisibilityKey}}"/>
-
                 <Label Content="Start Time:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Visibility="{Binding CurrentVolunteer, Converter={StaticResource ConvertVolunteerToVisibilityKey}}"/>
                 <TextBox Text="{Binding CurrentVolunteer.CurrentCall.StartTime}" IsReadOnly="True" Style="{StaticResource {x:Type TextBox}}" Foreground="Black" Visibility="{Binding CurrentVolunteer, Converter={StaticResource ConvertVolunteerToVisibilityKey}}"/>
-
                 <Label Content="Distance From Volunteer:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Visibility="{Binding CurrentVolunteer, Converter={StaticResource ConvertVolunteerToVisibilityKey}}"/>
                 <TextBox Text="{Binding CurrentVolunteer.CurrentCall.DistanceFromVolunteer}" IsReadOnly="True" Style="{StaticResource {x:Type TextBox}}" Foreground="Black" Visibility="{Binding CurrentVolunteer, Converter={StaticResource ConvertVolunteerToVisibilityKey}}"/>
             </StackPanel>
-
             <Button Content="{Binding ButtonText}" Width="200" Height="40" Click="btnAddUpdate_Click" HorizontalAlignment="Center" Margin="0,23,0,43"/>
         </StackPanel>
     </ScrollViewer>

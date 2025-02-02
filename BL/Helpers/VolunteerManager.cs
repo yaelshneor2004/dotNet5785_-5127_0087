@@ -472,6 +472,8 @@ internal static class VolunteerManager
 
                         CallManager.Observers.NotifyItemUpdated(newAssignment.Id);
                         CallManager.Observers.NotifyListUpdated();
+                        VolunteerManager.Observers.NotifyItemUpdated(vol.Id);
+                        VolunteerManager.Observers.NotifyListUpdated();
                     }
                 }
             }
@@ -494,7 +496,6 @@ internal static class VolunteerManager
                 {
                     if (AdminManager.Now >= assignmentInProgressData.StartCall.AddMinutes(enoughTime))
                     {
-                        // הוסף בדיקה האם הקריאה הוקצתה למתנדב לפני סיום הקריאה
                         bool isAssigned = s_dal.Assignment.ReadAll(a => a.CallId == assignmentInProgressData.CallId && a.FinishType == null).Any();
                         if (isAssigned)
                         {
@@ -509,6 +510,8 @@ internal static class VolunteerManager
 
                             CallManager.Observers.NotifyItemUpdated(updatedAssignment.Id);
                             CallManager.Observers.NotifyListUpdated();
+                            VolunteerManager.Observers.NotifyItemUpdated(vol.Id);
+                            VolunteerManager.Observers.NotifyListUpdated();
                         }
                     }
                     else
@@ -516,7 +519,6 @@ internal static class VolunteerManager
                         int percent = s_rand.Next(1, 1); // 10% chance to cancel the assignment
                         if (percent == 1)
                         {
-                            // הוסף בדיקה האם הקריאה הוקצתה למתנדב לפני ביטול הקריאה
                             bool isAssigned = s_dal.Assignment.ReadAll(a => a.CallId == assignmentInProgressData.CallId && a.FinishType == null).Any();
                             if (isAssigned)
                             {
@@ -531,6 +533,8 @@ internal static class VolunteerManager
 
                                 CallManager.Observers.NotifyItemUpdated(updatedAssignment.Id);
                                 CallManager.Observers.NotifyListUpdated();
+                                VolunteerManager.Observers.NotifyItemUpdated(vol.Id);
+                                VolunteerManager.Observers.NotifyListUpdated();
                             }
                         }
                     }

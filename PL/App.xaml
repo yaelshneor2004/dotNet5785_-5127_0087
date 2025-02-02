@@ -59,14 +59,12 @@
             <Setter Property="FontFamily" Value="Comic Sans MS"/>
         </Style>
 
-        <!-- סגנון עבור חלון עם קצוות מעוגלים -->
         <Style TargetType="Window">
             <Setter Property="WindowStyle" Value="None"/>
             <Setter Property="AllowsTransparency" Value="True"/>
             <Setter Property="Background" Value="#E6E6FA"/>
         </Style>
 
-        <!-- סגנון עבור Border עם קצוות מעוגלים וצל -->
         <Style x:Key="RoundedWindowBorder" TargetType="Border">
             <Setter Property="Background" Value="White"/>
             <Setter Property="CornerRadius" Value="10"/>
@@ -74,7 +72,6 @@
             <Setter Property="BorderBrush" Value="#9370DB"/>
             <Setter Property="BorderThickness" Value="2"/>
             <Setter Property="Margin" Value="20"/>
-            <!-- הוספת מרווח מסביב כדי לראות את הרקע מאחורי ה-Border -->
             <Setter Property="Effect">
                 <Setter.Value>
                     <DropShadowEffect Color="#9370DB" Opacity="0.5" BlurRadius="10" ShadowDepth="5"/>
@@ -118,43 +115,7 @@
                 <AdornedElementPlaceholder/>
             </DockPanel>
         </ControlTemplate>
-
-        <!--<Style TargetType="Button" x:Key="SimulatorButtonStyle">
-             General button style 
-            <Setter Property="Background" Value="#E6E6FA"/>
-            <Setter Property="BorderBrush" Value="#9370DB"/>
-            <Setter Property="BorderThickness" Value="2"/>
-            <Setter Property="Foreground" Value="#9370DB"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Padding" Value="10,5"/>
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}" 
-                        BorderBrush="{TemplateBinding BorderBrush}" 
-                        BorderThickness="{TemplateBinding BorderThickness}" 
-                        CornerRadius="10">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#D1C4E9"/>
-                </Trigger>
-                 Triggers for button content 
-                <DataTrigger Binding="{Binding IsSimulatorRunning}" Value="True">
-                    <Setter Property="Content" Value="Stop Simulator"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding IsSimulatorRunning}" Value="False">
-                    <Setter Property="Content" Value="Start Simulator"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>-->
-       
-            <Style x:Key="SimulatorButtonStyle" TargetType="Button" >
+        <Style x:Key="SimulatorButtonStyle" TargetType="Button" >
                 <Setter Property="Content" Value="Start Simulator"/>
             <Setter Property="Background" Value="#E6E6FA"/>
             <Setter Property="BorderBrush" Value="#9370DB"/>
