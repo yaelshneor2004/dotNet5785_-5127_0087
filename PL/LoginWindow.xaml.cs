@@ -21,6 +21,7 @@ namespace PL
             InitializeComponent();
         }
 
+        //
         public string userNameText { get; set; }
         public string ButtonImageSource
         {
