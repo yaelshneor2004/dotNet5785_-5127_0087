@@ -15,20 +15,24 @@
         </Grid.RowDefinitions>
 
         <!-- Internal, Upper Grid for Filters and Sorting -->
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Grid.Row="0" VerticalAlignment="Center" Margin="8,0,8,0">
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
             <!-- ComboBox for filtering calls by type -->
             <ComboBox SelectedValue="{Binding FilterByType, Mode=TwoWay}" 
                       ItemsSource="{Binding Source={StaticResource SortCollectionMyCallTypeKey}}" 
                       SelectionChanged="cmbFiltedrChanges_SelectionChanged" 
                       Height="43" 
-                      Width="778"/>
+                      Width="789"/>
+            <!-- ComboBox for filtering calls by type -->
+            <!-- ComboBox for filtering calls by type -->
+            <!-- ComboBox for filtering calls by type -->
+            <!-- ComboBox for filtering calls by type -->
         </StackPanel>
 
         <!-- DataGrid for displaying calls -->
         <DataGrid Grid.Row="1"
                   AutoGenerateColumns="False"
                   ItemsSource="{Binding CloseCallList, Mode=TwoWay}" 
-                  IsReadOnly="True">
+                  IsReadOnly="True" Margin="0,8,0,-8">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding Id}"/>
                 <DataGridTextColumn Header="Type" Binding="{Binding Type}"/>
