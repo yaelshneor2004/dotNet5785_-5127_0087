@@ -20,11 +20,12 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="0*"/>
+                <RowDefinition/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <Grid Grid.Row="0" Grid.Column="0" Margin="-40,30,80,10">
+            <Grid Grid.Row="1" Grid.Column="0" Margin="-40,26,80,10">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" MinHeight="28"/>
                     <RowDefinition/>
@@ -47,7 +48,7 @@
                 <Button Content="Add One Year" HorizontalAlignment="Left" Height="41" Margin="110,0,0,0" VerticalAlignment="Center" Width="150" Click="btnAddOneYear_Click" Grid.Row="5" IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource BooleanToIsEnabeldyConverterKey}}"/>
             </Grid>
             <!-- Updated Grid for DataGrid display on the top right -->
-            <Grid Grid.Row="0" Grid.Column="1" Margin="130,19,10,10">
+            <Grid Grid.Row="1" Grid.Column="1" Margin="130,15,10,10">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" MinHeight="1"/>
                     <RowDefinition Height="16*"/>
@@ -69,7 +70,7 @@
 
 
 
-            <Grid Grid.Row="0" Margin="283,44,275,0" Grid.ColumnSpan="2">
+            <Grid Grid.Row="1" Margin="283,40,275,0" Grid.ColumnSpan="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
@@ -82,7 +83,7 @@
                 <Button Content="Handle Calls" HorizontalAlignment="Center" Height="50" Width="150" Click="btnHandleCalls_Click" Grid.Row="3"/>
             </Grid>
 
-            <Grid Grid.Row="1" Grid.ColumnSpan="2" Margin="20">
+            <Grid Grid.Row="2" Grid.ColumnSpan="2" Margin="20,20,20,20">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
