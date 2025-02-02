@@ -1,7 +1,6 @@
 ﻿namespace DalApi;
 public static class Factory
-{
-    public static IDal Get
+{ public static IDal Get
     {
         get
         {

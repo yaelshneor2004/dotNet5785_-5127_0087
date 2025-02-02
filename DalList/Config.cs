@@ -1,5 +1,4 @@
-﻿
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 
 namespace Dal;
 
@@ -28,6 +27,5 @@ internal static class Config
         nextAssignmentId = startAssignmentId;
         Clock = DateTime.Now;
         RiskRange= TimeSpan.FromDays(14);
-
     }
 }

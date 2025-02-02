@@ -1,7 +1,6 @@
 ﻿namespace Dal;
     using DalApi;
 using DO;
-
 sealed internal class DalList : IDal
 {
     private DalList() { }

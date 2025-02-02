@@ -24,7 +24,7 @@ public record Assignment
      DateTime? FinishCall = null
   )
 {
-    /// Default constructor for stage 3
+    /// Default constructor for XmlSerializer  
     public Assignment() : this(0, 0, 0, DateTime.Now) { }
 
 }

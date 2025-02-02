@@ -26,7 +26,7 @@ string? Description = null,
 DateTime? MaxFinishCall = null
 )
 {
-    /// Default constructor for stage 3
+    /// Default constructor for XmlSerializer  
     public Call() : this(0, 0, "", 0, 0, DateTime.Now) { }
 
   

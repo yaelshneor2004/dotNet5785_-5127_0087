@@ -51,7 +51,6 @@ static class XMLTools
     public static void SaveListToXMLElement(XElement rootElem, string xmlFileName)
     {
         string xmlFilePath = s_xmlDir + xmlFileName;
-
         try
         {
             rootElem.Save(xmlFilePath);
@@ -81,6 +80,7 @@ static class XMLTools
     #endregion
 
     #region XmlConfig
+    /// Loads an integer value from XML, increments it by 1, and saves the new value back to the XML.
     public static int GetAndIncreaseConfigIntVal(string xmlFileName, string elemName)
     {
         XElement root = XMLTools.LoadListFromXMLElement(xmlFileName);
@@ -89,12 +89,14 @@ static class XMLTools
         XMLTools.SaveListToXMLElement(root, xmlFileName);
         return nextId;
     }
+    /// Loads and returns an integer value from XML.
     public static int GetConfigIntVal(string xmlFileName, string elemName)
     {
         XElement root = XMLTools.LoadListFromXMLElement(xmlFileName);
         int num = root.ToIntNullable(elemName) ?? throw new FormatException($"can't convert:  {xmlFileName}, {elemName}");
         return num;
     }
+    /// Loads and returns a TimeSpan value from XML.
     public static TimeSpan GetConfigTimeVal(string xmlFileName, string elemName)
     {
         XElement root = XMLTools.LoadListFromXMLElement(xmlFileName);
@@ -102,25 +104,28 @@ static class XMLTools
         TimeSpan ts = element != null ? TimeSpan.Parse(element.Value) : throw new FormatException($"Can't convert: {xmlFileName}, {elemName}");
         return ts;
     }
+    /// Loads and returns a DateTime value from XML.
     public static DateTime GetConfigDateVal(string xmlFileName, string elemName)
     {
         XElement root = XMLTools.LoadListFromXMLElement(xmlFileName);
         DateTime dt = root.ToDateTimeNullable(elemName) ?? throw new FormatException($"can't convert:  {xmlFileName}, {elemName}");
         return dt;
     }
+    /// Sets and saves an integer value in XML.
     public static void SetConfigIntVal(string xmlFileName, string elemName, int elemVal)
     {
         XElement root = XMLTools.LoadListFromXMLElement(xmlFileName);
         root.Element(elemName)?.SetValue((elemVal).ToString());
         XMLTools.SaveListToXMLElement(root, xmlFileName);
     }
+    /// Sets and saves a TimeSpan value in XML.
     public static void SetConfigTimeVal(string xmlFileName, string elemName, TimeSpan elemVal)
     {
         XElement root = XMLTools.LoadListFromXMLElement(xmlFileName);
         root.Element(elemName)?.SetValue(elemVal.ToString());
         XMLTools.SaveListToXMLElement(root, xmlFileName);
     }
-
+    /// Sets and saves a DateTime value in XML.
     public static void SetConfigDateVal(string xmlFileName, string elemName, DateTime elemVal)
     {
         XElement root = XMLTools.LoadListFromXMLElement(xmlFileName);
@@ -129,7 +134,7 @@ static class XMLTools
     }
     #endregion
 
-
+    //CONVERTERS
     #region ExtensionFuctions
     public static T? ToEnumNullable<T>(this XElement element, string name) where T : struct, Enum =>
         Enum.TryParse<T>((string?)element.Element(name), out var result) ? (T?)result : null;

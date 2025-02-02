@@ -58,14 +58,20 @@ public enum ConfigOptions
     SetRiskRange,
     ShowConfigValues,
     ResetConfig,
-   
 }
 /// <summary>
 /// Enum containing options for the main menu
 /// </summary>
 public enum MainMenuOptions
 {
-    Exit, ShowVolunteer, ShowCall, ShowAssignment, InitializeData, ShowAllData, ShowConfigSubMenu, ResetDatabaseAndConfig
+    Exit,
+    ShowVolunteer,
+    ShowCall,
+    ShowAssignment, 
+    InitializeData, 
+    ShowAllData,
+    ShowConfigSubMenu,
+    ResetDatabaseAndConfig
 }
 
 /// <summary>
@@ -73,5 +79,11 @@ public enum MainMenuOptions
 /// </summary>
 public enum EntityMenuOption
 {
-    Exit, Create, Read, ReadAll, Update, Delete, DeleteAll
+    Exit,
+    Create,
+    Read, 
+    ReadAll,
+    Update,
+    Delete, 
+    DeleteAll
 }
