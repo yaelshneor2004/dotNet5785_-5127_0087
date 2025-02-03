@@ -199,6 +199,8 @@
             <Setter Property="Margin" Value="10,0"/>
         </Style>
 
+        
+
         <Style TargetType="Control" x:Key="MergedStyle">
             <Setter Property="Foreground" Value="#9370DB"/>
             <Setter Property="FontSize" Value="12"/>

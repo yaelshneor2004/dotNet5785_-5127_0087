@@ -11,7 +11,9 @@
             Closed="MainWindow_Closed"
             Language="he-IL" WindowState="Maximized">
 
+
     <Viewbox Stretch="Uniform">
+
 
         <!--grid in all the window-->
         <Grid>
@@ -25,8 +27,9 @@
                     <TextBlock Text="Clock menu" Foreground="#9370DB" FontSize="20"/>
                 </GroupBox.Header>
                 <StackPanel Margin="32,0,38,0">
-                    <Label FontWeight="Bold" Content="{Binding CurrentTime, StringFormat=MM/dd/yyyy}" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="25" Foreground="#091040"/>
-                    <!--<Label Content="{Binding CurrentTime, StringFormat=MM/dd/yyyy}" FontSize="72" FontWeight="ExtraBold" Height="48" Width="183" HorizontalContentAlignment="Center" Foreground="Black"/>-->
+
+
+                    <Label Content="{Binding CurrentTime, StringFormat=MM/dd/yyyy}" FontSize="72" FontWeight="ExtraBold" Height="48" Width="183" HorizontalContentAlignment="Center" Foreground="Black"/>
                     <Button Content="Add One Minute" HorizontalAlignment="Center" Height="42" Width="150" Click="btnAddOneMinute_Click" IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource BooleanToIsEnabeldyConverterKey}}"/>
                     <Button Content="Add One Hour" HorizontalAlignment="Center" Height="42" Width="150" Click="btnAddOneHour_Click" IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource BooleanToIsEnabeldyConverterKey}}"/>
                     <Button Content="Add One Day" HorizontalAlignment="Center" Height="42" Width="150" Click="btnAddOneDay_Click" IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource BooleanToIsEnabeldyConverterKey}}"/>
