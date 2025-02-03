@@ -22,14 +22,21 @@
                 <ColumnDefinition Width="863*"/>
             </Grid.ColumnDefinitions>
 
-            <GroupBox BorderThickness="4" BorderBrush="#9370DB" VerticalAlignment="Top" HorizontalAlignment="Left" Height="360" Margin="194,42,0,0" Width="282" RenderTransformOrigin="0.863,0.466" Grid.Column="1">
+            <GroupBox BorderThickness="4" BorderBrush="#9370DB" VerticalAlignment="Top" HorizontalAlignment="Left" Height="360" Margin="194,41,0,0" Width="282" RenderTransformOrigin="0.863,0.466" Grid.Column="1">
                 <GroupBox.Header>
                     <TextBlock Text="Clock menu" Foreground="#9370DB" FontSize="20"/>
                 </GroupBox.Header>
                 <StackPanel Margin="32,0,38,0">
-
-
-                    <Label Content="{Binding CurrentTime, StringFormat=MM/dd/yyyy}" FontSize="72" FontWeight="ExtraBold" Height="48" Width="183" HorizontalContentAlignment="Center" Foreground="Black" />
+                    <Label Content="{Binding CurrentTime, StringFormat=MM/dd/yyyy}" FontWeight="ExtraBold" Height="6"Height="17" Width="132" HorizontalContentAlignment="Center" Foreground="Black" Style="{StaticResource HeaderLabelStyle}" RenderTransformOrigin="0.5,0.5" >
+                        <Label.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleY="-1"/>
+                                <SkewTransform/>
+                                <RotateTransform/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Label.RenderTransform>
+                    </Label>
                     <Button Content="Add One Minute" HorizontalAlignment="Center" Height="42" Width="150" Click="btnAddOneMinute_Click" IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource BooleanToIsEnabeldyConverterKey}}"/>
                     <Button Content="Add One Hour" HorizontalAlignment="Center" Height="42" Width="150" Click="btnAddOneHour_Click" IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource BooleanToIsEnabeldyConverterKey}}"/>
                     <Button Content="Add One Day" HorizontalAlignment="Center" Height="42" Width="150" Click="btnAddOneDay_Click" IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource BooleanToIsEnabeldyConverterKey}}"/>
@@ -50,7 +57,7 @@
             <Label Content="Enter the time in milliseconds" HorizontalAlignment="Left" Height="15" Margin="256,15,0,0" VerticalAlignment="Top" Width="190" Grid.Column="1"/>
 
 
-            <GroupBox BorderThickness="4" BorderBrush="#9370DB" VerticalAlignment="Top" HorizontalAlignment="Left" Height="360" Margin="506,42,0,0" Width="255" RenderTransformOrigin="0.863,0.466" Grid.Column="1">
+            <GroupBox BorderThickness="4" BorderBrush="#9370DB" VerticalAlignment="Top" HorizontalAlignment="Left" Height="360" Margin="506,41,0,0" Width="254" RenderTransformOrigin="0.863,0.466" Grid.Column="1">
                 <GroupBox.Header>
                     <TextBlock Text="Central buttons menu" Foreground="#9370DB" FontSize="20"/>
                 </GroupBox.Header>
