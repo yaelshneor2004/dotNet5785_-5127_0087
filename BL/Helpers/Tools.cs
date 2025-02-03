@@ -135,6 +135,12 @@ internal static class Tools
             }
         }
     }
+    /// <summary>
+    /// Retrieves the coordinates (latitude and longitude) of a given address using Google Maps Geocoding API.
+    /// </summary>
+    /// <param name="address">The address to get coordinates for.</param>
+    /// <returns>A tuple containing the latitude and longitude of the address.</returns>
+    /// <exception cref="BlInvalidOperationException">Thrown when the coordinates cannot be retrieved or an error occurs.</exception>
     internal static async Task<(double Latitude, double Longitude)> GetCoordinates(string address)
     {
         try
@@ -142,7 +148,6 @@ internal static class Tools
             using (var client = new HttpClient())
             {
                 string apiKey = "AIzaSyDp5JA_AxKyCcz9QK9q1btolMB6Y8jusc4";
-                ;
                 string requestUri = $"https://maps.googleapis.com/maps/api/geocode/xml?address={Uri.EscapeDataString(address)}&key={apiKey}";
                 var response = await client.GetAsync(requestUri).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
@@ -190,6 +195,9 @@ internal static class Tools
             throw new BlInvalidOperationException("An unexpected error occurred: " + ex.Message);
         }
     }
+    /// <summary>
+    /// Validates if the provided address is valid using Google Maps API.
+    /// </summary>
     internal static bool IsValidAddress(string? address)
     {
         if (string.IsNullOrWhiteSpace(address)) return true;

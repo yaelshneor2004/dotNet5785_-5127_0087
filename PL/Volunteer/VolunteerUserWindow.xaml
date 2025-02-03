@@ -89,7 +89,7 @@
                             </TextBox>
 
                             <Label Content="Address:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
-                            <TextBox Text="{Binding CurrentVolunteer.Address}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black"/>
+                            <TextBox Text="{Binding CurrentVolunteer.Address}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black" BorderBrush="{Binding CurrentVolunteer.Latitude,Converter={StaticResource ConvertZeroDimensionsToRedKey}}" />
 
                             <Label Content="Role:" Style="{StaticResource {x:Type Label}}" Foreground="Blue"/>
                             <ComboBox ItemsSource="{Binding Source={StaticResource SortCollectionRolesKey}}"

@@ -64,6 +64,9 @@ internal class CallImplementation : BlApi.ICall
         public int Status { get; set; }
         public int Count { get; set; }
     }
+    /// <summary>
+    /// Retrieves the amount of calls grouped by their status.
+    /// </summary>
     public int[] CallAmount()
     {
         IEnumerable<CallStatusInfo> callStatuses;
@@ -75,16 +78,16 @@ internal class CallImplementation : BlApi.ICall
                            orderby g.Key
                            select new CallStatusInfo { Status = g.Key, Count = g.Count() };
         }
-            // Prepare an array with six cells (or more if there are more statuses)
-            var callAmounts = new int[Enum.GetValues(typeof(BO.MyCallStatus)).Length - 1];
+        // Prepare an array with six cells (or more if there are more statuses)
+        var callAmounts = new int[Enum.GetValues(typeof(BO.MyCallStatus)).Length - 1];
 
-            // Fill the array with values from the grouping, or zeros if there are no calls in the status
-            foreach (var status in callStatuses)
-            {
-                callAmounts[status.Status] = status.Count;
-            }
+        // Fill the array with values from the grouping, or zeros if there are no calls in the status
+        foreach (var status in callStatuses)
+        {
+            callAmounts[status.Status] = status.Count;
+        }
 
-            return callAmounts;
+        return callAmounts;
     }
 
 
@@ -423,6 +426,9 @@ internal class CallImplementation : BlApi.ICall
             throw new BO.BlDoesNotExistException($"Assignment with ID {idC} does not exist.", ex);
         }
     }
+    /// <summary>
+    /// Retrieves a filtered list of calls based on their status.
+    /// </summary>
     public IEnumerable<CallInList> GetFilterCallList(BO.MyCallStatus filter)
     {
         IEnumerable<DO.Call> calls;

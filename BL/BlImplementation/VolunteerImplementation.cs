@@ -150,6 +150,11 @@ internal class VolunteerImplementation:IVolunteer
     }
 
 
+    /// <summary>
+    /// Retrieves a filtered list of volunteers based on the specified call type.
+    /// </summary>
+    /// <param name="filter">The call type to filter volunteers by.</param>
+    /// <returns>A list of volunteers filtered by the specified call type.</returns>
     public IEnumerable<VolunteerInList> GetFilterVolunteerList(BO.MyCallType filter)
     {
         IEnumerable<DO.Volunteer> volunteers;
@@ -175,7 +180,8 @@ internal class VolunteerImplementation:IVolunteer
             DO.Volunteer? volunteer;
             lock (AdminManager.BlMutex)
                 volunteer = _dal.Volunteer.Read(id);
-            if (volunteer.Role!= (DO.MyRole)myVolunteer.Role)
+
+            if (volunteer!=null&& volunteer.Role!= (DO.MyRole)myVolunteer.Role)
             {
                 int count;
                 lock (AdminManager.BlMutex)

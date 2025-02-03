@@ -34,7 +34,6 @@
         <local:ConvertDeleteAssignmentToVisibility x:Key="ConvertDeleteAssignmentToVisibilityKey"/>
         <local:ConvertVisibilityDeleteVol x:Key="ConvertVisibilityDeleteVolKey"/>
         <local:ConvertLabelDescriptionToVisibility x:Key="ConvertLabelDescriptionToVisibilityKey"/>
-        <local:ConvertObjIdTovisNotVis x:Key="ConvertObjIdTovisNotVisKey"/>
         <local:idNumValidation x:Key="idNumValidationKey" />
         <local:phoneValidation x:Key="phoneValidationKey" />
         <local:emailValidation x:Key="emailValidationKey" />
@@ -44,6 +43,8 @@
         <local:maxDistanceValidation x:Key="maxDistanceValidationKey" />
         <local:dateValidation x:Key="dateValidationKey"/>
         <local:descriptionValidation x:Key="descriptionValidationKey"/>
+        <local:ConvertZeroDimensionsToRed x:Key="ConvertZeroDimensionsToRedKey"/>
+        <local:ConvertObjIdTovisNotVis x:Key="ConvertObjIdTovisNotVisKey"/>
 
         <!-- Triggers -->
         <Style TargetType="DataGridRow">

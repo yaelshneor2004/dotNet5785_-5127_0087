@@ -94,6 +94,11 @@ internal static class CallManager
         return date > DateTime.MinValue && date < DateTime.MaxValue;
     }
 
+    /// <summary>
+    /// Determines the status of a call based on its assignments and maximum finish time.
+    /// </summary>
+    /// <param name="callD">The DO.Call instance to evaluate.</param>
+    /// <returns>The status of the call as a BO.MyCallStatus enum value.</returns>
     internal static BO.MyCallStatus GetCallStatus(DO.Call callD)
     {
         IEnumerable<DO.Assignment> assignmentsList;
@@ -331,6 +336,11 @@ internal static class CallManager
         return distance <= volunteer.MaxDistance;
     }
 
+    /// <summary>
+    /// Converts an instance of DO.Call to an instance of BO.OpenCallInList.
+    /// </summary>
+    /// <param name="volunteer">The volunteer handling the call.</param>
+    /// <param name="callDetails">The details of the call.</param>
     /// <returns>A new BO.OpenCallInList instance with the converted data.</returns>
     public static BO.OpenCallInList convertCallToOpened(DO.Volunteer volunteer, DO.Call callDetails)
     {
@@ -379,6 +389,10 @@ internal static class CallManager
             Observers.NotifyItemUpdated(call.Id);
         }
     }
+    /// <summary>
+    /// Sends an email notification to volunteers when a new call is opened.
+    /// </summary>
+    /// <param name="call">The call details to include in the email.</param>
     public static async Task AddCallSendEmailAsync(DO.Call call)
     {
         var volunteers = s_dal.Volunteer.ReadAll(volunteer =>
@@ -395,19 +409,29 @@ internal static class CallManager
             await CallManager.SendEmailAsync(volunteer.Email, subject, body);
         }
     }
-    public static async Task UpdateCancelTreatmentSendEmailAsync(int idV,DO.Assignment assignment)
+    /// <summary>
+    /// Updates the status of a call and sends an email notification when a treatment is canceled.
+    /// </summary>
+    /// <param name="idV">The ID of the volunteer.</param>
+    /// <param name="assignment">The assignment details.</param>
+    public static async Task UpdateCancelTreatmentSendEmailAsync(int idV, DO.Assignment assignment)
     {
         DO.Volunteer? volunteer;
         lock (AdminManager.BlMutex)
-        volunteer = s_dal.Volunteer.Read(assignment.VolunteerId);
+            volunteer = s_dal.Volunteer.Read(assignment.VolunteerId);
 
         if (CallManager.IsManager(idV))
         {
             var subject = $"Assignment Cancelled";
             var body = $"Your assignment for call {assignment.CallId} has been cancelled.";
-           await CallManager.SendEmailAsync(volunteer?.Email ?? string.Empty, subject, body);
+            await CallManager.SendEmailAsync(volunteer?.Email ?? string.Empty, subject, body);
         }
     }
+    /// <summary>
+    /// Adds coordinates to a call based on its address.
+    /// </summary>
+    /// <param name="call">The call object to update with coordinates.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
     public static async Task AddCallCoordinatesAsync(DO.Call call)
     {
         if (call.Address is not null)
