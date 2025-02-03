@@ -15,13 +15,18 @@
 
         <!--grid in all the window-->
         <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="161*"/>
+                <ColumnDefinition Width="863*"/>
+            </Grid.ColumnDefinitions>
 
-            <GroupBox BorderThickness="4" BorderBrush="#9370DB" VerticalAlignment="Top" HorizontalAlignment="Center" Height="360" Margin="0,2,0,0" Width="281" RenderTransformOrigin="0.863,0.466">
+            <GroupBox BorderThickness="4" BorderBrush="#9370DB" VerticalAlignment="Top" HorizontalAlignment="Left" Height="360" Margin="194,42,0,0" Width="282" RenderTransformOrigin="0.863,0.466" Grid.Column="1">
                 <GroupBox.Header>
-                    <TextBlock Text="Central buttons menu" Foreground="#9370DB" FontSize="20"/>
+                    <TextBlock Text="Clock menu" Foreground="#9370DB" FontSize="20"/>
                 </GroupBox.Header>
                 <StackPanel Margin="32,0,38,0">
-                    <Label Content="{Binding CurrentTime, StringFormat=MM/dd/yyyy}" FontSize="72" FontWeight="ExtraBold" Height="48" Width="250" HorizontalContentAlignment="Center" Foreground="Black"/>
+                    <Label FontWeight="Bold" Content="{Binding CurrentTime, StringFormat=MM/dd/yyyy}" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="25" Foreground="#091040"/>
+                    <!--<Label Content="{Binding CurrentTime, StringFormat=MM/dd/yyyy}" FontSize="72" FontWeight="ExtraBold" Height="48" Width="183" HorizontalContentAlignment="Center" Foreground="Black"/>-->
                     <Button Content="Add One Minute" HorizontalAlignment="Center" Height="42" Width="150" Click="btnAddOneMinute_Click" IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource BooleanToIsEnabeldyConverterKey}}"/>
                     <Button Content="Add One Hour" HorizontalAlignment="Center" Height="42" Width="150" Click="btnAddOneHour_Click" IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource BooleanToIsEnabeldyConverterKey}}"/>
                     <Button Content="Add One Day" HorizontalAlignment="Center" Height="42" Width="150" Click="btnAddOneDay_Click" IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource BooleanToIsEnabeldyConverterKey}}"/>
@@ -30,23 +35,23 @@
                 </StackPanel>
             </GroupBox>
 
-            <Label Content="Status Quantities" HorizontalAlignment="Left" FontSize="15" Margin="0,110,0,297" FontWeight="Bold" Width="130"/>
-            <DataGrid AutoGenerateColumns="False" IsReadOnly="True" ItemsSource="{Binding StatusList, Mode=TwoWay}" Background="Transparent" BorderBrush="Transparent" MouseLeftButtonUp="DataGrid_MouseLeftButtonUp" Margin="0,141,729,103" SelectedItem="{Binding selectedValue, Mode=TwoWay}" SelectionChanged="DataGrid_SelectionChanged" HorizontalAlignment="Right" Width="237">
+            <Label Content="Status Quantities" HorizontalAlignment="Left" FontSize="15" Margin="11,115,0,292" FontWeight="Bold" Width="130" Grid.ColumnSpan="2"/>
+            <DataGrid AutoGenerateColumns="False" IsReadOnly="True" ItemsSource="{Binding StatusList, Mode=TwoWay}" Background="Transparent" BorderBrush="Transparent" MouseLeftButtonUp="DataGrid_MouseLeftButtonUp" Margin="0,145,651,99" SelectedItem="{Binding selectedValue, Mode=TwoWay}" SelectionChanged="DataGrid_SelectionChanged" HorizontalAlignment="Right" Width="237" Grid.ColumnSpan="2">
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding value}" Header="Status" Width="*"/>
                     <DataGridTextColumn Binding="{Binding index}" Header="Quantity" Width="*"/>
                 </DataGrid.Columns>
             </DataGrid>
-            <Button Style="{StaticResource SimulatorButtonStyle }" HorizontalAlignment="Left" Height="36" Margin="120,42,0,0" VerticalAlignment="Top" Width="136" Click="ToggleSimulator_Click" RenderTransformOrigin="-3.54,7.601"/>
-            <TextBox HorizontalAlignment="Left" Height="30" Margin="45,-1,0,0" TextWrapping="Wrap" Text="{Binding Interval, Mode=TwoWay}" VerticalAlignment="Top" Width="190" IsReadOnly="{Binding IsSimulatorRunning, Converter={StaticResource BooleanToReadOnlyConverterKey}}"/>
-            <Label Content="Enter the time in milliseconds" HorizontalAlignment="Center" Height="15" Margin="0,15,0,0" VerticalAlignment="Top" Width="190"/>
+            <Button Style="{StaticResource SimulatorButtonStyle }" HorizontalAlignment="Left" Height="36" Margin="72,45,0,0" VerticalAlignment="Top" Width="136" Click="ToggleSimulator_Click" RenderTransformOrigin="-3.54,7.601" Grid.ColumnSpan="2"/>
+            <TextBox HorizontalAlignment="Left" Height="30" Margin="45,-1,0,0" TextWrapping="Wrap" Text="{Binding Interval, Mode=TwoWay}" VerticalAlignment="Top" Width="190" IsReadOnly="{Binding IsSimulatorRunning, Converter={StaticResource BooleanToReadOnlyConverterKey}}" Grid.ColumnSpan="2"/>
+            <Label Content="Enter the time in milliseconds" HorizontalAlignment="Left" Height="15" Margin="256,15,0,0" VerticalAlignment="Top" Width="190" Grid.Column="1"/>
 
 
-            <GroupBox  BorderThickness="4" BorderBrush="#9370DB" VerticalAlignment="Top" Height="343" Margin="748,20,45,0" >
+            <GroupBox BorderThickness="4" BorderBrush="#9370DB" VerticalAlignment="Top" HorizontalAlignment="Left" Height="360" Margin="506,42,0,0" Width="282" RenderTransformOrigin="0.863,0.466" Grid.Column="1">
                 <GroupBox.Header>
                     <TextBlock Text="Central buttons menu" Foreground="#9370DB" FontSize="20"/>
                 </GroupBox.Header>
-                <StackPanel Margin="24,0,18,0" Height="234" >
+                <StackPanel Margin="27,0,15,0" Height="234" >
                     <Button Content="Init DB" HorizontalAlignment="Center" Height="40" Width="150" Click="btnInitDB_Click"  IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource BooleanToIsEnabeldyConverterKey}}"/>
                     <Button Content="Reset DB" HorizontalAlignment="Center" Height="40" Width="150" Click="btnResetDB_Click"  IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource BooleanToIsEnabeldyConverterKey}}" />
                     <Button Content="Handle Volunteers" HorizontalAlignment="Center" Height="40" Width="150" Click="btnHandleVolunteers_Click"/>
@@ -56,9 +61,9 @@
 
 
 
-            <Label Content="Max Range-&#xD;&#xA;[Maximum time for an open call After this time the call will expire.]" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="0" Margin="8,381,0,0" Grid.Row="0"/>
-            <TextBox Text="{Binding MaxRiskRange}" Grid.Column="0" Margin="19,432,709,-61"/>
-            <Button Content="Update" HorizontalAlignment="Left" Width="112" Height="30" Click="btnUpdate_Click" Margin="326,446,0,-47"/>
+            <Label Content="Max Range:" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="0" Margin="14,340,0,0" Grid.Row="0" Grid.ColumnSpan="2"/>
+            <TextBox Text="{Binding MaxRiskRange}" Grid.Column="0" Margin="22,366,782,41" Grid.ColumnSpan="2"/>
+            <Button Content="Update" HorizontalAlignment="Left" Width="86" Height="30" Click="btnUpdate_Click" Margin="72,366,0,41" Grid.Column="1"/>
 
         </Grid>
     </Viewbox>
