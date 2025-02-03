@@ -29,8 +29,8 @@
                 <StackPanel Margin="32,0,38,0">
 
 
-                    <Label Style="{StaticResource HeaderLabelStyle} FontWeight="Bold" Content="{Binding CurrentTime}" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="25" Foreground="#091040" }" />
-                    <!--<Label Content="{Binding CurrentTime, StringFormat=MM/dd/yyyy}" FontSize="72" FontWeight="ExtraBold" Height="48" Width="183" HorizontalContentAlignment="Center" Foreground="Black"/>-->
+                    <!--<Label  FontWeight="Bold" Content="{Binding CurrentTime}" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="25" Foreground="#091040" }" />-->
+                        <Label Content="{Binding CurrentTime, StringFormat=MM/dd/yyyy}" Style="{StaticResource HeaderLabelStyle} FontSize="72" FontWeight="ExtraBold" Height="48" Width="183" HorizontalContentAlignment="Center" Foreground="Black"/>
                     <Button Content="Add One Minute" HorizontalAlignment="Center" Height="42" Width="150" Click="btnAddOneMinute_Click" IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource BooleanToIsEnabeldyConverterKey}}"/>
                     <Button Content="Add One Hour" HorizontalAlignment="Center" Height="42" Width="150" Click="btnAddOneHour_Click" IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource BooleanToIsEnabeldyConverterKey}}"/>
                     <Button Content="Add One Day" HorizontalAlignment="Center" Height="42" Width="150" Click="btnAddOneDay_Click" IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource BooleanToIsEnabeldyConverterKey}}"/>
