@@ -670,4 +670,24 @@
     <Description>call number: 1 of type: ComputerScience at: 18 Sokolov St, Ramat HaSharon</Description>
     <MaxFinishCall>2024-04-17T01:39:50.7419401+03:00</MaxFinishCall>
   </Call>
+  <Call>
+    <Id>68</Id>
+    <CallType>None</CallType>
+    <Address>Yigal Alon 120, Tel Aviv, Israel</Address>
+    <Latitude>0</Latitude>
+    <Longitude>0</Longitude>
+    <OpenTime>2025-02-03T01:39:49</OpenTime>
+    <Description>BHNJ</Description>
+    <MaxFinishCall>2025-02-28T01:39:49</MaxFinishCall>
+  </Call>
+  <Call>
+    <Id>69</Id>
+    <CallType>None</CallType>
+    <Address>Yigal Alon 120, Tel Aviv, Israel</Address>
+    <Latitude>32.0737482</Latitude>
+    <Longitude>34.7953709</Longitude>
+    <OpenTime>2025-02-03T01:39:49</OpenTime>
+    <Description>RGGTT</Description>
+    <MaxFinishCall>2025-02-26T01:39:49</MaxFinishCall>
+  </Call>
 </ArrayOfCall>

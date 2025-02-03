@@ -74,12 +74,24 @@ internal static class CallManager
     /// <param name="call">The call object to validate.</param>
     public static void ValidateCallLogic(BO.Call call)
     {
+        if ((call.MaxEndTime.HasValue && !IsValidDate(call.MaxEndTime.Value)))
+            throw new BO.BlInvalidOperationException("Invalid date.");
         if (call.MaxEndTime.HasValue && call.MaxEndTime <= call.StartTime)
             throw new BO.BlInvalidOperationException("Max end time must be later than start time.");
         if (call.Id < 0)
             throw new BO.BlInvalidOperationException("Invalid callId.");
         if (!Tools.IsValidAddress(call.Address))
             throw new BO.BlInvalidOperationException("Invalid Address.");
+    }
+
+    /// <summary>
+    /// Checks if the provided date is valid.
+    /// </summary>
+    /// <param name="date">The date to check.</param>
+    /// <returns>True if the date is valid, false otherwise.</returns>
+    private static bool IsValidDate(DateTime date)
+    {
+        return date > DateTime.MinValue && date < DateTime.MaxValue;
     }
 
     internal static BO.MyCallStatus GetCallStatus(DO.Call callD)

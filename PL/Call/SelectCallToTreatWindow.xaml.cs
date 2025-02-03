@@ -216,7 +216,7 @@ namespace PL.Call
 
         private async void CenterMapOnVolunteer()
         {
-            if (Call is not null)
+            if (Call is not null&& CurrentVolunteer is not null)
             {
                 await MapWebView.ExecuteScriptAsync($"initialize({CurrentVolunteer.Latitude}, " +
                     $"{CurrentVolunteer.Longitude}, {Call.Latitude}, " +
@@ -224,9 +224,12 @@ namespace PL.Call
             }
             else
             {
-                await MapWebView.ExecuteScriptAsync($"initialize({CurrentVolunteer.Latitude}, " +
-                    $"{CurrentVolunteer.Longitude}, {CurrentVolunteer.Latitude}, " +
-                    $"{CurrentVolunteer.Longitude}, '{CurrentVolunteer.TypeDistance}');");
+                if (CurrentVolunteer is not null)
+                {
+                    await MapWebView.ExecuteScriptAsync($"initialize({CurrentVolunteer.Latitude}, " +
+                        $"{CurrentVolunteer.Longitude}, {CurrentVolunteer.Latitude}, " +
+                        $"{CurrentVolunteer.Longitude}, '{CurrentVolunteer.TypeDistance}');");
+                }
             }
         }
         private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -252,11 +255,13 @@ namespace PL.Call
         {
             try
             {
-                s_bl.Volunteer.UpdateVolunteer(id, CurrentVolunteer);
-                MessageBox.Show("The address has been updated successfully", "Message", MessageBoxButton.OK, MessageBoxImage.Information);
-                queryCallList(id);
-                CenterMapOnVolunteer();
-
+                if (CurrentVolunteer != null)
+                {
+                    s_bl.Volunteer.UpdateVolunteer(id, CurrentVolunteer);
+                    MessageBox.Show("The address has been updated successfully", "Message", MessageBoxButton.OK, MessageBoxImage.Information);
+                    queryCallList(id);
+                    CenterMapOnVolunteer();
+                }
             }
             catch (BO.BlInvalidOperationException ex)
             {

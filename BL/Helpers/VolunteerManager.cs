@@ -441,7 +441,7 @@ internal static class VolunteerManager
 
             if (assignmentInProgressData == null)
             {
-                int percent = s_rand.Next(1, 1); // 20% chance to choose a call
+                int percent = s_rand.Next(1, 6); // 20% chance to choose a call
                 if (percent == 1)
                 {
                     DO.Call? openCall;
@@ -516,7 +516,7 @@ internal static class VolunteerManager
                     }
                     else
                     {
-                        int percent = s_rand.Next(1, 1); // 10% chance to cancel the assignment
+                        int percent = s_rand.Next(1, 11); // 10% chance to cancel the assignment
                         if (percent == 1)
                         {
                             bool isAssigned = s_dal.Assignment.ReadAll(a => a.CallId == assignmentInProgressData.CallId && a.FinishType == null).Any();

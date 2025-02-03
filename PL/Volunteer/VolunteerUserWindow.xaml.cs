@@ -51,7 +51,6 @@ public partial class VolunteerUserWindow : Window
 
     public BO.MyTypeDistance TypeDistance { get; set; } = BO.MyTypeDistance.None;
     public BO.MyRole Role { get; set; } = BO.MyRole.None;
-    private int id = 0;
 
     /// <summary>
     /// Constructor for VolunteerUserWindow.
@@ -129,7 +128,8 @@ public partial class VolunteerUserWindow : Window
     /// </summary>
     private void btnCallHistory_Click(object sender, RoutedEventArgs e)
     {
-        new VolunteerCallHistoryWindow(CurrentVolunteer.Id).Show();
+        if (CurrentVolunteer is not null)
+            new VolunteerCallHistoryWindow(CurrentVolunteer.Id).Show();
     }
 
     /// <summary>
@@ -137,7 +137,8 @@ public partial class VolunteerUserWindow : Window
     /// </summary>
     private void btnSelectCall_Click(object sender, RoutedEventArgs e)
     {
-        new SelectCallToTreatWindow(CurrentVolunteer.Id).Show();
+        if (CurrentVolunteer is not null)
+            new SelectCallToTreatWindow(CurrentVolunteer.Id).Show();
         //Close();
     }
 
@@ -152,8 +153,8 @@ public partial class VolunteerUserWindow : Window
             return;
         }
         try
-        {
-            s_bl.Call.UpdateCancelTreatment(CurrentVolunteer.Id, CurrentCall.Id);
+        {if(CurrentVolunteer is not null)
+                s_bl.Call.UpdateCancelTreatment(CurrentVolunteer.Id, CurrentCall.Id);
             MessageBox.Show("Treatment cancellation successfully canceled", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
         }
         catch (BO.BlTemporaryNotAvailableException ex)
@@ -190,7 +191,8 @@ public partial class VolunteerUserWindow : Window
         }
         try
         {
-            s_bl.Call.UpdateCompleteAssignment(CurrentVolunteer.Id, CurrentCall.Id);
+            if (CurrentVolunteer is not null)
+                s_bl.Call.UpdateCompleteAssignment(CurrentVolunteer.Id, CurrentCall.Id);
             MessageBox.Show("Treatment completed successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
         }
         catch (BO.BlTemporaryNotAvailableException ex)
@@ -235,13 +237,15 @@ public partial class VolunteerUserWindow : Window
     {
         if (CurrentCall is not null)
         {
-            await MapWebView.ExecuteScriptAsync($"initialize({CurrentVolunteer.Latitude}, " +
+            if (CurrentVolunteer is not null)
+                await MapWebView.ExecuteScriptAsync($"initialize({CurrentVolunteer.Latitude}, " +
                 $"{CurrentVolunteer.Longitude}, {CurrentCall.Latitude}, " +
                 $"{CurrentCall.Longitude}, '{CurrentVolunteer.TypeDistance}');");
         }
         else
         {
-            await MapWebView.ExecuteScriptAsync($"initialize({CurrentVolunteer.Latitude}, " +
+            if (CurrentVolunteer is not null)
+                await MapWebView.ExecuteScriptAsync($"initialize({CurrentVolunteer.Latitude}, " +
                 $"{CurrentVolunteer.Longitude}, {CurrentVolunteer.Latitude}, " +
                 $"{CurrentVolunteer.Longitude}, '{CurrentVolunteer.TypeDistance}');");
         }
@@ -259,8 +263,7 @@ public partial class VolunteerUserWindow : Window
     /// <summary>
     /// Observer method to update volunteer and call details.
     /// </summary>
-    private volatile DispatcherOperation? _observerOperation = null; //stage 7 
-
+    private volatile DispatcherOperation? _observerOperation = null; 
     private void VolunteerObserver()
     {
         try

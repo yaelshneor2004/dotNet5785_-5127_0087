@@ -20,16 +20,39 @@
                   IsEnabled="{Binding CurrentCall,Converter={StaticResource ConvertCallComboboxToReadOnlyKey}}" Background="White"/>
 
             <Label Content="Description:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Margin="0,5,0,5"/>
-            <TextBox Text="{Binding CurrentCall.Description}" Style="{StaticResource {x:Type TextBox}}" IsReadOnly="{Binding CurrentCall,Converter={StaticResource ConvertCallToReadOnlyKey}}" Foreground="Black" Margin="0,5,0,5"/>
-
+            <TextBox Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}" Style="{StaticResource {x:Type TextBox}}" IsReadOnly="{Binding CurrentCall,Converter={StaticResource ConvertCallToReadOnlyKey}}" Foreground="Black" Margin="0,5,0,5">
+            <TextBox.Text >
+                    <Binding Path="CurrentCall.Description" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <StaticResource ResourceKey="descriptionValidationKey"/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text >
+            </TextBox>
             <Label Content="Address:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Margin="0,5,0,5"/>
-            <TextBox Text="{Binding CurrentCall.Address}" Style="{StaticResource {x:Type TextBox}}" IsReadOnly="{Binding CurrentCall,Converter={StaticResource ConvertCallToReadOnlyKey}}" Foreground="Black" Margin="0,5,0,5"/>
 
+            <TextBox  Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}" Style="{StaticResource {x:Type TextBox}}" IsReadOnly="{Binding CurrentCall,Converter={StaticResource ConvertCallToReadOnlyKey}}" Foreground="Black" Margin="0,5,0,5">
+                <TextBox.Text >
+                    <Binding Path="CurrentCall.Address" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <StaticResource ResourceKey="addressValidationKey"/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text >
+            </TextBox>
             <Label Content="Start Time:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Margin="0,5,0,5"/>
             <TextBox Text="{Binding CurrentCall.StartTime}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black" Margin="0,5,0,5" IsReadOnly="True"/>
 
             <Label Content="Max End Time:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Margin="0,5,0,5"/>
-            <TextBox Text="{Binding CurrentCall.MaxEndTime}" Style="{StaticResource {x:Type TextBox}}" IsReadOnly="{Binding CurrentCall,Converter={StaticResource ConvertMaxEndToReadOnlyKey}}" Foreground="Black" Margin="0,5,0,5"/>
+            <TextBox  Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}"  IsReadOnly="{Binding CurrentCall,Converter={StaticResource ConvertMaxEndToReadOnlyKey}}" Style="{StaticResource {x:Type TextBox}}" Foreground="Black" Margin="0,5,0,5" >
+                <TextBox.Text >
+                    <Binding Path="CurrentCall.MaxEndTime" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <StaticResource ResourceKey="dateValidationKey"/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text >
+            </TextBox>
 
             <Label Content="Status:" Style="{StaticResource {x:Type Label}}" Foreground="Blue" Margin="0,5,0,5"/>
             <TextBox Text="{Binding CurrentCall.Status}" Style="{StaticResource {x:Type TextBox}}" IsReadOnly="True"  Foreground="Black" Margin="0,5,0,5"/>

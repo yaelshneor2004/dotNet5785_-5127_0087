@@ -82,7 +82,15 @@
             </Grid>
             <!-- TextBox and Button for changing volunteer address -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Grid.ColumnSpan="2" VerticalAlignment="Top" Margin="578,11,0,0" Width="407" Grid.RowSpan="2">
-                <TextBox Text="{Binding CurrentVolunteer.Address, Mode=TwoWay}" Width="230" Height="30"/>
+                <TextBox  Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}" Width="230" Height="30">
+                    <TextBox.Text >
+                        <Binding Path="CurrentVolunteer.Address" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <StaticResource ResourceKey="addressValidationKey"/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text >
+                </TextBox>
                 <Button Content="Update Address" Click="UpdateAddress_Click" Height="30"/>
             </StackPanel>
         </Grid>

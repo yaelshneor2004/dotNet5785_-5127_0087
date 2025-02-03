@@ -83,3 +83,24 @@ internal class maxDistanceValidation : ValidationRule
         return ValidationResult.ValidResult;
     }
 }
+internal class descriptionValidation : ValidationRule
+{
+    public override ValidationResult Validate(object value, System.Globalization.CultureInfo cultureInfo)
+    {
+        string description = (string)value;
+        if (description.Length < 2)
+            return new ValidationResult(false, "Description must contain at least 2 characters");
+        return ValidationResult.ValidResult;
+    }
+}
+internal class dateValidation : ValidationRule
+{
+    public override ValidationResult Validate(object value, System.Globalization.CultureInfo cultureInfo)
+    {
+        string date = (string)value;
+        DateTime tempDate;
+        if (!DateTime.TryParse(date, out tempDate))
+            return new ValidationResult(false, "Invalid date format");
+        return ValidationResult.ValidResult;
+    }
+}

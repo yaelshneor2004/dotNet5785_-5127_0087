@@ -29,7 +29,7 @@ namespace PL
         /// <summary>
         /// Helper class for displaying call status.
         /// </summary>
-        public class helper
+        public class Helper
         {
             public int index { get; set; }
             public BO.MyCallStatus value { get; set; }
@@ -44,6 +44,7 @@ namespace PL
         public MainWindow(int id)
         {
             idManager = id;
+            selectedValue = new Helper(); // Initialize selectedValue
             InitializeComponent();
             updateCallAmount();
         }
@@ -51,7 +52,7 @@ namespace PL
         {
             var callAmounts = s_bl.Call.CallAmount();
             var statusListAmount = callAmounts
-                .Select((count, index) => new helper
+                .Select((count, index) => new Helper
                 {
                     index = count,
                     value = (BO.MyCallStatus)index
@@ -68,20 +69,20 @@ namespace PL
         /// <summary>
         /// Gets or sets the selected value.
         /// </summary>
-        public helper selectedValue { get; set; }
+        public Helper selectedValue { get; set; }
 
         /// <summary>
         /// Gets or sets the status list.
         /// </summary>
-        public IEnumerable<helper> StatusList
+        public IEnumerable<Helper> StatusList
         {
-            get { return (IEnumerable<helper>)GetValue(StatusListProperty); }
+            get { return (IEnumerable<Helper>)GetValue(StatusListProperty); }
             set { SetValue(StatusListProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for StatusList. This enables animation, styling, binding, etc...
         public static readonly DependencyProperty StatusListProperty =
-            DependencyProperty.Register("StatusList", typeof(IEnumerable<helper>), typeof(MainWindow), new PropertyMetadata(null));
+            DependencyProperty.Register("StatusList", typeof(IEnumerable<Helper>), typeof(MainWindow), new PropertyMetadata(null));
 
         public int Interval
         {
@@ -137,7 +138,7 @@ namespace PL
         /// </summary>
         private volatile DispatcherOperation? _observerOperation = null; //stage 7
 
-        private void clockObserver()
+        private void ClockObserver()
         {
             if (_observerOperation is null || _observerOperation.Status == DispatcherOperationStatus.Completed)
 
@@ -187,7 +188,7 @@ namespace PL
         {
             CurrentTime = s_bl.Admin.GetClock();
             MaxRiskRange = s_bl.Admin.GetRiskRange();
-            s_bl.Admin.AddClockObserver(clockObserver);
+            s_bl.Admin.AddClockObserver(ClockObserver);
             s_bl.Admin.AddConfigObserver(configObserver);
             s_bl.Call.AddObserver(updateCallAmount);
 
@@ -200,7 +201,7 @@ namespace PL
         {
             s_bl.Admin.StopSimulator();
             IsSimulatorRunning = false;
-            s_bl.Admin.RemoveClockObserver(clockObserver);
+            s_bl.Admin.RemoveClockObserver(ClockObserver);
             s_bl.Admin.RemoveConfigObserver(configObserver);
             s_bl.Call.RemoveObserver(updateCallAmount);
         }

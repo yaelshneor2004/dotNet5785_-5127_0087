@@ -278,17 +278,18 @@ internal class CallImplementation : BlApi.ICall
     /// <returns>A list of opened calls.</returns>
     public IEnumerable<BO.OpenCallInList> SortOpenedCalls(int idV, BO.MyCallType? callType, BO.OpenedCall? openedCall)
     {
-       DO.Volunteer? volunteer;
+        DO.Volunteer? volunteer;
         IEnumerable<DO.Call> openCalls;
         lock (AdminManager.BlMutex)
         {
             volunteer = _dal.Volunteer.Read(idV);
             openCalls = _dal.Call.ReadAll();
         }
-       var calls= openCalls.Where(c=>CallManager.OpenCondition(c)&&CallManager.VolunteerArea(volunteer, c)).Select(c => CallManager.convertCallToOpened(volunteer,c)).ToList();
+        IEnumerable<BO.OpenCallInList> calls = Enumerable.Empty<BO.OpenCallInList>();
+        if (volunteer is not null)
+            calls = openCalls.Where(c => CallManager.OpenCondition(c) && CallManager.VolunteerArea(volunteer, c)).Select(c => CallManager.convertCallToOpened(volunteer, c)).ToList();
         calls = callType.HasValue ? calls.Where(call => call.Type == callType.Value).ToList() : calls;
         return CallManager.SortOpenCallsByField(calls, openedCall);
-
     }
 
     /// <summary>
@@ -356,8 +357,9 @@ internal class CallImplementation : BlApi.ICall
                     // Check that the assignment is still open and not already completed or canceled
                     if (assignment!=null&&assignment.FinishCall.HasValue ||assignment!=null&& assignment.FinishType.HasValue)
                         throw new BO.BlInvalidOperationException("The assignment has already been completed or canceled.");
-                    // Create a new assignment object with the updated finish time and finish type
-                    var updatedAssignment = assignment with
+            // Create a new assignment object with the updated finish time and finish type
+            DO.Assignment? updatedAssignment;
+                updatedAssignment = assignment with
                     {
                         FinishCall = AdminManager.Now,
                         FinishType = assignment.VolunteerId == idV ? DO.MyFinishType.SelfCancel : DO.MyFinishType.ManagerCancel
