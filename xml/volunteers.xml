@@ -141,34 +141,6 @@
     <IsActive>true</IsActive>
   </Volunteer>
   <Volunteer>
-    <Id>301150447</Id>
-    <FullName>Menachem Begin</FullName>
-    <Phone>05249080152</Phone>
-    <Email>menachembegin@gmail.com</Email>
-    <Role>Volunteer</Role>
-    <TypeDistance>Traveling</TypeDistance>
-    <Password>cuJISGbN5HYdUjd6jgA7Pw==</Password>
-    <Address>Reger Blvd 55, Be'er Sheva, Israel</Address>
-    <Latitude>31.24642</Latitude>
-    <Longitude>34.77952</Longitude>
-    <MaxDistance>58.77359115904844</MaxDistance>
-    <IsActive>true</IsActive>
-  </Volunteer>
-  <Volunteer>
-    <Id>190313205</Id>
-    <FullName>Ariel Sharon</FullName>
-    <Phone>05298808249</Phone>
-    <Email>arielsharon@gmail.com</Email>
-    <Role>Volunteer</Role>
-    <TypeDistance>Traveling</TypeDistance>
-    <Password>IwVXKuSmG+MSlBTsuv13+A==</Password>
-    <Address>Johanna Jabotinsky 15, Be'er Sheva, Israel</Address>
-    <Latitude>31.2536</Latitude>
-    <Longitude>34.78251</Longitude>
-    <MaxDistance>98.93927646242383</MaxDistance>
-    <IsActive>true</IsActive>
-  </Volunteer>
-  <Volunteer>
     <Id>781021860</Id>
     <FullName>Moshe Dayan</FullName>
     <Phone>05779249678</Phone>
@@ -211,20 +183,6 @@
     <IsActive>true</IsActive>
   </Volunteer>
   <Volunteer>
-    <Id>327770087</Id>
-    <FullName>Ayala Ozeri</FullName>
-    <Phone>0533328200</Phone>
-    <Email>ayala.ozeri@gmail.com</Email>
-    <Role>Manager</Role>
-    <TypeDistance>Aerial</TypeDistance>
-    <Password>xmsa6jw3qv3VG1W8RFtHyg==</Password>
-    <Address>Rothschild 10, Tel Aviv, Israel</Address>
-    <Latitude>32.0625</Latitude>
-    <Longitude>34.7721</Longitude>
-    <MaxDistance>10</MaxDistance>
-    <IsActive>true</IsActive>
-  </Volunteer>
-  <Volunteer>
     <Id>326615127</Id>
     <FullName>Yael Shneor</FullName>
     <Phone>0533859299</Phone>
@@ -250,6 +208,48 @@
     <Latitude>31.78130811991647</Latitude>
     <Longitude>35.22119546257982</Longitude>
     <MaxDistance>30</MaxDistance>
+    <IsActive>true</IsActive>
+  </Volunteer>
+  <Volunteer>
+    <Id>301150447</Id>
+    <FullName>Menachem Begin</FullName>
+    <Phone>05249080152</Phone>
+    <Email>menachembegin@gmail.com</Email>
+    <Role>Volunteer</Role>
+    <TypeDistance>Traveling</TypeDistance>
+    <Password>cuJISGbN5HYdUjd6jgA7Pw==</Password>
+    <Address>Reger Blvd 55, Sheva, Israel</Address>
+    <Latitude>31.2521018</Latitude>
+    <Longitude>34.7867691</Longitude>
+    <MaxDistance>58.77359115904844</MaxDistance>
+    <IsActive>true</IsActive>
+  </Volunteer>
+  <Volunteer>
+    <Id>190313205</Id>
+    <FullName>Ariel Sharon</FullName>
+    <Phone>05298808249</Phone>
+    <Email>arielsharon@gmail.com</Email>
+    <Role>Volunteer</Role>
+    <TypeDistance>Traveling</TypeDistance>
+    <Password>IwVXKuSmG+MSlBTsuv13+A==</Password>
+    <Address>Johanna Jabotinsky 15, Sheva, Israel</Address>
+    <Latitude>31.2496394</Latitude>
+    <Longitude>34.8088819</Longitude>
+    <MaxDistance>98.93927646242383</MaxDistance>
+    <IsActive>true</IsActive>
+  </Volunteer>
+  <Volunteer>
+    <Id>327770087</Id>
+    <FullName>Ayala Ozeri</FullName>
+    <Phone>0533328200</Phone>
+    <Email>ayala.ozeri@gmail.com</Email>
+    <Role>Manager</Role>
+    <TypeDistance>Aerial</TypeDistance>
+    <Password>xmsa6jw3qv3VG1W8RFtHyg==</Password>
+    <Address>Rothschild 10,bni brak</Address>
+    <Latitude>32.084932</Latitude>
+    <Longitude>34.835226</Longitude>
+    <MaxDistance>10</MaxDistance>
     <IsActive>true</IsActive>
   </Volunteer>
 </ArrayOfVolunteer>
