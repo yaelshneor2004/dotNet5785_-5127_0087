@@ -7,6 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stage0", "Stage0\Stage0.csp
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A1B91A2B-83EE-438A-9C1F-64BFB1F75B37}"
 	ProjectSection(SolutionItems) = preProject
+		..\..\..\..\..\Downloads\finishMinip.pdf = ..\..\..\..\..\Downloads\finishMinip.pdf
 		README.md = README.md
 	EndProjectSection
 EndProject
@@ -31,7 +32,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BL", "BL\BL.csproj", "{3F9F
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlTest", "BlTest\BlTest.csproj", "{6315FC7E-94C9-4C7C-9BE3-30E3F22BEEC2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PL", "PL\PL.csproj", "{470A4DE4-2830-4B74-9ADE-E13CB9F25F2D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PL", "PL\PL.csproj", "{470A4DE4-2830-4B74-9ADE-E13CB9F25F2D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
