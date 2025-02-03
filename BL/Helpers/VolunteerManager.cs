@@ -54,6 +54,11 @@ internal static class VolunteerManager
             throw new BO.BlInvalidOperationException("invalid Address");
 
     }
+    /// <summary>
+    /// Adds volunteer coordinates asynchronously based on their address.
+    /// </summary>
+    /// <param name="volunteer">The volunteer whose coordinates need to be added.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
     public static async Task AddVolunteerCoordinatesAsync(BO.Volunteer volunteer)
     {
         var coordinates = await Tools.GetCoordinates(volunteer.Address ?? string.Empty);
@@ -64,11 +69,6 @@ internal static class VolunteerManager
         Observers.NotifyListUpdated();
         Observers.NotifyItemUpdated(volunteer.Id);
     }
-
-
-
-
-
 
     /// <summary>
     /// Checks if the given password is strong.
@@ -240,6 +240,11 @@ internal static class VolunteerManager
             Role = (DO.MyRole)myVolunteer.Role
         };
     }
+    /// <summary>
+    /// Checks if the input string is encrypted.
+    /// </summary>
+    /// <param name="input">The input string to check.</param>
+    /// <returns>Returns true if the input string is encrypted, otherwise false.</returns>
     private static bool IsEncrypted(string input)
     {
         try
@@ -255,10 +260,10 @@ internal static class VolunteerManager
 
 
 
-    // / <summary>
+    /// <summary>
     /// Converts a DO.Volunteer to a BO.Volunteer.
     /// </summary>
-    /// <param name = "myVolunteer" > The DO.Volunteer object to convert.</param>
+    /// <param name="myVolunteer">The DO.Volunteer object to convert.</param>
     /// <returns>Returns the converted BO.Volunteer object.</returns>
     public static BO.Volunteer ConvertFromDoToBo(DO.Volunteer myVolunteer)
     {

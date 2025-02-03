@@ -444,22 +444,40 @@ public class ConvertObjIdTovisNotVis : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        if (value == null)
+        if (value is BO.CallInProgress currentCall)
         {
-            return Visibility.Collapsed;
+            if (currentCall!=null)
+            {
+                return Visibility.Visible;
+            }
         }
-        return Visibility.Visible;
-
+        return Visibility.Collapsed;
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
     {
         throw new NotImplementedException();
     }
-
-
 }
+public class ConvertZeroDimensionsToRed : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        if (value is double dimensions)
+        {
+            if (dimensions == 0)
+            {
+                return Brushes.Red;
+            }
+        }
+        return new SolidColorBrush((Color)ColorConverter.ConvertFromString("#9370DB"));
+    }
 
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}
 
 
 

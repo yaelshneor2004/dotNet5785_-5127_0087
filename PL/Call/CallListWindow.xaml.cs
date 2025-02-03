@@ -165,7 +165,8 @@ namespace PL.Call
         {
             try
             {
-                if (SelectedCall.Status == BO.MyCallStatus.InProgress || SelectedCall.Status == BO.MyCallStatus.InProgressAtRisk)
+
+                if (SelectedCall!=null&& SelectedCall.Status == BO.MyCallStatus.InProgress ||SelectedCall!=null&& SelectedCall.Status == BO.MyCallStatus.InProgressAtRisk)
                 {
                     s_bl.Call.UpdateCancelTreatment(idManager, SelectedCall.CallId);
                     MessageBox.Show("Call assignment canceled successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);

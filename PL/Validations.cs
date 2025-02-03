@@ -7,6 +7,7 @@ using System.Windows.Controls;
 
 namespace PL;
 
+// Validation rule for ID number
 internal class idNumValidation : ValidationRule
 {
     public override ValidationResult Validate(object value, System.Globalization.CultureInfo cultureInfo)
@@ -19,6 +20,7 @@ internal class idNumValidation : ValidationRule
         return ValidationResult.ValidResult;
     }
 }
+// Validation rule for phone number
 internal class phoneValidation : ValidationRule
 {
     public override ValidationResult Validate(object value, System.Globalization.CultureInfo cultureInfo)
@@ -31,6 +33,7 @@ internal class phoneValidation : ValidationRule
         return ValidationResult.ValidResult;
     }
 }
+// Validation rule for email
 internal class emailValidation : ValidationRule
 {
     public override ValidationResult Validate(object value, System.Globalization.CultureInfo cultureInfo)
@@ -43,6 +46,7 @@ internal class emailValidation : ValidationRule
         return ValidationResult.ValidResult;
     }
 }
+// Validation rule for password
 internal class passwordValidation : ValidationRule
 {
     public override ValidationResult Validate(object value, System.Globalization.CultureInfo cultureInfo)
@@ -53,6 +57,7 @@ internal class passwordValidation : ValidationRule
         return ValidationResult.ValidResult;
     }
 }
+// Validation rule for name
 internal class nameValidation : ValidationRule
 {
     public override ValidationResult Validate(object value, System.Globalization.CultureInfo cultureInfo)
@@ -63,6 +68,7 @@ internal class nameValidation : ValidationRule
         return ValidationResult.ValidResult;
     }
 }
+// Validation rule for address
 internal class addressValidation : ValidationRule
 {
     public override ValidationResult Validate(object value, System.Globalization.CultureInfo cultureInfo)
@@ -73,6 +79,7 @@ internal class addressValidation : ValidationRule
         return ValidationResult.ValidResult;
     }
 }
+// Validation rule for max distance
 internal class maxDistanceValidation : ValidationRule
 {
     public override ValidationResult Validate(object value, System.Globalization.CultureInfo cultureInfo)
@@ -83,6 +90,7 @@ internal class maxDistanceValidation : ValidationRule
         return ValidationResult.ValidResult;
     }
 }
+// Validation rule for description
 internal class descriptionValidation : ValidationRule
 {
     public override ValidationResult Validate(object value, System.Globalization.CultureInfo cultureInfo)
@@ -93,6 +101,7 @@ internal class descriptionValidation : ValidationRule
         return ValidationResult.ValidResult;
     }
 }
+// Validation rule for date
 internal class dateValidation : ValidationRule
 {
     public override ValidationResult Validate(object value, System.Globalization.CultureInfo cultureInfo)

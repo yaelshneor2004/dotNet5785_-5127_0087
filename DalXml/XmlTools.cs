@@ -9,7 +9,7 @@ static class XMLTools
 {
     const string s_xmlDir = @"..\xml\";
     static XMLTools()
-    {
+    {//CREATE XML DIRECTORY IN CASE IT DOESN'T EXIST
         if (!Directory.Exists(s_xmlDir))
             Directory.CreateDirectory(s_xmlDir);
     }
