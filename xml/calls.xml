@@ -22,7 +22,7 @@
   </Call>
   <Call>
     <Id>3</Id>
-    <CallType>Math</CallType>
+    <CallType>ComputerScience</CallType>
     <Address>30 Agripas Street, Jerusalem</Address>
     <Latitude>31.783470280009738</Latitude>
     <Longitude>35.215657362641764</Longitude>
@@ -82,7 +82,7 @@
   </Call>
   <Call>
     <Id>9</Id>
-    <CallType>Accounting</CallType>
+    <CallType>English</CallType>
     <Address>10 Ben Yehuda Street, Jerusalem</Address>
     <Latitude>31.78186936361579</Latitude>
     <Longitude>35.21774235102746</Longitude>
@@ -92,7 +92,7 @@
   </Call>
   <Call>
     <Id>10</Id>
-    <CallType>Math</CallType>
+    <CallType>Accounting</CallType>
     <Address>150 Hebron Road, Jerusalem</Address>
     <Latitude>31.74578724034863</Latitude>
     <Longitude>35.21658163568471</Longitude>
@@ -122,7 +122,7 @@
   </Call>
   <Call>
     <Id>13</Id>
-    <CallType>Accounting</CallType>
+    <CallType>ComputerScience</CallType>
     <Address>35 King George Street, Jerusalem</Address>
     <Latitude>31.779769</Latitude>
     <Longitude>35.2159379</Longitude>
@@ -182,7 +182,7 @@
   </Call>
   <Call>
     <Id>19</Id>
-    <CallType>Accounting</CallType>
+    <CallType>English</CallType>
     <Address>13 Shamai Street, Jerusalem</Address>
     <Latitude>31.77261</Latitude>
     <Longitude>35.216455</Longitude>
@@ -222,7 +222,7 @@
   </Call>
   <Call>
     <Id>23</Id>
-    <CallType>Math</CallType>
+    <CallType>ComputerScience</CallType>
     <Address>14 Lincoln Street, Jerusalem</Address>
     <Latitude>31.7820255</Latitude>
     <Longitude>35.221056</Longitude>
@@ -252,7 +252,7 @@
   </Call>
   <Call>
     <Id>26</Id>
-    <CallType>English</CallType>
+    <CallType>Accounting</CallType>
     <Address>10 King David Street, Jerusalem</Address>
     <Latitude>31.787706</Latitude>
     <Longitude>35.222337</Longitude>
@@ -272,7 +272,7 @@
   </Call>
   <Call>
     <Id>28</Id>
-    <CallType>English</CallType>
+    <CallType>Accounting</CallType>
     <Address>9 Beit HaDfus Street, Jerusalem</Address>
     <Latitude>31.7765005</Latitude>
     <Longitude>35.217356</Longitude>
@@ -322,7 +322,7 @@
   </Call>
   <Call>
     <Id>33</Id>
-    <CallType>ComputerScience</CallType>
+    <CallType>English</CallType>
     <Address>7 Greenberg Street, Jerusalem</Address>
     <Latitude>31.81637</Latitude>
     <Longitude>35.192176</Longitude>
@@ -342,7 +342,7 @@
   </Call>
   <Call>
     <Id>35</Id>
-    <CallType>ComputerScience</CallType>
+    <CallType>English</CallType>
     <Address>5 Shmuel HaNagid Street, Jerusalem</Address>
     <Latitude>31.817092</Latitude>
     <Longitude>35.1915</Longitude>
@@ -362,7 +362,7 @@
   </Call>
   <Call>
     <Id>37</Id>
-    <CallType>Accounting</CallType>
+    <CallType>Math</CallType>
     <Address>12 Neve Sha'anan Street, Jerusalem</Address>
     <Latitude>31.780274</Latitude>
     <Longitude>35.214955</Longitude>
@@ -382,7 +382,7 @@
   </Call>
   <Call>
     <Id>39</Id>
-    <CallType>ComputerScience</CallType>
+    <CallType>English</CallType>
     <Address>15 Hillel Street, Jerusalem</Address>
     <Latitude>31.771493</Latitude>
     <Longitude>35.200909</Longitude>
@@ -412,7 +412,7 @@
   </Call>
   <Call>
     <Id>42</Id>
-    <CallType>Math</CallType>
+    <CallType>Accounting</CallType>
     <Address>13 Pierre Koenig Street, Jerusalem</Address>
     <Latitude>31.780728</Latitude>
     <Longitude>35.214544</Longitude>
@@ -452,7 +452,7 @@
   </Call>
   <Call>
     <Id>46</Id>
-    <CallType>Math</CallType>
+    <CallType>ComputerScience</CallType>
     <Address>5 Ibn Shaprut Street, Jerusalem</Address>
     <Latitude>31.753902</Latitude>
     <Longitude>35.221349</Longitude>
@@ -532,7 +532,7 @@
   </Call>
   <Call>
     <Id>54</Id>
-    <CallType>Math</CallType>
+    <CallType>ComputerScience</CallType>
     <Address>13 Ben Gurion Blvd, Holon</Address>
     <Latitude>32.0853</Latitude>
     <Longitude>34.7818</Longitude>
@@ -552,7 +552,7 @@
   </Call>
   <Call>
     <Id>56</Id>
-    <CallType>Math</CallType>
+    <CallType>ComputerScience</CallType>
     <Address>200 Jabotinsky St, Petah Tikva</Address>
     <Latitude>32.0833</Latitude>
     <Longitude>34.8101</Longitude>
@@ -582,7 +582,7 @@
   </Call>
   <Call>
     <Id>59</Id>
-    <CallType>English</CallType>
+    <CallType>ComputerScience</CallType>
     <Address>88 HaNesi'im St, Be'er Sheva</Address>
     <Latitude>32.3295</Latitude>
     <Longitude>34.8532</Longitude>
@@ -602,7 +602,7 @@
   </Call>
   <Call>
     <Id>61</Id>
-    <CallType>Math</CallType>
+    <CallType>Accounting</CallType>
     <Address>9 HaGefen St, Kfar Saba</Address>
     <Latitude>32.794</Latitude>
     <Longitude>34.9896</Longitude>
@@ -612,7 +612,7 @@
   </Call>
   <Call>
     <Id>62</Id>
-    <CallType>English</CallType>
+    <CallType>Math</CallType>
     <Address>70 Weizmann St, Herzliya</Address>
     <Latitude>32.1782</Latitude>
     <Longitude>34.9076</Longitude>

@@ -21,7 +21,7 @@ namespace PL
             InitializeComponent();
         }
 
-        //
+        
         public string userNameText { get; set; }
         public string ButtonImageSource
         {
@@ -77,12 +77,13 @@ namespace PL
             try
             {
                 var userDetails = s_bl.Volunteer.Login(userNameText, passwordBox.Password);
-                // Show message to ask if the user wants to enter as a manager or volunteer
-                MessageBoxResult result = MessageBox.Show("Do you want to open the main screen?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
-                if (result == MessageBoxResult.Yes) // User chooses to enter as manager
+                // Check if the user is a manager
+                if (userDetails.Item1 == BO.MyRole.Manager)
                 {
-                    if (userDetails.Item1 == BO.MyRole.Manager)
+                    MessageBoxResult result = MessageBox.Show("Do you want to open the main screen?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                    if (result == MessageBoxResult.Yes) // User chooses to enter as manager
                     {
                         if (isManagerLoggedIn)
                         {
@@ -96,12 +97,12 @@ namespace PL
                             isManagerLoggedIn = true;
                         }
                     }
-                    else
+                    else // User chooses to enter as volunteer
                     {
-                        MessageBox.Show("You do not have manager privileges.", "Access Denied", MessageBoxButton.OK, MessageBoxImage.Error);
+                        new VolunteerUserWindow(userDetails.Item2).Show();
                     }
                 }
-                else // User chooses to enter as volunteer
+                else // User is a volunteer and not a manager
                 {
                     new VolunteerUserWindow(userDetails.Item2).Show();
                 }
@@ -119,6 +120,7 @@ namespace PL
                 MessageBox.Show($"An unknown error occurred: {ex.Message}.", "Unknown Error");
             }
         }
+
 
 
         private void TogglePasswordVisibility(object sender, RoutedEventArgs e)
