@@ -112,7 +112,6 @@ namespace PL.Call
             {
                 CenterMapOnVolunteer();
             };
-
             s_bl.Call.AddObserver(callListObserver);
             CurrentVolunteer = (id != 0) ? s_bl.Volunteer.GetVolunteerDetails(id)! : new BO.Volunteer
             {

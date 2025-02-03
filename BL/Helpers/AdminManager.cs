@@ -65,7 +65,6 @@ internal static class AdminManager
     {
         var oldClock = s_dal.Config.Clock; //stage 4
         s_dal.Config.Clock = newClock; //stage 4
-        //StudentManager.PeriodicStudentsUpdates(oldClock, newClock); //stage 4
         if (_periodicTask is null || _periodicTask.IsCompleted) //stage 7
             _periodicTask = Task.Run(() => CallManager.PeriodicCallsUpdates());
         //Calling all the observers of clock update
@@ -132,10 +131,6 @@ internal static class AdminManager
         while (!s_stop)
         {
             UpdateClock(Now.AddMinutes(s_interval));
-
-            //TO_DO:
-            //Add calls here to any logic simulation that was required in stage 7
-            //for example: course registration simulation
             if (_simulateTask is null || _simulateTask.IsCompleted)//stage 7
                 _simulateTask = Task.Run(() => VolunteerManager.SimulateVolunteer());
             try

@@ -46,8 +46,6 @@ namespace PL
             idManager = id;
             InitializeComponent();
             updateCallAmount();
-           
-
         }
         private void updateCallAmount()
         {

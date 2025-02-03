@@ -165,12 +165,6 @@ namespace PL
             }
             return null;
         }
-        private void LoginWindow_Closed(object? sender, EventArgs e)
-        {
-            foreach (Window window in Application.Current.Windows)
-            {
-                window.Close();
-            }
-        }
+
     }
 }
