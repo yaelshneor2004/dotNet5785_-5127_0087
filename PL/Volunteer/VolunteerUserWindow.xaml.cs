@@ -224,11 +224,11 @@ public partial class VolunteerUserWindow : Window
     {
         if (CurrentVolunteer!.Id != 0)
         {
-            if(CurrentCall!=null)
-            MapWebView.NavigationCompleted += async (s, args) =>
-            {
-                CenterMapOnVolunteer();
-            };
+            if (CurrentCall != null)
+                MapWebView.NavigationCompleted += async (s, args) =>
+                {
+                    CenterMapOnVolunteer();
+                };
             s_bl.Volunteer.AddObserver(CurrentVolunteer.Id, VolunteerObserver);
             VolunteerObserver();
         }
