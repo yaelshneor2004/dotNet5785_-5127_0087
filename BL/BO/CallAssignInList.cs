@@ -1,4 +1,6 @@
-﻿namespace BO
+﻿using Helpers;
+
+namespace BO
 {
     /// <summary>
     /// Represents the details of a call assignment in the list.
@@ -15,11 +17,7 @@
         public DateTime StartTreatmentTime { get; set; }
         public DateTime? EndTreatmentTime { get; set; }
         public MyFinishType? EndType { get; set; }
-        public override string ToString()
-        {
-            return $"VolunteerId: {VolunteerId}, VolunteerName: {VolunteerName}, StartTreatmentTime: {StartTreatmentTime}, " +
-                   $"EndTreatmentTime: {EndTreatmentTime}, EndType: {EndType}";
-        }
+        public override string ToString() => this.ToStringProperty();
     }
 
 

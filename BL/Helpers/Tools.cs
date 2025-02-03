@@ -27,6 +27,23 @@ internal static class Tools
             _ => throw new BO.BlInvalidOperationException("Invalid distance type")
         };
     }
+    public static string ToStringProperty<T>(this T t)
+    {
+        if (t == null)
+            return "null";
+
+        var properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+        string result = string.Empty;
+
+        foreach (var property in properties)
+        {
+            var value = property.GetValue(t);
+            string? valueString = value != null ? value.ToString() : "null";
+            result += $"{property.Name}: {valueString}\n";
+        }
+
+        return result.TrimEnd('\n');
+    }
 
     /// <summary>
     /// Calculates the aerial distance between two addresses using the Haversine formula.

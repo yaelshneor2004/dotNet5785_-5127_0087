@@ -1,4 +1,6 @@
-﻿namespace BO
+﻿using Helpers;
+
+namespace BO
 {
     /// <summary>
     /// Represents the details of a call.
@@ -52,12 +54,6 @@
             Assignments = new List<BO.CallAssignInList>();
         }
 
-        public override string ToString()
-        {
-            return $"Id: {Id}, Type: {Type}, Description: {Description}, Address: {Address}, " +
-                   $"Latitude: {Latitude}, Longitude: {Longitude}, StartTime: {StartTime}, " +
-                   $"MaxEndTime: {MaxEndTime}, Status: {Status}, " +
-                   $"Assignments: {string.Join(", ", Assignments?.Select(a => a.ToString()) ?? new List<string>())}";
-        }
+        public override string ToString() => this.ToStringProperty();
     }
 }

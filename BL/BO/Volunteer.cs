@@ -1,4 +1,6 @@
 ﻿
+using Helpers;
+
 namespace BO
 {
     /// <summary>
@@ -75,14 +77,7 @@ namespace BO
             CurrentCall = currentCall;
         }
 
-        public override string ToString()
-        {
-            return $"Volunteer ID: {Id}, FullName: {FullName}, Phone: {Phone}, Email: {Email}, " +
-                   $"Address: {Address}, Latitude: {Latitude}, Longitude: {Longitude}, Role: {Role}, " +
-                   $"Active: {IsActive}, Max Distance: {MaxDistance}, Type Distance: {TypeDistance}, " +
-                   $"Total Calls Handled: {TotalCallsHandled}, Total Calls Cancelled: {TotalCallsCancelled}, " +
-                   $"Total Calls Expired: {TotalCallsExpired}, Current Call: {CurrentCall}";
-        }
+        public override string ToString() => this.ToStringProperty();
     }
 
 }

@@ -1,4 +1,6 @@
-﻿namespace BO
+﻿using Helpers;
+
+namespace BO
 {
     /// <summary>
     /// Represents the details of a call in the list.
@@ -23,12 +25,7 @@
         public TimeSpan? CompletionTime { get; set; }
         public MyCallStatus Status { get; set; }
         public int TotalAssignments { get; set; }
-        public override string ToString()
-        {
-            return $"Id: {Id}, CallId: {CallId}, Type: {Type}, StartTime: {StartTime}, " +
-                   $"TimeRemaining: {TimeRemaining}, LastVolunteerName: {LastVolunteerName}, " +
-                   $"CompletionTime: {CompletionTime}, Status: {Status}, TotalAssignments: {TotalAssignments}";
-        }
+        public override string ToString() => this.ToStringProperty();
     }
 
 }

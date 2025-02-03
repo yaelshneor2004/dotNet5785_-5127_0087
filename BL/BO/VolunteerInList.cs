@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using Helpers;
+using System.Linq;
 
 
 namespace BO
@@ -25,11 +26,7 @@ namespace BO
         public int TotalCallsExpired { get; init; }
         public int? CurrentCallId { get; set; }
         public BO.MyCallType CurrentCallType { get; set; }
-        public override string ToString()
-        {
-            return $"Volunteer ID: {Id}, FullName: {FullName}, Active: {IsActive}, " + $"Total Calls Handled: {TotalCallsHandled}, Total Calls Cancelled: {TotalCallsCancelled}, " + $"Total Calls Expired: {TotalCallsExpired}, Current Call ID: {CurrentCallId}, " + $"Current Call Type: {CurrentCallType}";
-
-        }
+        public override string ToString() => this.ToStringProperty();
     }
 }
 

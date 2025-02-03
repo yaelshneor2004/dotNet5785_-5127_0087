@@ -1,4 +1,5 @@
 ﻿using DO;
+using Helpers;
 
 namespace BO
 {
@@ -21,11 +22,7 @@ namespace BO
         public DateTime StartTreatmentTime { get; set; }
         public DateTime? EndTime { get; set; }
         public MyFinishType? EndType { get; set; }
-        public override string ToString()
-        {
-            return $"Id: {Id}, Type: {Type}, Address: {Address}, StartTime: {StartTime}, " +
-                   $"StartTreatmentTime: {StartTreatmentTime}, EndTime: {EndTime}, EndType: {EndType}";
-        }
+        public override string ToString() => this.ToStringProperty();
     }
 
 }
