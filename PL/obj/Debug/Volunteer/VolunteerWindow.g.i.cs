@@ -53,7 +53,7 @@ namespace PL.Volunteer {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/PL;V1.0.0.0;component/volunteer/volunteerwindow.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/PL;component/volunteer/volunteerwindow.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\Volunteer\VolunteerWindow.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

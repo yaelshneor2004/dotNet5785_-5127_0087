@@ -53,7 +53,7 @@ namespace PL.Volunteer {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/PL;V1.0.0.0;component/volunteer/volunteercallhistorywindow.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/PL;component/volunteer/volunteercallhistorywindow.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\Volunteer\VolunteerCallHistoryWindow.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

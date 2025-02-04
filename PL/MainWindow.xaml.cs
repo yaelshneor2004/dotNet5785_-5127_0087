@@ -192,8 +192,6 @@ namespace PL
             s_bl.Admin.AddConfigObserver(configObserver);
             s_bl.Admin.AddConfigObserver(updateCallAmount);
             s_bl.Call.AddObserver(updateCallAmount);
-
-
         }
 
         /// <summary>

@@ -62,7 +62,7 @@ namespace PL.Call {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/PL;V1.0.0.0;component/call/selectcalltotreatwindow.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/PL;component/call/selectcalltotreatwindow.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\Call\SelectCallToTreatWindow.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);
