@@ -1,0 +1,54 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "Microsoft.Maps.MapControl.WPF/1.0.0.3": {
+        "runtime": {
+          "lib/net40-Client/Microsoft.Maps.MapControl.WPF.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.1.0"
+          }
+        }
+      },
+      "Microsoft.Web.WebView2/1.0.2957.106": {
+        "runtimeTargets": {
+          "runtimes/win-arm64/native/WebView2Loader.dll": {
+            "rid": "win-arm64",
+            "assetType": "native",
+            "fileVersion": "1.0.2957.106"
+          },
+          "runtimes/win-x64/native/WebView2Loader.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "1.0.2957.106"
+          },
+          "runtimes/win-x86/native/WebView2Loader.dll": {
+            "rid": "win-x86",
+            "assetType": "native",
+            "fileVersion": "1.0.2957.106"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Microsoft.Maps.MapControl.WPF/1.0.0.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-P5Xys9PH/NIZY8qPASd03VOrZ/eXyS1hSoruR7oM+Otn98DkvUD1LwO8m9Aro4/5jCU1BgRmOTJrIQm5y9UHnQ==",
+      "path": "microsoft.maps.mapcontrol.wpf/1.0.0.3",
+      "hashPath": "microsoft.maps.mapcontrol.wpf.1.0.0.3.nupkg.sha512"
+    },
+    "Microsoft.Web.WebView2/1.0.2957.106": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-eHc2yKD//d1a6Razu6jl373RGKdzLhxDBk/wc/i//tC9+nEVXcO38pvjZwR2s0C34y+0trzKvbGHffrEx7vyVw==",
+      "path": "microsoft.web.webview2/1.0.2957.106",
+      "hashPath": "microsoft.web.webview2.1.0.2957.106.nupkg.sha512"
+    }
+  }
+}

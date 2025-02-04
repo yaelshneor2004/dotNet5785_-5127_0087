@@ -27,7 +27,7 @@
                     <TextBlock Text="Clock menu" Foreground="#9370DB" FontSize="20"/>
                 </GroupBox.Header>
                 <StackPanel Margin="32,0,38,0">
-                    <Label Content="{Binding CurrentTime, StringFormat=MM/dd/yyyy}" FontWeight="ExtraBold" Height="6"Height="17" Width="132" HorizontalContentAlignment="Center" Foreground="Black" Style="{StaticResource HeaderLabelStyle}" RenderTransformOrigin="0.5,0.5" >
+                    <Label Content="{Binding CurrentTime, StringFormat=MM/dd/yyyy}" FontWeight="ExtraBold" Height="17" Width="132" HorizontalContentAlignment="Center" Foreground="Black" Style="{StaticResource HeaderLabelStyle}" RenderTransformOrigin="0.5,0.5" >
                         <Label.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform ScaleY="-1"/>
