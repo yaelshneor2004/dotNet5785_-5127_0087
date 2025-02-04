@@ -89,6 +89,7 @@ namespace PL.Call
         private void CallListWindow_Loaded(object sender, RoutedEventArgs e)
         {
             s_bl.Call.AddObserver(callListObserver);
+            s_bl.Admin.AddConfigObserver(callListObserver);
         }
 
         /// <summary>
@@ -97,6 +98,8 @@ namespace PL.Call
         private void CallListWindow_Closed(object? sender, EventArgs e)
         {
             s_bl.Call.RemoveObserver(callListObserver);
+            s_bl.Admin.RemoveConfigObserver(callListObserver);
+
         }
 
         /// <summary>
