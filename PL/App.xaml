@@ -45,7 +45,7 @@
         <local:descriptionValidation x:Key="descriptionValidationKey"/>
         <local:ConvertZeroDimensionsToRed x:Key="ConvertZeroDimensionsToRedKey"/>
         <local:ConvertObjIdTovisNotVis x:Key="ConvertObjIdTovisNotVisKey"/>
-
+  
         <!-- Triggers -->
         <Style TargetType="DataGridRow">
             <Setter Property="Background" Value="#E6E6FA"/>
@@ -118,7 +118,7 @@
             </DockPanel>
         </ControlTemplate>
         <Style x:Key="SimulatorButtonStyle" TargetType="Button" >
-                <Setter Property="Content" Value="Start Simulator"/>
+            <Setter Property="Content" Value="Start Simulator"/>
             <Setter Property="Background" Value="#E6E6FA"/>
             <Setter Property="BorderBrush" Value="#9370DB"/>
             <Setter Property="BorderThickness" Value="2"/>
@@ -141,26 +141,14 @@
             </Setter>
 
             <Style.Triggers>
-                    <DataTrigger Binding="{Binding IsSimulatorRunning}" Value="True">
-                        <Setter Property="Content" Value="Stop Simulator"/>
-                    </DataTrigger>
-                
-                    <DataTrigger Binding="{Binding IsSimulatorRunning}" Value="False">
-                        <Setter Property="Content" Value="Start Simulator"/>
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
+                <DataTrigger Binding="{Binding IsSimulatorRunning}" Value="True">
+                    <Setter Property="Content" Value="Stop Simulator"/>
+                </DataTrigger>
 
-
-  
-
-        <!-- Label Style -->
-        <Style x:Key="HeaderLabelStyle" TargetType="Label">
-            <Setter Property="FontSize" Value="22"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="Foreground" Value="#333333"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="Margin" Value="0,30,0,20"/>
+                <DataTrigger Binding="{Binding IsSimulatorRunning}" Value="False">
+                    <Setter Property="Content" Value="Start Simulator"/>
+                </DataTrigger>
+            </Style.Triggers>
         </Style>
 
         <Style TargetType="Button">

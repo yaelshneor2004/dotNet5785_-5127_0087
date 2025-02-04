@@ -190,7 +190,9 @@ namespace PL
             MaxRiskRange = s_bl.Admin.GetRiskRange();
             s_bl.Admin.AddClockObserver(ClockObserver);
             s_bl.Admin.AddConfigObserver(configObserver);
+            s_bl.Admin.AddConfigObserver(updateCallAmount);
             s_bl.Call.AddObserver(updateCallAmount);
+
 
         }
 
@@ -203,7 +205,9 @@ namespace PL
             IsSimulatorRunning = false;
             s_bl.Admin.RemoveClockObserver(ClockObserver);
             s_bl.Admin.RemoveConfigObserver(configObserver);
+            s_bl.Admin.RemoveConfigObserver(updateCallAmount);
             s_bl.Call.RemoveObserver(updateCallAmount);
+
         }
 
         /// <summary>
